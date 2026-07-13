@@ -598,6 +598,16 @@ message StreamMsgTips {
   bool end = 5;
 }
 
+message ModifyMsgTips {
+  string conversationID = 1;
+  string clientMsgID = 2;
+  string newContent = 3;
+  int64 seq = 4;
+  int64 modifiedTime = 5;
+  string userID = 6;
+  int64 modifiedCount = 7;
+}
+
 message ConversationDeleteTips {
   string userID = 1;
   repeated string conversationIDs = 2;

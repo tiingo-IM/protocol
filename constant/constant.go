@@ -25,6 +25,7 @@ const (
 	CustomOnlineOnly             = 120
 	ReactionMessageModifier      = 121
 	ReactionMessageDeleter       = 122
+	Stream                       = 143
 	Common                       = 200
 	GroupMsg                     = 201
 	SignalMsg                    = 202
@@ -99,10 +100,12 @@ const (
 	BusinessNotification      = 2001
 	BusinessNotificationEnd   = 2099
 
-	MsgRevokeNotification  = 2101
-	DeleteMsgsNotification = 2102
+	MsgRevokeNotification     = 2101
+	DeleteMsgsNotification    = 2102
+	ModifyMessageNotification = 2103
 
-	HasReadReceipt = 2200
+	HasReadReceipt        = 2200
+	StreamMsgNotification = 2500
 
 	NotificationEnd = 5000
 

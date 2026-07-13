@@ -1,10 +1,59 @@
 package msg
 
 import (
+	"encoding/json"
 	"errors"
 	"fmt"
 	"time"
 )
+
+func (x *ModifyMessageReq) Check() error {
+	if x.ConversationID == "" {
+		return errors.New("conversationID is empty")
+	}
+	if x.Seq < 1 {
+		return errors.New("seq is invalid")
+	}
+	if x.NewContent == "" {
+		return errors.New("newContent is empty")
+	}
+	var content map[string]any
+	if err := json.Unmarshal([]byte(x.NewContent), &content); err != nil {
+		return fmt.Errorf("newContent is invalid %w", err)
+	}
+	return nil
+}
+
+func (x *AppendStreamMsgReq) Check() error {
+	if x.ConversationID == "" {
+		return errors.New("conversationID is empty")
+	}
+	if x.ClientMsgID == "" {
+		return errors.New("clientMsgID is empty")
+	}
+	if !x.End && len(x.Packets) == 0 {
+		return errors.New("packets is empty")
+	}
+	if x.StartIndex < 0 {
+		return errors.New("start index is invalid")
+	}
+	for _, packet := range x.Packets {
+		if packet == "" {
+			return errors.New("packet is empty")
+		}
+	}
+	return nil
+}
+
+func (x *GetStreamMsgReq) Check() error {
+	if x.ConversationID == "" {
+		return errors.New("conversationID is empty")
+	}
+	if x.ClientMsgID == "" {
+		return errors.New("clientMsgID is empty")
+	}
+	return nil
+}
 
 func (x *GetMaxAndMinSeqReq) Check() error {
 	if x.UserID == "" {

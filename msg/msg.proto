@@ -387,6 +387,41 @@ message GetLastMessageResp {
   map<string,sdkws.MsgData> msgs = 1;
 }
 
+message AppendStreamMsgReq {
+  string conversationID = 1;
+  string clientMsgID = 2;
+  int64 startIndex = 3;
+  repeated string packets = 4;
+  bool end = 5;
+}
+
+message AppendStreamMsgResp {}
+
+message GetStreamMsgReq {
+  string conversationID = 1;
+  string clientMsgID = 2;
+  int64 seq = 3;
+}
+
+message GetStreamMsgResp {
+  string userID = 1;
+  repeated string packets = 2;
+  bool end = 3;
+  int64 deadlineTime = 4;
+}
+
+message ModifyMessageReq {
+  string conversationID = 1;
+  int64 seq = 2;
+  string newContent = 3;
+  string oldContent = 4;
+}
+
+message ModifyMessageResp {
+  int64 modifiedTime = 1;
+  int64 modifiedCount = 2;
+}
+
 service msg {
   // Get min and max seq (including the user and specified groups)
   rpc GetMaxSeq(sdkws.GetMaxSeqReq) returns (sdkws.GetMaxSeqResp);
@@ -443,4 +478,8 @@ service msg {
   rpc SetUserConversationMinSeq(SetUserConversationMinSeqReq) returns (SetUserConversationMinSeqResp);
   rpc GetLastMessageSeqByTime(GetLastMessageSeqByTimeReq) returns (GetLastMessageSeqByTimeResp);
   rpc GetLastMessage(GetLastMessageReq) returns (GetLastMessageResp);
+
+  rpc AppendStreamMsg(AppendStreamMsgReq) returns (AppendStreamMsgResp);
+  rpc GetStreamMsg(GetStreamMsgReq) returns (GetStreamMsgResp);
+  rpc ModifyMessage(ModifyMessageReq) returns (ModifyMessageResp);
 }
