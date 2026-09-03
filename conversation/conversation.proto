@@ -75,7 +75,7 @@ message ConversationElem {
   string conversationID = 1;
   int32 recvMsgOpt = 2;
   int64 unreadCount = 3;
-  bool IsPinned = 4;
+  bool isPinned = 4;
   MsgInfo msgInfo = 5;
 }
 
@@ -92,7 +92,7 @@ message MsgInfo {
   string groupFaceURL = 10;
   int32 groupType = 11;
   uint32 groupMemberCount = 12;
-  int64 LatestMsgRecvTime = 13;
+  int64 latestMsgRecvTime = 13;
   int32 msgFrom = 14;
   int32 contentType = 15;
   string content = 16;

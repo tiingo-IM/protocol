@@ -49,7 +49,7 @@ message getPaginationFriendsApplyToReq {
   repeated int32 handleResults = 3;
 }
 message getPaginationFriendsApplyToResp {
-  repeated openim.sdkws.FriendRequest FriendRequests = 1;
+  repeated openim.sdkws.FriendRequest friendRequests = 1;
   int32 total = 2;
 }
 

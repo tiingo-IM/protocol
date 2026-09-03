@@ -113,8 +113,8 @@ message SetConversationHasReadSeqReq {
 message SetConversationHasReadSeqResp {}
 
 message DeleteSyncOpt {
-  bool IsSyncSelf = 3;
-  bool IsSyncOther = 4;
+  bool isSyncSelf = 3;
+  bool isSyncOther = 4;
 }
 
 message ClearConversationsMsgReq {
