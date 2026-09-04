@@ -112,6 +112,38 @@ message SetConversationHasReadSeqReq {
 
 message SetConversationHasReadSeqResp {}
 
+message GetMessagesReadCountReq {
+  string conversationID = 1;
+  repeated int64 seqs = 2;
+  string userID = 3;
+}
+
+// seq -> number of distinct readers other than the message's own sender.
+// A seq with no reads yet (or not found) is simply absent from the map.
+message GetMessagesReadCountResp {
+  map<int64, int32> readCounts = 1;
+}
+
+message GetMessageReadersReq {
+  string conversationID = 1;
+  int64 seq = 2;
+  // 0 = start from the most recently read; otherwise the readAt (unix milli)
+  // of the last entry from the previous page, for descending keyset paging.
+  int64 lastReadAt = 3;
+  int32 count = 4;
+  string userID = 5;
+}
+
+message MessageReader {
+  string userID = 1;
+  int64 readAt = 2;
+}
+
+message GetMessageReadersResp {
+  repeated MessageReader readers = 1;
+  int32 totalCount = 2;
+}
+
 message DeleteSyncOpt {
   bool isSyncSelf = 3;
   bool isSyncOther = 4;
@@ -463,6 +495,14 @@ service msg {
   rpc MarkMsgsAsRead(MarkMsgsAsReadReq) returns (MarkMsgsAsReadResp);
   rpc MarkConversationAsRead(MarkConversationAsReadReq) returns (MarkConversationAsReadResp);
   rpc SetConversationHasReadSeq(SetConversationHasReadSeqReq) returns (SetConversationHasReadSeqResp);
+  // Per-message read-receipt counts for a batch of seqs already in the local
+  // cache (e.g. on initial load / page-in of history) — the live/incremental
+  // path is the seqReadCounts pushed on sdkws.MarkAsReadTips instead.
+  rpc GetMessagesReadCount(GetMessagesReadCountReq) returns (GetMessagesReadCountResp);
+  // Paginated list of who has read one specific message (userID + readAt),
+  // ordered most-recent-read first. Meant to be called lazily, only once the
+  // user actually opens the "seen by" detail view for that message.
+  rpc GetMessageReaders(GetMessageReadersReq) returns (GetMessageReadersResp);
 
   rpc GetConversationsHasReadAndMaxSeq(GetConversationsHasReadAndMaxSeqReq) returns (GetConversationsHasReadAndMaxSeqResp);
   rpc GetActiveUser(GetActiveUserReq) returns (GetActiveUserResp);

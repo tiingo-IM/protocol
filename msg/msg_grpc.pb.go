@@ -42,6 +42,8 @@ const (
 	Msg_MarkMsgsAsRead_FullMethodName                   = "/openim.msg.msg/MarkMsgsAsRead"
 	Msg_MarkConversationAsRead_FullMethodName           = "/openim.msg.msg/MarkConversationAsRead"
 	Msg_SetConversationHasReadSeq_FullMethodName        = "/openim.msg.msg/SetConversationHasReadSeq"
+	Msg_GetMessagesReadCount_FullMethodName             = "/openim.msg.msg/GetMessagesReadCount"
+	Msg_GetMessageReaders_FullMethodName                = "/openim.msg.msg/GetMessageReaders"
 	Msg_GetConversationsHasReadAndMaxSeq_FullMethodName = "/openim.msg.msg/GetConversationsHasReadAndMaxSeq"
 	Msg_GetActiveUser_FullMethodName                    = "/openim.msg.msg/GetActiveUser"
 	Msg_GetActiveGroup_FullMethodName                   = "/openim.msg.msg/GetActiveGroup"
@@ -99,6 +101,14 @@ type MsgClient interface {
 	MarkMsgsAsRead(ctx context.Context, in *MarkMsgsAsReadReq, opts ...grpc.CallOption) (*MarkMsgsAsReadResp, error)
 	MarkConversationAsRead(ctx context.Context, in *MarkConversationAsReadReq, opts ...grpc.CallOption) (*MarkConversationAsReadResp, error)
 	SetConversationHasReadSeq(ctx context.Context, in *SetConversationHasReadSeqReq, opts ...grpc.CallOption) (*SetConversationHasReadSeqResp, error)
+	// Per-message read-receipt counts for a batch of seqs already in the local
+	// cache (e.g. on initial load / page-in of history) — the live/incremental
+	// path is the seqReadCounts pushed on sdkws.MarkAsReadTips instead.
+	GetMessagesReadCount(ctx context.Context, in *GetMessagesReadCountReq, opts ...grpc.CallOption) (*GetMessagesReadCountResp, error)
+	// Paginated list of who has read one specific message (userID + readAt),
+	// ordered most-recent-read first. Meant to be called lazily, only once the
+	// user actually opens the "seen by" detail view for that message.
+	GetMessageReaders(ctx context.Context, in *GetMessageReadersReq, opts ...grpc.CallOption) (*GetMessageReadersResp, error)
 	GetConversationsHasReadAndMaxSeq(ctx context.Context, in *GetConversationsHasReadAndMaxSeqReq, opts ...grpc.CallOption) (*GetConversationsHasReadAndMaxSeqResp, error)
 	GetActiveUser(ctx context.Context, in *GetActiveUserReq, opts ...grpc.CallOption) (*GetActiveUserResp, error)
 	GetActiveGroup(ctx context.Context, in *GetActiveGroupReq, opts ...grpc.CallOption) (*GetActiveGroupResp, error)
@@ -343,6 +353,26 @@ func (c *msgClient) SetConversationHasReadSeq(ctx context.Context, in *SetConver
 	return out, nil
 }
 
+func (c *msgClient) GetMessagesReadCount(ctx context.Context, in *GetMessagesReadCountReq, opts ...grpc.CallOption) (*GetMessagesReadCountResp, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(GetMessagesReadCountResp)
+	err := c.cc.Invoke(ctx, Msg_GetMessagesReadCount_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *msgClient) GetMessageReaders(ctx context.Context, in *GetMessageReadersReq, opts ...grpc.CallOption) (*GetMessageReadersResp, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(GetMessageReadersResp)
+	err := c.cc.Invoke(ctx, Msg_GetMessageReaders_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 func (c *msgClient) GetConversationsHasReadAndMaxSeq(ctx context.Context, in *GetConversationsHasReadAndMaxSeqReq, opts ...grpc.CallOption) (*GetConversationsHasReadAndMaxSeqResp, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(GetConversationsHasReadAndMaxSeqResp)
@@ -524,6 +554,14 @@ type MsgServer interface {
 	MarkMsgsAsRead(context.Context, *MarkMsgsAsReadReq) (*MarkMsgsAsReadResp, error)
 	MarkConversationAsRead(context.Context, *MarkConversationAsReadReq) (*MarkConversationAsReadResp, error)
 	SetConversationHasReadSeq(context.Context, *SetConversationHasReadSeqReq) (*SetConversationHasReadSeqResp, error)
+	// Per-message read-receipt counts for a batch of seqs already in the local
+	// cache (e.g. on initial load / page-in of history) — the live/incremental
+	// path is the seqReadCounts pushed on sdkws.MarkAsReadTips instead.
+	GetMessagesReadCount(context.Context, *GetMessagesReadCountReq) (*GetMessagesReadCountResp, error)
+	// Paginated list of who has read one specific message (userID + readAt),
+	// ordered most-recent-read first. Meant to be called lazily, only once the
+	// user actually opens the "seen by" detail view for that message.
+	GetMessageReaders(context.Context, *GetMessageReadersReq) (*GetMessageReadersResp, error)
 	GetConversationsHasReadAndMaxSeq(context.Context, *GetConversationsHasReadAndMaxSeqReq) (*GetConversationsHasReadAndMaxSeqResp, error)
 	GetActiveUser(context.Context, *GetActiveUserReq) (*GetActiveUserResp, error)
 	GetActiveGroup(context.Context, *GetActiveGroupReq) (*GetActiveGroupResp, error)
@@ -613,6 +651,12 @@ func (UnimplementedMsgServer) MarkConversationAsRead(context.Context, *MarkConve
 }
 func (UnimplementedMsgServer) SetConversationHasReadSeq(context.Context, *SetConversationHasReadSeqReq) (*SetConversationHasReadSeqResp, error) {
 	return nil, status.Error(codes.Unimplemented, "method SetConversationHasReadSeq not implemented")
+}
+func (UnimplementedMsgServer) GetMessagesReadCount(context.Context, *GetMessagesReadCountReq) (*GetMessagesReadCountResp, error) {
+	return nil, status.Error(codes.Unimplemented, "method GetMessagesReadCount not implemented")
+}
+func (UnimplementedMsgServer) GetMessageReaders(context.Context, *GetMessageReadersReq) (*GetMessageReadersResp, error) {
+	return nil, status.Error(codes.Unimplemented, "method GetMessageReaders not implemented")
 }
 func (UnimplementedMsgServer) GetConversationsHasReadAndMaxSeq(context.Context, *GetConversationsHasReadAndMaxSeqReq) (*GetConversationsHasReadAndMaxSeqResp, error) {
 	return nil, status.Error(codes.Unimplemented, "method GetConversationsHasReadAndMaxSeq not implemented")
@@ -1073,6 +1117,42 @@ func _Msg_SetConversationHasReadSeq_Handler(srv interface{}, ctx context.Context
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Msg_GetMessagesReadCount_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetMessagesReadCountReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(MsgServer).GetMessagesReadCount(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Msg_GetMessagesReadCount_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(MsgServer).GetMessagesReadCount(ctx, req.(*GetMessagesReadCountReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Msg_GetMessageReaders_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetMessageReadersReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(MsgServer).GetMessageReaders(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Msg_GetMessageReaders_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(MsgServer).GetMessageReaders(ctx, req.(*GetMessageReadersReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 func _Msg_GetConversationsHasReadAndMaxSeq_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(GetConversationsHasReadAndMaxSeqReq)
 	if err := dec(in); err != nil {
@@ -1419,6 +1499,14 @@ var Msg_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "SetConversationHasReadSeq",
 			Handler:    _Msg_SetConversationHasReadSeq_Handler,
+		},
+		{
+			MethodName: "GetMessagesReadCount",
+			Handler:    _Msg_GetMessagesReadCount_Handler,
+		},
+		{
+			MethodName: "GetMessageReaders",
+			Handler:    _Msg_GetMessageReaders_Handler,
 		},
 		{
 			MethodName: "GetConversationsHasReadAndMaxSeq",

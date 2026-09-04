@@ -549,6 +549,23 @@ message MarkAsReadTips {
   string conversationID = 2;
   repeated int64 seqs = 3;
   int64 hasReadSeq = 4;
+  // Per-message read-receipt counts updated in this batch. Populated only by
+  // the dedicated per-message read-receipt pipeline (Kafka-backed, see
+  // msg.MsgSvr's MarkMsgsAsRead / GetMessagesReadCount) and sent to the
+  // original sender of each message — unlike hasReadSeq above, which is a
+  // per-conversation watermark notification sent back to the reader's own
+  // other devices. A client that doesn't understand this field can safely
+  // ignore it and fall back to pre-existing hasReadSeq-driven behavior.
+  repeated SeqReadCount seqReadCounts = 5;
+}
+
+// One message's up-to-date read-receipt count, as of the batch that produced
+// this MarkAsReadTips. readCount excludes the message's own sender — for a
+// 1:1 conversation it is therefore always 0 or 1 (0/1 other participant); for
+// a group it is the number of distinct other members who have read it.
+message SeqReadCount {
+  int64 seq = 1;
+  int32 readCount = 2;
 }
 
 message SetAppBackgroundStatusReq {
