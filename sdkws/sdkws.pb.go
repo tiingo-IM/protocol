@@ -71,23 +71,23 @@ func (PullOrder) EnumDescriptor() ([]byte, []int) {
 
 type GroupInfo struct {
 	state                  protoimpl.MessageState `protogen:"open.v1"`
-	GroupID                string                 `protobuf:"bytes,1,opt,name=groupID,proto3" json:"groupID"`
-	GroupName              string                 `protobuf:"bytes,2,opt,name=groupName,proto3" json:"groupName"`
-	Notification           string                 `protobuf:"bytes,3,opt,name=notification,proto3" json:"notification"`
-	Introduction           string                 `protobuf:"bytes,4,opt,name=introduction,proto3" json:"introduction"`
-	FaceURL                string                 `protobuf:"bytes,5,opt,name=faceURL,proto3" json:"faceURL"`
-	OwnerUserID            string                 `protobuf:"bytes,6,opt,name=ownerUserID,proto3" json:"ownerUserID"`
-	CreateTime             int64                  `protobuf:"varint,7,opt,name=createTime,proto3" json:"createTime"`
-	MemberCount            uint32                 `protobuf:"varint,8,opt,name=memberCount,proto3" json:"memberCount"`
-	Ex                     string                 `protobuf:"bytes,9,opt,name=ex,proto3" json:"ex"`
-	Status                 int32                  `protobuf:"varint,10,opt,name=status,proto3" json:"status"`
-	CreatorUserID          string                 `protobuf:"bytes,11,opt,name=creatorUserID,proto3" json:"creatorUserID"`
-	GroupType              int32                  `protobuf:"varint,12,opt,name=groupType,proto3" json:"groupType"`
-	NeedVerification       int32                  `protobuf:"varint,13,opt,name=needVerification,proto3" json:"needVerification"`
-	LookMemberInfo         int32                  `protobuf:"varint,14,opt,name=lookMemberInfo,proto3" json:"lookMemberInfo"`
-	ApplyMemberFriend      int32                  `protobuf:"varint,15,opt,name=applyMemberFriend,proto3" json:"applyMemberFriend"`
-	NotificationUpdateTime int64                  `protobuf:"varint,16,opt,name=notificationUpdateTime,proto3" json:"notificationUpdateTime"`
-	NotificationUserID     string                 `protobuf:"bytes,17,opt,name=notificationUserID,proto3" json:"notificationUserID"`
+	GroupID                string                 `protobuf:"bytes,1,opt,name=groupID,proto3" json:"groupID,omitempty"`
+	GroupName              string                 `protobuf:"bytes,2,opt,name=groupName,proto3" json:"groupName,omitempty"`
+	Notification           string                 `protobuf:"bytes,3,opt,name=notification,proto3" json:"notification,omitempty"`
+	Introduction           string                 `protobuf:"bytes,4,opt,name=introduction,proto3" json:"introduction,omitempty"`
+	FaceURL                string                 `protobuf:"bytes,5,opt,name=faceURL,proto3" json:"faceURL,omitempty"`
+	OwnerUserID            string                 `protobuf:"bytes,6,opt,name=ownerUserID,proto3" json:"ownerUserID,omitempty"`
+	CreateTime             int64                  `protobuf:"varint,7,opt,name=createTime,proto3" json:"createTime,omitempty"`
+	MemberCount            uint32                 `protobuf:"varint,8,opt,name=memberCount,proto3" json:"memberCount,omitempty"`
+	Ex                     string                 `protobuf:"bytes,9,opt,name=ex,proto3" json:"ex,omitempty"`
+	Status                 int32                  `protobuf:"varint,10,opt,name=status,proto3" json:"status,omitempty"`
+	CreatorUserID          string                 `protobuf:"bytes,11,opt,name=creatorUserID,proto3" json:"creatorUserID,omitempty"`
+	GroupType              int32                  `protobuf:"varint,12,opt,name=groupType,proto3" json:"groupType,omitempty"`
+	NeedVerification       int32                  `protobuf:"varint,13,opt,name=needVerification,proto3" json:"needVerification,omitempty"`
+	LookMemberInfo         int32                  `protobuf:"varint,14,opt,name=lookMemberInfo,proto3" json:"lookMemberInfo,omitempty"`
+	ApplyMemberFriend      int32                  `protobuf:"varint,15,opt,name=applyMemberFriend,proto3" json:"applyMemberFriend,omitempty"`
+	NotificationUpdateTime int64                  `protobuf:"varint,16,opt,name=notificationUpdateTime,proto3" json:"notificationUpdateTime,omitempty"`
+	NotificationUserID     string                 `protobuf:"bytes,17,opt,name=notificationUserID,proto3" json:"notificationUserID,omitempty"`
 	unknownFields          protoimpl.UnknownFields
 	sizeCache              protoimpl.SizeCache
 }
@@ -243,15 +243,15 @@ func (x *GroupInfo) GetNotificationUserID() string {
 
 type GroupInfoForSet struct {
 	state             protoimpl.MessageState  `protogen:"open.v1"`
-	GroupID           string                  `protobuf:"bytes,1,opt,name=groupID,proto3" json:"groupID"`
-	GroupName         string                  `protobuf:"bytes,2,opt,name=groupName,proto3" json:"groupName"`
-	Notification      string                  `protobuf:"bytes,3,opt,name=notification,proto3" json:"notification"`
-	Introduction      string                  `protobuf:"bytes,4,opt,name=introduction,proto3" json:"introduction"`
-	FaceURL           string                  `protobuf:"bytes,5,opt,name=faceURL,proto3" json:"faceURL"`
-	Ex                *wrapperspb.StringValue `protobuf:"bytes,6,opt,name=ex,proto3" json:"ex"`
-	NeedVerification  *wrapperspb.Int32Value  `protobuf:"bytes,7,opt,name=needVerification,proto3" json:"needVerification"`
-	LookMemberInfo    *wrapperspb.Int32Value  `protobuf:"bytes,8,opt,name=lookMemberInfo,proto3" json:"lookMemberInfo"`
-	ApplyMemberFriend *wrapperspb.Int32Value  `protobuf:"bytes,9,opt,name=applyMemberFriend,proto3" json:"applyMemberFriend"`
+	GroupID           string                  `protobuf:"bytes,1,opt,name=groupID,proto3" json:"groupID,omitempty"`
+	GroupName         string                  `protobuf:"bytes,2,opt,name=groupName,proto3" json:"groupName,omitempty"`
+	Notification      string                  `protobuf:"bytes,3,opt,name=notification,proto3" json:"notification,omitempty"`
+	Introduction      string                  `protobuf:"bytes,4,opt,name=introduction,proto3" json:"introduction,omitempty"`
+	FaceURL           string                  `protobuf:"bytes,5,opt,name=faceURL,proto3" json:"faceURL,omitempty"`
+	Ex                *wrapperspb.StringValue `protobuf:"bytes,6,opt,name=ex,proto3" json:"ex,omitempty"`
+	NeedVerification  *wrapperspb.Int32Value  `protobuf:"bytes,7,opt,name=needVerification,proto3" json:"needVerification,omitempty"`
+	LookMemberInfo    *wrapperspb.Int32Value  `protobuf:"bytes,8,opt,name=lookMemberInfo,proto3" json:"lookMemberInfo,omitempty"`
+	ApplyMemberFriend *wrapperspb.Int32Value  `protobuf:"bytes,9,opt,name=applyMemberFriend,proto3" json:"applyMemberFriend,omitempty"`
 	unknownFields     protoimpl.UnknownFields
 	sizeCache         protoimpl.SizeCache
 }
@@ -351,18 +351,18 @@ func (x *GroupInfoForSet) GetApplyMemberFriend() *wrapperspb.Int32Value {
 
 type GroupMemberFullInfo struct {
 	state          protoimpl.MessageState `protogen:"open.v1"`
-	GroupID        string                 `protobuf:"bytes,1,opt,name=groupID,proto3" json:"groupID"`
-	UserID         string                 `protobuf:"bytes,2,opt,name=userID,proto3" json:"userID"`
-	RoleLevel      int32                  `protobuf:"varint,3,opt,name=roleLevel,proto3" json:"roleLevel"`
-	JoinTime       int64                  `protobuf:"varint,4,opt,name=joinTime,proto3" json:"joinTime"`
-	Nickname       string                 `protobuf:"bytes,5,opt,name=nickname,proto3" json:"nickname"`
-	FaceURL        string                 `protobuf:"bytes,6,opt,name=faceURL,proto3" json:"faceURL"`
-	AppMangerLevel int32                  `protobuf:"varint,7,opt,name=appMangerLevel,proto3" json:"appMangerLevel"` //if >0
-	JoinSource     int32                  `protobuf:"varint,8,opt,name=joinSource,proto3" json:"joinSource"`
-	OperatorUserID string                 `protobuf:"bytes,9,opt,name=operatorUserID,proto3" json:"operatorUserID"`
-	Ex             string                 `protobuf:"bytes,10,opt,name=ex,proto3" json:"ex"`
-	MuteEndTime    int64                  `protobuf:"varint,11,opt,name=muteEndTime,proto3" json:"muteEndTime"`
-	InviterUserID  string                 `protobuf:"bytes,12,opt,name=inviterUserID,proto3" json:"inviterUserID"`
+	GroupID        string                 `protobuf:"bytes,1,opt,name=groupID,proto3" json:"groupID,omitempty"`
+	UserID         string                 `protobuf:"bytes,2,opt,name=userID,proto3" json:"userID,omitempty"`
+	RoleLevel      int32                  `protobuf:"varint,3,opt,name=roleLevel,proto3" json:"roleLevel,omitempty"`
+	JoinTime       int64                  `protobuf:"varint,4,opt,name=joinTime,proto3" json:"joinTime,omitempty"`
+	Nickname       string                 `protobuf:"bytes,5,opt,name=nickname,proto3" json:"nickname,omitempty"`
+	FaceURL        string                 `protobuf:"bytes,6,opt,name=faceURL,proto3" json:"faceURL,omitempty"`
+	AppMangerLevel int32                  `protobuf:"varint,7,opt,name=appMangerLevel,proto3" json:"appMangerLevel,omitempty"` //if >0
+	JoinSource     int32                  `protobuf:"varint,8,opt,name=joinSource,proto3" json:"joinSource,omitempty"`
+	OperatorUserID string                 `protobuf:"bytes,9,opt,name=operatorUserID,proto3" json:"operatorUserID,omitempty"`
+	Ex             string                 `protobuf:"bytes,10,opt,name=ex,proto3" json:"ex,omitempty"`
+	MuteEndTime    int64                  `protobuf:"varint,11,opt,name=muteEndTime,proto3" json:"muteEndTime,omitempty"`
+	InviterUserID  string                 `protobuf:"bytes,12,opt,name=inviterUserID,proto3" json:"inviterUserID,omitempty"`
 	unknownFields  protoimpl.UnknownFields
 	sizeCache      protoimpl.SizeCache
 }
@@ -483,10 +483,10 @@ func (x *GroupMemberFullInfo) GetInviterUserID() string {
 
 type PublicUserInfo struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	UserID        string                 `protobuf:"bytes,1,opt,name=userID,proto3" json:"userID"`
-	Nickname      string                 `protobuf:"bytes,2,opt,name=nickname,proto3" json:"nickname"`
-	FaceURL       string                 `protobuf:"bytes,3,opt,name=faceURL,proto3" json:"faceURL"`
-	Ex            string                 `protobuf:"bytes,4,opt,name=ex,proto3" json:"ex"`
+	UserID        string                 `protobuf:"bytes,1,opt,name=userID,proto3" json:"userID,omitempty"`
+	Nickname      string                 `protobuf:"bytes,2,opt,name=nickname,proto3" json:"nickname,omitempty"`
+	FaceURL       string                 `protobuf:"bytes,3,opt,name=faceURL,proto3" json:"faceURL,omitempty"`
+	Ex            string                 `protobuf:"bytes,4,opt,name=ex,proto3" json:"ex,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -551,13 +551,13 @@ func (x *PublicUserInfo) GetEx() string {
 
 type UserInfo struct {
 	state            protoimpl.MessageState `protogen:"open.v1"`
-	UserID           string                 `protobuf:"bytes,1,opt,name=userID,proto3" json:"userID"`
-	Nickname         string                 `protobuf:"bytes,2,opt,name=nickname,proto3" json:"nickname"`
-	FaceURL          string                 `protobuf:"bytes,3,opt,name=faceURL,proto3" json:"faceURL"`
-	Ex               string                 `protobuf:"bytes,4,opt,name=ex,proto3" json:"ex"`
-	CreateTime       int64                  `protobuf:"varint,5,opt,name=createTime,proto3" json:"createTime"`
-	AppMangerLevel   int32                  `protobuf:"varint,6,opt,name=appMangerLevel,proto3" json:"appMangerLevel"`
-	GlobalRecvMsgOpt int32                  `protobuf:"varint,7,opt,name=globalRecvMsgOpt,proto3" json:"globalRecvMsgOpt"`
+	UserID           string                 `protobuf:"bytes,1,opt,name=userID,proto3" json:"userID,omitempty"`
+	Nickname         string                 `protobuf:"bytes,2,opt,name=nickname,proto3" json:"nickname,omitempty"`
+	FaceURL          string                 `protobuf:"bytes,3,opt,name=faceURL,proto3" json:"faceURL,omitempty"`
+	Ex               string                 `protobuf:"bytes,4,opt,name=ex,proto3" json:"ex,omitempty"`
+	CreateTime       int64                  `protobuf:"varint,5,opt,name=createTime,proto3" json:"createTime,omitempty"`
+	AppMangerLevel   int32                  `protobuf:"varint,6,opt,name=appMangerLevel,proto3" json:"appMangerLevel,omitempty"`
+	GlobalRecvMsgOpt int32                  `protobuf:"varint,7,opt,name=globalRecvMsgOpt,proto3" json:"globalRecvMsgOpt,omitempty"`
 	unknownFields    protoimpl.UnknownFields
 	sizeCache        protoimpl.SizeCache
 }
@@ -643,11 +643,11 @@ func (x *UserInfo) GetGlobalRecvMsgOpt() int32 {
 
 type UserInfoWithEx struct {
 	state            protoimpl.MessageState  `protogen:"open.v1"`
-	UserID           string                  `protobuf:"bytes,1,opt,name=userID,proto3" json:"userID"`
-	Nickname         *wrapperspb.StringValue `protobuf:"bytes,2,opt,name=nickname,proto3" json:"nickname"`
-	FaceURL          *wrapperspb.StringValue `protobuf:"bytes,3,opt,name=faceURL,proto3" json:"faceURL"`
-	Ex               *wrapperspb.StringValue `protobuf:"bytes,4,opt,name=ex,proto3" json:"ex"`
-	GlobalRecvMsgOpt *wrapperspb.Int32Value  `protobuf:"bytes,7,opt,name=globalRecvMsgOpt,proto3" json:"globalRecvMsgOpt"`
+	UserID           string                  `protobuf:"bytes,1,opt,name=userID,proto3" json:"userID,omitempty"`
+	Nickname         *wrapperspb.StringValue `protobuf:"bytes,2,opt,name=nickname,proto3" json:"nickname,omitempty"`
+	FaceURL          *wrapperspb.StringValue `protobuf:"bytes,3,opt,name=faceURL,proto3" json:"faceURL,omitempty"`
+	Ex               *wrapperspb.StringValue `protobuf:"bytes,4,opt,name=ex,proto3" json:"ex,omitempty"`
+	GlobalRecvMsgOpt *wrapperspb.Int32Value  `protobuf:"bytes,7,opt,name=globalRecvMsgOpt,proto3" json:"globalRecvMsgOpt,omitempty"`
 	unknownFields    protoimpl.UnknownFields
 	sizeCache        protoimpl.SizeCache
 }
@@ -719,14 +719,14 @@ func (x *UserInfoWithEx) GetGlobalRecvMsgOpt() *wrapperspb.Int32Value {
 
 type FriendInfo struct {
 	state          protoimpl.MessageState `protogen:"open.v1"`
-	OwnerUserID    string                 `protobuf:"bytes,1,opt,name=ownerUserID,proto3" json:"ownerUserID"`
-	Remark         string                 `protobuf:"bytes,2,opt,name=remark,proto3" json:"remark"`
-	CreateTime     int64                  `protobuf:"varint,3,opt,name=createTime,proto3" json:"createTime"`
-	FriendUser     *UserInfo              `protobuf:"bytes,4,opt,name=friendUser,proto3" json:"friendUser"`
-	AddSource      int32                  `protobuf:"varint,5,opt,name=addSource,proto3" json:"addSource"`
-	OperatorUserID string                 `protobuf:"bytes,6,opt,name=operatorUserID,proto3" json:"operatorUserID"`
-	Ex             string                 `protobuf:"bytes,7,opt,name=ex,proto3" json:"ex"`
-	IsPinned       bool                   `protobuf:"varint,8,opt,name=isPinned,proto3" json:"isPinned"`
+	OwnerUserID    string                 `protobuf:"bytes,1,opt,name=ownerUserID,proto3" json:"ownerUserID,omitempty"`
+	Remark         string                 `protobuf:"bytes,2,opt,name=remark,proto3" json:"remark,omitempty"`
+	CreateTime     int64                  `protobuf:"varint,3,opt,name=createTime,proto3" json:"createTime,omitempty"`
+	FriendUser     *UserInfo              `protobuf:"bytes,4,opt,name=friendUser,proto3" json:"friendUser,omitempty"`
+	AddSource      int32                  `protobuf:"varint,5,opt,name=addSource,proto3" json:"addSource,omitempty"`
+	OperatorUserID string                 `protobuf:"bytes,6,opt,name=operatorUserID,proto3" json:"operatorUserID,omitempty"`
+	Ex             string                 `protobuf:"bytes,7,opt,name=ex,proto3" json:"ex,omitempty"`
+	IsPinned       bool                   `protobuf:"varint,8,opt,name=isPinned,proto3" json:"isPinned,omitempty"`
 	unknownFields  protoimpl.UnknownFields
 	sizeCache      protoimpl.SizeCache
 }
@@ -819,12 +819,12 @@ func (x *FriendInfo) GetIsPinned() bool {
 
 type BlackInfo struct {
 	state          protoimpl.MessageState `protogen:"open.v1"`
-	OwnerUserID    string                 `protobuf:"bytes,1,opt,name=ownerUserID,proto3" json:"ownerUserID"`
-	CreateTime     int64                  `protobuf:"varint,2,opt,name=createTime,proto3" json:"createTime"`
-	BlackUserInfo  *PublicUserInfo        `protobuf:"bytes,3,opt,name=blackUserInfo,proto3" json:"blackUserInfo"`
-	AddSource      int32                  `protobuf:"varint,4,opt,name=addSource,proto3" json:"addSource"`
-	OperatorUserID string                 `protobuf:"bytes,5,opt,name=operatorUserID,proto3" json:"operatorUserID"`
-	Ex             string                 `protobuf:"bytes,6,opt,name=ex,proto3" json:"ex"`
+	OwnerUserID    string                 `protobuf:"bytes,1,opt,name=ownerUserID,proto3" json:"ownerUserID,omitempty"`
+	CreateTime     int64                  `protobuf:"varint,2,opt,name=createTime,proto3" json:"createTime,omitempty"`
+	BlackUserInfo  *PublicUserInfo        `protobuf:"bytes,3,opt,name=blackUserInfo,proto3" json:"blackUserInfo,omitempty"`
+	AddSource      int32                  `protobuf:"varint,4,opt,name=addSource,proto3" json:"addSource,omitempty"`
+	OperatorUserID string                 `protobuf:"bytes,5,opt,name=operatorUserID,proto3" json:"operatorUserID,omitempty"`
+	Ex             string                 `protobuf:"bytes,6,opt,name=ex,proto3" json:"ex,omitempty"`
 	unknownFields  protoimpl.UnknownFields
 	sizeCache      protoimpl.SizeCache
 }
@@ -903,17 +903,17 @@ func (x *BlackInfo) GetEx() string {
 
 type GroupRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	UserInfo      *PublicUserInfo        `protobuf:"bytes,1,opt,name=userInfo,proto3" json:"userInfo"`
-	GroupInfo     *GroupInfo             `protobuf:"bytes,2,opt,name=groupInfo,proto3" json:"groupInfo"`
-	HandleResult  int32                  `protobuf:"varint,3,opt,name=handleResult,proto3" json:"handleResult"`
-	ReqMsg        string                 `protobuf:"bytes,4,opt,name=reqMsg,proto3" json:"reqMsg"`
-	HandleMsg     string                 `protobuf:"bytes,5,opt,name=handleMsg,proto3" json:"handleMsg"`
-	ReqTime       int64                  `protobuf:"varint,6,opt,name=reqTime,proto3" json:"reqTime"`
-	HandleUserID  string                 `protobuf:"bytes,7,opt,name=handleUserID,proto3" json:"handleUserID"`
-	HandleTime    int64                  `protobuf:"varint,8,opt,name=handleTime,proto3" json:"handleTime"`
-	Ex            string                 `protobuf:"bytes,9,opt,name=ex,proto3" json:"ex"`
-	JoinSource    int32                  `protobuf:"varint,10,opt,name=joinSource,proto3" json:"joinSource"`
-	InviterUserID string                 `protobuf:"bytes,11,opt,name=inviterUserID,proto3" json:"inviterUserID"`
+	UserInfo      *PublicUserInfo        `protobuf:"bytes,1,opt,name=userInfo,proto3" json:"userInfo,omitempty"`
+	GroupInfo     *GroupInfo             `protobuf:"bytes,2,opt,name=groupInfo,proto3" json:"groupInfo,omitempty"`
+	HandleResult  int32                  `protobuf:"varint,3,opt,name=handleResult,proto3" json:"handleResult,omitempty"`
+	ReqMsg        string                 `protobuf:"bytes,4,opt,name=reqMsg,proto3" json:"reqMsg,omitempty"`
+	HandleMsg     string                 `protobuf:"bytes,5,opt,name=handleMsg,proto3" json:"handleMsg,omitempty"`
+	ReqTime       int64                  `protobuf:"varint,6,opt,name=reqTime,proto3" json:"reqTime,omitempty"`
+	HandleUserID  string                 `protobuf:"bytes,7,opt,name=handleUserID,proto3" json:"handleUserID,omitempty"`
+	HandleTime    int64                  `protobuf:"varint,8,opt,name=handleTime,proto3" json:"handleTime,omitempty"`
+	Ex            string                 `protobuf:"bytes,9,opt,name=ex,proto3" json:"ex,omitempty"`
+	JoinSource    int32                  `protobuf:"varint,10,opt,name=joinSource,proto3" json:"joinSource,omitempty"`
+	InviterUserID string                 `protobuf:"bytes,11,opt,name=inviterUserID,proto3" json:"inviterUserID,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -1027,19 +1027,19 @@ func (x *GroupRequest) GetInviterUserID() string {
 
 type FriendRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	FromUserID    string                 `protobuf:"bytes,1,opt,name=fromUserID,proto3" json:"fromUserID"`
-	FromNickname  string                 `protobuf:"bytes,2,opt,name=fromNickname,proto3" json:"fromNickname"`
-	FromFaceURL   string                 `protobuf:"bytes,3,opt,name=fromFaceURL,proto3" json:"fromFaceURL"`
-	ToUserID      string                 `protobuf:"bytes,4,opt,name=toUserID,proto3" json:"toUserID"`
-	ToNickname    string                 `protobuf:"bytes,5,opt,name=toNickname,proto3" json:"toNickname"`
-	ToFaceURL     string                 `protobuf:"bytes,6,opt,name=toFaceURL,proto3" json:"toFaceURL"`
-	HandleResult  int32                  `protobuf:"varint,7,opt,name=handleResult,proto3" json:"handleResult"`
-	ReqMsg        string                 `protobuf:"bytes,8,opt,name=reqMsg,proto3" json:"reqMsg"`
-	CreateTime    int64                  `protobuf:"varint,9,opt,name=createTime,proto3" json:"createTime"`
-	HandlerUserID string                 `protobuf:"bytes,10,opt,name=handlerUserID,proto3" json:"handlerUserID"`
-	HandleMsg     string                 `protobuf:"bytes,11,opt,name=handleMsg,proto3" json:"handleMsg"`
-	HandleTime    int64                  `protobuf:"varint,12,opt,name=handleTime,proto3" json:"handleTime"`
-	Ex            string                 `protobuf:"bytes,13,opt,name=ex,proto3" json:"ex"`
+	FromUserID    string                 `protobuf:"bytes,1,opt,name=fromUserID,proto3" json:"fromUserID,omitempty"`
+	FromNickname  string                 `protobuf:"bytes,2,opt,name=fromNickname,proto3" json:"fromNickname,omitempty"`
+	FromFaceURL   string                 `protobuf:"bytes,3,opt,name=fromFaceURL,proto3" json:"fromFaceURL,omitempty"`
+	ToUserID      string                 `protobuf:"bytes,4,opt,name=toUserID,proto3" json:"toUserID,omitempty"`
+	ToNickname    string                 `protobuf:"bytes,5,opt,name=toNickname,proto3" json:"toNickname,omitempty"`
+	ToFaceURL     string                 `protobuf:"bytes,6,opt,name=toFaceURL,proto3" json:"toFaceURL,omitempty"`
+	HandleResult  int32                  `protobuf:"varint,7,opt,name=handleResult,proto3" json:"handleResult,omitempty"`
+	ReqMsg        string                 `protobuf:"bytes,8,opt,name=reqMsg,proto3" json:"reqMsg,omitempty"`
+	CreateTime    int64                  `protobuf:"varint,9,opt,name=createTime,proto3" json:"createTime,omitempty"`
+	HandlerUserID string                 `protobuf:"bytes,10,opt,name=handlerUserID,proto3" json:"handlerUserID,omitempty"`
+	HandleMsg     string                 `protobuf:"bytes,11,opt,name=handleMsg,proto3" json:"handleMsg,omitempty"`
+	HandleTime    int64                  `protobuf:"varint,12,opt,name=handleTime,proto3" json:"handleTime,omitempty"`
+	Ex            string                 `protobuf:"bytes,13,opt,name=ex,proto3" json:"ex,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -1167,9 +1167,9 @@ func (x *FriendRequest) GetEx() string {
 
 type PullMessageBySeqsReq struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	UserID        string                 `protobuf:"bytes,1,opt,name=userID,proto3" json:"userID"`
-	SeqRanges     []*SeqRange            `protobuf:"bytes,2,rep,name=seqRanges,proto3" json:"seqRanges"`
-	Order         PullOrder              `protobuf:"varint,3,opt,name=order,proto3,enum=openim.sdkws.PullOrder" json:"order"`
+	UserID        string                 `protobuf:"bytes,1,opt,name=userID,proto3" json:"userID,omitempty"`
+	SeqRanges     []*SeqRange            `protobuf:"bytes,2,rep,name=seqRanges,proto3" json:"seqRanges,omitempty"`
+	Order         PullOrder              `protobuf:"varint,3,opt,name=order,proto3,enum=openim.sdkws.PullOrder" json:"order,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -1227,10 +1227,10 @@ func (x *PullMessageBySeqsReq) GetOrder() PullOrder {
 
 type SeqRange struct {
 	state          protoimpl.MessageState `protogen:"open.v1"`
-	ConversationID string                 `protobuf:"bytes,1,opt,name=conversationID,proto3" json:"conversationID"`
-	Begin          int64                  `protobuf:"varint,2,opt,name=begin,proto3" json:"begin"`
-	End            int64                  `protobuf:"varint,3,opt,name=end,proto3" json:"end"`
-	Num            int64                  `protobuf:"varint,4,opt,name=num,proto3" json:"num"`
+	ConversationID string                 `protobuf:"bytes,1,opt,name=conversationID,proto3" json:"conversationID,omitempty"`
+	Begin          int64                  `protobuf:"varint,2,opt,name=begin,proto3" json:"begin,omitempty"`
+	End            int64                  `protobuf:"varint,3,opt,name=end,proto3" json:"end,omitempty"`
+	Num            int64                  `protobuf:"varint,4,opt,name=num,proto3" json:"num,omitempty"`
 	unknownFields  protoimpl.UnknownFields
 	sizeCache      protoimpl.SizeCache
 }
@@ -1295,9 +1295,9 @@ func (x *SeqRange) GetNum() int64 {
 
 type PullMsgs struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	Msgs          []*MsgData             `protobuf:"bytes,1,rep,name=Msgs,proto3" json:"Msgs"`
-	IsEnd         bool                   `protobuf:"varint,2,opt,name=isEnd,proto3" json:"isEnd"`
-	EndSeq        int64                  `protobuf:"varint,3,opt,name=endSeq,proto3" json:"endSeq"`
+	Msgs          []*MsgData             `protobuf:"bytes,1,rep,name=Msgs,proto3" json:"Msgs,omitempty"`
+	IsEnd         bool                   `protobuf:"varint,2,opt,name=isEnd,proto3" json:"isEnd,omitempty"`
+	EndSeq        int64                  `protobuf:"varint,3,opt,name=endSeq,proto3" json:"endSeq,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -1407,7 +1407,7 @@ func (x *PullMessageBySeqsResp) GetNotificationMsgs() map[string]*PullMsgs {
 
 type GetMaxSeqReq struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	UserID        string                 `protobuf:"bytes,1,opt,name=userID,proto3" json:"userID"`
+	UserID        string                 `protobuf:"bytes,1,opt,name=userID,proto3" json:"userID,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -1503,9 +1503,9 @@ func (x *GetMaxSeqResp) GetMinSeqs() map[string]int64 {
 
 type UserSendMsgResp struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	ServerMsgID   string                 `protobuf:"bytes,1,opt,name=serverMsgID,proto3" json:"serverMsgID"`
-	ClientMsgID   string                 `protobuf:"bytes,2,opt,name=clientMsgID,proto3" json:"clientMsgID"`
-	SendTime      int64                  `protobuf:"varint,3,opt,name=sendTime,proto3" json:"sendTime"`
+	ServerMsgID   string                 `protobuf:"bytes,1,opt,name=serverMsgID,proto3" json:"serverMsgID,omitempty"`
+	ClientMsgID   string                 `protobuf:"bytes,2,opt,name=clientMsgID,proto3" json:"clientMsgID,omitempty"`
+	SendTime      int64                  `protobuf:"varint,3,opt,name=sendTime,proto3" json:"sendTime,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -1563,28 +1563,41 @@ func (x *UserSendMsgResp) GetSendTime() int64 {
 
 type MsgData struct {
 	state            protoimpl.MessageState `protogen:"open.v1"`
-	SendID           string                 `protobuf:"bytes,1,opt,name=sendID,proto3" json:"sendID"`
-	RecvID           string                 `protobuf:"bytes,2,opt,name=recvID,proto3" json:"recvID"`
-	GroupID          string                 `protobuf:"bytes,3,opt,name=groupID,proto3" json:"groupID"`
-	ClientMsgID      string                 `protobuf:"bytes,4,opt,name=clientMsgID,proto3" json:"clientMsgID"`
-	ServerMsgID      string                 `protobuf:"bytes,5,opt,name=serverMsgID,proto3" json:"serverMsgID"`
-	SenderPlatformID int32                  `protobuf:"varint,6,opt,name=senderPlatformID,proto3" json:"senderPlatformID"`
-	SenderNickname   string                 `protobuf:"bytes,7,opt,name=senderNickname,proto3" json:"senderNickname"`
-	SenderFaceURL    string                 `protobuf:"bytes,8,opt,name=senderFaceURL,proto3" json:"senderFaceURL"`
-	SessionType      int32                  `protobuf:"varint,9,opt,name=sessionType,proto3" json:"sessionType"`
-	MsgFrom          int32                  `protobuf:"varint,10,opt,name=msgFrom,proto3" json:"msgFrom"`
-	ContentType      int32                  `protobuf:"varint,11,opt,name=contentType,proto3" json:"contentType"`
-	Content          []byte                 `protobuf:"bytes,12,opt,name=content,proto3" json:"content"`
-	Seq              int64                  `protobuf:"varint,14,opt,name=seq,proto3" json:"seq"`
-	SendTime         int64                  `protobuf:"varint,15,opt,name=sendTime,proto3" json:"sendTime"`
-	CreateTime       int64                  `protobuf:"varint,16,opt,name=createTime,proto3" json:"createTime"`
-	Status           int32                  `protobuf:"varint,17,opt,name=status,proto3" json:"status"`
-	IsRead           bool                   `protobuf:"varint,18,opt,name=isRead,proto3" json:"isRead"`
+	SendID           string                 `protobuf:"bytes,1,opt,name=sendID,proto3" json:"sendID,omitempty"`
+	RecvID           string                 `protobuf:"bytes,2,opt,name=recvID,proto3" json:"recvID,omitempty"`
+	GroupID          string                 `protobuf:"bytes,3,opt,name=groupID,proto3" json:"groupID,omitempty"`
+	ClientMsgID      string                 `protobuf:"bytes,4,opt,name=clientMsgID,proto3" json:"clientMsgID,omitempty"`
+	ServerMsgID      string                 `protobuf:"bytes,5,opt,name=serverMsgID,proto3" json:"serverMsgID,omitempty"`
+	SenderPlatformID int32                  `protobuf:"varint,6,opt,name=senderPlatformID,proto3" json:"senderPlatformID,omitempty"`
+	SenderNickname   string                 `protobuf:"bytes,7,opt,name=senderNickname,proto3" json:"senderNickname,omitempty"`
+	SenderFaceURL    string                 `protobuf:"bytes,8,opt,name=senderFaceURL,proto3" json:"senderFaceURL,omitempty"`
+	SessionType      int32                  `protobuf:"varint,9,opt,name=sessionType,proto3" json:"sessionType,omitempty"`
+	MsgFrom          int32                  `protobuf:"varint,10,opt,name=msgFrom,proto3" json:"msgFrom,omitempty"`
+	ContentType      int32                  `protobuf:"varint,11,opt,name=contentType,proto3" json:"contentType,omitempty"`
+	Content          []byte                 `protobuf:"bytes,12,opt,name=content,proto3" json:"content,omitempty"`
+	Seq              int64                  `protobuf:"varint,14,opt,name=seq,proto3" json:"seq,omitempty"`
+	SendTime         int64                  `protobuf:"varint,15,opt,name=sendTime,proto3" json:"sendTime,omitempty"`
+	CreateTime       int64                  `protobuf:"varint,16,opt,name=createTime,proto3" json:"createTime,omitempty"`
+	Status           int32                  `protobuf:"varint,17,opt,name=status,proto3" json:"status,omitempty"`
+	IsRead           bool                   `protobuf:"varint,18,opt,name=isRead,proto3" json:"isRead,omitempty"`
 	Options          map[string]bool        `protobuf:"bytes,19,rep,name=options,proto3" json:"options,omitempty" protobuf_key:"bytes,1,opt,name=key" protobuf_val:"varint,2,opt,name=value"`
-	OfflinePushInfo  *OfflinePushInfo       `protobuf:"bytes,20,opt,name=offlinePushInfo,proto3" json:"offlinePushInfo"`
-	AtUserIDList     []string               `protobuf:"bytes,21,rep,name=atUserIDList,proto3" json:"atUserIDList"`
-	AttachedInfo     string                 `protobuf:"bytes,22,opt,name=attachedInfo,proto3" json:"attachedInfo"`
-	Ex               string                 `protobuf:"bytes,23,opt,name=ex,proto3" json:"ex"`
+	OfflinePushInfo  *OfflinePushInfo       `protobuf:"bytes,20,opt,name=offlinePushInfo,proto3" json:"offlinePushInfo,omitempty"`
+	AtUserIDList     []string               `protobuf:"bytes,21,rep,name=atUserIDList,proto3" json:"atUserIDList,omitempty"`
+	AttachedInfo     string                 `protobuf:"bytes,22,opt,name=attachedInfo,proto3" json:"attachedInfo,omitempty"`
+	Ex               string                 `protobuf:"bytes,23,opt,name=ex,proto3" json:"ex,omitempty"`
+	// Local extension, not part of upstream openimsdk/protocol: resolved,
+	// per-recipient-connection override for whether this specific push of
+	// a system/notification message (msgFrom=Sys) should be shown to the
+	// client at all — set by open-im-server's msggateway at the moment it
+	// writes to one specific connection, based on that connection's own
+	// platform and an admin-configured (contentType, platform) visibility
+	// table synced from the chat business-server. Absent means "no admin
+	// override configured" — the client falls back to its own default
+	// (show every system message type it already knows how to render).
+	// Only ever meaningful on a live push to one connection; never
+	// populated on a message read back via history/sync, since a stored
+	// message has no single "this connection" to resolve against.
+	SystemMsgVisible *bool `protobuf:"varint,24,opt,name=systemMsgVisible,proto3,oneof" json:"systemMsgVisible,omitempty"`
 	unknownFields    protoimpl.UnknownFields
 	sizeCache        protoimpl.SizeCache
 }
@@ -1773,6 +1786,13 @@ func (x *MsgData) GetEx() string {
 	return ""
 }
 
+func (x *MsgData) GetSystemMsgVisible() bool {
+	if x != nil && x.SystemMsgVisible != nil {
+		return *x.SystemMsgVisible
+	}
+	return false
+}
+
 type PushMessages struct {
 	state            protoimpl.MessageState `protogen:"open.v1"`
 	Msgs             map[string]*PullMsgs   `protobuf:"bytes,1,rep,name=msgs,proto3" json:"msgs,omitempty" protobuf_key:"bytes,1,opt,name=key" protobuf_val:"bytes,2,opt,name=value"`
@@ -1827,12 +1847,12 @@ func (x *PushMessages) GetNotificationMsgs() map[string]*PullMsgs {
 
 type OfflinePushInfo struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	Title         string                 `protobuf:"bytes,1,opt,name=title,proto3" json:"title"`
-	Desc          string                 `protobuf:"bytes,2,opt,name=desc,proto3" json:"desc"`
-	Ex            string                 `protobuf:"bytes,3,opt,name=ex,proto3" json:"ex"`
-	IOSPushSound  string                 `protobuf:"bytes,4,opt,name=iOSPushSound,proto3" json:"iOSPushSound"`
-	IOSBadgeCount bool                   `protobuf:"varint,5,opt,name=iOSBadgeCount,proto3" json:"iOSBadgeCount"`
-	SignalInfo    string                 `protobuf:"bytes,6,opt,name=signalInfo,proto3" json:"signalInfo"`
+	Title         string                 `protobuf:"bytes,1,opt,name=title,proto3" json:"title,omitempty"`
+	Desc          string                 `protobuf:"bytes,2,opt,name=desc,proto3" json:"desc,omitempty"`
+	Ex            string                 `protobuf:"bytes,3,opt,name=ex,proto3" json:"ex,omitempty"`
+	IOSPushSound  string                 `protobuf:"bytes,4,opt,name=iOSPushSound,proto3" json:"iOSPushSound,omitempty"`
+	IOSBadgeCount bool                   `protobuf:"varint,5,opt,name=iOSBadgeCount,proto3" json:"iOSBadgeCount,omitempty"`
+	SignalInfo    string                 `protobuf:"bytes,6,opt,name=signalInfo,proto3" json:"signalInfo,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -1911,9 +1931,9 @@ func (x *OfflinePushInfo) GetSignalInfo() string {
 
 type TipsComm struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	Detail        []byte                 `protobuf:"bytes,1,opt,name=detail,proto3" json:"detail"`
-	DefaultTips   string                 `protobuf:"bytes,2,opt,name=defaultTips,proto3" json:"defaultTips"`
-	JsonDetail    string                 `protobuf:"bytes,3,opt,name=jsonDetail,proto3" json:"jsonDetail"`
+	Detail        []byte                 `protobuf:"bytes,1,opt,name=detail,proto3" json:"detail,omitempty"`
+	DefaultTips   string                 `protobuf:"bytes,2,opt,name=defaultTips,proto3" json:"defaultTips,omitempty"`
+	JsonDetail    string                 `protobuf:"bytes,3,opt,name=jsonDetail,proto3" json:"jsonDetail,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -1972,13 +1992,13 @@ func (x *TipsComm) GetJsonDetail() string {
 // OnGroupCreated()
 type GroupCreatedTips struct {
 	state                protoimpl.MessageState `protogen:"open.v1"`
-	Group                *GroupInfo             `protobuf:"bytes,1,opt,name=group,proto3" json:"group"`
-	OpUser               *GroupMemberFullInfo   `protobuf:"bytes,2,opt,name=opUser,proto3" json:"opUser"`
-	MemberList           []*GroupMemberFullInfo `protobuf:"bytes,3,rep,name=memberList,proto3" json:"memberList"`
-	OperationTime        int64                  `protobuf:"varint,4,opt,name=operationTime,proto3" json:"operationTime"`
-	GroupOwnerUser       *GroupMemberFullInfo   `protobuf:"bytes,5,opt,name=groupOwnerUser,proto3" json:"groupOwnerUser"`
-	GroupMemberVersion   uint64                 `protobuf:"varint,6,opt,name=groupMemberVersion,proto3" json:"groupMemberVersion"`
-	GroupMemberVersionID string                 `protobuf:"bytes,7,opt,name=groupMemberVersionID,proto3" json:"groupMemberVersionID"`
+	Group                *GroupInfo             `protobuf:"bytes,1,opt,name=group,proto3" json:"group,omitempty"`
+	OpUser               *GroupMemberFullInfo   `protobuf:"bytes,2,opt,name=opUser,proto3" json:"opUser,omitempty"`
+	MemberList           []*GroupMemberFullInfo `protobuf:"bytes,3,rep,name=memberList,proto3" json:"memberList,omitempty"`
+	OperationTime        int64                  `protobuf:"varint,4,opt,name=operationTime,proto3" json:"operationTime,omitempty"`
+	GroupOwnerUser       *GroupMemberFullInfo   `protobuf:"bytes,5,opt,name=groupOwnerUser,proto3" json:"groupOwnerUser,omitempty"`
+	GroupMemberVersion   uint64                 `protobuf:"varint,6,opt,name=groupMemberVersion,proto3" json:"groupMemberVersion,omitempty"`
+	GroupMemberVersionID string                 `protobuf:"bytes,7,opt,name=groupMemberVersionID,proto3" json:"groupMemberVersionID,omitempty"`
 	unknownFields        protoimpl.UnknownFields
 	sizeCache            protoimpl.SizeCache
 }
@@ -2065,11 +2085,11 @@ func (x *GroupCreatedTips) GetGroupMemberVersionID() string {
 // OnGroupInfoSet()
 type GroupInfoSetTips struct {
 	state                protoimpl.MessageState `protogen:"open.v1"`
-	OpUser               *GroupMemberFullInfo   `protobuf:"bytes,1,opt,name=opUser,proto3" json:"opUser"` //who do this
-	MuteTime             int64                  `protobuf:"varint,2,opt,name=muteTime,proto3" json:"muteTime"`
-	Group                *GroupInfo             `protobuf:"bytes,3,opt,name=group,proto3" json:"group"`
-	GroupMemberVersion   uint64                 `protobuf:"varint,4,opt,name=groupMemberVersion,proto3" json:"groupMemberVersion"`
-	GroupMemberVersionID string                 `protobuf:"bytes,5,opt,name=groupMemberVersionID,proto3" json:"groupMemberVersionID"`
+	OpUser               *GroupMemberFullInfo   `protobuf:"bytes,1,opt,name=opUser,proto3" json:"opUser,omitempty"` //who do this
+	MuteTime             int64                  `protobuf:"varint,2,opt,name=muteTime,proto3" json:"muteTime,omitempty"`
+	Group                *GroupInfo             `protobuf:"bytes,3,opt,name=group,proto3" json:"group,omitempty"`
+	GroupMemberVersion   uint64                 `protobuf:"varint,4,opt,name=groupMemberVersion,proto3" json:"groupMemberVersion,omitempty"`
+	GroupMemberVersionID string                 `protobuf:"bytes,5,opt,name=groupMemberVersionID,proto3" json:"groupMemberVersionID,omitempty"`
 	unknownFields        protoimpl.UnknownFields
 	sizeCache            protoimpl.SizeCache
 }
@@ -2141,10 +2161,10 @@ func (x *GroupInfoSetTips) GetGroupMemberVersionID() string {
 
 type GroupInfoSetNameTips struct {
 	state                protoimpl.MessageState `protogen:"open.v1"`
-	OpUser               *GroupMemberFullInfo   `protobuf:"bytes,1,opt,name=opUser,proto3" json:"opUser"` //who do this
-	Group                *GroupInfo             `protobuf:"bytes,2,opt,name=group,proto3" json:"group"`
-	GroupMemberVersion   uint64                 `protobuf:"varint,3,opt,name=groupMemberVersion,proto3" json:"groupMemberVersion"`
-	GroupMemberVersionID string                 `protobuf:"bytes,4,opt,name=groupMemberVersionID,proto3" json:"groupMemberVersionID"`
+	OpUser               *GroupMemberFullInfo   `protobuf:"bytes,1,opt,name=opUser,proto3" json:"opUser,omitempty"` //who do this
+	Group                *GroupInfo             `protobuf:"bytes,2,opt,name=group,proto3" json:"group,omitempty"`
+	GroupMemberVersion   uint64                 `protobuf:"varint,3,opt,name=groupMemberVersion,proto3" json:"groupMemberVersion,omitempty"`
+	GroupMemberVersionID string                 `protobuf:"bytes,4,opt,name=groupMemberVersionID,proto3" json:"groupMemberVersionID,omitempty"`
 	unknownFields        protoimpl.UnknownFields
 	sizeCache            protoimpl.SizeCache
 }
@@ -2209,10 +2229,10 @@ func (x *GroupInfoSetNameTips) GetGroupMemberVersionID() string {
 
 type GroupInfoSetAnnouncementTips struct {
 	state                protoimpl.MessageState `protogen:"open.v1"`
-	OpUser               *GroupMemberFullInfo   `protobuf:"bytes,1,opt,name=opUser,proto3" json:"opUser"` //who do this
-	Group                *GroupInfo             `protobuf:"bytes,2,opt,name=group,proto3" json:"group"`
-	GroupMemberVersion   uint64                 `protobuf:"varint,3,opt,name=groupMemberVersion,proto3" json:"groupMemberVersion"`
-	GroupMemberVersionID string                 `protobuf:"bytes,4,opt,name=groupMemberVersionID,proto3" json:"groupMemberVersionID"`
+	OpUser               *GroupMemberFullInfo   `protobuf:"bytes,1,opt,name=opUser,proto3" json:"opUser,omitempty"` //who do this
+	Group                *GroupInfo             `protobuf:"bytes,2,opt,name=group,proto3" json:"group,omitempty"`
+	GroupMemberVersion   uint64                 `protobuf:"varint,3,opt,name=groupMemberVersion,proto3" json:"groupMemberVersion,omitempty"`
+	GroupMemberVersionID string                 `protobuf:"bytes,4,opt,name=groupMemberVersionID,proto3" json:"groupMemberVersionID,omitempty"`
 	unknownFields        protoimpl.UnknownFields
 	sizeCache            protoimpl.SizeCache
 }
@@ -2278,11 +2298,11 @@ func (x *GroupInfoSetAnnouncementTips) GetGroupMemberVersionID() string {
 // OnJoinGroupApplication()
 type JoinGroupApplicationTips struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	Group         *GroupInfo             `protobuf:"bytes,1,opt,name=group,proto3" json:"group"`
-	Applicant     *PublicUserInfo        `protobuf:"bytes,2,opt,name=applicant,proto3" json:"applicant"`
-	ReqMsg        string                 `protobuf:"bytes,3,opt,name=reqMsg,proto3" json:"reqMsg"`
-	Uuid          string                 `protobuf:"bytes,4,opt,name=uuid,proto3" json:"uuid"`
-	Request       *GroupRequest          `protobuf:"bytes,5,opt,name=request,proto3" json:"request"`
+	Group         *GroupInfo             `protobuf:"bytes,1,opt,name=group,proto3" json:"group,omitempty"`
+	Applicant     *PublicUserInfo        `protobuf:"bytes,2,opt,name=applicant,proto3" json:"applicant,omitempty"`
+	ReqMsg        string                 `protobuf:"bytes,3,opt,name=reqMsg,proto3" json:"reqMsg,omitempty"`
+	Uuid          string                 `protobuf:"bytes,4,opt,name=uuid,proto3" json:"uuid,omitempty"`
+	Request       *GroupRequest          `protobuf:"bytes,5,opt,name=request,proto3" json:"request,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -2357,11 +2377,11 @@ func (x *JoinGroupApplicationTips) GetRequest() *GroupRequest {
 // Actively leave the group
 type MemberQuitTips struct {
 	state                protoimpl.MessageState `protogen:"open.v1"`
-	Group                *GroupInfo             `protobuf:"bytes,1,opt,name=group,proto3" json:"group"`
-	QuitUser             *GroupMemberFullInfo   `protobuf:"bytes,2,opt,name=quitUser,proto3" json:"quitUser"`
-	OperationTime        int64                  `protobuf:"varint,3,opt,name=operationTime,proto3" json:"operationTime"`
-	GroupMemberVersion   uint64                 `protobuf:"varint,4,opt,name=groupMemberVersion,proto3" json:"groupMemberVersion"`
-	GroupMemberVersionID string                 `protobuf:"bytes,5,opt,name=groupMemberVersionID,proto3" json:"groupMemberVersionID"`
+	Group                *GroupInfo             `protobuf:"bytes,1,opt,name=group,proto3" json:"group,omitempty"`
+	QuitUser             *GroupMemberFullInfo   `protobuf:"bytes,2,opt,name=quitUser,proto3" json:"quitUser,omitempty"`
+	OperationTime        int64                  `protobuf:"varint,3,opt,name=operationTime,proto3" json:"operationTime,omitempty"`
+	GroupMemberVersion   uint64                 `protobuf:"varint,4,opt,name=groupMemberVersion,proto3" json:"groupMemberVersion,omitempty"`
+	GroupMemberVersionID string                 `protobuf:"bytes,5,opt,name=groupMemberVersionID,proto3" json:"groupMemberVersionID,omitempty"`
 	unknownFields        protoimpl.UnknownFields
 	sizeCache            protoimpl.SizeCache
 }
@@ -2434,12 +2454,12 @@ func (x *MemberQuitTips) GetGroupMemberVersionID() string {
 // OnApplicationGroupAccepted()
 type GroupApplicationAcceptedTips struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	Group         *GroupInfo             `protobuf:"bytes,1,opt,name=group,proto3" json:"group"`
-	OpUser        *GroupMemberFullInfo   `protobuf:"bytes,2,opt,name=opUser,proto3" json:"opUser"`
-	HandleMsg     string                 `protobuf:"bytes,4,opt,name=handleMsg,proto3" json:"handleMsg"`
-	ReceiverAs    int32                  `protobuf:"varint,5,opt,name=receiverAs,proto3" json:"receiverAs"` // admin(==1) or applicant(==0)
-	Uuid          string                 `protobuf:"bytes,6,opt,name=uuid,proto3" json:"uuid"`
-	Request       *GroupRequest          `protobuf:"bytes,7,opt,name=request,proto3" json:"request"`
+	Group         *GroupInfo             `protobuf:"bytes,1,opt,name=group,proto3" json:"group,omitempty"`
+	OpUser        *GroupMemberFullInfo   `protobuf:"bytes,2,opt,name=opUser,proto3" json:"opUser,omitempty"`
+	HandleMsg     string                 `protobuf:"bytes,4,opt,name=handleMsg,proto3" json:"handleMsg,omitempty"`
+	ReceiverAs    int32                  `protobuf:"varint,5,opt,name=receiverAs,proto3" json:"receiverAs,omitempty"` // admin(==1) or applicant(==0)
+	Uuid          string                 `protobuf:"bytes,6,opt,name=uuid,proto3" json:"uuid,omitempty"`
+	Request       *GroupRequest          `protobuf:"bytes,7,opt,name=request,proto3" json:"request,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -2519,12 +2539,12 @@ func (x *GroupApplicationAcceptedTips) GetRequest() *GroupRequest {
 // OnApplicationGroupRejected()
 type GroupApplicationRejectedTips struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	Group         *GroupInfo             `protobuf:"bytes,1,opt,name=group,proto3" json:"group"`
-	OpUser        *GroupMemberFullInfo   `protobuf:"bytes,2,opt,name=opUser,proto3" json:"opUser"`
-	HandleMsg     string                 `protobuf:"bytes,4,opt,name=handleMsg,proto3" json:"handleMsg"`
-	ReceiverAs    int32                  `protobuf:"varint,5,opt,name=receiverAs,proto3" json:"receiverAs"` // admin(==1) or applicant(==0)
-	Uuid          string                 `protobuf:"bytes,6,opt,name=uuid,proto3" json:"uuid"`
-	Request       *GroupRequest          `protobuf:"bytes,7,opt,name=request,proto3" json:"request"`
+	Group         *GroupInfo             `protobuf:"bytes,1,opt,name=group,proto3" json:"group,omitempty"`
+	OpUser        *GroupMemberFullInfo   `protobuf:"bytes,2,opt,name=opUser,proto3" json:"opUser,omitempty"`
+	HandleMsg     string                 `protobuf:"bytes,4,opt,name=handleMsg,proto3" json:"handleMsg,omitempty"`
+	ReceiverAs    int32                  `protobuf:"varint,5,opt,name=receiverAs,proto3" json:"receiverAs,omitempty"` // admin(==1) or applicant(==0)
+	Uuid          string                 `protobuf:"bytes,6,opt,name=uuid,proto3" json:"uuid,omitempty"`
+	Request       *GroupRequest          `protobuf:"bytes,7,opt,name=request,proto3" json:"request,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -2604,14 +2624,14 @@ func (x *GroupApplicationRejectedTips) GetRequest() *GroupRequest {
 // OnTransferGroupOwner()
 type GroupOwnerTransferredTips struct {
 	state                protoimpl.MessageState `protogen:"open.v1"`
-	Group                *GroupInfo             `protobuf:"bytes,1,opt,name=group,proto3" json:"group"`
-	OpUser               *GroupMemberFullInfo   `protobuf:"bytes,2,opt,name=opUser,proto3" json:"opUser"`
-	NewGroupOwner        *GroupMemberFullInfo   `protobuf:"bytes,3,opt,name=newGroupOwner,proto3" json:"newGroupOwner"`
-	OldGroupOwner        string                 `protobuf:"bytes,4,opt,name=oldGroupOwner,proto3" json:"oldGroupOwner"`
-	OperationTime        int64                  `protobuf:"varint,5,opt,name=operationTime,proto3" json:"operationTime"`
-	OldGroupOwnerInfo    *GroupMemberFullInfo   `protobuf:"bytes,6,opt,name=oldGroupOwnerInfo,proto3" json:"oldGroupOwnerInfo"`
-	GroupMemberVersion   uint64                 `protobuf:"varint,7,opt,name=groupMemberVersion,proto3" json:"groupMemberVersion"`
-	GroupMemberVersionID string                 `protobuf:"bytes,8,opt,name=groupMemberVersionID,proto3" json:"groupMemberVersionID"`
+	Group                *GroupInfo             `protobuf:"bytes,1,opt,name=group,proto3" json:"group,omitempty"`
+	OpUser               *GroupMemberFullInfo   `protobuf:"bytes,2,opt,name=opUser,proto3" json:"opUser,omitempty"`
+	NewGroupOwner        *GroupMemberFullInfo   `protobuf:"bytes,3,opt,name=newGroupOwner,proto3" json:"newGroupOwner,omitempty"`
+	OldGroupOwner        string                 `protobuf:"bytes,4,opt,name=oldGroupOwner,proto3" json:"oldGroupOwner,omitempty"`
+	OperationTime        int64                  `protobuf:"varint,5,opt,name=operationTime,proto3" json:"operationTime,omitempty"`
+	OldGroupOwnerInfo    *GroupMemberFullInfo   `protobuf:"bytes,6,opt,name=oldGroupOwnerInfo,proto3" json:"oldGroupOwnerInfo,omitempty"`
+	GroupMemberVersion   uint64                 `protobuf:"varint,7,opt,name=groupMemberVersion,proto3" json:"groupMemberVersion,omitempty"`
+	GroupMemberVersionID string                 `protobuf:"bytes,8,opt,name=groupMemberVersionID,proto3" json:"groupMemberVersionID,omitempty"`
 	unknownFields        protoimpl.UnknownFields
 	sizeCache            protoimpl.SizeCache
 }
@@ -2705,12 +2725,12 @@ func (x *GroupOwnerTransferredTips) GetGroupMemberVersionID() string {
 // OnMemberKicked()
 type MemberKickedTips struct {
 	state                protoimpl.MessageState `protogen:"open.v1"`
-	Group                *GroupInfo             `protobuf:"bytes,1,opt,name=group,proto3" json:"group"`
-	OpUser               *GroupMemberFullInfo   `protobuf:"bytes,2,opt,name=opUser,proto3" json:"opUser"`
-	KickedUserList       []*GroupMemberFullInfo `protobuf:"bytes,3,rep,name=kickedUserList,proto3" json:"kickedUserList"`
-	OperationTime        int64                  `protobuf:"varint,4,opt,name=operationTime,proto3" json:"operationTime"`
-	GroupMemberVersion   uint64                 `protobuf:"varint,5,opt,name=groupMemberVersion,proto3" json:"groupMemberVersion"`
-	GroupMemberVersionID string                 `protobuf:"bytes,6,opt,name=groupMemberVersionID,proto3" json:"groupMemberVersionID"`
+	Group                *GroupInfo             `protobuf:"bytes,1,opt,name=group,proto3" json:"group,omitempty"`
+	OpUser               *GroupMemberFullInfo   `protobuf:"bytes,2,opt,name=opUser,proto3" json:"opUser,omitempty"`
+	KickedUserList       []*GroupMemberFullInfo `protobuf:"bytes,3,rep,name=kickedUserList,proto3" json:"kickedUserList,omitempty"`
+	OperationTime        int64                  `protobuf:"varint,4,opt,name=operationTime,proto3" json:"operationTime,omitempty"`
+	GroupMemberVersion   uint64                 `protobuf:"varint,5,opt,name=groupMemberVersion,proto3" json:"groupMemberVersion,omitempty"`
+	GroupMemberVersionID string                 `protobuf:"bytes,6,opt,name=groupMemberVersionID,proto3" json:"groupMemberVersionID,omitempty"`
 	unknownFields        protoimpl.UnknownFields
 	sizeCache            protoimpl.SizeCache
 }
@@ -2790,13 +2810,13 @@ func (x *MemberKickedTips) GetGroupMemberVersionID() string {
 // OnMemberInvited()
 type MemberInvitedTips struct {
 	state                protoimpl.MessageState `protogen:"open.v1"`
-	Group                *GroupInfo             `protobuf:"bytes,1,opt,name=group,proto3" json:"group"`
-	OpUser               *GroupMemberFullInfo   `protobuf:"bytes,2,opt,name=opUser,proto3" json:"opUser"`
-	InvitedUserList      []*GroupMemberFullInfo `protobuf:"bytes,3,rep,name=invitedUserList,proto3" json:"invitedUserList"`
-	OperationTime        int64                  `protobuf:"varint,4,opt,name=operationTime,proto3" json:"operationTime"`
-	GroupMemberVersion   uint64                 `protobuf:"varint,5,opt,name=groupMemberVersion,proto3" json:"groupMemberVersion"`
-	GroupMemberVersionID string                 `protobuf:"bytes,6,opt,name=groupMemberVersionID,proto3" json:"groupMemberVersionID"`
-	InviterUser          *GroupMemberFullInfo   `protobuf:"bytes,7,opt,name=inviterUser,proto3" json:"inviterUser"`
+	Group                *GroupInfo             `protobuf:"bytes,1,opt,name=group,proto3" json:"group,omitempty"`
+	OpUser               *GroupMemberFullInfo   `protobuf:"bytes,2,opt,name=opUser,proto3" json:"opUser,omitempty"`
+	InvitedUserList      []*GroupMemberFullInfo `protobuf:"bytes,3,rep,name=invitedUserList,proto3" json:"invitedUserList,omitempty"`
+	OperationTime        int64                  `protobuf:"varint,4,opt,name=operationTime,proto3" json:"operationTime,omitempty"`
+	GroupMemberVersion   uint64                 `protobuf:"varint,5,opt,name=groupMemberVersion,proto3" json:"groupMemberVersion,omitempty"`
+	GroupMemberVersionID string                 `protobuf:"bytes,6,opt,name=groupMemberVersionID,proto3" json:"groupMemberVersionID,omitempty"`
+	InviterUser          *GroupMemberFullInfo   `protobuf:"bytes,7,opt,name=inviterUser,proto3" json:"inviterUser,omitempty"`
 	unknownFields        protoimpl.UnknownFields
 	sizeCache            protoimpl.SizeCache
 }
@@ -2883,11 +2903,11 @@ func (x *MemberInvitedTips) GetInviterUser() *GroupMemberFullInfo {
 // Actively join the group
 type MemberEnterTips struct {
 	state                protoimpl.MessageState `protogen:"open.v1"`
-	Group                *GroupInfo             `protobuf:"bytes,1,opt,name=group,proto3" json:"group"`
-	EntrantUser          *GroupMemberFullInfo   `protobuf:"bytes,2,opt,name=entrantUser,proto3" json:"entrantUser"`
-	OperationTime        int64                  `protobuf:"varint,3,opt,name=operationTime,proto3" json:"operationTime"`
-	GroupMemberVersion   uint64                 `protobuf:"varint,5,opt,name=groupMemberVersion,proto3" json:"groupMemberVersion"`
-	GroupMemberVersionID string                 `protobuf:"bytes,6,opt,name=groupMemberVersionID,proto3" json:"groupMemberVersionID"`
+	Group                *GroupInfo             `protobuf:"bytes,1,opt,name=group,proto3" json:"group,omitempty"`
+	EntrantUser          *GroupMemberFullInfo   `protobuf:"bytes,2,opt,name=entrantUser,proto3" json:"entrantUser,omitempty"`
+	OperationTime        int64                  `protobuf:"varint,3,opt,name=operationTime,proto3" json:"operationTime,omitempty"`
+	GroupMemberVersion   uint64                 `protobuf:"varint,5,opt,name=groupMemberVersion,proto3" json:"groupMemberVersion,omitempty"`
+	GroupMemberVersionID string                 `protobuf:"bytes,6,opt,name=groupMemberVersionID,proto3" json:"groupMemberVersionID,omitempty"`
 	unknownFields        protoimpl.UnknownFields
 	sizeCache            protoimpl.SizeCache
 }
@@ -2959,9 +2979,9 @@ func (x *MemberEnterTips) GetGroupMemberVersionID() string {
 
 type GroupDismissedTips struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	Group         *GroupInfo             `protobuf:"bytes,1,opt,name=group,proto3" json:"group"`
-	OpUser        *GroupMemberFullInfo   `protobuf:"bytes,2,opt,name=opUser,proto3" json:"opUser"`
-	OperationTime int64                  `protobuf:"varint,3,opt,name=operationTime,proto3" json:"operationTime"`
+	Group         *GroupInfo             `protobuf:"bytes,1,opt,name=group,proto3" json:"group,omitempty"`
+	OpUser        *GroupMemberFullInfo   `protobuf:"bytes,2,opt,name=opUser,proto3" json:"opUser,omitempty"`
+	OperationTime int64                  `protobuf:"varint,3,opt,name=operationTime,proto3" json:"operationTime,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -3019,13 +3039,13 @@ func (x *GroupDismissedTips) GetOperationTime() int64 {
 
 type GroupMemberMutedTips struct {
 	state                protoimpl.MessageState `protogen:"open.v1"`
-	Group                *GroupInfo             `protobuf:"bytes,1,opt,name=group,proto3" json:"group"`
-	OpUser               *GroupMemberFullInfo   `protobuf:"bytes,2,opt,name=opUser,proto3" json:"opUser"`
-	OperationTime        int64                  `protobuf:"varint,3,opt,name=operationTime,proto3" json:"operationTime"`
-	MutedUser            *GroupMemberFullInfo   `protobuf:"bytes,4,opt,name=mutedUser,proto3" json:"mutedUser"`
-	MutedSeconds         uint32                 `protobuf:"varint,5,opt,name=mutedSeconds,proto3" json:"mutedSeconds"`
-	GroupMemberVersion   uint64                 `protobuf:"varint,6,opt,name=groupMemberVersion,proto3" json:"groupMemberVersion"`
-	GroupMemberVersionID string                 `protobuf:"bytes,7,opt,name=groupMemberVersionID,proto3" json:"groupMemberVersionID"`
+	Group                *GroupInfo             `protobuf:"bytes,1,opt,name=group,proto3" json:"group,omitempty"`
+	OpUser               *GroupMemberFullInfo   `protobuf:"bytes,2,opt,name=opUser,proto3" json:"opUser,omitempty"`
+	OperationTime        int64                  `protobuf:"varint,3,opt,name=operationTime,proto3" json:"operationTime,omitempty"`
+	MutedUser            *GroupMemberFullInfo   `protobuf:"bytes,4,opt,name=mutedUser,proto3" json:"mutedUser,omitempty"`
+	MutedSeconds         uint32                 `protobuf:"varint,5,opt,name=mutedSeconds,proto3" json:"mutedSeconds,omitempty"`
+	GroupMemberVersion   uint64                 `protobuf:"varint,6,opt,name=groupMemberVersion,proto3" json:"groupMemberVersion,omitempty"`
+	GroupMemberVersionID string                 `protobuf:"bytes,7,opt,name=groupMemberVersionID,proto3" json:"groupMemberVersionID,omitempty"`
 	unknownFields        protoimpl.UnknownFields
 	sizeCache            protoimpl.SizeCache
 }
@@ -3111,12 +3131,12 @@ func (x *GroupMemberMutedTips) GetGroupMemberVersionID() string {
 
 type GroupMemberCancelMutedTips struct {
 	state                protoimpl.MessageState `protogen:"open.v1"`
-	Group                *GroupInfo             `protobuf:"bytes,1,opt,name=group,proto3" json:"group"`
-	OpUser               *GroupMemberFullInfo   `protobuf:"bytes,2,opt,name=opUser,proto3" json:"opUser"`
-	OperationTime        int64                  `protobuf:"varint,3,opt,name=operationTime,proto3" json:"operationTime"`
-	MutedUser            *GroupMemberFullInfo   `protobuf:"bytes,4,opt,name=mutedUser,proto3" json:"mutedUser"`
-	GroupMemberVersion   uint64                 `protobuf:"varint,5,opt,name=groupMemberVersion,proto3" json:"groupMemberVersion"`
-	GroupMemberVersionID string                 `protobuf:"bytes,6,opt,name=groupMemberVersionID,proto3" json:"groupMemberVersionID"`
+	Group                *GroupInfo             `protobuf:"bytes,1,opt,name=group,proto3" json:"group,omitempty"`
+	OpUser               *GroupMemberFullInfo   `protobuf:"bytes,2,opt,name=opUser,proto3" json:"opUser,omitempty"`
+	OperationTime        int64                  `protobuf:"varint,3,opt,name=operationTime,proto3" json:"operationTime,omitempty"`
+	MutedUser            *GroupMemberFullInfo   `protobuf:"bytes,4,opt,name=mutedUser,proto3" json:"mutedUser,omitempty"`
+	GroupMemberVersion   uint64                 `protobuf:"varint,5,opt,name=groupMemberVersion,proto3" json:"groupMemberVersion,omitempty"`
+	GroupMemberVersionID string                 `protobuf:"bytes,6,opt,name=groupMemberVersionID,proto3" json:"groupMemberVersionID,omitempty"`
 	unknownFields        protoimpl.UnknownFields
 	sizeCache            protoimpl.SizeCache
 }
@@ -3195,11 +3215,11 @@ func (x *GroupMemberCancelMutedTips) GetGroupMemberVersionID() string {
 
 type GroupMutedTips struct {
 	state                protoimpl.MessageState `protogen:"open.v1"`
-	Group                *GroupInfo             `protobuf:"bytes,1,opt,name=group,proto3" json:"group"`
-	OpUser               *GroupMemberFullInfo   `protobuf:"bytes,2,opt,name=opUser,proto3" json:"opUser"`
-	OperationTime        int64                  `protobuf:"varint,3,opt,name=operationTime,proto3" json:"operationTime"`
-	GroupMemberVersion   uint64                 `protobuf:"varint,4,opt,name=groupMemberVersion,proto3" json:"groupMemberVersion"`
-	GroupMemberVersionID string                 `protobuf:"bytes,5,opt,name=groupMemberVersionID,proto3" json:"groupMemberVersionID"`
+	Group                *GroupInfo             `protobuf:"bytes,1,opt,name=group,proto3" json:"group,omitempty"`
+	OpUser               *GroupMemberFullInfo   `protobuf:"bytes,2,opt,name=opUser,proto3" json:"opUser,omitempty"`
+	OperationTime        int64                  `protobuf:"varint,3,opt,name=operationTime,proto3" json:"operationTime,omitempty"`
+	GroupMemberVersion   uint64                 `protobuf:"varint,4,opt,name=groupMemberVersion,proto3" json:"groupMemberVersion,omitempty"`
+	GroupMemberVersionID string                 `protobuf:"bytes,5,opt,name=groupMemberVersionID,proto3" json:"groupMemberVersionID,omitempty"`
 	unknownFields        protoimpl.UnknownFields
 	sizeCache            protoimpl.SizeCache
 }
@@ -3271,11 +3291,11 @@ func (x *GroupMutedTips) GetGroupMemberVersionID() string {
 
 type GroupCancelMutedTips struct {
 	state                protoimpl.MessageState `protogen:"open.v1"`
-	Group                *GroupInfo             `protobuf:"bytes,1,opt,name=group,proto3" json:"group"`
-	OpUser               *GroupMemberFullInfo   `protobuf:"bytes,2,opt,name=opUser,proto3" json:"opUser"`
-	OperationTime        int64                  `protobuf:"varint,3,opt,name=operationTime,proto3" json:"operationTime"`
-	GroupMemberVersion   uint64                 `protobuf:"varint,4,opt,name=groupMemberVersion,proto3" json:"groupMemberVersion"`
-	GroupMemberVersionID string                 `protobuf:"bytes,5,opt,name=groupMemberVersionID,proto3" json:"groupMemberVersionID"`
+	Group                *GroupInfo             `protobuf:"bytes,1,opt,name=group,proto3" json:"group,omitempty"`
+	OpUser               *GroupMemberFullInfo   `protobuf:"bytes,2,opt,name=opUser,proto3" json:"opUser,omitempty"`
+	OperationTime        int64                  `protobuf:"varint,3,opt,name=operationTime,proto3" json:"operationTime,omitempty"`
+	GroupMemberVersion   uint64                 `protobuf:"varint,4,opt,name=groupMemberVersion,proto3" json:"groupMemberVersion,omitempty"`
+	GroupMemberVersionID string                 `protobuf:"bytes,5,opt,name=groupMemberVersionID,proto3" json:"groupMemberVersionID,omitempty"`
 	unknownFields        protoimpl.UnknownFields
 	sizeCache            protoimpl.SizeCache
 }
@@ -3347,13 +3367,13 @@ func (x *GroupCancelMutedTips) GetGroupMemberVersionID() string {
 
 type GroupMemberInfoSetTips struct {
 	state                protoimpl.MessageState `protogen:"open.v1"`
-	Group                *GroupInfo             `protobuf:"bytes,1,opt,name=group,proto3" json:"group"`
-	OpUser               *GroupMemberFullInfo   `protobuf:"bytes,2,opt,name=opUser,proto3" json:"opUser"`
-	OperationTime        int64                  `protobuf:"varint,3,opt,name=operationTime,proto3" json:"operationTime"`
-	ChangedUser          *GroupMemberFullInfo   `protobuf:"bytes,4,opt,name=changedUser,proto3" json:"changedUser"`
-	GroupMemberVersion   uint64                 `protobuf:"varint,5,opt,name=groupMemberVersion,proto3" json:"groupMemberVersion"`
-	GroupMemberVersionID string                 `protobuf:"bytes,6,opt,name=groupMemberVersionID,proto3" json:"groupMemberVersionID"`
-	GroupSortVersion     uint64                 `protobuf:"varint,7,opt,name=groupSortVersion,proto3" json:"groupSortVersion"`
+	Group                *GroupInfo             `protobuf:"bytes,1,opt,name=group,proto3" json:"group,omitempty"`
+	OpUser               *GroupMemberFullInfo   `protobuf:"bytes,2,opt,name=opUser,proto3" json:"opUser,omitempty"`
+	OperationTime        int64                  `protobuf:"varint,3,opt,name=operationTime,proto3" json:"operationTime,omitempty"`
+	ChangedUser          *GroupMemberFullInfo   `protobuf:"bytes,4,opt,name=changedUser,proto3" json:"changedUser,omitempty"`
+	GroupMemberVersion   uint64                 `protobuf:"varint,5,opt,name=groupMemberVersion,proto3" json:"groupMemberVersion,omitempty"`
+	GroupMemberVersionID string                 `protobuf:"bytes,6,opt,name=groupMemberVersionID,proto3" json:"groupMemberVersionID,omitempty"`
+	GroupSortVersion     uint64                 `protobuf:"varint,7,opt,name=groupSortVersion,proto3" json:"groupSortVersion,omitempty"`
 	unknownFields        protoimpl.UnknownFields
 	sizeCache            protoimpl.SizeCache
 }
@@ -3439,9 +3459,9 @@ func (x *GroupMemberInfoSetTips) GetGroupSortVersion() uint64 {
 
 type FriendApplication struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	AddTime       int64                  `protobuf:"varint,1,opt,name=addTime,proto3" json:"addTime"`
-	AddSource     string                 `protobuf:"bytes,2,opt,name=addSource,proto3" json:"addSource"`
-	AddWording    string                 `protobuf:"bytes,3,opt,name=addWording,proto3" json:"addWording"`
+	AddTime       int64                  `protobuf:"varint,1,opt,name=addTime,proto3" json:"addTime,omitempty"`
+	AddSource     string                 `protobuf:"bytes,2,opt,name=addSource,proto3" json:"addSource,omitempty"`
+	AddWording    string                 `protobuf:"bytes,3,opt,name=addWording,proto3" json:"addWording,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -3499,8 +3519,8 @@ func (x *FriendApplication) GetAddWording() string {
 
 type FromToUserID struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	FromUserID    string                 `protobuf:"bytes,1,opt,name=fromUserID,proto3" json:"fromUserID"`
-	ToUserID      string                 `protobuf:"bytes,2,opt,name=toUserID,proto3" json:"toUserID"`
+	FromUserID    string                 `protobuf:"bytes,1,opt,name=fromUserID,proto3" json:"fromUserID,omitempty"`
+	ToUserID      string                 `protobuf:"bytes,2,opt,name=toUserID,proto3" json:"toUserID,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -3552,8 +3572,8 @@ func (x *FromToUserID) GetToUserID() string {
 // FromUserID apply to add ToUserID
 type FriendApplicationTips struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	FromToUserID  *FromToUserID          `protobuf:"bytes,1,opt,name=fromToUserID,proto3" json:"fromToUserID"` //from: initiator; to: receiver
-	Request       *FriendRequest         `protobuf:"bytes,2,opt,name=request,proto3" json:"request"`
+	FromToUserID  *FromToUserID          `protobuf:"bytes,1,opt,name=fromToUserID,proto3" json:"fromToUserID,omitempty"` //from: initiator; to: receiver
+	Request       *FriendRequest         `protobuf:"bytes,2,opt,name=request,proto3" json:"request,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -3605,11 +3625,11 @@ func (x *FriendApplicationTips) GetRequest() *FriendRequest {
 // FromUserID accept or reject ToUserID
 type FriendApplicationApprovedTips struct {
 	state           protoimpl.MessageState `protogen:"open.v1"`
-	FromToUserID    *FromToUserID          `protobuf:"bytes,1,opt,name=fromToUserID,proto3" json:"fromToUserID"` //from: the person who agrees; to: the person who initiates the request
-	HandleMsg       string                 `protobuf:"bytes,2,opt,name=handleMsg,proto3" json:"handleMsg"`
-	FriendVersion   uint64                 `protobuf:"varint,3,opt,name=friendVersion,proto3" json:"friendVersion"`
-	FriendVersionID string                 `protobuf:"bytes,4,opt,name=friendVersionID,proto3" json:"friendVersionID"`
-	Request         *FriendRequest         `protobuf:"bytes,5,opt,name=request,proto3" json:"request"`
+	FromToUserID    *FromToUserID          `protobuf:"bytes,1,opt,name=fromToUserID,proto3" json:"fromToUserID,omitempty"` //from: the person who agrees; to: the person who initiates the request
+	HandleMsg       string                 `protobuf:"bytes,2,opt,name=handleMsg,proto3" json:"handleMsg,omitempty"`
+	FriendVersion   uint64                 `protobuf:"varint,3,opt,name=friendVersion,proto3" json:"friendVersion,omitempty"`
+	FriendVersionID string                 `protobuf:"bytes,4,opt,name=friendVersionID,proto3" json:"friendVersionID,omitempty"`
+	Request         *FriendRequest         `protobuf:"bytes,5,opt,name=request,proto3" json:"request,omitempty"`
 	unknownFields   protoimpl.UnknownFields
 	sizeCache       protoimpl.SizeCache
 }
@@ -3682,9 +3702,9 @@ func (x *FriendApplicationApprovedTips) GetRequest() *FriendRequest {
 // FromUserID accept or reject ToUserID
 type FriendApplicationRejectedTips struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	FromToUserID  *FromToUserID          `protobuf:"bytes,1,opt,name=fromToUserID,proto3" json:"fromToUserID"` //from: rejecter; to: request initiator
-	HandleMsg     string                 `protobuf:"bytes,2,opt,name=handleMsg,proto3" json:"handleMsg"`
-	Request       *FriendRequest         `protobuf:"bytes,3,opt,name=request,proto3" json:"request"`
+	FromToUserID  *FromToUserID          `protobuf:"bytes,1,opt,name=fromToUserID,proto3" json:"fromToUserID,omitempty"` //from: rejecter; to: request initiator
+	HandleMsg     string                 `protobuf:"bytes,2,opt,name=handleMsg,proto3" json:"handleMsg,omitempty"`
+	Request       *FriendRequest         `protobuf:"bytes,3,opt,name=request,proto3" json:"request,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -3743,11 +3763,11 @@ func (x *FriendApplicationRejectedTips) GetRequest() *FriendRequest {
 // FromUserID  Added a friend ToUserID
 type FriendAddedTips struct {
 	state           protoimpl.MessageState `protogen:"open.v1"`
-	Friend          *FriendInfo            `protobuf:"bytes,1,opt,name=friend,proto3" json:"friend"`
-	OperationTime   int64                  `protobuf:"varint,2,opt,name=operationTime,proto3" json:"operationTime"`
-	OpUser          *PublicUserInfo        `protobuf:"bytes,3,opt,name=opUser,proto3" json:"opUser"` //who do this
-	FriendVersion   uint64                 `protobuf:"varint,4,opt,name=friendVersion,proto3" json:"friendVersion"`
-	FriendVersionID string                 `protobuf:"bytes,5,opt,name=friendVersionID,proto3" json:"friendVersionID"`
+	Friend          *FriendInfo            `protobuf:"bytes,1,opt,name=friend,proto3" json:"friend,omitempty"`
+	OperationTime   int64                  `protobuf:"varint,2,opt,name=operationTime,proto3" json:"operationTime,omitempty"`
+	OpUser          *PublicUserInfo        `protobuf:"bytes,3,opt,name=opUser,proto3" json:"opUser,omitempty"` //who do this
+	FriendVersion   uint64                 `protobuf:"varint,4,opt,name=friendVersion,proto3" json:"friendVersion,omitempty"`
+	FriendVersionID string                 `protobuf:"bytes,5,opt,name=friendVersionID,proto3" json:"friendVersionID,omitempty"`
 	unknownFields   protoimpl.UnknownFields
 	sizeCache       protoimpl.SizeCache
 }
@@ -3820,9 +3840,9 @@ func (x *FriendAddedTips) GetFriendVersionID() string {
 // FromUserID  deleted a friend ToUserID
 type FriendDeletedTips struct {
 	state           protoimpl.MessageState `protogen:"open.v1"`
-	FromToUserID    *FromToUserID          `protobuf:"bytes,1,opt,name=fromToUserID,proto3" json:"fromToUserID"` //from：owner； to：friend
-	FriendVersion   uint64                 `protobuf:"varint,2,opt,name=friendVersion,proto3" json:"friendVersion"`
-	FriendVersionID string                 `protobuf:"bytes,3,opt,name=friendVersionID,proto3" json:"friendVersionID"`
+	FromToUserID    *FromToUserID          `protobuf:"bytes,1,opt,name=fromToUserID,proto3" json:"fromToUserID,omitempty"` //from：owner； to：friend
+	FriendVersion   uint64                 `protobuf:"varint,2,opt,name=friendVersion,proto3" json:"friendVersion,omitempty"`
+	FriendVersionID string                 `protobuf:"bytes,3,opt,name=friendVersionID,proto3" json:"friendVersionID,omitempty"`
 	unknownFields   protoimpl.UnknownFields
 	sizeCache       protoimpl.SizeCache
 }
@@ -3880,7 +3900,7 @@ func (x *FriendDeletedTips) GetFriendVersionID() string {
 
 type BlackAddedTips struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	FromToUserID  *FromToUserID          `protobuf:"bytes,1,opt,name=fromToUserID,proto3" json:"fromToUserID"` //from：owner； to：black
+	FromToUserID  *FromToUserID          `protobuf:"bytes,1,opt,name=fromToUserID,proto3" json:"fromToUserID,omitempty"` //from：owner； to：black
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -3924,7 +3944,7 @@ func (x *BlackAddedTips) GetFromToUserID() *FromToUserID {
 
 type BlackDeletedTips struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	FromToUserID  *FromToUserID          `protobuf:"bytes,1,opt,name=fromToUserID,proto3" json:"fromToUserID"` //from：owner； to：black
+	FromToUserID  *FromToUserID          `protobuf:"bytes,1,opt,name=fromToUserID,proto3" json:"fromToUserID,omitempty"` //from：owner； to：black
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -3968,10 +3988,10 @@ func (x *BlackDeletedTips) GetFromToUserID() *FromToUserID {
 
 type FriendInfoChangedTips struct {
 	state             protoimpl.MessageState `protogen:"open.v1"`
-	FromToUserID      *FromToUserID          `protobuf:"bytes,1,opt,name=fromToUserID,proto3" json:"fromToUserID"` //from：changed； to：friend
-	FriendVersion     uint64                 `protobuf:"varint,2,opt,name=friendVersion,proto3" json:"friendVersion"`
-	FriendVersionID   string                 `protobuf:"bytes,3,opt,name=friendVersionID,proto3" json:"friendVersionID"`
-	FriendSortVersion uint64                 `protobuf:"varint,4,opt,name=friendSortVersion,proto3" json:"friendSortVersion"`
+	FromToUserID      *FromToUserID          `protobuf:"bytes,1,opt,name=fromToUserID,proto3" json:"fromToUserID,omitempty"` //from：changed； to：friend
+	FriendVersion     uint64                 `protobuf:"varint,2,opt,name=friendVersion,proto3" json:"friendVersion,omitempty"`
+	FriendVersionID   string                 `protobuf:"bytes,3,opt,name=friendVersionID,proto3" json:"friendVersionID,omitempty"`
+	FriendSortVersion uint64                 `protobuf:"varint,4,opt,name=friendSortVersion,proto3" json:"friendSortVersion,omitempty"`
 	unknownFields     protoimpl.UnknownFields
 	sizeCache         protoimpl.SizeCache
 }
@@ -4037,7 +4057,7 @@ func (x *FriendInfoChangedTips) GetFriendSortVersion() uint64 {
 // ////////////////////user/////////////////////
 type UserInfoUpdatedTips struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	UserID        string                 `protobuf:"bytes,1,opt,name=userID,proto3" json:"userID"`
+	UserID        string                 `protobuf:"bytes,1,opt,name=userID,proto3" json:"userID,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -4081,10 +4101,10 @@ func (x *UserInfoUpdatedTips) GetUserID() string {
 
 type UserStatusChangeTips struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	FromUserID    string                 `protobuf:"bytes,1,opt,name=fromUserID,proto3" json:"fromUserID"`
-	ToUserID      string                 `protobuf:"bytes,2,opt,name=toUserID,proto3" json:"toUserID"`
-	Status        int32                  `protobuf:"varint,3,opt,name=status,proto3" json:"status"`
-	PlatformID    int32                  `protobuf:"varint,4,opt,name=platformID,proto3" json:"platformID"`
+	FromUserID    string                 `protobuf:"bytes,1,opt,name=fromUserID,proto3" json:"fromUserID,omitempty"`
+	ToUserID      string                 `protobuf:"bytes,2,opt,name=toUserID,proto3" json:"toUserID,omitempty"`
+	Status        int32                  `protobuf:"varint,3,opt,name=status,proto3" json:"status,omitempty"`
+	PlatformID    int32                  `protobuf:"varint,4,opt,name=platformID,proto3" json:"platformID,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -4149,8 +4169,8 @@ func (x *UserStatusChangeTips) GetPlatformID() int32 {
 
 type UserCommandAddTips struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	FromUserID    string                 `protobuf:"bytes,1,opt,name=fromUserID,proto3" json:"fromUserID"`
-	ToUserID      string                 `protobuf:"bytes,2,opt,name=toUserID,proto3" json:"toUserID"`
+	FromUserID    string                 `protobuf:"bytes,1,opt,name=fromUserID,proto3" json:"fromUserID,omitempty"`
+	ToUserID      string                 `protobuf:"bytes,2,opt,name=toUserID,proto3" json:"toUserID,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -4201,8 +4221,8 @@ func (x *UserCommandAddTips) GetToUserID() string {
 
 type UserCommandUpdateTips struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	FromUserID    string                 `protobuf:"bytes,1,opt,name=fromUserID,proto3" json:"fromUserID"`
-	ToUserID      string                 `protobuf:"bytes,2,opt,name=toUserID,proto3" json:"toUserID"`
+	FromUserID    string                 `protobuf:"bytes,1,opt,name=fromUserID,proto3" json:"fromUserID,omitempty"`
+	ToUserID      string                 `protobuf:"bytes,2,opt,name=toUserID,proto3" json:"toUserID,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -4253,8 +4273,8 @@ func (x *UserCommandUpdateTips) GetToUserID() string {
 
 type UserCommandDeleteTips struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	FromUserID    string                 `protobuf:"bytes,1,opt,name=fromUserID,proto3" json:"fromUserID"`
-	ToUserID      string                 `protobuf:"bytes,2,opt,name=toUserID,proto3" json:"toUserID"`
+	FromUserID    string                 `protobuf:"bytes,1,opt,name=fromUserID,proto3" json:"fromUserID,omitempty"`
+	ToUserID      string                 `protobuf:"bytes,2,opt,name=toUserID,proto3" json:"toUserID,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -4306,8 +4326,8 @@ func (x *UserCommandDeleteTips) GetToUserID() string {
 // ////////////////////conversation/////////////////////
 type ConversationUpdateTips struct {
 	state              protoimpl.MessageState `protogen:"open.v1"`
-	UserID             string                 `protobuf:"bytes,1,opt,name=userID,proto3" json:"userID"`
-	ConversationIDList []string               `protobuf:"bytes,2,rep,name=conversationIDList,proto3" json:"conversationIDList"`
+	UserID             string                 `protobuf:"bytes,1,opt,name=userID,proto3" json:"userID,omitempty"`
+	ConversationIDList []string               `protobuf:"bytes,2,rep,name=conversationIDList,proto3" json:"conversationIDList,omitempty"`
 	unknownFields      protoimpl.UnknownFields
 	sizeCache          protoimpl.SizeCache
 }
@@ -4358,10 +4378,10 @@ func (x *ConversationUpdateTips) GetConversationIDList() []string {
 
 type ConversationSetPrivateTips struct {
 	state          protoimpl.MessageState `protogen:"open.v1"`
-	RecvID         string                 `protobuf:"bytes,1,opt,name=recvID,proto3" json:"recvID"`
-	SendID         string                 `protobuf:"bytes,2,opt,name=sendID,proto3" json:"sendID"`
-	IsPrivate      bool                   `protobuf:"varint,3,opt,name=isPrivate,proto3" json:"isPrivate"`
-	ConversationID string                 `protobuf:"bytes,4,opt,name=conversationID,proto3" json:"conversationID"`
+	RecvID         string                 `protobuf:"bytes,1,opt,name=recvID,proto3" json:"recvID,omitempty"`
+	SendID         string                 `protobuf:"bytes,2,opt,name=sendID,proto3" json:"sendID,omitempty"`
+	IsPrivate      bool                   `protobuf:"varint,3,opt,name=isPrivate,proto3" json:"isPrivate,omitempty"`
+	ConversationID string                 `protobuf:"bytes,4,opt,name=conversationID,proto3" json:"conversationID,omitempty"`
 	unknownFields  protoimpl.UnknownFields
 	sizeCache      protoimpl.SizeCache
 }
@@ -4426,10 +4446,10 @@ func (x *ConversationSetPrivateTips) GetConversationID() string {
 
 type ConversationHasReadTips struct {
 	state           protoimpl.MessageState `protogen:"open.v1"`
-	UserID          string                 `protobuf:"bytes,1,opt,name=userID,proto3" json:"userID"`
-	ConversationID  string                 `protobuf:"bytes,2,opt,name=conversationID,proto3" json:"conversationID"`
-	HasReadSeq      int64                  `protobuf:"varint,3,opt,name=hasReadSeq,proto3" json:"hasReadSeq"`
-	UnreadCountTime int64                  `protobuf:"varint,4,opt,name=unreadCountTime,proto3" json:"unreadCountTime"`
+	UserID          string                 `protobuf:"bytes,1,opt,name=userID,proto3" json:"userID,omitempty"`
+	ConversationID  string                 `protobuf:"bytes,2,opt,name=conversationID,proto3" json:"conversationID,omitempty"`
+	HasReadSeq      int64                  `protobuf:"varint,3,opt,name=hasReadSeq,proto3" json:"hasReadSeq,omitempty"`
+	UnreadCountTime int64                  `protobuf:"varint,4,opt,name=unreadCountTime,proto3" json:"unreadCountTime,omitempty"`
 	unknownFields   protoimpl.UnknownFields
 	sizeCache       protoimpl.SizeCache
 }
@@ -4494,7 +4514,7 @@ func (x *ConversationHasReadTips) GetUnreadCountTime() int64 {
 
 type NotificationElem struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	Detail        string                 `protobuf:"bytes,1,opt,name=detail,proto3" json:"detail"`
+	Detail        string                 `protobuf:"bytes,1,opt,name=detail,proto3" json:"detail,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -4539,7 +4559,7 @@ func (x *NotificationElem) GetDetail() string {
 // //////////////////message///////////////////////
 type Seqs struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	Seqs          []int64                `protobuf:"varint,1,rep,packed,name=seqs,proto3" json:"seqs"`
+	Seqs          []int64                `protobuf:"varint,1,rep,packed,name=seqs,proto3" json:"seqs,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -4583,9 +4603,9 @@ func (x *Seqs) GetSeqs() []int64 {
 
 type DeleteMessageTips struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	OpUserID      string                 `protobuf:"bytes,1,opt,name=opUserID,proto3" json:"opUserID"`
-	UserID        string                 `protobuf:"bytes,2,opt,name=userID,proto3" json:"userID"`
-	Seqs          []int64                `protobuf:"varint,3,rep,packed,name=seqs,proto3" json:"seqs"`
+	OpUserID      string                 `protobuf:"bytes,1,opt,name=opUserID,proto3" json:"opUserID,omitempty"`
+	UserID        string                 `protobuf:"bytes,2,opt,name=userID,proto3" json:"userID,omitempty"`
+	Seqs          []int64                `protobuf:"varint,3,rep,packed,name=seqs,proto3" json:"seqs,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -4643,13 +4663,13 @@ func (x *DeleteMessageTips) GetSeqs() []int64 {
 
 type RevokeMsgTips struct {
 	state          protoimpl.MessageState `protogen:"open.v1"`
-	RevokerUserID  string                 `protobuf:"bytes,1,opt,name=revokerUserID,proto3" json:"revokerUserID"`
-	ClientMsgID    string                 `protobuf:"bytes,2,opt,name=clientMsgID,proto3" json:"clientMsgID"`
-	RevokeTime     int64                  `protobuf:"varint,3,opt,name=revokeTime,proto3" json:"revokeTime"`
-	SesstionType   int32                  `protobuf:"varint,5,opt,name=sesstionType,proto3" json:"sesstionType"`
-	Seq            int64                  `protobuf:"varint,6,opt,name=seq,proto3" json:"seq"`
-	ConversationID string                 `protobuf:"bytes,7,opt,name=conversationID,proto3" json:"conversationID"`
-	IsAdminRevoke  bool                   `protobuf:"varint,8,opt,name=isAdminRevoke,proto3" json:"isAdminRevoke"`
+	RevokerUserID  string                 `protobuf:"bytes,1,opt,name=revokerUserID,proto3" json:"revokerUserID,omitempty"`
+	ClientMsgID    string                 `protobuf:"bytes,2,opt,name=clientMsgID,proto3" json:"clientMsgID,omitempty"`
+	RevokeTime     int64                  `protobuf:"varint,3,opt,name=revokeTime,proto3" json:"revokeTime,omitempty"`
+	SesstionType   int32                  `protobuf:"varint,5,opt,name=sesstionType,proto3" json:"sesstionType,omitempty"`
+	Seq            int64                  `protobuf:"varint,6,opt,name=seq,proto3" json:"seq,omitempty"`
+	ConversationID string                 `protobuf:"bytes,7,opt,name=conversationID,proto3" json:"conversationID,omitempty"`
+	IsAdminRevoke  bool                   `protobuf:"varint,8,opt,name=isAdminRevoke,proto3" json:"isAdminRevoke,omitempty"`
 	unknownFields  protoimpl.UnknownFields
 	sizeCache      protoimpl.SizeCache
 }
@@ -4735,17 +4755,17 @@ func (x *RevokeMsgTips) GetIsAdminRevoke() bool {
 
 type MessageRevokedContent struct {
 	state                       protoimpl.MessageState `protogen:"open.v1"`
-	RevokerID                   string                 `protobuf:"bytes,1,opt,name=revokerID,proto3" json:"revokerID"`
-	RevokerRole                 int32                  `protobuf:"varint,2,opt,name=revokerRole,proto3" json:"revokerRole"`
-	ClientMsgID                 string                 `protobuf:"bytes,3,opt,name=clientMsgID,proto3" json:"clientMsgID"`
-	RevokerNickname             string                 `protobuf:"bytes,4,opt,name=revokerNickname,proto3" json:"revokerNickname"`
-	RevokeTime                  int64                  `protobuf:"varint,5,opt,name=revokeTime,proto3" json:"revokeTime"`
-	SourceMessageSendTime       int64                  `protobuf:"varint,6,opt,name=sourceMessageSendTime,proto3" json:"sourceMessageSendTime"`
-	SourceMessageSendID         string                 `protobuf:"bytes,7,opt,name=sourceMessageSendID,proto3" json:"sourceMessageSendID"`
-	SourceMessageSenderNickname string                 `protobuf:"bytes,8,opt,name=sourceMessageSenderNickname,proto3" json:"sourceMessageSenderNickname"`
-	SessionType                 int32                  `protobuf:"varint,10,opt,name=sessionType,proto3" json:"sessionType"`
-	Seq                         int64                  `protobuf:"varint,11,opt,name=seq,proto3" json:"seq"`
-	Ex                          string                 `protobuf:"bytes,12,opt,name=ex,proto3" json:"ex"`
+	RevokerID                   string                 `protobuf:"bytes,1,opt,name=revokerID,proto3" json:"revokerID,omitempty"`
+	RevokerRole                 int32                  `protobuf:"varint,2,opt,name=revokerRole,proto3" json:"revokerRole,omitempty"`
+	ClientMsgID                 string                 `protobuf:"bytes,3,opt,name=clientMsgID,proto3" json:"clientMsgID,omitempty"`
+	RevokerNickname             string                 `protobuf:"bytes,4,opt,name=revokerNickname,proto3" json:"revokerNickname,omitempty"`
+	RevokeTime                  int64                  `protobuf:"varint,5,opt,name=revokeTime,proto3" json:"revokeTime,omitempty"`
+	SourceMessageSendTime       int64                  `protobuf:"varint,6,opt,name=sourceMessageSendTime,proto3" json:"sourceMessageSendTime,omitempty"`
+	SourceMessageSendID         string                 `protobuf:"bytes,7,opt,name=sourceMessageSendID,proto3" json:"sourceMessageSendID,omitempty"`
+	SourceMessageSenderNickname string                 `protobuf:"bytes,8,opt,name=sourceMessageSenderNickname,proto3" json:"sourceMessageSenderNickname,omitempty"`
+	SessionType                 int32                  `protobuf:"varint,10,opt,name=sessionType,proto3" json:"sessionType,omitempty"`
+	Seq                         int64                  `protobuf:"varint,11,opt,name=seq,proto3" json:"seq,omitempty"`
+	Ex                          string                 `protobuf:"bytes,12,opt,name=ex,proto3" json:"ex,omitempty"`
 	unknownFields               protoimpl.UnknownFields
 	sizeCache                   protoimpl.SizeCache
 }
@@ -4859,8 +4879,8 @@ func (x *MessageRevokedContent) GetEx() string {
 
 type ClearConversationTips struct {
 	state           protoimpl.MessageState `protogen:"open.v1"`
-	UserID          string                 `protobuf:"bytes,1,opt,name=userID,proto3" json:"userID"`
-	ConversationIDs []string               `protobuf:"bytes,2,rep,name=conversationIDs,proto3" json:"conversationIDs"`
+	UserID          string                 `protobuf:"bytes,1,opt,name=userID,proto3" json:"userID,omitempty"`
+	ConversationIDs []string               `protobuf:"bytes,2,rep,name=conversationIDs,proto3" json:"conversationIDs,omitempty"`
 	unknownFields   protoimpl.UnknownFields
 	sizeCache       protoimpl.SizeCache
 }
@@ -4911,9 +4931,9 @@ func (x *ClearConversationTips) GetConversationIDs() []string {
 
 type DeleteMsgsTips struct {
 	state          protoimpl.MessageState `protogen:"open.v1"`
-	UserID         string                 `protobuf:"bytes,1,opt,name=userID,proto3" json:"userID"`
-	ConversationID string                 `protobuf:"bytes,2,opt,name=conversationID,proto3" json:"conversationID"`
-	Seqs           []int64                `protobuf:"varint,3,rep,packed,name=seqs,proto3" json:"seqs"`
+	UserID         string                 `protobuf:"bytes,1,opt,name=userID,proto3" json:"userID,omitempty"`
+	ConversationID string                 `protobuf:"bytes,2,opt,name=conversationID,proto3" json:"conversationID,omitempty"`
+	Seqs           []int64                `protobuf:"varint,3,rep,packed,name=seqs,proto3" json:"seqs,omitempty"`
 	unknownFields  protoimpl.UnknownFields
 	sizeCache      protoimpl.SizeCache
 }
@@ -4971,10 +4991,10 @@ func (x *DeleteMsgsTips) GetSeqs() []int64 {
 
 type MarkAsReadTips struct {
 	state            protoimpl.MessageState `protogen:"open.v1"`
-	MarkAsReadUserID string                 `protobuf:"bytes,1,opt,name=markAsReadUserID,proto3" json:"markAsReadUserID"`
-	ConversationID   string                 `protobuf:"bytes,2,opt,name=conversationID,proto3" json:"conversationID"`
-	Seqs             []int64                `protobuf:"varint,3,rep,packed,name=seqs,proto3" json:"seqs"`
-	HasReadSeq       int64                  `protobuf:"varint,4,opt,name=hasReadSeq,proto3" json:"hasReadSeq"`
+	MarkAsReadUserID string                 `protobuf:"bytes,1,opt,name=markAsReadUserID,proto3" json:"markAsReadUserID,omitempty"`
+	ConversationID   string                 `protobuf:"bytes,2,opt,name=conversationID,proto3" json:"conversationID,omitempty"`
+	Seqs             []int64                `protobuf:"varint,3,rep,packed,name=seqs,proto3" json:"seqs,omitempty"`
+	HasReadSeq       int64                  `protobuf:"varint,4,opt,name=hasReadSeq,proto3" json:"hasReadSeq,omitempty"`
 	// Per-message read-receipt counts updated in this batch. Populated only by
 	// the dedicated per-message read-receipt pipeline (Kafka-backed, see
 	// msg.MsgSvr's MarkMsgsAsRead / GetMessagesReadCount) and sent to the
@@ -4982,7 +5002,7 @@ type MarkAsReadTips struct {
 	// per-conversation watermark notification sent back to the reader's own
 	// other devices. A client that doesn't understand this field can safely
 	// ignore it and fall back to pre-existing hasReadSeq-driven behavior.
-	SeqReadCounts []*SeqReadCount `protobuf:"bytes,5,rep,name=seqReadCounts,proto3" json:"seqReadCounts"`
+	SeqReadCounts []*SeqReadCount `protobuf:"bytes,5,rep,name=seqReadCounts,proto3" json:"seqReadCounts,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -5058,8 +5078,8 @@ func (x *MarkAsReadTips) GetSeqReadCounts() []*SeqReadCount {
 // a group it is the number of distinct other members who have read it.
 type SeqReadCount struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	Seq           int64                  `protobuf:"varint,1,opt,name=seq,proto3" json:"seq"`
-	ReadCount     int32                  `protobuf:"varint,2,opt,name=readCount,proto3" json:"readCount"`
+	Seq           int64                  `protobuf:"varint,1,opt,name=seq,proto3" json:"seq,omitempty"`
+	ReadCount     int32                  `protobuf:"varint,2,opt,name=readCount,proto3" json:"readCount,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -5110,8 +5130,8 @@ func (x *SeqReadCount) GetReadCount() int32 {
 
 type SetAppBackgroundStatusReq struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	UserID        string                 `protobuf:"bytes,1,opt,name=userID,proto3" json:"userID"`
-	IsBackground  bool                   `protobuf:"varint,2,opt,name=isBackground,proto3" json:"isBackground"`
+	UserID        string                 `protobuf:"bytes,1,opt,name=userID,proto3" json:"userID,omitempty"`
+	IsBackground  bool                   `protobuf:"varint,2,opt,name=isBackground,proto3" json:"isBackground,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -5198,11 +5218,11 @@ func (*SetAppBackgroundStatusResp) Descriptor() ([]byte, []int) {
 
 type ProcessUserCommand struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	UserID        string                 `protobuf:"bytes,1,opt,name=userID,proto3" json:"userID"`
-	Type          int32                  `protobuf:"varint,2,opt,name=type,proto3" json:"type"`
-	CreateTime    int64                  `protobuf:"varint,3,opt,name=createTime,proto3" json:"createTime"`
-	Uuid          string                 `protobuf:"bytes,4,opt,name=uuid,proto3" json:"uuid"`
-	Value         string                 `protobuf:"bytes,5,opt,name=value,proto3" json:"value"`
+	UserID        string                 `protobuf:"bytes,1,opt,name=userID,proto3" json:"userID,omitempty"`
+	Type          int32                  `protobuf:"varint,2,opt,name=type,proto3" json:"type,omitempty"`
+	CreateTime    int64                  `protobuf:"varint,3,opt,name=createTime,proto3" json:"createTime,omitempty"`
+	Uuid          string                 `protobuf:"bytes,4,opt,name=uuid,proto3" json:"uuid,omitempty"`
+	Value         string                 `protobuf:"bytes,5,opt,name=value,proto3" json:"value,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -5274,8 +5294,8 @@ func (x *ProcessUserCommand) GetValue() string {
 
 type RequestPagination struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	PageNumber    int32                  `protobuf:"varint,1,opt,name=pageNumber,proto3" json:"pageNumber"`
-	ShowNumber    int32                  `protobuf:"varint,2,opt,name=showNumber,proto3" json:"showNumber"`
+	PageNumber    int32                  `protobuf:"varint,1,opt,name=pageNumber,proto3" json:"pageNumber,omitempty"`
+	ShowNumber    int32                  `protobuf:"varint,2,opt,name=showNumber,proto3" json:"showNumber,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -5326,10 +5346,10 @@ func (x *RequestPagination) GetShowNumber() int32 {
 
 type FriendsInfoUpdateTips struct {
 	state           protoimpl.MessageState `protogen:"open.v1"`
-	FromToUserID    *FromToUserID          `protobuf:"bytes,1,opt,name=fromToUserID,proto3" json:"fromToUserID"`
-	FriendIDs       []string               `protobuf:"bytes,2,rep,name=friendIDs,proto3" json:"friendIDs"`
-	FriendVersion   uint64                 `protobuf:"varint,3,opt,name=friendVersion,proto3" json:"friendVersion"`
-	FriendVersionID string                 `protobuf:"bytes,4,opt,name=friendVersionID,proto3" json:"friendVersionID"`
+	FromToUserID    *FromToUserID          `protobuf:"bytes,1,opt,name=fromToUserID,proto3" json:"fromToUserID,omitempty"`
+	FriendIDs       []string               `protobuf:"bytes,2,rep,name=friendIDs,proto3" json:"friendIDs,omitempty"`
+	FriendVersion   uint64                 `protobuf:"varint,3,opt,name=friendVersion,proto3" json:"friendVersion,omitempty"`
+	FriendVersionID string                 `protobuf:"bytes,4,opt,name=friendVersionID,proto3" json:"friendVersionID,omitempty"`
 	unknownFields   protoimpl.UnknownFields
 	sizeCache       protoimpl.SizeCache
 }
@@ -5394,8 +5414,8 @@ func (x *FriendsInfoUpdateTips) GetFriendVersionID() string {
 
 type SubUserOnlineStatusElem struct {
 	state             protoimpl.MessageState `protogen:"open.v1"`
-	UserID            string                 `protobuf:"bytes,1,opt,name=userID,proto3" json:"userID"`
-	OnlinePlatformIDs []int32                `protobuf:"varint,2,rep,packed,name=onlinePlatformIDs,proto3" json:"onlinePlatformIDs"`
+	UserID            string                 `protobuf:"bytes,1,opt,name=userID,proto3" json:"userID,omitempty"`
+	OnlinePlatformIDs []int32                `protobuf:"varint,2,rep,packed,name=onlinePlatformIDs,proto3" json:"onlinePlatformIDs,omitempty"`
 	unknownFields     protoimpl.UnknownFields
 	sizeCache         protoimpl.SizeCache
 }
@@ -5446,7 +5466,7 @@ func (x *SubUserOnlineStatusElem) GetOnlinePlatformIDs() []int32 {
 
 type SubUserOnlineStatusTips struct {
 	state         protoimpl.MessageState     `protogen:"open.v1"`
-	Subscribers   []*SubUserOnlineStatusElem `protobuf:"bytes,1,rep,name=subscribers,proto3" json:"subscribers"`
+	Subscribers   []*SubUserOnlineStatusElem `protobuf:"bytes,1,rep,name=subscribers,proto3" json:"subscribers,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -5490,8 +5510,8 @@ func (x *SubUserOnlineStatusTips) GetSubscribers() []*SubUserOnlineStatusElem {
 
 type SubUserOnlineStatus struct {
 	state             protoimpl.MessageState `protogen:"open.v1"`
-	SubscribeUserID   []string               `protobuf:"bytes,1,rep,name=subscribeUserID,proto3" json:"subscribeUserID"`
-	UnsubscribeUserID []string               `protobuf:"bytes,2,rep,name=unsubscribeUserID,proto3" json:"unsubscribeUserID"`
+	SubscribeUserID   []string               `protobuf:"bytes,1,rep,name=subscribeUserID,proto3" json:"subscribeUserID,omitempty"`
+	UnsubscribeUserID []string               `protobuf:"bytes,2,rep,name=unsubscribeUserID,proto3" json:"unsubscribeUserID,omitempty"`
 	unknownFields     protoimpl.UnknownFields
 	sizeCache         protoimpl.SizeCache
 }
@@ -5542,11 +5562,11 @@ func (x *SubUserOnlineStatus) GetUnsubscribeUserID() []string {
 
 type StreamMsgTips struct {
 	state          protoimpl.MessageState `protogen:"open.v1"`
-	ConversationID string                 `protobuf:"bytes,1,opt,name=conversationID,proto3" json:"conversationID"`
-	ClientMsgID    string                 `protobuf:"bytes,2,opt,name=clientMsgID,proto3" json:"clientMsgID"`
-	StartIndex     int64                  `protobuf:"varint,3,opt,name=startIndex,proto3" json:"startIndex"`
-	Packets        []string               `protobuf:"bytes,4,rep,name=packets,proto3" json:"packets"`
-	End            bool                   `protobuf:"varint,5,opt,name=end,proto3" json:"end"`
+	ConversationID string                 `protobuf:"bytes,1,opt,name=conversationID,proto3" json:"conversationID,omitempty"`
+	ClientMsgID    string                 `protobuf:"bytes,2,opt,name=clientMsgID,proto3" json:"clientMsgID,omitempty"`
+	StartIndex     int64                  `protobuf:"varint,3,opt,name=startIndex,proto3" json:"startIndex,omitempty"`
+	Packets        []string               `protobuf:"bytes,4,rep,name=packets,proto3" json:"packets,omitempty"`
+	End            bool                   `protobuf:"varint,5,opt,name=end,proto3" json:"end,omitempty"`
 	unknownFields  protoimpl.UnknownFields
 	sizeCache      protoimpl.SizeCache
 }
@@ -5618,13 +5638,13 @@ func (x *StreamMsgTips) GetEnd() bool {
 
 type ModifyMsgTips struct {
 	state          protoimpl.MessageState `protogen:"open.v1"`
-	ConversationID string                 `protobuf:"bytes,1,opt,name=conversationID,proto3" json:"conversationID"`
-	ClientMsgID    string                 `protobuf:"bytes,2,opt,name=clientMsgID,proto3" json:"clientMsgID"`
-	NewContent     string                 `protobuf:"bytes,3,opt,name=newContent,proto3" json:"newContent"`
-	Seq            int64                  `protobuf:"varint,4,opt,name=seq,proto3" json:"seq"`
-	ModifiedTime   int64                  `protobuf:"varint,5,opt,name=modifiedTime,proto3" json:"modifiedTime"`
-	UserID         string                 `protobuf:"bytes,6,opt,name=userID,proto3" json:"userID"`
-	ModifiedCount  int64                  `protobuf:"varint,7,opt,name=modifiedCount,proto3" json:"modifiedCount"`
+	ConversationID string                 `protobuf:"bytes,1,opt,name=conversationID,proto3" json:"conversationID,omitempty"`
+	ClientMsgID    string                 `protobuf:"bytes,2,opt,name=clientMsgID,proto3" json:"clientMsgID,omitempty"`
+	NewContent     string                 `protobuf:"bytes,3,opt,name=newContent,proto3" json:"newContent,omitempty"`
+	Seq            int64                  `protobuf:"varint,4,opt,name=seq,proto3" json:"seq,omitempty"`
+	ModifiedTime   int64                  `protobuf:"varint,5,opt,name=modifiedTime,proto3" json:"modifiedTime,omitempty"`
+	UserID         string                 `protobuf:"bytes,6,opt,name=userID,proto3" json:"userID,omitempty"`
+	ModifiedCount  int64                  `protobuf:"varint,7,opt,name=modifiedCount,proto3" json:"modifiedCount,omitempty"`
 	unknownFields  protoimpl.UnknownFields
 	sizeCache      protoimpl.SizeCache
 }
@@ -5710,8 +5730,8 @@ func (x *ModifyMsgTips) GetModifiedCount() int64 {
 
 type ConversationDeleteTips struct {
 	state           protoimpl.MessageState `protogen:"open.v1"`
-	UserID          string                 `protobuf:"bytes,1,opt,name=userID,proto3" json:"userID"`
-	ConversationIDs []string               `protobuf:"bytes,2,rep,name=conversationIDs,proto3" json:"conversationIDs"`
+	UserID          string                 `protobuf:"bytes,1,opt,name=userID,proto3" json:"userID,omitempty"`
+	ConversationIDs []string               `protobuf:"bytes,2,rep,name=conversationIDs,proto3" json:"conversationIDs,omitempty"`
 	unknownFields   protoimpl.UnknownFields
 	sizeCache       protoimpl.SizeCache
 }
@@ -5932,7 +5952,7 @@ const file_sdkws_sdkws_proto_rawDesc = "" +
 	"\x0fUserSendMsgResp\x12 \n" +
 	"\vserverMsgID\x18\x01 \x01(\tR\vserverMsgID\x12 \n" +
 	"\vclientMsgID\x18\x02 \x01(\tR\vclientMsgID\x12\x1a\n" +
-	"\bsendTime\x18\x03 \x01(\x03R\bsendTime\"\xa2\x06\n" +
+	"\bsendTime\x18\x03 \x01(\x03R\bsendTime\"\xe8\x06\n" +
 	"\aMsgData\x12\x16\n" +
 	"\x06sendID\x18\x01 \x01(\tR\x06sendID\x12\x16\n" +
 	"\x06recvID\x18\x02 \x01(\tR\x06recvID\x12\x18\n" +
@@ -5958,10 +5978,12 @@ const file_sdkws_sdkws_proto_rawDesc = "" +
 	"\x0fofflinePushInfo\x18\x14 \x01(\v2\x1d.openim.sdkws.OfflinePushInfoR\x0fofflinePushInfo\x12\"\n" +
 	"\fatUserIDList\x18\x15 \x03(\tR\fatUserIDList\x12\"\n" +
 	"\fattachedInfo\x18\x16 \x01(\tR\fattachedInfo\x12\x0e\n" +
-	"\x02ex\x18\x17 \x01(\tR\x02ex\x1a:\n" +
+	"\x02ex\x18\x17 \x01(\tR\x02ex\x12/\n" +
+	"\x10systemMsgVisible\x18\x18 \x01(\bH\x00R\x10systemMsgVisible\x88\x01\x01\x1a:\n" +
 	"\fOptionsEntry\x12\x10\n" +
 	"\x03key\x18\x01 \x01(\tR\x03key\x12\x14\n" +
-	"\x05value\x18\x02 \x01(\bR\x05value:\x028\x01\"\xd4\x02\n" +
+	"\x05value\x18\x02 \x01(\bR\x05value:\x028\x01B\x13\n" +
+	"\x11_systemMsgVisible\"\xd4\x02\n" +
 	"\fPushMessages\x128\n" +
 	"\x04msgs\x18\x01 \x03(\v2$.openim.sdkws.PushMessages.MsgsEntryR\x04msgs\x12\\\n" +
 	"\x10notificationMsgs\x18\x02 \x03(\v20.openim.sdkws.PushMessages.NotificationMsgsEntryR\x10notificationMsgs\x1aO\n" +
@@ -6510,6 +6532,7 @@ func file_sdkws_sdkws_proto_init() {
 	if File_sdkws_sdkws_proto != nil {
 		return
 	}
+	file_sdkws_sdkws_proto_msgTypes[17].OneofWrappers = []any{}
 	type x struct{}
 	out := protoimpl.TypeBuilder{
 		File: protoimpl.DescBuilder{

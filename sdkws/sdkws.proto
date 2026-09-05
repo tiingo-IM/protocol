@@ -196,6 +196,19 @@ message MsgData {
   repeated string atUserIDList = 21;
   string attachedInfo = 22;
   string ex = 23;
+  // Local extension, not part of upstream openimsdk/protocol: resolved,
+  // per-recipient-connection override for whether this specific push of
+  // a system/notification message (msgFrom=Sys) should be shown to the
+  // client at all — set by open-im-server's msggateway at the moment it
+  // writes to one specific connection, based on that connection's own
+  // platform and an admin-configured (contentType, platform) visibility
+  // table synced from the chat business-server. Absent means "no admin
+  // override configured" — the client falls back to its own default
+  // (show every system message type it already knows how to render).
+  // Only ever meaningful on a live push to one connection; never
+  // populated on a message read back via history/sync, since a stored
+  // message has no single "this connection" to resolve against.
+  optional bool systemMsgVisible = 24;
 }
 message PushMessages {
   map<string, PullMsgs> msgs = 1;
