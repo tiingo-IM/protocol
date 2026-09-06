@@ -29,6 +29,52 @@ message SetGroupInfoReq {
 }
 message SetGroupInfoResp {}
 
+// A user barred from a group. Distinct from the account-level blacklist
+// (openim.relation): that is one person refusing another everywhere,
+// while this is one group refusing a person, decided by its owner or
+// admins and enforced on every route back in — application, invitation
+// and direct join alike.
+message GroupBlacklistUser {
+  string userID = 1;
+  string nickname = 2;
+  string faceURL = 3;
+  // Who barred them, and why. The reason is shown back to the
+  // moderators reviewing the list, never to the person barred.
+  string operatorUserID = 4;
+  int64 createTime = 5;
+  string reason = 6;
+}
+
+message AddGroupBlacklistReq {
+  string groupID = 1;
+  repeated string userIDs = 2;
+  string reason = 3;
+}
+message AddGroupBlacklistResp {}
+
+message RemoveGroupBlacklistReq {
+  string groupID = 1;
+  repeated string userIDs = 2;
+}
+message RemoveGroupBlacklistResp {}
+
+message GetGroupBlacklistReq {
+  string groupID = 1;
+  openim.sdkws.RequestPagination pagination = 2;
+}
+message GetGroupBlacklistResp {
+  uint32 total = 1;
+  repeated GroupBlacklistUser users = 2;
+}
+
+message IsGroupBlacklistedReq {
+  string groupID = 1;
+  repeated string userIDs = 2;
+}
+message IsGroupBlacklistedResp {
+  repeated string blacklistedUserIDs = 1;
+}
+
 message SetGroupInfoExReq {
   string groupID = 1;
   openim.protobuf.StringValue groupName = 2;
@@ -42,6 +88,7 @@ message SetGroupInfoExReq {
   // See sdkws.GroupInfo for what these mean.
   openim.protobuf.Int32Value deleteConversationOnKick = 10;
   openim.protobuf.Int32Value historyForNewMembers = 11;
+  openim.protobuf.Int32Value readReceipts = 12;
 }
 message SetGroupInfoExResp {}
 
@@ -473,6 +520,15 @@ service group {
   // Set group info
   rpc setGroupInfo(SetGroupInfoReq) returns (SetGroupInfoResp);
   rpc setGroupInfoEx(SetGroupInfoExReq) returns (SetGroupInfoExResp);
+  // Bar users from a group, lift the bar, and read the list. Adding
+  // someone who is currently a member removes them as part of the same
+  // call — a ban that left them sitting in the group would not be one.
+  rpc addGroupBlacklist(AddGroupBlacklistReq) returns (AddGroupBlacklistResp);
+  rpc removeGroupBlacklist(RemoveGroupBlacklistReq) returns (RemoveGroupBlacklistResp);
+  rpc getGroupBlacklist(GetGroupBlacklistReq) returns (GetGroupBlacklistResp);
+  // Which of these users are barred. For callers deciding whether to
+  // offer a join at all, rather than letting the attempt be refused.
+  rpc isGroupBlacklisted(IsGroupBlacklistedReq) returns (IsGroupBlacklistedResp);
   // Get group join applications (as admin or owner)
   rpc getGroupApplicationList(GetGroupApplicationListReq) returns (GetGroupApplicationListResp);
 

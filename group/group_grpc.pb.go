@@ -25,6 +25,10 @@ const (
 	Group_GetGroupsInfo_FullMethodName                     = "/openim.group.group/getGroupsInfo"
 	Group_SetGroupInfo_FullMethodName                      = "/openim.group.group/setGroupInfo"
 	Group_SetGroupInfoEx_FullMethodName                    = "/openim.group.group/setGroupInfoEx"
+	Group_AddGroupBlacklist_FullMethodName                 = "/openim.group.group/addGroupBlacklist"
+	Group_RemoveGroupBlacklist_FullMethodName              = "/openim.group.group/removeGroupBlacklist"
+	Group_GetGroupBlacklist_FullMethodName                 = "/openim.group.group/getGroupBlacklist"
+	Group_IsGroupBlacklisted_FullMethodName                = "/openim.group.group/isGroupBlacklisted"
 	Group_GetGroupApplicationList_FullMethodName           = "/openim.group.group/getGroupApplicationList"
 	Group_GetGroupApplicationUnhandledCount_FullMethodName = "/openim.group.group/getGroupApplicationUnhandledCount"
 	Group_GetUserReqApplicationList_FullMethodName         = "/openim.group.group/getUserReqApplicationList"
@@ -78,6 +82,15 @@ type GroupClient interface {
 	// Set group info
 	SetGroupInfo(ctx context.Context, in *SetGroupInfoReq, opts ...grpc.CallOption) (*SetGroupInfoResp, error)
 	SetGroupInfoEx(ctx context.Context, in *SetGroupInfoExReq, opts ...grpc.CallOption) (*SetGroupInfoExResp, error)
+	// Bar users from a group, lift the bar, and read the list. Adding
+	// someone who is currently a member removes them as part of the same
+	// call — a ban that left them sitting in the group would not be one.
+	AddGroupBlacklist(ctx context.Context, in *AddGroupBlacklistReq, opts ...grpc.CallOption) (*AddGroupBlacklistResp, error)
+	RemoveGroupBlacklist(ctx context.Context, in *RemoveGroupBlacklistReq, opts ...grpc.CallOption) (*RemoveGroupBlacklistResp, error)
+	GetGroupBlacklist(ctx context.Context, in *GetGroupBlacklistReq, opts ...grpc.CallOption) (*GetGroupBlacklistResp, error)
+	// Which of these users are barred. For callers deciding whether to
+	// offer a join at all, rather than letting the attempt be refused.
+	IsGroupBlacklisted(ctx context.Context, in *IsGroupBlacklistedReq, opts ...grpc.CallOption) (*IsGroupBlacklistedResp, error)
 	// Get group join applications (as admin or owner)
 	GetGroupApplicationList(ctx context.Context, in *GetGroupApplicationListReq, opts ...grpc.CallOption) (*GetGroupApplicationListResp, error)
 	GetGroupApplicationUnhandledCount(ctx context.Context, in *GetGroupApplicationUnhandledCountReq, opts ...grpc.CallOption) (*GetGroupApplicationUnhandledCountResp, error)
@@ -200,6 +213,46 @@ func (c *groupClient) SetGroupInfoEx(ctx context.Context, in *SetGroupInfoExReq,
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(SetGroupInfoExResp)
 	err := c.cc.Invoke(ctx, Group_SetGroupInfoEx_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *groupClient) AddGroupBlacklist(ctx context.Context, in *AddGroupBlacklistReq, opts ...grpc.CallOption) (*AddGroupBlacklistResp, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(AddGroupBlacklistResp)
+	err := c.cc.Invoke(ctx, Group_AddGroupBlacklist_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *groupClient) RemoveGroupBlacklist(ctx context.Context, in *RemoveGroupBlacklistReq, opts ...grpc.CallOption) (*RemoveGroupBlacklistResp, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(RemoveGroupBlacklistResp)
+	err := c.cc.Invoke(ctx, Group_RemoveGroupBlacklist_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *groupClient) GetGroupBlacklist(ctx context.Context, in *GetGroupBlacklistReq, opts ...grpc.CallOption) (*GetGroupBlacklistResp, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(GetGroupBlacklistResp)
+	err := c.cc.Invoke(ctx, Group_GetGroupBlacklist_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *groupClient) IsGroupBlacklisted(ctx context.Context, in *IsGroupBlacklistedReq, opts ...grpc.CallOption) (*IsGroupBlacklistedResp, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(IsGroupBlacklistedResp)
+	err := c.cc.Invoke(ctx, Group_IsGroupBlacklisted_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
@@ -581,6 +634,15 @@ type GroupServer interface {
 	// Set group info
 	SetGroupInfo(context.Context, *SetGroupInfoReq) (*SetGroupInfoResp, error)
 	SetGroupInfoEx(context.Context, *SetGroupInfoExReq) (*SetGroupInfoExResp, error)
+	// Bar users from a group, lift the bar, and read the list. Adding
+	// someone who is currently a member removes them as part of the same
+	// call — a ban that left them sitting in the group would not be one.
+	AddGroupBlacklist(context.Context, *AddGroupBlacklistReq) (*AddGroupBlacklistResp, error)
+	RemoveGroupBlacklist(context.Context, *RemoveGroupBlacklistReq) (*RemoveGroupBlacklistResp, error)
+	GetGroupBlacklist(context.Context, *GetGroupBlacklistReq) (*GetGroupBlacklistResp, error)
+	// Which of these users are barred. For callers deciding whether to
+	// offer a join at all, rather than letting the attempt be refused.
+	IsGroupBlacklisted(context.Context, *IsGroupBlacklistedReq) (*IsGroupBlacklistedResp, error)
 	// Get group join applications (as admin or owner)
 	GetGroupApplicationList(context.Context, *GetGroupApplicationListReq) (*GetGroupApplicationListResp, error)
 	GetGroupApplicationUnhandledCount(context.Context, *GetGroupApplicationUnhandledCountReq) (*GetGroupApplicationUnhandledCountResp, error)
@@ -666,6 +728,18 @@ func (UnimplementedGroupServer) SetGroupInfo(context.Context, *SetGroupInfoReq) 
 }
 func (UnimplementedGroupServer) SetGroupInfoEx(context.Context, *SetGroupInfoExReq) (*SetGroupInfoExResp, error) {
 	return nil, status.Error(codes.Unimplemented, "method SetGroupInfoEx not implemented")
+}
+func (UnimplementedGroupServer) AddGroupBlacklist(context.Context, *AddGroupBlacklistReq) (*AddGroupBlacklistResp, error) {
+	return nil, status.Error(codes.Unimplemented, "method AddGroupBlacklist not implemented")
+}
+func (UnimplementedGroupServer) RemoveGroupBlacklist(context.Context, *RemoveGroupBlacklistReq) (*RemoveGroupBlacklistResp, error) {
+	return nil, status.Error(codes.Unimplemented, "method RemoveGroupBlacklist not implemented")
+}
+func (UnimplementedGroupServer) GetGroupBlacklist(context.Context, *GetGroupBlacklistReq) (*GetGroupBlacklistResp, error) {
+	return nil, status.Error(codes.Unimplemented, "method GetGroupBlacklist not implemented")
+}
+func (UnimplementedGroupServer) IsGroupBlacklisted(context.Context, *IsGroupBlacklistedReq) (*IsGroupBlacklistedResp, error) {
+	return nil, status.Error(codes.Unimplemented, "method IsGroupBlacklisted not implemented")
 }
 func (UnimplementedGroupServer) GetGroupApplicationList(context.Context, *GetGroupApplicationListReq) (*GetGroupApplicationListResp, error) {
 	return nil, status.Error(codes.Unimplemented, "method GetGroupApplicationList not implemented")
@@ -900,6 +974,78 @@ func _Group_SetGroupInfoEx_Handler(srv interface{}, ctx context.Context, dec fun
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(GroupServer).SetGroupInfoEx(ctx, req.(*SetGroupInfoExReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Group_AddGroupBlacklist_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(AddGroupBlacklistReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(GroupServer).AddGroupBlacklist(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Group_AddGroupBlacklist_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(GroupServer).AddGroupBlacklist(ctx, req.(*AddGroupBlacklistReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Group_RemoveGroupBlacklist_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(RemoveGroupBlacklistReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(GroupServer).RemoveGroupBlacklist(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Group_RemoveGroupBlacklist_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(GroupServer).RemoveGroupBlacklist(ctx, req.(*RemoveGroupBlacklistReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Group_GetGroupBlacklist_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetGroupBlacklistReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(GroupServer).GetGroupBlacklist(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Group_GetGroupBlacklist_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(GroupServer).GetGroupBlacklist(ctx, req.(*GetGroupBlacklistReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Group_IsGroupBlacklisted_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(IsGroupBlacklistedReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(GroupServer).IsGroupBlacklisted(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Group_IsGroupBlacklisted_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(GroupServer).IsGroupBlacklisted(ctx, req.(*IsGroupBlacklistedReq))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -1582,6 +1728,22 @@ var Group_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "setGroupInfoEx",
 			Handler:    _Group_SetGroupInfoEx_Handler,
+		},
+		{
+			MethodName: "addGroupBlacklist",
+			Handler:    _Group_AddGroupBlacklist_Handler,
+		},
+		{
+			MethodName: "removeGroupBlacklist",
+			Handler:    _Group_RemoveGroupBlacklist_Handler,
+		},
+		{
+			MethodName: "getGroupBlacklist",
+			Handler:    _Group_GetGroupBlacklist_Handler,
+		},
+		{
+			MethodName: "isGroupBlacklisted",
+			Handler:    _Group_IsGroupBlacklisted_Handler,
 		},
 		{
 			MethodName: "getGroupApplicationList",

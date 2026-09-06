@@ -43,6 +43,12 @@ message GroupInfo {
   // does not close history someone already has. Unset defers to the
   // deployment's enableHistoryForNewMembers.
   int32 historyForNewMembers = 19;
+  // On: this group keeps and shows per-message read receipts — the
+  // "seen by" list and the read count on each message. Off, nobody's
+  // reading is recorded here and nothing already recorded is served.
+  // Unset behaves as on, which is how the group behaved before the
+  // switch existed.
+  int32 readReceipts = 20;
 }
 
 message GroupInfoForSet {
@@ -60,6 +66,7 @@ message GroupInfoForSet {
   // distinct from "set it to 0".
   openim.protobuf.Int32Value deleteConversationOnKick = 10;
   openim.protobuf.Int32Value historyForNewMembers = 11;
+  openim.protobuf.Int32Value readReceipts = 12;
 }
 
 message GroupMemberFullInfo {
