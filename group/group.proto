@@ -101,6 +101,60 @@ message JoinGroupReq {
 }
 message JoinGroupResp {}
 
+// ---------------------------------------------------------------------
+// Joining by QR code. Three steps, deliberately separate:
+//
+//   1. a member asks for a code for their group (createGroupQrcode),
+//   2. whoever scans it resolves the opaque uuid into something worth
+//      showing — group name, avatar, member count — plus a short-lived
+//      authCode (parseQrcode),
+//   3. they decide to join, presenting that authCode (scanJoinGroup).
+//
+// Step 2 exists so a scanner sees what they are about to join before
+// joining it, and so the long-lived poster code is never itself a
+// join token: the uuid can sit on a wall for a week, while the
+// authCode minted from it is single-use and expires in minutes.
+// ---------------------------------------------------------------------
+
+message CreateGroupQrcodeReq {
+  string groupID = 1;
+}
+message CreateGroupQrcodeResp {
+  // Opaque; means nothing without a parseQrcode call.
+  string uuid = 1;
+  // Epoch ms. Callers should re-issue rather than show an expired code.
+  int64 expireTime = 2;
+}
+
+message ParseQrcodeReq {
+  string uuid = 1;
+}
+message ParseQrcodeResp {
+  // What this code points at. Only "group" today; present so a future
+  // user/contact code can share this endpoint rather than needing a
+  // parallel one.
+  string type = 1;
+  openim.sdkws.GroupInfo groupInfo = 2;
+  // Empty when the caller is already in the group — there is nothing to
+  // join, so no join token is minted.
+  string authCode = 3;
+  int64 authCodeExpireTime = 4;
+  bool alreadyMember = 5;
+}
+
+message ScanJoinGroupReq {
+  string groupID = 1;
+  string authCode = 2;
+}
+message ScanJoinGroupResp {
+  // Exactly one of these is true on success. A group with
+  // needVerification on records a join request instead of adding the
+  // caller, and the caller has to be told which happened — the two look
+  // identical otherwise.
+  bool joined = 1;
+  bool pendingApproval = 2;
+}
+
 message GroupApplicationResponseReq {
   string groupID = 1;
   string fromUserID = 2; //
@@ -480,4 +534,10 @@ service group {
   rpc GetFullGroupMemberUserIDs(GetFullGroupMemberUserIDsReq) returns (GetFullGroupMemberUserIDsResp);
 
   rpc GetFullJoinGroupIDs(GetFullJoinGroupIDsReq) returns (GetFullJoinGroupIDsResp);
+
+  // Join-by-QR-code; see CreateGroupQrcodeReq above for why it is three
+  // calls rather than one.
+  rpc createGroupQrcode(CreateGroupQrcodeReq) returns (CreateGroupQrcodeResp);
+  rpc parseQrcode(ParseQrcodeReq) returns (ParseQrcodeResp);
+  rpc scanJoinGroup(ScanJoinGroupReq) returns (ScanJoinGroupResp);
 }
