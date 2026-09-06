@@ -58,6 +58,9 @@ const (
 	Msg_AppendStreamMsg_FullMethodName                  = "/openim.msg.msg/AppendStreamMsg"
 	Msg_GetStreamMsg_FullMethodName                     = "/openim.msg.msg/GetStreamMsg"
 	Msg_ModifyMessage_FullMethodName                    = "/openim.msg.msg/ModifyMessage"
+	Msg_SetSystemMsgVisibility_FullMethodName           = "/openim.msg.msg/SetSystemMsgVisibility"
+	Msg_DelSystemMsgVisibility_FullMethodName           = "/openim.msg.msg/DelSystemMsgVisibility"
+	Msg_GetSystemMsgVisibilityList_FullMethodName       = "/openim.msg.msg/GetSystemMsgVisibilityList"
 )
 
 // MsgClient is the client API for Msg service.
@@ -123,6 +126,17 @@ type MsgClient interface {
 	AppendStreamMsg(ctx context.Context, in *AppendStreamMsgReq, opts ...grpc.CallOption) (*AppendStreamMsgResp, error)
 	GetStreamMsg(ctx context.Context, in *GetStreamMsgReq, opts ...grpc.CallOption) (*GetStreamMsgResp, error)
 	ModifyMessage(ctx context.Context, in *ModifyMessageReq, opts ...grpc.CallOption) (*ModifyMessageResp, error)
+	// Admin-configured show/hide table for group-lifecycle system
+	// notifications. Owned here rather than in the sibling `chat` business
+	// server because both keys are this protocol's own enums (contentType
+	// and PlatformID) and only open-im-server ever reads the result — see
+	// SystemMsgVisibilityEntry above. Writes go to Mongo, then push a
+	// snapshot into Redis and publish on cachekey.SystemMsgVisibilityChannel
+	// so msggateway (which has no Mongo of its own) and this service both
+	// refresh their in-memory caches without polling anything.
+	SetSystemMsgVisibility(ctx context.Context, in *SetSystemMsgVisibilityReq, opts ...grpc.CallOption) (*SetSystemMsgVisibilityResp, error)
+	DelSystemMsgVisibility(ctx context.Context, in *DelSystemMsgVisibilityReq, opts ...grpc.CallOption) (*DelSystemMsgVisibilityResp, error)
+	GetSystemMsgVisibilityList(ctx context.Context, in *GetSystemMsgVisibilityListReq, opts ...grpc.CallOption) (*GetSystemMsgVisibilityListResp, error)
 }
 
 type msgClient struct {
@@ -513,6 +527,36 @@ func (c *msgClient) ModifyMessage(ctx context.Context, in *ModifyMessageReq, opt
 	return out, nil
 }
 
+func (c *msgClient) SetSystemMsgVisibility(ctx context.Context, in *SetSystemMsgVisibilityReq, opts ...grpc.CallOption) (*SetSystemMsgVisibilityResp, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(SetSystemMsgVisibilityResp)
+	err := c.cc.Invoke(ctx, Msg_SetSystemMsgVisibility_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *msgClient) DelSystemMsgVisibility(ctx context.Context, in *DelSystemMsgVisibilityReq, opts ...grpc.CallOption) (*DelSystemMsgVisibilityResp, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(DelSystemMsgVisibilityResp)
+	err := c.cc.Invoke(ctx, Msg_DelSystemMsgVisibility_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *msgClient) GetSystemMsgVisibilityList(ctx context.Context, in *GetSystemMsgVisibilityListReq, opts ...grpc.CallOption) (*GetSystemMsgVisibilityListResp, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(GetSystemMsgVisibilityListResp)
+	err := c.cc.Invoke(ctx, Msg_GetSystemMsgVisibilityList_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // MsgServer is the server API for Msg service.
 // All implementations must embed UnimplementedMsgServer
 // for forward compatibility.
@@ -576,6 +620,17 @@ type MsgServer interface {
 	AppendStreamMsg(context.Context, *AppendStreamMsgReq) (*AppendStreamMsgResp, error)
 	GetStreamMsg(context.Context, *GetStreamMsgReq) (*GetStreamMsgResp, error)
 	ModifyMessage(context.Context, *ModifyMessageReq) (*ModifyMessageResp, error)
+	// Admin-configured show/hide table for group-lifecycle system
+	// notifications. Owned here rather than in the sibling `chat` business
+	// server because both keys are this protocol's own enums (contentType
+	// and PlatformID) and only open-im-server ever reads the result — see
+	// SystemMsgVisibilityEntry above. Writes go to Mongo, then push a
+	// snapshot into Redis and publish on cachekey.SystemMsgVisibilityChannel
+	// so msggateway (which has no Mongo of its own) and this service both
+	// refresh their in-memory caches without polling anything.
+	SetSystemMsgVisibility(context.Context, *SetSystemMsgVisibilityReq) (*SetSystemMsgVisibilityResp, error)
+	DelSystemMsgVisibility(context.Context, *DelSystemMsgVisibilityReq) (*DelSystemMsgVisibilityResp, error)
+	GetSystemMsgVisibilityList(context.Context, *GetSystemMsgVisibilityListReq) (*GetSystemMsgVisibilityListResp, error)
 	mustEmbedUnimplementedMsgServer()
 }
 
@@ -699,6 +754,15 @@ func (UnimplementedMsgServer) GetStreamMsg(context.Context, *GetStreamMsgReq) (*
 }
 func (UnimplementedMsgServer) ModifyMessage(context.Context, *ModifyMessageReq) (*ModifyMessageResp, error) {
 	return nil, status.Error(codes.Unimplemented, "method ModifyMessage not implemented")
+}
+func (UnimplementedMsgServer) SetSystemMsgVisibility(context.Context, *SetSystemMsgVisibilityReq) (*SetSystemMsgVisibilityResp, error) {
+	return nil, status.Error(codes.Unimplemented, "method SetSystemMsgVisibility not implemented")
+}
+func (UnimplementedMsgServer) DelSystemMsgVisibility(context.Context, *DelSystemMsgVisibilityReq) (*DelSystemMsgVisibilityResp, error) {
+	return nil, status.Error(codes.Unimplemented, "method DelSystemMsgVisibility not implemented")
+}
+func (UnimplementedMsgServer) GetSystemMsgVisibilityList(context.Context, *GetSystemMsgVisibilityListReq) (*GetSystemMsgVisibilityListResp, error) {
+	return nil, status.Error(codes.Unimplemented, "method GetSystemMsgVisibilityList not implemented")
 }
 func (UnimplementedMsgServer) mustEmbedUnimplementedMsgServer() {}
 func (UnimplementedMsgServer) testEmbeddedByValue()             {}
@@ -1405,6 +1469,60 @@ func _Msg_ModifyMessage_Handler(srv interface{}, ctx context.Context, dec func(i
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Msg_SetSystemMsgVisibility_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(SetSystemMsgVisibilityReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(MsgServer).SetSystemMsgVisibility(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Msg_SetSystemMsgVisibility_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(MsgServer).SetSystemMsgVisibility(ctx, req.(*SetSystemMsgVisibilityReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Msg_DelSystemMsgVisibility_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(DelSystemMsgVisibilityReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(MsgServer).DelSystemMsgVisibility(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Msg_DelSystemMsgVisibility_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(MsgServer).DelSystemMsgVisibility(ctx, req.(*DelSystemMsgVisibilityReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Msg_GetSystemMsgVisibilityList_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetSystemMsgVisibilityListReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(MsgServer).GetSystemMsgVisibilityList(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Msg_GetSystemMsgVisibilityList_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(MsgServer).GetSystemMsgVisibilityList(ctx, req.(*GetSystemMsgVisibilityListReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // Msg_ServiceDesc is the grpc.ServiceDesc for Msg service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -1563,6 +1681,18 @@ var Msg_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "ModifyMessage",
 			Handler:    _Msg_ModifyMessage_Handler,
+		},
+		{
+			MethodName: "SetSystemMsgVisibility",
+			Handler:    _Msg_SetSystemMsgVisibility_Handler,
+		},
+		{
+			MethodName: "DelSystemMsgVisibility",
+			Handler:    _Msg_DelSystemMsgVisibility_Handler,
+		},
+		{
+			MethodName: "GetSystemMsgVisibilityList",
+			Handler:    _Msg_GetSystemMsgVisibilityList_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

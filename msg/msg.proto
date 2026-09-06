@@ -454,6 +454,44 @@ message ModifyMessageResp {
   int64 modifiedCount = 2;
 }
 
+// SystemMsgVisibilityEntry: one admin-configured override deciding whether
+// a single group-lifecycle system notification contentType is shown to
+// clients on one exact PlatformID (1 iOS, 2 Android, 3 Windows, 4 OSX,
+// 5 Web, 6 MiniWeb, 7 Linux, 8 APad, 9 IPad, 10 Admin, 11 HarmonyOS,
+// 12 Bot). Keyed on the exact PlatformID rather than one of the coarser
+// PlatformID2class buckets ("PC"/"Mobile"/"Pad"): an admin hiding
+// group-created on Web must not silently also hide it on MiniWeb, and
+// bucketing left iPad/HarmonyOS/Bot in no bucket at all.
+//
+// Absence of an entry for a (contentType, platformID) pair means "no
+// override configured", which is NOT the same as show=false — see
+// sdkws.MsgData.systemMsgVisible's own doc comment for how delivery
+// resolves it.
+message SystemMsgVisibilityEntry {
+  int32 contentType = 1;
+  int32 platformID = 2;
+  bool show = 3;
+}
+
+message SetSystemMsgVisibilityReq {
+  repeated SystemMsgVisibilityEntry entries = 1;
+}
+
+message SetSystemMsgVisibilityResp {}
+
+message DelSystemMsgVisibilityReq {
+  // Only contentType and platformID are read; show is ignored.
+  repeated SystemMsgVisibilityEntry entries = 1;
+}
+
+message DelSystemMsgVisibilityResp {}
+
+message GetSystemMsgVisibilityListReq {}
+
+message GetSystemMsgVisibilityListResp {
+  repeated SystemMsgVisibilityEntry entries = 1;
+}
+
 service msg {
   // Get min and max seq (including the user and specified groups)
   rpc GetMaxSeq(sdkws.GetMaxSeqReq) returns (sdkws.GetMaxSeqResp);
@@ -522,4 +560,16 @@ service msg {
   rpc AppendStreamMsg(AppendStreamMsgReq) returns (AppendStreamMsgResp);
   rpc GetStreamMsg(GetStreamMsgReq) returns (GetStreamMsgResp);
   rpc ModifyMessage(ModifyMessageReq) returns (ModifyMessageResp);
+
+  // Admin-configured show/hide table for group-lifecycle system
+  // notifications. Owned here rather than in the sibling `chat` business
+  // server because both keys are this protocol's own enums (contentType
+  // and PlatformID) and only open-im-server ever reads the result — see
+  // SystemMsgVisibilityEntry above. Writes go to Mongo, then push a
+  // snapshot into Redis and publish on cachekey.SystemMsgVisibilityChannel
+  // so msggateway (which has no Mongo of its own) and this service both
+  // refresh their in-memory caches without polling anything.
+  rpc SetSystemMsgVisibility(SetSystemMsgVisibilityReq) returns (SetSystemMsgVisibilityResp);
+  rpc DelSystemMsgVisibility(DelSystemMsgVisibilityReq) returns (DelSystemMsgVisibilityResp);
+  rpc GetSystemMsgVisibilityList(GetSystemMsgVisibilityListReq) returns (GetSystemMsgVisibilityListResp);
 }
