@@ -24,6 +24,17 @@ message Conversation {
   int64 msgDestructTime = 15;
   int64 latestMsgDestructTime = 16;
   bool isMsgDestruct = 17;
+  // Whether this owner has locked this conversation behind their chat
+  // password.
+  //
+  // A real field rather than something packed into `ex`: `ex` is a
+  // single opaque string written whole, so a second feature wanting it
+  // would force a JSON envelope and a read-modify-write with no
+  // compare-and-set. It also would not reach ConversationElem, and the
+  // list needs this on the *same* payload as the last-message preview it
+  // has to mask — a lock that arrives on a different call than the
+  // secret it hides can only fail open.
+  bool chatPwdOn = 18;
 }
 
 message ConversationReq {
@@ -42,6 +53,7 @@ message ConversationReq {
   openim.protobuf.Int32Value groupAtType = 13;
   openim.protobuf.Int64Value msgDestructTime = 14;
   openim.protobuf.BoolValue isMsgDestruct = 15;
+  openim.protobuf.BoolValue chatPwdOn = 16;
 }
 
 message SetConversationReq {
@@ -77,6 +89,10 @@ message ConversationElem {
   int64 unreadCount = 3;
   bool isPinned = 4;
   MsgInfo msgInfo = 5;
+  // Rides on the same payload as msgInfo deliberately: a client that
+  // masks a locked conversation's preview has to know it is locked at
+  // the moment it renders that preview, not one call later.
+  bool chatPwdOn = 6;
 }
 
 message MsgInfo {
