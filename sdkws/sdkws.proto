@@ -25,6 +25,24 @@ message GroupInfo {
   int32 applyMemberFriend = 15;
   int64 notificationUpdateTime = 16;
   string notificationUserID = 17;
+  // The two owner-configurable switches below carry three states each,
+  // not two: 0 = unset, 1 = on, 2 = off (constant.GroupSettingUnset /
+  // On / Off). "No owner has ever answered" is a real answer — it is
+  // what lets a deployment-wide default apply — and a bool cannot hold
+  // it, since proto3 makes false and absent the same wire.
+
+  // On: removing a member takes their own copy of the conversation with
+  // it, rather than leaving them a read-only record of a group they are
+  // no longer in. Only their copy; everything said stays put for
+  // everyone still in the group. Unset behaves as on.
+  int32 deleteConversationOnKick = 18;
+  // On: someone who joins may read what was said before they arrived.
+  // Enforced at the moment of joining, by pinning that member's floor
+  // then — so turning it on later does not retroactively open the back
+  // catalogue to people who joined while it was off, and turning it off
+  // does not close history someone already has. Unset defers to the
+  // deployment's enableHistoryForNewMembers.
+  int32 historyForNewMembers = 19;
 }
 
 message GroupInfoForSet {
@@ -37,6 +55,11 @@ message GroupInfoForSet {
   openim.protobuf.Int32Value needVerification = 7;
   openim.protobuf.Int32Value lookMemberInfo = 8;
   openim.protobuf.Int32Value applyMemberFriend = 9;
+  // See GroupInfo above for what these mean. Wrapped, like the three
+  // Int32Values above them, so that "not in this request" stays
+  // distinct from "set it to 0".
+  openim.protobuf.Int32Value deleteConversationOnKick = 10;
+  openim.protobuf.Int32Value historyForNewMembers = 11;
 }
 
 message GroupMemberFullInfo {

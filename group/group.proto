@@ -39,6 +39,9 @@ message SetGroupInfoExReq {
   openim.protobuf.Int32Value needVerification = 7;
   openim.protobuf.Int32Value lookMemberInfo = 8;
   openim.protobuf.Int32Value applyMemberFriend = 9;
+  // See sdkws.GroupInfo for what these mean.
+  openim.protobuf.Int32Value deleteConversationOnKick = 10;
+  openim.protobuf.Int32Value historyForNewMembers = 11;
 }
 message SetGroupInfoExResp {}
 

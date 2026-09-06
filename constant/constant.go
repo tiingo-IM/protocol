@@ -325,6 +325,17 @@ const (
 	Directly                            = 2 // join directly without verification
 )
 
+// Owner-configurable group switches (sdkws.GroupInfo's
+// deleteConversationOnKick / historyForNewMembers) carry three states,
+// not two: the owner said yes, the owner said no, and no owner has ever
+// said. Only the third lets a deployment-wide default apply, and a bool
+// cannot express it — proto3 puts false and absent on the same wire.
+const (
+	GroupSettingUnset = 0
+	GroupSettingOn    = 1
+	GroupSettingOff   = 2
+)
+
 const (
 	GroupRPCRecvSize = 30
 	GroupRPCSendSize = 30
