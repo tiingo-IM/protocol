@@ -304,6 +304,40 @@ message DeleteConversationsReq {
 }
 message DeleteConversationsResp {}
 
+// NotificationSeqRange is the (afterSeq, throughSeq] span one conversation's
+// unread count covers: afterSeq is that user's read watermark, throughSeq the
+// conversation's max seq.
+message NotificationSeqRange {
+  string conversationID = 1;
+  int64 afterSeq = 2;
+  int64 throughSeq = 3;
+}
+
+// GetNotificationSeqCounts asks how many of the seqs in each span were
+// consumed by notification messages (a group rename, a member joining) rather
+// than by anything a user would call a message.
+//
+// An unread count is `maxSeq - hasReadSeq`, arithmetic over two watermarks
+// with no notion of what sits between them, so every notification inflates it
+// by one — and clients that render notifications as a non-message row never
+// report those seqs as read, leaving a badge that reading cannot clear. This
+// returns the correction.
+//
+// Exists as an RPC purely so the API gateway can apply the same correction
+// the conversation service already applies internally: the gateway holds no
+// Redis connection of its own, and the alternative was letting the two
+// surfaces report different unread totals for the same user.
+message GetNotificationSeqCountsReq {
+  repeated NotificationSeqRange ranges = 1;
+}
+message GetNotificationSeqCountsResp {
+  // Keyed by conversationID. Conversations with nothing recorded are absent
+  // rather than zero — callers must treat a missing entry as "nothing known
+  // to subtract", never as "nothing to subtract", and clamp the result at
+  // zero. The underlying record is Redis-only and may be incomplete.
+  map<string, int64> counts = 1;
+}
+
 service conversation {
   rpc GetConversation(GetConversationReq) returns (GetConversationResp);
   rpc GetSortedConversationList(GetSortedConversationListReq) returns (GetSortedConversationListResp);
@@ -331,4 +365,5 @@ service conversation {
   rpc ClearUserConversationMsg(ClearUserConversationMsgReq) returns (ClearUserConversationMsgResp);
   rpc UpdateConversationsByUser(UpdateConversationsByUserReq) returns (UpdateConversationsByUserResp);
   rpc DeleteConversations(DeleteConversationsReq) returns (DeleteConversationsResp);
+  rpc GetNotificationSeqCounts(GetNotificationSeqCountsReq) returns (GetNotificationSeqCountsResp);
 }

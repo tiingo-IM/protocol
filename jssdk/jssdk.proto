@@ -16,6 +16,16 @@ message ConversationMsg {
   sdkws.GroupInfo group = 5;
   int64 maxSeq = 6;
   int64 readSeq = 7;
+  // This conversation's unread badge, already corrected for the seqs taken
+  // up by notification messages and clamped at zero. Prefer it over deriving
+  // `maxSeq - readSeq` yourself: that difference counts every group rename
+  // and member join as an unread message, and clients that render those as a
+  // non-message row never report their seqs as read, so the resulting badge
+  // cannot be cleared by reading the conversation.
+  //
+  // maxSeq/readSeq stay exactly what they were — the raw watermarks — since
+  // clients that track reads per message need them as a starting point.
+  int64 unreadCount = 8;
 }
 
 message GetActiveConversationsReq  {
