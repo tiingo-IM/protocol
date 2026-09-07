@@ -274,6 +274,18 @@ message MsgData {
   // receiving device to resolve against, so the value is always
   // computed per delivery.
   optional bool systemMsgVisible = 24;
+  // When this message was last edited by its author, in epoch ms, or 0
+  // if it never was. One field rather than an is_edited flag beside a
+  // timestamp: two fields can contradict each other (edited=true with no
+  // time, a time with edited=false) and one cannot, and a real edit time
+  // is always non-zero, so the sentinel costs nothing.
+  //
+  // Editing rewrites the message in place at the same seq — there is no
+  // second message and no gap in the sequence — so a client syncing
+  // history it missed receives the edited content with no special
+  // handling at all, and this field is what tells it to render the
+  // "edited" marker beside the timestamp.
+  int64 editTime = 25;
 }
 message PushMessages {
   map<string, PullMsgs> msgs = 1;
@@ -750,4 +762,25 @@ message AppSettings {
 // than a "go and look" marker, so one push is the whole change.
 message AppSettingsChangedTips {
   AppSettings settings = 1;
+}
+
+// Pushed (constant.MsgEditNotification, 2104) to a conversation after
+// its author edits one of their messages.
+//
+// Carries the new content rather than a "go and refetch" marker, so a
+// client that has the message on screen replaces it in place. The
+// content is the encoded payload for contentType, exactly as it is
+// stored — which is also why contentType travels with it: editing a
+// plain text message so that it mentions someone turns it from Text into
+// AtText, and a client that assumed the type had not changed would
+// render the new payload with the old codec.
+message EditMsgTips {
+  string conversationID = 1;
+  int64 seq = 2;
+  string clientMsgID = 3;
+  string editorUserID = 4;
+  int32 sessionType = 5;
+  int32 contentType = 6;
+  string content = 7;
+  int64 editTime = 8;
 }

@@ -108,6 +108,15 @@ const (
 	MsgRevokeNotification     = 2101
 	DeleteMsgsNotification    = 2102
 	ModifyMessageNotification = 2103
+	// A message was edited in place by its author; see sdkws.EditMsgTips.
+	//
+	// 2104 rather than reusing ModifyMessageNotification above, which is
+	// an upstream constant with no sender anywhere in this deployment.
+	// Its shape is wrong for this (ModifyMsgTips carries no contentType,
+	// so it cannot describe an edit that turns Text into AtText), and
+	// taking a name upstream still owns would collide the day upstream
+	// starts using it.
+	MsgEditNotification = 2104
 
 	HasReadReceipt        = 2200
 

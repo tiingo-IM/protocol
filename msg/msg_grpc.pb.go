@@ -66,6 +66,7 @@ const (
 	Msg_GetSystemMsgVisibilityList_FullMethodName       = "/openim.msg.msg/GetSystemMsgVisibilityList"
 	Msg_GetAppSettings_FullMethodName                   = "/openim.msg.msg/GetAppSettings"
 	Msg_SetAppSettings_FullMethodName                   = "/openim.msg.msg/SetAppSettings"
+	Msg_EditMsg_FullMethodName                          = "/openim.msg.msg/EditMsg"
 )
 
 // MsgClient is the client API for Msg service.
@@ -157,6 +158,9 @@ type MsgClient interface {
 	// costs no database read per message.
 	GetAppSettings(ctx context.Context, in *GetAppSettingsReq, opts ...grpc.CallOption) (*GetAppSettingsResp, error)
 	SetAppSettings(ctx context.Context, in *SetAppSettingsReq, opts ...grpc.CallOption) (*SetAppSettingsResp, error)
+	// Edit a message in place — see EditMsgReq for why this is not the
+	// ModifyMessage stub above.
+	EditMsg(ctx context.Context, in *EditMsgReq, opts ...grpc.CallOption) (*EditMsgResp, error)
 }
 
 type msgClient struct {
@@ -627,6 +631,16 @@ func (c *msgClient) SetAppSettings(ctx context.Context, in *SetAppSettingsReq, o
 	return out, nil
 }
 
+func (c *msgClient) EditMsg(ctx context.Context, in *EditMsgReq, opts ...grpc.CallOption) (*EditMsgResp, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(EditMsgResp)
+	err := c.cc.Invoke(ctx, Msg_EditMsg_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // MsgServer is the server API for Msg service.
 // All implementations must embed UnimplementedMsgServer
 // for forward compatibility.
@@ -716,6 +730,9 @@ type MsgServer interface {
 	// costs no database read per message.
 	GetAppSettings(context.Context, *GetAppSettingsReq) (*GetAppSettingsResp, error)
 	SetAppSettings(context.Context, *SetAppSettingsReq) (*SetAppSettingsResp, error)
+	// Edit a message in place — see EditMsgReq for why this is not the
+	// ModifyMessage stub above.
+	EditMsg(context.Context, *EditMsgReq) (*EditMsgResp, error)
 	mustEmbedUnimplementedMsgServer()
 }
 
@@ -863,6 +880,9 @@ func (UnimplementedMsgServer) GetAppSettings(context.Context, *GetAppSettingsReq
 }
 func (UnimplementedMsgServer) SetAppSettings(context.Context, *SetAppSettingsReq) (*SetAppSettingsResp, error) {
 	return nil, status.Error(codes.Unimplemented, "method SetAppSettings not implemented")
+}
+func (UnimplementedMsgServer) EditMsg(context.Context, *EditMsgReq) (*EditMsgResp, error) {
+	return nil, status.Error(codes.Unimplemented, "method EditMsg not implemented")
 }
 func (UnimplementedMsgServer) mustEmbedUnimplementedMsgServer() {}
 func (UnimplementedMsgServer) testEmbeddedByValue()             {}
@@ -1713,6 +1733,24 @@ func _Msg_SetAppSettings_Handler(srv interface{}, ctx context.Context, dec func(
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Msg_EditMsg_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(EditMsgReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(MsgServer).EditMsg(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Msg_EditMsg_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(MsgServer).EditMsg(ctx, req.(*EditMsgReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // Msg_ServiceDesc is the grpc.ServiceDesc for Msg service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -1903,6 +1941,10 @@ var Msg_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "SetAppSettings",
 			Handler:    _Msg_SetAppSettings_Handler,
+		},
+		{
+			MethodName: "EditMsg",
+			Handler:    _Msg_EditMsg_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

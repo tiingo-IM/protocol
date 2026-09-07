@@ -559,6 +559,38 @@ message SetAppSettingsResp {
   sdkws.AppSettings settings = 1;
 }
 
+// EditMsgReq rewrites one message in place, at the same seq.
+//
+// Not ModifyMessage above, which is an upstream stub with no
+// implementation on any server in this deployment: its request carries
+// no contentType, so it cannot express the one edit that changes it
+// (adding an @mention turns Text into AtText), and adopting its name for
+// different semantics would collide the day upstream fills it in.
+message EditMsgReq {
+  string conversationID = 1;
+  int64 seq = 2;
+  // The editor, who must also be the message's original sender. There is
+  // deliberately no moderator path: taking down someone else's message
+  // and rewriting their words are different acts, and only the first is
+  // moderation.
+  string userID = 3;
+  // The new payload, already encoded for contentType — the same bytes
+  // that would have been sent had the message been written this way in
+  // the first place. Encoded by the client because that is where the
+  // knowledge lives: rebuilding an AtText's atUserList from plain text
+  // would mean re-deriving the mention list on the server from a name
+  // table it does not have.
+  string content = 4;
+  // The new content type, which may differ from the old one within the
+  // text family (Text, AtText, AdvancedText, MarkdownText). Anything
+  // else is refused.
+  int32 contentType = 5;
+}
+
+message EditMsgResp {
+  int64 editTime = 1;
+}
+
 service msg {
   // Get min and max seq (including the user and specified groups)
   rpc GetMaxSeq(sdkws.GetMaxSeqReq) returns (sdkws.GetMaxSeqResp);
@@ -655,4 +687,8 @@ service msg {
   // costs no database read per message.
   rpc GetAppSettings(GetAppSettingsReq) returns (GetAppSettingsResp);
   rpc SetAppSettings(SetAppSettingsReq) returns (SetAppSettingsResp);
+
+  // Edit a message in place — see EditMsgReq for why this is not the
+  // ModifyMessage stub above.
+  rpc EditMsg(EditMsgReq) returns (EditMsgResp);
 }
