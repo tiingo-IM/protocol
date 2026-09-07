@@ -64,6 +64,8 @@ const (
 	Msg_SetSystemMsgVisibility_FullMethodName           = "/openim.msg.msg/SetSystemMsgVisibility"
 	Msg_DelSystemMsgVisibility_FullMethodName           = "/openim.msg.msg/DelSystemMsgVisibility"
 	Msg_GetSystemMsgVisibilityList_FullMethodName       = "/openim.msg.msg/GetSystemMsgVisibilityList"
+	Msg_GetAppSettings_FullMethodName                   = "/openim.msg.msg/GetAppSettings"
+	Msg_SetAppSettings_FullMethodName                   = "/openim.msg.msg/SetAppSettings"
 )
 
 // MsgClient is the client API for Msg service.
@@ -146,6 +148,15 @@ type MsgClient interface {
 	SetSystemMsgVisibility(ctx context.Context, in *SetSystemMsgVisibilityReq, opts ...grpc.CallOption) (*SetSystemMsgVisibilityResp, error)
 	DelSystemMsgVisibility(ctx context.Context, in *DelSystemMsgVisibilityReq, opts ...grpc.CallOption) (*DelSystemMsgVisibilityResp, error)
 	GetSystemMsgVisibilityList(ctx context.Context, in *GetSystemMsgVisibilityListReq, opts ...grpc.CallOption) (*GetSystemMsgVisibilityListResp, error)
+	// Admin-configured client settings, owned here for the same reason the
+	// visibility table above is: msg is the service that has to *enforce*
+	// them (the edit and recall windows are checked on the write path), and
+	// a check on the write path must never wait on another service to
+	// answer. Same propagation, too — Mongo, then a snapshot into Redis
+	// published on cachekey.AppSettingsChannel — so enforcing a window
+	// costs no database read per message.
+	GetAppSettings(ctx context.Context, in *GetAppSettingsReq, opts ...grpc.CallOption) (*GetAppSettingsResp, error)
+	SetAppSettings(ctx context.Context, in *SetAppSettingsReq, opts ...grpc.CallOption) (*SetAppSettingsResp, error)
 }
 
 type msgClient struct {
@@ -596,6 +607,26 @@ func (c *msgClient) GetSystemMsgVisibilityList(ctx context.Context, in *GetSyste
 	return out, nil
 }
 
+func (c *msgClient) GetAppSettings(ctx context.Context, in *GetAppSettingsReq, opts ...grpc.CallOption) (*GetAppSettingsResp, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(GetAppSettingsResp)
+	err := c.cc.Invoke(ctx, Msg_GetAppSettings_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *msgClient) SetAppSettings(ctx context.Context, in *SetAppSettingsReq, opts ...grpc.CallOption) (*SetAppSettingsResp, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(SetAppSettingsResp)
+	err := c.cc.Invoke(ctx, Msg_SetAppSettings_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // MsgServer is the server API for Msg service.
 // All implementations must embed UnimplementedMsgServer
 // for forward compatibility.
@@ -676,6 +707,15 @@ type MsgServer interface {
 	SetSystemMsgVisibility(context.Context, *SetSystemMsgVisibilityReq) (*SetSystemMsgVisibilityResp, error)
 	DelSystemMsgVisibility(context.Context, *DelSystemMsgVisibilityReq) (*DelSystemMsgVisibilityResp, error)
 	GetSystemMsgVisibilityList(context.Context, *GetSystemMsgVisibilityListReq) (*GetSystemMsgVisibilityListResp, error)
+	// Admin-configured client settings, owned here for the same reason the
+	// visibility table above is: msg is the service that has to *enforce*
+	// them (the edit and recall windows are checked on the write path), and
+	// a check on the write path must never wait on another service to
+	// answer. Same propagation, too — Mongo, then a snapshot into Redis
+	// published on cachekey.AppSettingsChannel — so enforcing a window
+	// costs no database read per message.
+	GetAppSettings(context.Context, *GetAppSettingsReq) (*GetAppSettingsResp, error)
+	SetAppSettings(context.Context, *SetAppSettingsReq) (*SetAppSettingsResp, error)
 	mustEmbedUnimplementedMsgServer()
 }
 
@@ -817,6 +857,12 @@ func (UnimplementedMsgServer) DelSystemMsgVisibility(context.Context, *DelSystem
 }
 func (UnimplementedMsgServer) GetSystemMsgVisibilityList(context.Context, *GetSystemMsgVisibilityListReq) (*GetSystemMsgVisibilityListResp, error) {
 	return nil, status.Error(codes.Unimplemented, "method GetSystemMsgVisibilityList not implemented")
+}
+func (UnimplementedMsgServer) GetAppSettings(context.Context, *GetAppSettingsReq) (*GetAppSettingsResp, error) {
+	return nil, status.Error(codes.Unimplemented, "method GetAppSettings not implemented")
+}
+func (UnimplementedMsgServer) SetAppSettings(context.Context, *SetAppSettingsReq) (*SetAppSettingsResp, error) {
+	return nil, status.Error(codes.Unimplemented, "method SetAppSettings not implemented")
 }
 func (UnimplementedMsgServer) mustEmbedUnimplementedMsgServer() {}
 func (UnimplementedMsgServer) testEmbeddedByValue()             {}
@@ -1631,6 +1677,42 @@ func _Msg_GetSystemMsgVisibilityList_Handler(srv interface{}, ctx context.Contex
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Msg_GetAppSettings_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetAppSettingsReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(MsgServer).GetAppSettings(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Msg_GetAppSettings_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(MsgServer).GetAppSettings(ctx, req.(*GetAppSettingsReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Msg_SetAppSettings_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(SetAppSettingsReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(MsgServer).SetAppSettings(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Msg_SetAppSettings_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(MsgServer).SetAppSettings(ctx, req.(*SetAppSettingsReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // Msg_ServiceDesc is the grpc.ServiceDesc for Msg service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -1813,6 +1895,14 @@ var Msg_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "GetSystemMsgVisibilityList",
 			Handler:    _Msg_GetSystemMsgVisibilityList_Handler,
+		},
+		{
+			MethodName: "GetAppSettings",
+			Handler:    _Msg_GetAppSettings_Handler,
+		},
+		{
+			MethodName: "SetAppSettings",
+			Handler:    _Msg_SetAppSettings_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

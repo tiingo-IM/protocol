@@ -110,6 +110,21 @@ const (
 	ModifyMessageNotification = 2103
 
 	HasReadReceipt        = 2200
+
+	// AppSettingsChangedNotification carries the whole new AppSettings
+	// object after an admin edits it, so a client applies the change
+	// without a refetch. Sent to every user who is online at that
+	// moment, and unreliable (not persisted): a client that was offline
+	// reads the same object from GetAppSettings at startup, so spending
+	// a permanent seq per user on a value they will fetch anyway would
+	// buy nothing.
+	//
+	// 2400 rather than a slot next to the message notifications above:
+	// this is not about a message, a conversation, a group or a user,
+	// and the empty band between HasReadReceipt and StreamMsg is the
+	// only place that says so.
+	AppSettingsChangedNotification = 2400
+
 	StreamMsgNotification = 2500
 
 	NotificationEnd = 5000

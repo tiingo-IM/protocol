@@ -537,6 +537,28 @@ message GetSystemMsgVisibilityListResp {
   repeated SystemMsgVisibilityEntry entries = 1;
 }
 
+// Read the admin-configured client settings. Open to any signed-in user,
+// unlike the two writes below: every client needs the answer at startup
+// to know whether it may offer editing at all, and for how long.
+message GetAppSettingsReq {}
+
+message GetAppSettingsResp {
+  // Always fully populated, defaults applied — see sdkws.AppSettings.
+  sdkws.AppSettings settings = 1;
+}
+
+message SetAppSettingsReq {
+  // Merged, not replaced: fields left absent keep their current values.
+  sdkws.AppSettings settings = 1;
+}
+
+message SetAppSettingsResp {
+  // The whole object as it now stands, so the caller that just wrote it
+  // renders the same values every other client is about to be pushed,
+  // rather than the subset it happened to send.
+  sdkws.AppSettings settings = 1;
+}
+
 service msg {
   // Get min and max seq (including the user and specified groups)
   rpc GetMaxSeq(sdkws.GetMaxSeqReq) returns (sdkws.GetMaxSeqResp);
@@ -623,4 +645,14 @@ service msg {
   rpc SetSystemMsgVisibility(SetSystemMsgVisibilityReq) returns (SetSystemMsgVisibilityResp);
   rpc DelSystemMsgVisibility(DelSystemMsgVisibilityReq) returns (DelSystemMsgVisibilityResp);
   rpc GetSystemMsgVisibilityList(GetSystemMsgVisibilityListReq) returns (GetSystemMsgVisibilityListResp);
+
+  // Admin-configured client settings, owned here for the same reason the
+  // visibility table above is: msg is the service that has to *enforce*
+  // them (the edit and recall windows are checked on the write path), and
+  // a check on the write path must never wait on another service to
+  // answer. Same propagation, too — Mongo, then a snapshot into Redis
+  // published on cachekey.AppSettingsChannel — so enforcing a window
+  // costs no database read per message.
+  rpc GetAppSettings(GetAppSettingsReq) returns (GetAppSettingsResp);
+  rpc SetAppSettings(SetAppSettingsReq) returns (SetAppSettingsResp);
 }

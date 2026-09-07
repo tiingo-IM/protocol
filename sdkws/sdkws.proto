@@ -707,3 +707,47 @@ message ConversationDeleteTips {
   string userID = 1;
   repeated string conversationIDs = 2;
 }
+
+// AppSettings: the admin-configured knobs a client has to know about in
+// order to behave correctly, delivered as one object rather than one
+// endpoint per knob — so the next knob costs a field here instead of a
+// round trip everywhere.
+//
+// Every field is `optional` so that a write can merge. An admin console
+// one release behind the server sends only the fields it knows about,
+// and the ones it has never heard of keep their values instead of being
+// silently zeroed by their own absence.
+//
+// A read is the opposite: GetAppSettings always answers with every field
+// present, defaults already applied, so no client ever has to carry its
+// own copy of what a default is (and no two clients can disagree about
+// it).
+//
+// Every duration field below reads the same way, and this is the only
+// place that rule is written down:
+//
+//	 -1  no limit
+//	  0  the action is disabled entirely
+//	 >0  the window, in seconds
+//
+// One meaning per value across all of them, deliberately. The obvious
+// alternative — 0 meaning "no limit" here and "disabled" there — puts
+// two opposite readings on the same number in the same message, and the
+// admin who has to remember which field is which will eventually get it
+// wrong in the direction that turns a feature off.
+message AppSettings {
+  // How long after sending a message its author may still edit it.
+  // Defaults to 300 (five minutes).
+  optional int32 editWindowSeconds = 1;
+  // The same, for recall. Defaults to -1, no limit: recall shipped long
+  // before this setting existed and has never been time-bounded, so the
+  // default has to keep meaning what the absence of a setting meant.
+  optional int32 revokeWindowSeconds = 2;
+}
+
+// Pushed (constant.AppSettingsChangedNotification, 2400) to every user
+// online when an admin saves. Carries the settings themselves rather
+// than a "go and look" marker, so one push is the whole change.
+message AppSettingsChangedTips {
+  AppSettings settings = 1;
+}
