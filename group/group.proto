@@ -89,6 +89,7 @@ message SetGroupInfoExReq {
   openim.protobuf.Int32Value deleteConversationOnKick = 10;
   openim.protobuf.Int32Value historyForNewMembers = 11;
   openim.protobuf.Int32Value readReceipts = 12;
+  openim.protobuf.Int32Value memberPin = 13;
 }
 message SetGroupInfoExResp {}
 

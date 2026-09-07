@@ -44,6 +44,9 @@ const (
 	Msg_SetConversationHasReadSeq_FullMethodName        = "/openim.msg.msg/SetConversationHasReadSeq"
 	Msg_GetMessagesReadCount_FullMethodName             = "/openim.msg.msg/GetMessagesReadCount"
 	Msg_GetMessageReaders_FullMethodName                = "/openim.msg.msg/GetMessageReaders"
+	Msg_PinMessage_FullMethodName                       = "/openim.msg.msg/PinMessage"
+	Msg_ClearPinnedMessages_FullMethodName              = "/openim.msg.msg/ClearPinnedMessages"
+	Msg_GetPinnedMessages_FullMethodName                = "/openim.msg.msg/GetPinnedMessages"
 	Msg_GetConversationsHasReadAndMaxSeq_FullMethodName = "/openim.msg.msg/GetConversationsHasReadAndMaxSeq"
 	Msg_GetActiveUser_FullMethodName                    = "/openim.msg.msg/GetActiveUser"
 	Msg_GetActiveGroup_FullMethodName                   = "/openim.msg.msg/GetActiveGroup"
@@ -112,6 +115,12 @@ type MsgClient interface {
 	// ordered most-recent-read first. Meant to be called lazily, only once the
 	// user actually opens the "seen by" detail view for that message.
 	GetMessageReaders(ctx context.Context, in *GetMessageReadersReq, opts ...grpc.CallOption) (*GetMessageReadersResp, error)
+	// Pinned messages: pin/unpin one, clear the lot, and sync the list by
+	// version. See PinnedMessageChangedTips for how a change reaches
+	// everyone else.
+	PinMessage(ctx context.Context, in *PinMessageReq, opts ...grpc.CallOption) (*PinMessageResp, error)
+	ClearPinnedMessages(ctx context.Context, in *ClearPinnedMessagesReq, opts ...grpc.CallOption) (*ClearPinnedMessagesResp, error)
+	GetPinnedMessages(ctx context.Context, in *GetPinnedMessagesReq, opts ...grpc.CallOption) (*GetPinnedMessagesResp, error)
 	GetConversationsHasReadAndMaxSeq(ctx context.Context, in *GetConversationsHasReadAndMaxSeqReq, opts ...grpc.CallOption) (*GetConversationsHasReadAndMaxSeqResp, error)
 	GetActiveUser(ctx context.Context, in *GetActiveUserReq, opts ...grpc.CallOption) (*GetActiveUserResp, error)
 	GetActiveGroup(ctx context.Context, in *GetActiveGroupReq, opts ...grpc.CallOption) (*GetActiveGroupResp, error)
@@ -387,6 +396,36 @@ func (c *msgClient) GetMessageReaders(ctx context.Context, in *GetMessageReaders
 	return out, nil
 }
 
+func (c *msgClient) PinMessage(ctx context.Context, in *PinMessageReq, opts ...grpc.CallOption) (*PinMessageResp, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(PinMessageResp)
+	err := c.cc.Invoke(ctx, Msg_PinMessage_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *msgClient) ClearPinnedMessages(ctx context.Context, in *ClearPinnedMessagesReq, opts ...grpc.CallOption) (*ClearPinnedMessagesResp, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(ClearPinnedMessagesResp)
+	err := c.cc.Invoke(ctx, Msg_ClearPinnedMessages_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *msgClient) GetPinnedMessages(ctx context.Context, in *GetPinnedMessagesReq, opts ...grpc.CallOption) (*GetPinnedMessagesResp, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(GetPinnedMessagesResp)
+	err := c.cc.Invoke(ctx, Msg_GetPinnedMessages_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 func (c *msgClient) GetConversationsHasReadAndMaxSeq(ctx context.Context, in *GetConversationsHasReadAndMaxSeqReq, opts ...grpc.CallOption) (*GetConversationsHasReadAndMaxSeqResp, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(GetConversationsHasReadAndMaxSeqResp)
@@ -606,6 +645,12 @@ type MsgServer interface {
 	// ordered most-recent-read first. Meant to be called lazily, only once the
 	// user actually opens the "seen by" detail view for that message.
 	GetMessageReaders(context.Context, *GetMessageReadersReq) (*GetMessageReadersResp, error)
+	// Pinned messages: pin/unpin one, clear the lot, and sync the list by
+	// version. See PinnedMessageChangedTips for how a change reaches
+	// everyone else.
+	PinMessage(context.Context, *PinMessageReq) (*PinMessageResp, error)
+	ClearPinnedMessages(context.Context, *ClearPinnedMessagesReq) (*ClearPinnedMessagesResp, error)
+	GetPinnedMessages(context.Context, *GetPinnedMessagesReq) (*GetPinnedMessagesResp, error)
 	GetConversationsHasReadAndMaxSeq(context.Context, *GetConversationsHasReadAndMaxSeqReq) (*GetConversationsHasReadAndMaxSeqResp, error)
 	GetActiveUser(context.Context, *GetActiveUserReq) (*GetActiveUserResp, error)
 	GetActiveGroup(context.Context, *GetActiveGroupReq) (*GetActiveGroupResp, error)
@@ -712,6 +757,15 @@ func (UnimplementedMsgServer) GetMessagesReadCount(context.Context, *GetMessages
 }
 func (UnimplementedMsgServer) GetMessageReaders(context.Context, *GetMessageReadersReq) (*GetMessageReadersResp, error) {
 	return nil, status.Error(codes.Unimplemented, "method GetMessageReaders not implemented")
+}
+func (UnimplementedMsgServer) PinMessage(context.Context, *PinMessageReq) (*PinMessageResp, error) {
+	return nil, status.Error(codes.Unimplemented, "method PinMessage not implemented")
+}
+func (UnimplementedMsgServer) ClearPinnedMessages(context.Context, *ClearPinnedMessagesReq) (*ClearPinnedMessagesResp, error) {
+	return nil, status.Error(codes.Unimplemented, "method ClearPinnedMessages not implemented")
+}
+func (UnimplementedMsgServer) GetPinnedMessages(context.Context, *GetPinnedMessagesReq) (*GetPinnedMessagesResp, error) {
+	return nil, status.Error(codes.Unimplemented, "method GetPinnedMessages not implemented")
 }
 func (UnimplementedMsgServer) GetConversationsHasReadAndMaxSeq(context.Context, *GetConversationsHasReadAndMaxSeqReq) (*GetConversationsHasReadAndMaxSeqResp, error) {
 	return nil, status.Error(codes.Unimplemented, "method GetConversationsHasReadAndMaxSeq not implemented")
@@ -1217,6 +1271,60 @@ func _Msg_GetMessageReaders_Handler(srv interface{}, ctx context.Context, dec fu
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Msg_PinMessage_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(PinMessageReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(MsgServer).PinMessage(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Msg_PinMessage_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(MsgServer).PinMessage(ctx, req.(*PinMessageReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Msg_ClearPinnedMessages_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ClearPinnedMessagesReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(MsgServer).ClearPinnedMessages(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Msg_ClearPinnedMessages_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(MsgServer).ClearPinnedMessages(ctx, req.(*ClearPinnedMessagesReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Msg_GetPinnedMessages_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetPinnedMessagesReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(MsgServer).GetPinnedMessages(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Msg_GetPinnedMessages_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(MsgServer).GetPinnedMessages(ctx, req.(*GetPinnedMessagesReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 func _Msg_GetConversationsHasReadAndMaxSeq_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(GetConversationsHasReadAndMaxSeqReq)
 	if err := dec(in); err != nil {
@@ -1625,6 +1733,18 @@ var Msg_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "GetMessageReaders",
 			Handler:    _Msg_GetMessageReaders_Handler,
+		},
+		{
+			MethodName: "PinMessage",
+			Handler:    _Msg_PinMessage_Handler,
+		},
+		{
+			MethodName: "ClearPinnedMessages",
+			Handler:    _Msg_ClearPinnedMessages_Handler,
+		},
+		{
+			MethodName: "GetPinnedMessages",
+			Handler:    _Msg_GetPinnedMessages_Handler,
 		},
 		{
 			MethodName: "GetConversationsHasReadAndMaxSeq",

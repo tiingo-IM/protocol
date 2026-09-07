@@ -49,6 +49,33 @@ message GroupInfo {
   // Unset behaves as on, which is how the group behaved before the
   // switch existed.
   int32 readReceipts = 20;
+  // On: ordinary members may pin and unpin messages here. Off, only the
+  // owner and admins can, and everyone else sees the pinned bar without
+  // being able to change it. Unset behaves as off — pinning puts
+  // something in front of the whole group, so it starts as a
+  // moderator's act.
+  int32 memberPin = 21;
+}
+
+// A conversation's pinned-message list changed — pushed to everyone in
+// the conversation so the pinned bar moves without a refetch, and, for a
+// pin, also written into the timeline as a tip ("X pinned a message").
+//
+// `version` is the list's version *after* this change. A client holding
+// the previous one knows its copy is exactly one change stale and can
+// apply this tip directly; a client further behind refetches. See
+// GetPinnedMessagesReq.
+message PinnedMessageChangedTips {
+  string conversationID = 1;
+  int32 sessionType = 2;
+  string groupID = 3;
+  // constant.PinnedMessagePinned / Unpinned / Cleared.
+  int32 action = 4;
+  // The message pinned or unpinned; 0 when the whole list was cleared.
+  int64 seq = 5;
+  string opUserID = 6;
+  string opUserNickname = 7;
+  int64 version = 8;
 }
 
 message GroupInfoForSet {
@@ -67,6 +94,7 @@ message GroupInfoForSet {
   openim.protobuf.Int32Value deleteConversationOnKick = 10;
   openim.protobuf.Int32Value historyForNewMembers = 11;
   openim.protobuf.Int32Value readReceipts = 12;
+  openim.protobuf.Int32Value memberPin = 13;
 }
 
 message GroupMemberFullInfo {

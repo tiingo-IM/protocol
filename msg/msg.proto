@@ -112,6 +112,51 @@ message SetConversationHasReadSeqReq {
 
 message SetConversationHasReadSeqResp {}
 
+// One pinned message. `message` is the message itself, so a pinned bar
+// can render its digest without a second fetch — absent when the message
+// can no longer be read (physically removed, or below this user's floor).
+message PinnedMessage {
+  int64 seq = 1;
+  string clientMsgID = 2;
+  string pinnedBy = 3;
+  int64 pinTime = 4;
+  openim.sdkws.MsgData message = 5;
+}
+
+// Pin or unpin one message. Both directions share an RPC because they
+// share every check; the REST layer offers them as two routes.
+message PinMessageReq {
+  string conversationID = 1;
+  string userID = 2;
+  int64 seq = 3;
+  bool pin = 4;
+}
+message PinMessageResp {
+  int64 version = 1;
+}
+
+message ClearPinnedMessagesReq {
+  string conversationID = 1;
+  string userID = 2;
+}
+message ClearPinnedMessagesResp {
+  int64 version = 1;
+}
+
+// Sync by version: pass the version last seen and get `unchanged` back
+// when nothing has moved, so opening a conversation costs one small
+// round trip rather than a list.
+message GetPinnedMessagesReq {
+  string conversationID = 1;
+  string userID = 2;
+  int64 version = 3;
+}
+message GetPinnedMessagesResp {
+  int64 version = 1;
+  bool unchanged = 2;
+  repeated PinnedMessage messages = 3;
+}
+
 message GetMessagesReadCountReq {
   string conversationID = 1;
   repeated int64 seqs = 2;
@@ -541,6 +586,12 @@ service msg {
   // ordered most-recent-read first. Meant to be called lazily, only once the
   // user actually opens the "seen by" detail view for that message.
   rpc GetMessageReaders(GetMessageReadersReq) returns (GetMessageReadersResp);
+  // Pinned messages: pin/unpin one, clear the lot, and sync the list by
+  // version. See PinnedMessageChangedTips for how a change reaches
+  // everyone else.
+  rpc PinMessage(PinMessageReq) returns (PinMessageResp);
+  rpc ClearPinnedMessages(ClearPinnedMessagesReq) returns (ClearPinnedMessagesResp);
+  rpc GetPinnedMessages(GetPinnedMessagesReq) returns (GetPinnedMessagesResp);
 
   rpc GetConversationsHasReadAndMaxSeq(GetConversationsHasReadAndMaxSeqReq) returns (GetConversationsHasReadAndMaxSeqResp);
   rpc GetActiveUser(GetActiveUserReq) returns (GetActiveUserResp);

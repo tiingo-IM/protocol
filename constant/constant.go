@@ -95,6 +95,11 @@ const (
 	ConversationUnreadNotification      = 1702
 	ClearConversationNotification       = 1703
 	ConversationDeleteNotification      = 1704
+	// A conversation's pinned-message list changed. One content type
+	// for all three changes, with sessionType passed per call rather
+	// than fixed, because a conversation may be a single chat or a
+	// group and the pinned bar is the same feature in both.
+	PinnedMessageChangedNotification = 1705
 
 	BusinessNotificationBegin = 2000
 	BusinessNotification      = 2001
@@ -330,6 +335,14 @@ const (
 // not two: the owner said yes, the owner said no, and no owner has ever
 // said. Only the third lets a deployment-wide default apply, and a bool
 // cannot express it — proto3 puts false and absent on the same wire.
+// What changed in a conversation's pinned-message list, carried on
+// PinnedMessageChangedTips.
+const (
+	PinnedMessagePinned   = 1
+	PinnedMessageUnpinned = 2
+	PinnedMessageCleared  = 3
+)
+
 const (
 	GroupSettingUnset = 0
 	GroupSettingOn    = 1
