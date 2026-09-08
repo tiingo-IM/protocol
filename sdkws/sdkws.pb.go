@@ -1813,7 +1813,24 @@ type MsgData struct {
 	// history it missed receives the edited content with no special
 	// handling at all, and this field is what tells it to render the
 	// "edited" marker beside the timestamp.
-	EditTime      int64 `protobuf:"varint,25,opt,name=editTime,proto3" json:"editTime"`
+	EditTime int64 `protobuf:"varint,25,opt,name=editTime,proto3" json:"editTime"`
+	// Whether the user this response is being built *for* has already read
+	// this specific message — resolved per delivery against the durable
+	// per-message read-receipt claim set, never persisted with the message
+	// (it has no single reader to resolve against). Lets a client skip
+	// re-reporting a message it already reported, which the previous
+	// in-memory-only guard could not survive a restart to do.
+	//
+	// Deliberately NOT the neighbouring isRead field, which is a different
+	// question with the opposite subject: isRead means "the *peer* read the
+	// message I sent" (a receipt, single-chat only — see the server's
+	// convert.MsgDB2Pb), whereas this means "I read the message someone
+	// sent me".
+	//
+	// Not `optional`: absent (an older server) and an explicit false lead
+	// to the same client action — report it — so presence would carry no
+	// information a client could act on differently.
+	ReadByMe      bool `protobuf:"varint,26,opt,name=readByMe,proto3" json:"readByMe"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -2014,6 +2031,13 @@ func (x *MsgData) GetEditTime() int64 {
 		return x.EditTime
 	}
 	return 0
+}
+
+func (x *MsgData) GetReadByMe() bool {
+	if x != nil {
+		return x.ReadByMe
+	}
+	return false
 }
 
 type PushMessages struct {
@@ -6434,7 +6458,7 @@ const file_sdkws_sdkws_proto_rawDesc = "" +
 	"\x0fUserSendMsgResp\x12 \n" +
 	"\vserverMsgID\x18\x01 \x01(\tR\vserverMsgID\x12 \n" +
 	"\vclientMsgID\x18\x02 \x01(\tR\vclientMsgID\x12\x1a\n" +
-	"\bsendTime\x18\x03 \x01(\x03R\bsendTime\"\x84\a\n" +
+	"\bsendTime\x18\x03 \x01(\x03R\bsendTime\"\xa0\a\n" +
 	"\aMsgData\x12\x16\n" +
 	"\x06sendID\x18\x01 \x01(\tR\x06sendID\x12\x16\n" +
 	"\x06recvID\x18\x02 \x01(\tR\x06recvID\x12\x18\n" +
@@ -6462,7 +6486,8 @@ const file_sdkws_sdkws_proto_rawDesc = "" +
 	"\fattachedInfo\x18\x16 \x01(\tR\fattachedInfo\x12\x0e\n" +
 	"\x02ex\x18\x17 \x01(\tR\x02ex\x12/\n" +
 	"\x10systemMsgVisible\x18\x18 \x01(\bH\x00R\x10systemMsgVisible\x88\x01\x01\x12\x1a\n" +
-	"\beditTime\x18\x19 \x01(\x03R\beditTime\x1a:\n" +
+	"\beditTime\x18\x19 \x01(\x03R\beditTime\x12\x1a\n" +
+	"\breadByMe\x18\x1a \x01(\bR\breadByMe\x1a:\n" +
 	"\fOptionsEntry\x12\x10\n" +
 	"\x03key\x18\x01 \x01(\tR\x03key\x12\x14\n" +
 	"\x05value\x18\x02 \x01(\bR\x05value:\x028\x01B\x13\n" +

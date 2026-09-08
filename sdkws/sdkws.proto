@@ -286,6 +286,23 @@ message MsgData {
   // handling at all, and this field is what tells it to render the
   // "edited" marker beside the timestamp.
   int64 editTime = 25;
+  // Whether the user this response is being built *for* has already read
+  // this specific message — resolved per delivery against the durable
+  // per-message read-receipt claim set, never persisted with the message
+  // (it has no single reader to resolve against). Lets a client skip
+  // re-reporting a message it already reported, which the previous
+  // in-memory-only guard could not survive a restart to do.
+  //
+  // Deliberately NOT the neighbouring isRead field, which is a different
+  // question with the opposite subject: isRead means "the *peer* read the
+  // message I sent" (a receipt, single-chat only — see the server's
+  // convert.MsgDB2Pb), whereas this means "I read the message someone
+  // sent me".
+  //
+  // Not `optional`: absent (an older server) and an explicit false lead
+  // to the same client action — report it — so presence would carry no
+  // information a client could act on differently.
+  bool readByMe = 26;
 }
 message PushMessages {
   map<string, PullMsgs> msgs = 1;
