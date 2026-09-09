@@ -65,6 +65,8 @@ const (
 	Group_CreateGroupQrcode_FullMethodName                 = "/openim.group.group/createGroupQrcode"
 	Group_ParseQrcode_FullMethodName                       = "/openim.group.group/parseQrcode"
 	Group_ScanJoinGroup_FullMethodName                     = "/openim.group.group/scanJoinGroup"
+	Group_GetGroupCreationDefaults_FullMethodName          = "/openim.group.group/getGroupCreationDefaults"
+	Group_SetGroupCreationDefaults_FullMethodName          = "/openim.group.group/setGroupCreationDefaults"
 )
 
 // GroupClient is the client API for Group service.
@@ -149,6 +151,12 @@ type GroupClient interface {
 	CreateGroupQrcode(ctx context.Context, in *CreateGroupQrcodeReq, opts ...grpc.CallOption) (*CreateGroupQrcodeResp, error)
 	ParseQrcode(ctx context.Context, in *ParseQrcodeReq, opts ...grpc.CallOption) (*ParseQrcodeResp, error)
 	ScanJoinGroup(ctx context.Context, in *ScanJoinGroupReq, opts ...grpc.CallOption) (*ScanJoinGroupResp, error)
+	// What every new group's switches start at. Both admin-only: unlike
+	// AppSettings, whose /get is open because every client reads it at
+	// startup, nothing but createGroup and the admin console ever needs
+	// these.
+	GetGroupCreationDefaults(ctx context.Context, in *GetGroupCreationDefaultsReq, opts ...grpc.CallOption) (*GetGroupCreationDefaultsResp, error)
+	SetGroupCreationDefaults(ctx context.Context, in *SetGroupCreationDefaultsReq, opts ...grpc.CallOption) (*SetGroupCreationDefaultsResp, error)
 }
 
 type groupClient struct {
@@ -619,6 +627,26 @@ func (c *groupClient) ScanJoinGroup(ctx context.Context, in *ScanJoinGroupReq, o
 	return out, nil
 }
 
+func (c *groupClient) GetGroupCreationDefaults(ctx context.Context, in *GetGroupCreationDefaultsReq, opts ...grpc.CallOption) (*GetGroupCreationDefaultsResp, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(GetGroupCreationDefaultsResp)
+	err := c.cc.Invoke(ctx, Group_GetGroupCreationDefaults_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *groupClient) SetGroupCreationDefaults(ctx context.Context, in *SetGroupCreationDefaultsReq, opts ...grpc.CallOption) (*SetGroupCreationDefaultsResp, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(SetGroupCreationDefaultsResp)
+	err := c.cc.Invoke(ctx, Group_SetGroupCreationDefaults_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // GroupServer is the server API for Group service.
 // All implementations must embed UnimplementedGroupServer
 // for forward compatibility.
@@ -701,6 +729,12 @@ type GroupServer interface {
 	CreateGroupQrcode(context.Context, *CreateGroupQrcodeReq) (*CreateGroupQrcodeResp, error)
 	ParseQrcode(context.Context, *ParseQrcodeReq) (*ParseQrcodeResp, error)
 	ScanJoinGroup(context.Context, *ScanJoinGroupReq) (*ScanJoinGroupResp, error)
+	// What every new group's switches start at. Both admin-only: unlike
+	// AppSettings, whose /get is open because every client reads it at
+	// startup, nothing but createGroup and the admin console ever needs
+	// these.
+	GetGroupCreationDefaults(context.Context, *GetGroupCreationDefaultsReq) (*GetGroupCreationDefaultsResp, error)
+	SetGroupCreationDefaults(context.Context, *SetGroupCreationDefaultsReq) (*SetGroupCreationDefaultsResp, error)
 	mustEmbedUnimplementedGroupServer()
 }
 
@@ -848,6 +882,12 @@ func (UnimplementedGroupServer) ParseQrcode(context.Context, *ParseQrcodeReq) (*
 }
 func (UnimplementedGroupServer) ScanJoinGroup(context.Context, *ScanJoinGroupReq) (*ScanJoinGroupResp, error) {
 	return nil, status.Error(codes.Unimplemented, "method ScanJoinGroup not implemented")
+}
+func (UnimplementedGroupServer) GetGroupCreationDefaults(context.Context, *GetGroupCreationDefaultsReq) (*GetGroupCreationDefaultsResp, error) {
+	return nil, status.Error(codes.Unimplemented, "method GetGroupCreationDefaults not implemented")
+}
+func (UnimplementedGroupServer) SetGroupCreationDefaults(context.Context, *SetGroupCreationDefaultsReq) (*SetGroupCreationDefaultsResp, error) {
+	return nil, status.Error(codes.Unimplemented, "method SetGroupCreationDefaults not implemented")
 }
 func (UnimplementedGroupServer) mustEmbedUnimplementedGroupServer() {}
 func (UnimplementedGroupServer) testEmbeddedByValue()               {}
@@ -1698,6 +1738,42 @@ func _Group_ScanJoinGroup_Handler(srv interface{}, ctx context.Context, dec func
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Group_GetGroupCreationDefaults_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetGroupCreationDefaultsReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(GroupServer).GetGroupCreationDefaults(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Group_GetGroupCreationDefaults_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(GroupServer).GetGroupCreationDefaults(ctx, req.(*GetGroupCreationDefaultsReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Group_SetGroupCreationDefaults_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(SetGroupCreationDefaultsReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(GroupServer).SetGroupCreationDefaults(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Group_SetGroupCreationDefaults_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(GroupServer).SetGroupCreationDefaults(ctx, req.(*SetGroupCreationDefaultsReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // Group_ServiceDesc is the grpc.ServiceDesc for Group service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -1888,6 +1964,14 @@ var Group_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "scanJoinGroup",
 			Handler:    _Group_ScanJoinGroup_Handler,
+		},
+		{
+			MethodName: "getGroupCreationDefaults",
+			Handler:    _Group_GetGroupCreationDefaults_Handler,
+		},
+		{
+			MethodName: "setGroupCreationDefaults",
+			Handler:    _Group_SetGroupCreationDefaults_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

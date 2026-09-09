@@ -25,11 +25,11 @@ const (
 
 type CreateGroupReq struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	MemberUserIDs []string               `protobuf:"bytes,1,rep,name=memberUserIDs,proto3" json:"memberUserIDs,omitempty"`
-	GroupInfo     *sdkws.GroupInfo       `protobuf:"bytes,2,opt,name=groupInfo,proto3" json:"groupInfo,omitempty"`
-	AdminUserIDs  []string               `protobuf:"bytes,3,rep,name=adminUserIDs,proto3" json:"adminUserIDs,omitempty"`
-	OwnerUserID   string                 `protobuf:"bytes,4,opt,name=ownerUserID,proto3" json:"ownerUserID,omitempty"` //owner
-	SendMessage   *bool                  `protobuf:"varint,5,opt,name=sendMessage,proto3,oneof" json:"sendMessage,omitempty"`
+	MemberUserIDs []string               `protobuf:"bytes,1,rep,name=memberUserIDs,proto3" json:"memberUserIDs"`
+	GroupInfo     *sdkws.GroupInfo       `protobuf:"bytes,2,opt,name=groupInfo,proto3" json:"groupInfo"`
+	AdminUserIDs  []string               `protobuf:"bytes,3,rep,name=adminUserIDs,proto3" json:"adminUserIDs"`
+	OwnerUserID   string                 `protobuf:"bytes,4,opt,name=ownerUserID,proto3" json:"ownerUserID"` //owner
+	SendMessage   *bool                  `protobuf:"varint,5,opt,name=sendMessage,proto3,oneof" json:"sendMessage"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -101,7 +101,7 @@ func (x *CreateGroupReq) GetSendMessage() bool {
 
 type CreateGroupResp struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	GroupInfo     *sdkws.GroupInfo       `protobuf:"bytes,1,opt,name=groupInfo,proto3" json:"groupInfo,omitempty"`
+	GroupInfo     *sdkws.GroupInfo       `protobuf:"bytes,1,opt,name=groupInfo,proto3" json:"groupInfo"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -145,7 +145,7 @@ func (x *CreateGroupResp) GetGroupInfo() *sdkws.GroupInfo {
 
 type GetGroupsInfoReq struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	GroupIDs      []string               `protobuf:"bytes,1,rep,name=groupIDs,proto3" json:"groupIDs,omitempty"`
+	GroupIDs      []string               `protobuf:"bytes,1,rep,name=groupIDs,proto3" json:"groupIDs"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -189,7 +189,7 @@ func (x *GetGroupsInfoReq) GetGroupIDs() []string {
 
 type GetGroupsInfoResp struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	GroupInfos    []*sdkws.GroupInfo     `protobuf:"bytes,1,rep,name=groupInfos,proto3" json:"groupInfos,omitempty"`
+	GroupInfos    []*sdkws.GroupInfo     `protobuf:"bytes,1,rep,name=groupInfos,proto3" json:"groupInfos"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -233,7 +233,7 @@ func (x *GetGroupsInfoResp) GetGroupInfos() []*sdkws.GroupInfo {
 
 type SetGroupInfoReq struct {
 	state           protoimpl.MessageState `protogen:"open.v1"`
-	GroupInfoForSet *sdkws.GroupInfoForSet `protobuf:"bytes,1,opt,name=groupInfoForSet,proto3" json:"groupInfoForSet,omitempty"`
+	GroupInfoForSet *sdkws.GroupInfoForSet `protobuf:"bytes,1,opt,name=groupInfoForSet,proto3" json:"groupInfoForSet"`
 	unknownFields   protoimpl.UnknownFields
 	sizeCache       protoimpl.SizeCache
 }
@@ -318,14 +318,14 @@ func (*SetGroupInfoResp) Descriptor() ([]byte, []int) {
 // and direct join alike.
 type GroupBlacklistUser struct {
 	state    protoimpl.MessageState `protogen:"open.v1"`
-	UserID   string                 `protobuf:"bytes,1,opt,name=userID,proto3" json:"userID,omitempty"`
-	Nickname string                 `protobuf:"bytes,2,opt,name=nickname,proto3" json:"nickname,omitempty"`
-	FaceURL  string                 `protobuf:"bytes,3,opt,name=faceURL,proto3" json:"faceURL,omitempty"`
+	UserID   string                 `protobuf:"bytes,1,opt,name=userID,proto3" json:"userID"`
+	Nickname string                 `protobuf:"bytes,2,opt,name=nickname,proto3" json:"nickname"`
+	FaceURL  string                 `protobuf:"bytes,3,opt,name=faceURL,proto3" json:"faceURL"`
 	// Who barred them, and why. The reason is shown back to the
 	// moderators reviewing the list, never to the person barred.
-	OperatorUserID string `protobuf:"bytes,4,opt,name=operatorUserID,proto3" json:"operatorUserID,omitempty"`
-	CreateTime     int64  `protobuf:"varint,5,opt,name=createTime,proto3" json:"createTime,omitempty"`
-	Reason         string `protobuf:"bytes,6,opt,name=reason,proto3" json:"reason,omitempty"`
+	OperatorUserID string `protobuf:"bytes,4,opt,name=operatorUserID,proto3" json:"operatorUserID"`
+	CreateTime     int64  `protobuf:"varint,5,opt,name=createTime,proto3" json:"createTime"`
+	Reason         string `protobuf:"bytes,6,opt,name=reason,proto3" json:"reason"`
 	unknownFields  protoimpl.UnknownFields
 	sizeCache      protoimpl.SizeCache
 }
@@ -404,9 +404,9 @@ func (x *GroupBlacklistUser) GetReason() string {
 
 type AddGroupBlacklistReq struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	GroupID       string                 `protobuf:"bytes,1,opt,name=groupID,proto3" json:"groupID,omitempty"`
-	UserIDs       []string               `protobuf:"bytes,2,rep,name=userIDs,proto3" json:"userIDs,omitempty"`
-	Reason        string                 `protobuf:"bytes,3,opt,name=reason,proto3" json:"reason,omitempty"`
+	GroupID       string                 `protobuf:"bytes,1,opt,name=groupID,proto3" json:"groupID"`
+	UserIDs       []string               `protobuf:"bytes,2,rep,name=userIDs,proto3" json:"userIDs"`
+	Reason        string                 `protobuf:"bytes,3,opt,name=reason,proto3" json:"reason"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -500,8 +500,8 @@ func (*AddGroupBlacklistResp) Descriptor() ([]byte, []int) {
 
 type RemoveGroupBlacklistReq struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	GroupID       string                 `protobuf:"bytes,1,opt,name=groupID,proto3" json:"groupID,omitempty"`
-	UserIDs       []string               `protobuf:"bytes,2,rep,name=userIDs,proto3" json:"userIDs,omitempty"`
+	GroupID       string                 `protobuf:"bytes,1,opt,name=groupID,proto3" json:"groupID"`
+	UserIDs       []string               `protobuf:"bytes,2,rep,name=userIDs,proto3" json:"userIDs"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -588,8 +588,8 @@ func (*RemoveGroupBlacklistResp) Descriptor() ([]byte, []int) {
 
 type GetGroupBlacklistReq struct {
 	state         protoimpl.MessageState   `protogen:"open.v1"`
-	GroupID       string                   `protobuf:"bytes,1,opt,name=groupID,proto3" json:"groupID,omitempty"`
-	Pagination    *sdkws.RequestPagination `protobuf:"bytes,2,opt,name=pagination,proto3" json:"pagination,omitempty"`
+	GroupID       string                   `protobuf:"bytes,1,opt,name=groupID,proto3" json:"groupID"`
+	Pagination    *sdkws.RequestPagination `protobuf:"bytes,2,opt,name=pagination,proto3" json:"pagination"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -640,8 +640,8 @@ func (x *GetGroupBlacklistReq) GetPagination() *sdkws.RequestPagination {
 
 type GetGroupBlacklistResp struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	Total         uint32                 `protobuf:"varint,1,opt,name=total,proto3" json:"total,omitempty"`
-	Users         []*GroupBlacklistUser  `protobuf:"bytes,2,rep,name=users,proto3" json:"users,omitempty"`
+	Total         uint32                 `protobuf:"varint,1,opt,name=total,proto3" json:"total"`
+	Users         []*GroupBlacklistUser  `protobuf:"bytes,2,rep,name=users,proto3" json:"users"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -692,8 +692,8 @@ func (x *GetGroupBlacklistResp) GetUsers() []*GroupBlacklistUser {
 
 type IsGroupBlacklistedReq struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	GroupID       string                 `protobuf:"bytes,1,opt,name=groupID,proto3" json:"groupID,omitempty"`
-	UserIDs       []string               `protobuf:"bytes,2,rep,name=userIDs,proto3" json:"userIDs,omitempty"`
+	GroupID       string                 `protobuf:"bytes,1,opt,name=groupID,proto3" json:"groupID"`
+	UserIDs       []string               `protobuf:"bytes,2,rep,name=userIDs,proto3" json:"userIDs"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -744,7 +744,7 @@ func (x *IsGroupBlacklistedReq) GetUserIDs() []string {
 
 type IsGroupBlacklistedResp struct {
 	state              protoimpl.MessageState `protogen:"open.v1"`
-	BlacklistedUserIDs []string               `protobuf:"bytes,1,rep,name=blacklistedUserIDs,proto3" json:"blacklistedUserIDs,omitempty"`
+	BlacklistedUserIDs []string               `protobuf:"bytes,1,rep,name=blacklistedUserIDs,proto3" json:"blacklistedUserIDs"`
 	unknownFields      protoimpl.UnknownFields
 	sizeCache          protoimpl.SizeCache
 }
@@ -788,20 +788,20 @@ func (x *IsGroupBlacklistedResp) GetBlacklistedUserIDs() []string {
 
 type SetGroupInfoExReq struct {
 	state             protoimpl.MessageState  `protogen:"open.v1"`
-	GroupID           string                  `protobuf:"bytes,1,opt,name=groupID,proto3" json:"groupID,omitempty"`
-	GroupName         *wrapperspb.StringValue `protobuf:"bytes,2,opt,name=groupName,proto3" json:"groupName,omitempty"`
-	Notification      *wrapperspb.StringValue `protobuf:"bytes,3,opt,name=notification,proto3" json:"notification,omitempty"`
-	Introduction      *wrapperspb.StringValue `protobuf:"bytes,4,opt,name=introduction,proto3" json:"introduction,omitempty"`
-	FaceURL           *wrapperspb.StringValue `protobuf:"bytes,5,opt,name=faceURL,proto3" json:"faceURL,omitempty"`
-	Ex                *wrapperspb.StringValue `protobuf:"bytes,6,opt,name=ex,proto3" json:"ex,omitempty"`
-	NeedVerification  *wrapperspb.Int32Value  `protobuf:"bytes,7,opt,name=needVerification,proto3" json:"needVerification,omitempty"`
-	LookMemberInfo    *wrapperspb.Int32Value  `protobuf:"bytes,8,opt,name=lookMemberInfo,proto3" json:"lookMemberInfo,omitempty"`
-	ApplyMemberFriend *wrapperspb.Int32Value  `protobuf:"bytes,9,opt,name=applyMemberFriend,proto3" json:"applyMemberFriend,omitempty"`
+	GroupID           string                  `protobuf:"bytes,1,opt,name=groupID,proto3" json:"groupID"`
+	GroupName         *wrapperspb.StringValue `protobuf:"bytes,2,opt,name=groupName,proto3" json:"groupName"`
+	Notification      *wrapperspb.StringValue `protobuf:"bytes,3,opt,name=notification,proto3" json:"notification"`
+	Introduction      *wrapperspb.StringValue `protobuf:"bytes,4,opt,name=introduction,proto3" json:"introduction"`
+	FaceURL           *wrapperspb.StringValue `protobuf:"bytes,5,opt,name=faceURL,proto3" json:"faceURL"`
+	Ex                *wrapperspb.StringValue `protobuf:"bytes,6,opt,name=ex,proto3" json:"ex"`
+	NeedVerification  *wrapperspb.Int32Value  `protobuf:"bytes,7,opt,name=needVerification,proto3" json:"needVerification"`
+	LookMemberInfo    *wrapperspb.Int32Value  `protobuf:"bytes,8,opt,name=lookMemberInfo,proto3" json:"lookMemberInfo"`
+	ApplyMemberFriend *wrapperspb.Int32Value  `protobuf:"bytes,9,opt,name=applyMemberFriend,proto3" json:"applyMemberFriend"`
 	// See sdkws.GroupInfo for what these mean.
-	DeleteConversationOnKick *wrapperspb.Int32Value `protobuf:"bytes,10,opt,name=deleteConversationOnKick,proto3" json:"deleteConversationOnKick,omitempty"`
-	HistoryForNewMembers     *wrapperspb.Int32Value `protobuf:"bytes,11,opt,name=historyForNewMembers,proto3" json:"historyForNewMembers,omitempty"`
-	ReadReceipts             *wrapperspb.Int32Value `protobuf:"bytes,12,opt,name=readReceipts,proto3" json:"readReceipts,omitempty"`
-	MemberPin                *wrapperspb.Int32Value `protobuf:"bytes,13,opt,name=memberPin,proto3" json:"memberPin,omitempty"`
+	DeleteConversationOnKick *wrapperspb.Int32Value `protobuf:"bytes,10,opt,name=deleteConversationOnKick,proto3" json:"deleteConversationOnKick"`
+	HistoryForNewMembers     *wrapperspb.Int32Value `protobuf:"bytes,11,opt,name=historyForNewMembers,proto3" json:"historyForNewMembers"`
+	ReadReceipts             *wrapperspb.Int32Value `protobuf:"bytes,12,opt,name=readReceipts,proto3" json:"readReceipts"`
+	MemberPin                *wrapperspb.Int32Value `protobuf:"bytes,13,opt,name=memberPin,proto3" json:"memberPin"`
 	unknownFields            protoimpl.UnknownFields
 	sizeCache                protoimpl.SizeCache
 }
@@ -965,10 +965,10 @@ func (*SetGroupInfoExResp) Descriptor() ([]byte, []int) {
 
 type GetGroupApplicationListReq struct {
 	state         protoimpl.MessageState   `protogen:"open.v1"`
-	Pagination    *sdkws.RequestPagination `protobuf:"bytes,1,opt,name=pagination,proto3" json:"pagination,omitempty"`
-	FromUserID    string                   `protobuf:"bytes,2,opt,name=fromUserID,proto3" json:"fromUserID,omitempty"` //owner or admin
-	GroupIDs      []string                 `protobuf:"bytes,3,rep,name=groupIDs,proto3" json:"groupIDs,omitempty"`
-	HandleResults []int32                  `protobuf:"varint,4,rep,packed,name=handleResults,proto3" json:"handleResults,omitempty"`
+	Pagination    *sdkws.RequestPagination `protobuf:"bytes,1,opt,name=pagination,proto3" json:"pagination"`
+	FromUserID    string                   `protobuf:"bytes,2,opt,name=fromUserID,proto3" json:"fromUserID"` //owner or admin
+	GroupIDs      []string                 `protobuf:"bytes,3,rep,name=groupIDs,proto3" json:"groupIDs"`
+	HandleResults []int32                  `protobuf:"varint,4,rep,packed,name=handleResults,proto3" json:"handleResults"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -1033,8 +1033,8 @@ func (x *GetGroupApplicationListReq) GetHandleResults() []int32 {
 
 type GetGroupApplicationListResp struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	Total         uint32                 `protobuf:"varint,1,opt,name=total,proto3" json:"total,omitempty"`
-	GroupRequests []*sdkws.GroupRequest  `protobuf:"bytes,2,rep,name=groupRequests,proto3" json:"groupRequests,omitempty"`
+	Total         uint32                 `protobuf:"varint,1,opt,name=total,proto3" json:"total"`
+	GroupRequests []*sdkws.GroupRequest  `protobuf:"bytes,2,rep,name=groupRequests,proto3" json:"groupRequests"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -1085,8 +1085,8 @@ func (x *GetGroupApplicationListResp) GetGroupRequests() []*sdkws.GroupRequest {
 
 type GetGroupApplicationUnhandledCountReq struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	UserID        string                 `protobuf:"bytes,1,opt,name=userID,proto3" json:"userID,omitempty"`
-	Time          int64                  `protobuf:"varint,2,opt,name=time,proto3" json:"time,omitempty"`
+	UserID        string                 `protobuf:"bytes,1,opt,name=userID,proto3" json:"userID"`
+	Time          int64                  `protobuf:"varint,2,opt,name=time,proto3" json:"time"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -1137,7 +1137,7 @@ func (x *GetGroupApplicationUnhandledCountReq) GetTime() int64 {
 
 type GetGroupApplicationUnhandledCountResp struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	Count         int64                  `protobuf:"varint,1,opt,name=count,proto3" json:"count,omitempty"`
+	Count         int64                  `protobuf:"varint,1,opt,name=count,proto3" json:"count"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -1181,10 +1181,10 @@ func (x *GetGroupApplicationUnhandledCountResp) GetCount() int64 {
 
 type GetUserReqApplicationListReq struct {
 	state         protoimpl.MessageState   `protogen:"open.v1"`
-	Pagination    *sdkws.RequestPagination `protobuf:"bytes,1,opt,name=pagination,proto3" json:"pagination,omitempty"`
-	UserID        string                   `protobuf:"bytes,2,opt,name=userID,proto3" json:"userID,omitempty"`
-	GroupIDs      []string                 `protobuf:"bytes,3,rep,name=groupIDs,proto3" json:"groupIDs,omitempty"`
-	HandleResults []int32                  `protobuf:"varint,4,rep,packed,name=handleResults,proto3" json:"handleResults,omitempty"`
+	Pagination    *sdkws.RequestPagination `protobuf:"bytes,1,opt,name=pagination,proto3" json:"pagination"`
+	UserID        string                   `protobuf:"bytes,2,opt,name=userID,proto3" json:"userID"`
+	GroupIDs      []string                 `protobuf:"bytes,3,rep,name=groupIDs,proto3" json:"groupIDs"`
+	HandleResults []int32                  `protobuf:"varint,4,rep,packed,name=handleResults,proto3" json:"handleResults"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -1249,8 +1249,8 @@ func (x *GetUserReqApplicationListReq) GetHandleResults() []int32 {
 
 type GetUserReqApplicationListResp struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	Total         uint32                 `protobuf:"varint,1,opt,name=total,proto3" json:"total,omitempty"`
-	GroupRequests []*sdkws.GroupRequest  `protobuf:"bytes,2,rep,name=groupRequests,proto3" json:"groupRequests,omitempty"`
+	Total         uint32                 `protobuf:"varint,1,opt,name=total,proto3" json:"total"`
+	GroupRequests []*sdkws.GroupRequest  `protobuf:"bytes,2,rep,name=groupRequests,proto3" json:"groupRequests"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -1301,8 +1301,8 @@ func (x *GetUserReqApplicationListResp) GetGroupRequests() []*sdkws.GroupRequest
 
 type GetSpecifiedUserGroupRequestInfoReq struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	GroupID       string                 `protobuf:"bytes,1,opt,name=groupID,proto3" json:"groupID,omitempty"`
-	UserID        string                 `protobuf:"bytes,2,opt,name=userID,proto3" json:"userID,omitempty"`
+	GroupID       string                 `protobuf:"bytes,1,opt,name=groupID,proto3" json:"groupID"`
+	UserID        string                 `protobuf:"bytes,2,opt,name=userID,proto3" json:"userID"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -1353,8 +1353,8 @@ func (x *GetSpecifiedUserGroupRequestInfoReq) GetUserID() string {
 
 type GetSpecifiedUserGroupRequestInfoResp struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	Total         uint32                 `protobuf:"varint,1,opt,name=total,proto3" json:"total,omitempty"`
-	GroupRequests []*sdkws.GroupRequest  `protobuf:"bytes,2,rep,name=groupRequests,proto3" json:"groupRequests,omitempty"`
+	Total         uint32                 `protobuf:"varint,1,opt,name=total,proto3" json:"total"`
+	GroupRequests []*sdkws.GroupRequest  `protobuf:"bytes,2,rep,name=groupRequests,proto3" json:"groupRequests"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -1405,9 +1405,9 @@ func (x *GetSpecifiedUserGroupRequestInfoResp) GetGroupRequests() []*sdkws.Group
 
 type TransferGroupOwnerReq struct {
 	state          protoimpl.MessageState `protogen:"open.v1"`
-	GroupID        string                 `protobuf:"bytes,1,opt,name=groupID,proto3" json:"groupID,omitempty"`
-	OldOwnerUserID string                 `protobuf:"bytes,2,opt,name=oldOwnerUserID,proto3" json:"oldOwnerUserID,omitempty"`
-	NewOwnerUserID string                 `protobuf:"bytes,3,opt,name=newOwnerUserID,proto3" json:"newOwnerUserID,omitempty"`
+	GroupID        string                 `protobuf:"bytes,1,opt,name=groupID,proto3" json:"groupID"`
+	OldOwnerUserID string                 `protobuf:"bytes,2,opt,name=oldOwnerUserID,proto3" json:"oldOwnerUserID"`
+	NewOwnerUserID string                 `protobuf:"bytes,3,opt,name=newOwnerUserID,proto3" json:"newOwnerUserID"`
 	unknownFields  protoimpl.UnknownFields
 	sizeCache      protoimpl.SizeCache
 }
@@ -1501,11 +1501,11 @@ func (*TransferGroupOwnerResp) Descriptor() ([]byte, []int) {
 
 type JoinGroupReq struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	GroupID       string                 `protobuf:"bytes,1,opt,name=groupID,proto3" json:"groupID,omitempty"`
-	ReqMessage    string                 `protobuf:"bytes,2,opt,name=reqMessage,proto3" json:"reqMessage,omitempty"`
-	JoinSource    int32                  `protobuf:"varint,3,opt,name=joinSource,proto3" json:"joinSource,omitempty"`
-	InviterUserID string                 `protobuf:"bytes,4,opt,name=inviterUserID,proto3" json:"inviterUserID,omitempty"`
-	Ex            string                 `protobuf:"bytes,5,opt,name=ex,proto3" json:"ex,omitempty"`
+	GroupID       string                 `protobuf:"bytes,1,opt,name=groupID,proto3" json:"groupID"`
+	ReqMessage    string                 `protobuf:"bytes,2,opt,name=reqMessage,proto3" json:"reqMessage"`
+	JoinSource    int32                  `protobuf:"varint,3,opt,name=joinSource,proto3" json:"joinSource"`
+	InviterUserID string                 `protobuf:"bytes,4,opt,name=inviterUserID,proto3" json:"inviterUserID"`
+	Ex            string                 `protobuf:"bytes,5,opt,name=ex,proto3" json:"ex"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -1613,7 +1613,7 @@ func (*JoinGroupResp) Descriptor() ([]byte, []int) {
 
 type CreateGroupQrcodeReq struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	GroupID       string                 `protobuf:"bytes,1,opt,name=groupID,proto3" json:"groupID,omitempty"`
+	GroupID       string                 `protobuf:"bytes,1,opt,name=groupID,proto3" json:"groupID"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -1658,9 +1658,9 @@ func (x *CreateGroupQrcodeReq) GetGroupID() string {
 type CreateGroupQrcodeResp struct {
 	state protoimpl.MessageState `protogen:"open.v1"`
 	// Opaque; means nothing without a parseQrcode call.
-	Uuid string `protobuf:"bytes,1,opt,name=uuid,proto3" json:"uuid,omitempty"`
+	Uuid string `protobuf:"bytes,1,opt,name=uuid,proto3" json:"uuid"`
 	// Epoch ms. Callers should re-issue rather than show an expired code.
-	ExpireTime    int64 `protobuf:"varint,2,opt,name=expireTime,proto3" json:"expireTime,omitempty"`
+	ExpireTime    int64 `protobuf:"varint,2,opt,name=expireTime,proto3" json:"expireTime"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -1711,7 +1711,7 @@ func (x *CreateGroupQrcodeResp) GetExpireTime() int64 {
 
 type ParseQrcodeReq struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	Uuid          string                 `protobuf:"bytes,1,opt,name=uuid,proto3" json:"uuid,omitempty"`
+	Uuid          string                 `protobuf:"bytes,1,opt,name=uuid,proto3" json:"uuid"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -1758,13 +1758,13 @@ type ParseQrcodeResp struct {
 	// What this code points at. Only "group" today; present so a future
 	// user/contact code can share this endpoint rather than needing a
 	// parallel one.
-	Type      string           `protobuf:"bytes,1,opt,name=type,proto3" json:"type,omitempty"`
-	GroupInfo *sdkws.GroupInfo `protobuf:"bytes,2,opt,name=groupInfo,proto3" json:"groupInfo,omitempty"`
+	Type      string           `protobuf:"bytes,1,opt,name=type,proto3" json:"type"`
+	GroupInfo *sdkws.GroupInfo `protobuf:"bytes,2,opt,name=groupInfo,proto3" json:"groupInfo"`
 	// Empty when the caller is already in the group — there is nothing to
 	// join, so no join token is minted.
-	AuthCode           string `protobuf:"bytes,3,opt,name=authCode,proto3" json:"authCode,omitempty"`
-	AuthCodeExpireTime int64  `protobuf:"varint,4,opt,name=authCodeExpireTime,proto3" json:"authCodeExpireTime,omitempty"`
-	AlreadyMember      bool   `protobuf:"varint,5,opt,name=alreadyMember,proto3" json:"alreadyMember,omitempty"`
+	AuthCode           string `protobuf:"bytes,3,opt,name=authCode,proto3" json:"authCode"`
+	AuthCodeExpireTime int64  `protobuf:"varint,4,opt,name=authCodeExpireTime,proto3" json:"authCodeExpireTime"`
+	AlreadyMember      bool   `protobuf:"varint,5,opt,name=alreadyMember,proto3" json:"alreadyMember"`
 	unknownFields      protoimpl.UnknownFields
 	sizeCache          protoimpl.SizeCache
 }
@@ -1836,8 +1836,8 @@ func (x *ParseQrcodeResp) GetAlreadyMember() bool {
 
 type ScanJoinGroupReq struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	GroupID       string                 `protobuf:"bytes,1,opt,name=groupID,proto3" json:"groupID,omitempty"`
-	AuthCode      string                 `protobuf:"bytes,2,opt,name=authCode,proto3" json:"authCode,omitempty"`
+	GroupID       string                 `protobuf:"bytes,1,opt,name=groupID,proto3" json:"groupID"`
+	AuthCode      string                 `protobuf:"bytes,2,opt,name=authCode,proto3" json:"authCode"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -1892,8 +1892,8 @@ type ScanJoinGroupResp struct {
 	// needVerification on records a join request instead of adding the
 	// caller, and the caller has to be told which happened — the two look
 	// identical otherwise.
-	Joined          bool `protobuf:"varint,1,opt,name=joined,proto3" json:"joined,omitempty"`
-	PendingApproval bool `protobuf:"varint,2,opt,name=pendingApproval,proto3" json:"pendingApproval,omitempty"`
+	Joined          bool `protobuf:"varint,1,opt,name=joined,proto3" json:"joined"`
+	PendingApproval bool `protobuf:"varint,2,opt,name=pendingApproval,proto3" json:"pendingApproval"`
 	unknownFields   protoimpl.UnknownFields
 	sizeCache       protoimpl.SizeCache
 }
@@ -1944,10 +1944,10 @@ func (x *ScanJoinGroupResp) GetPendingApproval() bool {
 
 type GroupApplicationResponseReq struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	GroupID       string                 `protobuf:"bytes,1,opt,name=groupID,proto3" json:"groupID,omitempty"`
-	FromUserID    string                 `protobuf:"bytes,2,opt,name=fromUserID,proto3" json:"fromUserID,omitempty"` //
-	HandledMsg    string                 `protobuf:"bytes,3,opt,name=handledMsg,proto3" json:"handledMsg,omitempty"`
-	HandleResult  int32                  `protobuf:"varint,4,opt,name=handleResult,proto3" json:"handleResult,omitempty"`
+	GroupID       string                 `protobuf:"bytes,1,opt,name=groupID,proto3" json:"groupID"`
+	FromUserID    string                 `protobuf:"bytes,2,opt,name=fromUserID,proto3" json:"fromUserID"` //
+	HandledMsg    string                 `protobuf:"bytes,3,opt,name=handledMsg,proto3" json:"handledMsg"`
+	HandleResult  int32                  `protobuf:"varint,4,opt,name=handleResult,proto3" json:"handleResult"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -2048,8 +2048,8 @@ func (*GroupApplicationResponseResp) Descriptor() ([]byte, []int) {
 
 type QuitGroupReq struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	GroupID       string                 `protobuf:"bytes,1,opt,name=groupID,proto3" json:"groupID,omitempty"`
-	UserID        string                 `protobuf:"bytes,2,opt,name=userID,proto3" json:"userID,omitempty"`
+	GroupID       string                 `protobuf:"bytes,1,opt,name=groupID,proto3" json:"groupID"`
+	UserID        string                 `protobuf:"bytes,2,opt,name=userID,proto3" json:"userID"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -2136,10 +2136,10 @@ func (*QuitGroupResp) Descriptor() ([]byte, []int) {
 
 type GetGroupMemberListReq struct {
 	state         protoimpl.MessageState   `protogen:"open.v1"`
-	Pagination    *sdkws.RequestPagination `protobuf:"bytes,1,opt,name=pagination,proto3" json:"pagination,omitempty"`
-	GroupID       string                   `protobuf:"bytes,2,opt,name=groupID,proto3" json:"groupID,omitempty"`
-	Filter        int32                    `protobuf:"varint,3,opt,name=filter,proto3" json:"filter,omitempty"`
-	Keyword       string                   `protobuf:"bytes,4,opt,name=keyword,proto3" json:"keyword,omitempty"`
+	Pagination    *sdkws.RequestPagination `protobuf:"bytes,1,opt,name=pagination,proto3" json:"pagination"`
+	GroupID       string                   `protobuf:"bytes,2,opt,name=groupID,proto3" json:"groupID"`
+	Filter        int32                    `protobuf:"varint,3,opt,name=filter,proto3" json:"filter"`
+	Keyword       string                   `protobuf:"bytes,4,opt,name=keyword,proto3" json:"keyword"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -2204,8 +2204,8 @@ func (x *GetGroupMemberListReq) GetKeyword() string {
 
 type GetGroupMemberListResp struct {
 	state         protoimpl.MessageState       `protogen:"open.v1"`
-	Total         uint32                       `protobuf:"varint,1,opt,name=total,proto3" json:"total,omitempty"`
-	Members       []*sdkws.GroupMemberFullInfo `protobuf:"bytes,2,rep,name=members,proto3" json:"members,omitempty"`
+	Total         uint32                       `protobuf:"varint,1,opt,name=total,proto3" json:"total"`
+	Members       []*sdkws.GroupMemberFullInfo `protobuf:"bytes,2,rep,name=members,proto3" json:"members"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -2256,8 +2256,8 @@ func (x *GetGroupMemberListResp) GetMembers() []*sdkws.GroupMemberFullInfo {
 
 type GetGroupMembersInfoReq struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	GroupID       string                 `protobuf:"bytes,1,opt,name=groupID,proto3" json:"groupID,omitempty"`
-	UserIDs       []string               `protobuf:"bytes,2,rep,name=userIDs,proto3" json:"userIDs,omitempty"`
+	GroupID       string                 `protobuf:"bytes,1,opt,name=groupID,proto3" json:"groupID"`
+	UserIDs       []string               `protobuf:"bytes,2,rep,name=userIDs,proto3" json:"userIDs"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -2308,7 +2308,7 @@ func (x *GetGroupMembersInfoReq) GetUserIDs() []string {
 
 type GetGroupMembersInfoResp struct {
 	state         protoimpl.MessageState       `protogen:"open.v1"`
-	Members       []*sdkws.GroupMemberFullInfo `protobuf:"bytes,1,rep,name=members,proto3" json:"members,omitempty"`
+	Members       []*sdkws.GroupMemberFullInfo `protobuf:"bytes,1,rep,name=members,proto3" json:"members"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -2352,10 +2352,10 @@ func (x *GetGroupMembersInfoResp) GetMembers() []*sdkws.GroupMemberFullInfo {
 
 type KickGroupMemberReq struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	GroupID       string                 `protobuf:"bytes,1,opt,name=groupID,proto3" json:"groupID,omitempty"`
-	KickedUserIDs []string               `protobuf:"bytes,2,rep,name=kickedUserIDs,proto3" json:"kickedUserIDs,omitempty"`
-	Reason        string                 `protobuf:"bytes,3,opt,name=reason,proto3" json:"reason,omitempty"`
-	SendMessage   *bool                  `protobuf:"varint,4,opt,name=sendMessage,proto3,oneof" json:"sendMessage,omitempty"`
+	GroupID       string                 `protobuf:"bytes,1,opt,name=groupID,proto3" json:"groupID"`
+	KickedUserIDs []string               `protobuf:"bytes,2,rep,name=kickedUserIDs,proto3" json:"kickedUserIDs"`
+	Reason        string                 `protobuf:"bytes,3,opt,name=reason,proto3" json:"reason"`
+	SendMessage   *bool                  `protobuf:"varint,4,opt,name=sendMessage,proto3,oneof" json:"sendMessage"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -2456,8 +2456,8 @@ func (*KickGroupMemberResp) Descriptor() ([]byte, []int) {
 
 type GetJoinedGroupListReq struct {
 	state         protoimpl.MessageState   `protogen:"open.v1"`
-	Pagination    *sdkws.RequestPagination `protobuf:"bytes,1,opt,name=pagination,proto3" json:"pagination,omitempty"`
-	FromUserID    string                   `protobuf:"bytes,2,opt,name=fromUserID,proto3" json:"fromUserID,omitempty"`
+	Pagination    *sdkws.RequestPagination `protobuf:"bytes,1,opt,name=pagination,proto3" json:"pagination"`
+	FromUserID    string                   `protobuf:"bytes,2,opt,name=fromUserID,proto3" json:"fromUserID"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -2508,8 +2508,8 @@ func (x *GetJoinedGroupListReq) GetFromUserID() string {
 
 type GetJoinedGroupListResp struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	Total         uint32                 `protobuf:"varint,1,opt,name=total,proto3" json:"total,omitempty"`
-	Groups        []*sdkws.GroupInfo     `protobuf:"bytes,2,rep,name=groups,proto3" json:"groups,omitempty"`
+	Total         uint32                 `protobuf:"varint,1,opt,name=total,proto3" json:"total"`
+	Groups        []*sdkws.GroupInfo     `protobuf:"bytes,2,rep,name=groups,proto3" json:"groups"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -2560,10 +2560,10 @@ func (x *GetJoinedGroupListResp) GetGroups() []*sdkws.GroupInfo {
 
 type InviteUserToGroupReq struct {
 	state          protoimpl.MessageState `protogen:"open.v1"`
-	GroupID        string                 `protobuf:"bytes,1,opt,name=groupID,proto3" json:"groupID,omitempty"`
-	Reason         string                 `protobuf:"bytes,2,opt,name=reason,proto3" json:"reason,omitempty"`
-	InvitedUserIDs []string               `protobuf:"bytes,3,rep,name=invitedUserIDs,proto3" json:"invitedUserIDs,omitempty"`
-	SendMessage    *bool                  `protobuf:"varint,4,opt,name=sendMessage,proto3,oneof" json:"sendMessage,omitempty"`
+	GroupID        string                 `protobuf:"bytes,1,opt,name=groupID,proto3" json:"groupID"`
+	Reason         string                 `protobuf:"bytes,2,opt,name=reason,proto3" json:"reason"`
+	InvitedUserIDs []string               `protobuf:"bytes,3,rep,name=invitedUserIDs,proto3" json:"invitedUserIDs"`
+	SendMessage    *bool                  `protobuf:"varint,4,opt,name=sendMessage,proto3,oneof" json:"sendMessage"`
 	unknownFields  protoimpl.UnknownFields
 	sizeCache      protoimpl.SizeCache
 }
@@ -2664,8 +2664,8 @@ func (*InviteUserToGroupResp) Descriptor() ([]byte, []int) {
 
 type GetGroupAllMemberReq struct {
 	state         protoimpl.MessageState   `protogen:"open.v1"`
-	Pagination    *sdkws.RequestPagination `protobuf:"bytes,1,opt,name=pagination,proto3" json:"pagination,omitempty"`
-	GroupID       string                   `protobuf:"bytes,2,opt,name=groupID,proto3" json:"groupID,omitempty"`
+	Pagination    *sdkws.RequestPagination `protobuf:"bytes,1,opt,name=pagination,proto3" json:"pagination"`
+	GroupID       string                   `protobuf:"bytes,2,opt,name=groupID,proto3" json:"groupID"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -2716,7 +2716,7 @@ func (x *GetGroupAllMemberReq) GetGroupID() string {
 
 type GetGroupAllMemberResp struct {
 	state         protoimpl.MessageState       `protogen:"open.v1"`
-	Members       []*sdkws.GroupMemberFullInfo `protobuf:"bytes,1,rep,name=members,proto3" json:"members,omitempty"`
+	Members       []*sdkws.GroupMemberFullInfo `protobuf:"bytes,1,rep,name=members,proto3" json:"members"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -2760,9 +2760,9 @@ func (x *GetGroupAllMemberResp) GetMembers() []*sdkws.GroupMemberFullInfo {
 
 type CMSGroup struct {
 	state              protoimpl.MessageState `protogen:"open.v1"`
-	GroupInfo          *sdkws.GroupInfo       `protobuf:"bytes,1,opt,name=groupInfo,proto3" json:"groupInfo,omitempty"`
-	GroupOwnerUserName string                 `protobuf:"bytes,2,opt,name=groupOwnerUserName,proto3" json:"groupOwnerUserName,omitempty"`
-	GroupOwnerUserID   string                 `protobuf:"bytes,3,opt,name=groupOwnerUserID,proto3" json:"groupOwnerUserID,omitempty"`
+	GroupInfo          *sdkws.GroupInfo       `protobuf:"bytes,1,opt,name=groupInfo,proto3" json:"groupInfo"`
+	GroupOwnerUserName string                 `protobuf:"bytes,2,opt,name=groupOwnerUserName,proto3" json:"groupOwnerUserName"`
+	GroupOwnerUserID   string                 `protobuf:"bytes,3,opt,name=groupOwnerUserID,proto3" json:"groupOwnerUserID"`
 	unknownFields      protoimpl.UnknownFields
 	sizeCache          protoimpl.SizeCache
 }
@@ -2820,9 +2820,9 @@ func (x *CMSGroup) GetGroupOwnerUserID() string {
 
 type GetGroupsReq struct {
 	state         protoimpl.MessageState   `protogen:"open.v1"`
-	Pagination    *sdkws.RequestPagination `protobuf:"bytes,1,opt,name=pagination,proto3" json:"pagination,omitempty"`
-	GroupName     string                   `protobuf:"bytes,2,opt,name=groupName,proto3" json:"groupName,omitempty"`
-	GroupID       string                   `protobuf:"bytes,3,opt,name=groupID,proto3" json:"groupID,omitempty"`
+	Pagination    *sdkws.RequestPagination `protobuf:"bytes,1,opt,name=pagination,proto3" json:"pagination"`
+	GroupName     string                   `protobuf:"bytes,2,opt,name=groupName,proto3" json:"groupName"`
+	GroupID       string                   `protobuf:"bytes,3,opt,name=groupID,proto3" json:"groupID"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -2880,8 +2880,8 @@ func (x *GetGroupsReq) GetGroupID() string {
 
 type GetGroupsResp struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	Total         uint32                 `protobuf:"varint,1,opt,name=total,proto3" json:"total,omitempty"`
-	Groups        []*CMSGroup            `protobuf:"bytes,2,rep,name=groups,proto3" json:"groups,omitempty"`
+	Total         uint32                 `protobuf:"varint,1,opt,name=total,proto3" json:"total"`
+	Groups        []*CMSGroup            `protobuf:"bytes,2,rep,name=groups,proto3" json:"groups"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -2932,7 +2932,7 @@ func (x *GetGroupsResp) GetGroups() []*CMSGroup {
 
 type GetGroupMemberReq struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	GroupID       string                 `protobuf:"bytes,1,opt,name=groupID,proto3" json:"groupID,omitempty"`
+	GroupID       string                 `protobuf:"bytes,1,opt,name=groupID,proto3" json:"groupID"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -2976,9 +2976,9 @@ func (x *GetGroupMemberReq) GetGroupID() string {
 
 type GetGroupMembersCMSReq struct {
 	state         protoimpl.MessageState   `protogen:"open.v1"`
-	Pagination    *sdkws.RequestPagination `protobuf:"bytes,1,opt,name=pagination,proto3" json:"pagination,omitempty"`
-	GroupID       string                   `protobuf:"bytes,2,opt,name=groupID,proto3" json:"groupID,omitempty"`
-	UserName      string                   `protobuf:"bytes,3,opt,name=userName,proto3" json:"userName,omitempty"`
+	Pagination    *sdkws.RequestPagination `protobuf:"bytes,1,opt,name=pagination,proto3" json:"pagination"`
+	GroupID       string                   `protobuf:"bytes,2,opt,name=groupID,proto3" json:"groupID"`
+	UserName      string                   `protobuf:"bytes,3,opt,name=userName,proto3" json:"userName"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -3036,8 +3036,8 @@ func (x *GetGroupMembersCMSReq) GetUserName() string {
 
 type GetGroupMembersCMSResp struct {
 	state         protoimpl.MessageState       `protogen:"open.v1"`
-	Total         uint32                       `protobuf:"varint,1,opt,name=total,proto3" json:"total,omitempty"`
-	Members       []*sdkws.GroupMemberFullInfo `protobuf:"bytes,2,rep,name=members,proto3" json:"members,omitempty"`
+	Total         uint32                       `protobuf:"varint,1,opt,name=total,proto3" json:"total"`
+	Members       []*sdkws.GroupMemberFullInfo `protobuf:"bytes,2,rep,name=members,proto3" json:"members"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -3088,9 +3088,9 @@ func (x *GetGroupMembersCMSResp) GetMembers() []*sdkws.GroupMemberFullInfo {
 
 type DismissGroupReq struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	GroupID       string                 `protobuf:"bytes,1,opt,name=groupID,proto3" json:"groupID,omitempty"`
-	DeleteMember  bool                   `protobuf:"varint,2,opt,name=deleteMember,proto3" json:"deleteMember,omitempty"`
-	SendMessage   *bool                  `protobuf:"varint,3,opt,name=sendMessage,proto3,oneof" json:"sendMessage,omitempty"`
+	GroupID       string                 `protobuf:"bytes,1,opt,name=groupID,proto3" json:"groupID"`
+	DeleteMember  bool                   `protobuf:"varint,2,opt,name=deleteMember,proto3" json:"deleteMember"`
+	SendMessage   *bool                  `protobuf:"varint,3,opt,name=sendMessage,proto3,oneof" json:"sendMessage"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -3184,9 +3184,9 @@ func (*DismissGroupResp) Descriptor() ([]byte, []int) {
 
 type MuteGroupMemberReq struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	GroupID       string                 `protobuf:"bytes,1,opt,name=groupID,proto3" json:"groupID,omitempty"`
-	UserID        string                 `protobuf:"bytes,2,opt,name=userID,proto3" json:"userID,omitempty"`
-	MutedSeconds  uint32                 `protobuf:"varint,3,opt,name=mutedSeconds,proto3" json:"mutedSeconds,omitempty"`
+	GroupID       string                 `protobuf:"bytes,1,opt,name=groupID,proto3" json:"groupID"`
+	UserID        string                 `protobuf:"bytes,2,opt,name=userID,proto3" json:"userID"`
+	MutedSeconds  uint32                 `protobuf:"varint,3,opt,name=mutedSeconds,proto3" json:"mutedSeconds"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -3280,8 +3280,8 @@ func (*MuteGroupMemberResp) Descriptor() ([]byte, []int) {
 
 type CancelMuteGroupMemberReq struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	GroupID       string                 `protobuf:"bytes,1,opt,name=groupID,proto3" json:"groupID,omitempty"`
-	UserID        string                 `protobuf:"bytes,2,opt,name=userID,proto3" json:"userID,omitempty"`
+	GroupID       string                 `protobuf:"bytes,1,opt,name=groupID,proto3" json:"groupID"`
+	UserID        string                 `protobuf:"bytes,2,opt,name=userID,proto3" json:"userID"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -3368,7 +3368,7 @@ func (*CancelMuteGroupMemberResp) Descriptor() ([]byte, []int) {
 
 type MuteGroupReq struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	GroupID       string                 `protobuf:"bytes,1,opt,name=groupID,proto3" json:"groupID,omitempty"`
+	GroupID       string                 `protobuf:"bytes,1,opt,name=groupID,proto3" json:"groupID"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -3448,7 +3448,7 @@ func (*MuteGroupResp) Descriptor() ([]byte, []int) {
 
 type CancelMuteGroupReq struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	GroupID       string                 `protobuf:"bytes,1,opt,name=groupID,proto3" json:"groupID,omitempty"`
+	GroupID       string                 `protobuf:"bytes,1,opt,name=groupID,proto3" json:"groupID"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -3528,12 +3528,12 @@ func (*CancelMuteGroupResp) Descriptor() ([]byte, []int) {
 
 type SetGroupMemberInfo struct {
 	state         protoimpl.MessageState  `protogen:"open.v1"`
-	GroupID       string                  `protobuf:"bytes,1,opt,name=groupID,proto3" json:"groupID,omitempty"`
-	UserID        string                  `protobuf:"bytes,2,opt,name=userID,proto3" json:"userID,omitempty"`
-	Nickname      *wrapperspb.StringValue `protobuf:"bytes,3,opt,name=nickname,proto3" json:"nickname,omitempty"`
-	FaceURL       *wrapperspb.StringValue `protobuf:"bytes,4,opt,name=faceURL,proto3" json:"faceURL,omitempty"`
-	RoleLevel     *wrapperspb.Int32Value  `protobuf:"bytes,5,opt,name=roleLevel,proto3" json:"roleLevel,omitempty"`
-	Ex            *wrapperspb.StringValue `protobuf:"bytes,6,opt,name=ex,proto3" json:"ex,omitempty"`
+	GroupID       string                  `protobuf:"bytes,1,opt,name=groupID,proto3" json:"groupID"`
+	UserID        string                  `protobuf:"bytes,2,opt,name=userID,proto3" json:"userID"`
+	Nickname      *wrapperspb.StringValue `protobuf:"bytes,3,opt,name=nickname,proto3" json:"nickname"`
+	FaceURL       *wrapperspb.StringValue `protobuf:"bytes,4,opt,name=faceURL,proto3" json:"faceURL"`
+	RoleLevel     *wrapperspb.Int32Value  `protobuf:"bytes,5,opt,name=roleLevel,proto3" json:"roleLevel"`
+	Ex            *wrapperspb.StringValue `protobuf:"bytes,6,opt,name=ex,proto3" json:"ex"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -3612,7 +3612,7 @@ func (x *SetGroupMemberInfo) GetEx() *wrapperspb.StringValue {
 
 type SetGroupMemberInfoReq struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	Members       []*SetGroupMemberInfo  `protobuf:"bytes,1,rep,name=members,proto3" json:"members,omitempty"`
+	Members       []*SetGroupMemberInfo  `protobuf:"bytes,1,rep,name=members,proto3" json:"members"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -3692,7 +3692,7 @@ func (*SetGroupMemberInfoResp) Descriptor() ([]byte, []int) {
 
 type GetGroupAbstractInfoReq struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	GroupIDs      []string               `protobuf:"bytes,1,rep,name=groupIDs,proto3" json:"groupIDs,omitempty"`
+	GroupIDs      []string               `protobuf:"bytes,1,rep,name=groupIDs,proto3" json:"groupIDs"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -3736,9 +3736,9 @@ func (x *GetGroupAbstractInfoReq) GetGroupIDs() []string {
 
 type GroupAbstractInfo struct {
 	state               protoimpl.MessageState `protogen:"open.v1"`
-	GroupID             string                 `protobuf:"bytes,1,opt,name=groupID,proto3" json:"groupID,omitempty"`
-	GroupMemberNumber   uint32                 `protobuf:"varint,2,opt,name=groupMemberNumber,proto3" json:"groupMemberNumber,omitempty"`
-	GroupMemberListHash uint64                 `protobuf:"varint,3,opt,name=groupMemberListHash,proto3" json:"groupMemberListHash,omitempty"`
+	GroupID             string                 `protobuf:"bytes,1,opt,name=groupID,proto3" json:"groupID"`
+	GroupMemberNumber   uint32                 `protobuf:"varint,2,opt,name=groupMemberNumber,proto3" json:"groupMemberNumber"`
+	GroupMemberListHash uint64                 `protobuf:"varint,3,opt,name=groupMemberListHash,proto3" json:"groupMemberListHash"`
 	unknownFields       protoimpl.UnknownFields
 	sizeCache           protoimpl.SizeCache
 }
@@ -3796,7 +3796,7 @@ func (x *GroupAbstractInfo) GetGroupMemberListHash() uint64 {
 
 type GetGroupAbstractInfoResp struct {
 	state              protoimpl.MessageState `protogen:"open.v1"`
-	GroupAbstractInfos []*GroupAbstractInfo   `protobuf:"bytes,1,rep,name=groupAbstractInfos,proto3" json:"groupAbstractInfos,omitempty"`
+	GroupAbstractInfos []*GroupAbstractInfo   `protobuf:"bytes,1,rep,name=groupAbstractInfos,proto3" json:"groupAbstractInfos"`
 	unknownFields      protoimpl.UnknownFields
 	sizeCache          protoimpl.SizeCache
 }
@@ -3840,8 +3840,8 @@ func (x *GetGroupAbstractInfoResp) GetGroupAbstractInfos() []*GroupAbstractInfo 
 
 type GetUserInGroupMembersReq struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	UserID        string                 `protobuf:"bytes,1,opt,name=userID,proto3" json:"userID,omitempty"`
-	GroupIDs      []string               `protobuf:"bytes,2,rep,name=groupIDs,proto3" json:"groupIDs,omitempty"`
+	UserID        string                 `protobuf:"bytes,1,opt,name=userID,proto3" json:"userID"`
+	GroupIDs      []string               `protobuf:"bytes,2,rep,name=groupIDs,proto3" json:"groupIDs"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -3892,7 +3892,7 @@ func (x *GetUserInGroupMembersReq) GetGroupIDs() []string {
 
 type GetUserInGroupMembersResp struct {
 	state         protoimpl.MessageState       `protogen:"open.v1"`
-	Members       []*sdkws.GroupMemberFullInfo `protobuf:"bytes,1,rep,name=members,proto3" json:"members,omitempty"`
+	Members       []*sdkws.GroupMemberFullInfo `protobuf:"bytes,1,rep,name=members,proto3" json:"members"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -3936,7 +3936,7 @@ func (x *GetUserInGroupMembersResp) GetMembers() []*sdkws.GroupMemberFullInfo {
 
 type GetGroupMemberUserIDsReq struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	GroupID       string                 `protobuf:"bytes,1,opt,name=groupID,proto3" json:"groupID,omitempty"`
+	GroupID       string                 `protobuf:"bytes,1,opt,name=groupID,proto3" json:"groupID"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -3980,7 +3980,7 @@ func (x *GetGroupMemberUserIDsReq) GetGroupID() string {
 
 type GetGroupMemberUserIDsResp struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	UserIDs       []string               `protobuf:"bytes,1,rep,name=userIDs,proto3" json:"userIDs,omitempty"`
+	UserIDs       []string               `protobuf:"bytes,1,rep,name=userIDs,proto3" json:"userIDs"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -4024,8 +4024,8 @@ func (x *GetGroupMemberUserIDsResp) GetUserIDs() []string {
 
 type GetGroupMemberRoleLevelReq struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	GroupID       string                 `protobuf:"bytes,1,opt,name=groupID,proto3" json:"groupID,omitempty"`
-	RoleLevels    []int32                `protobuf:"varint,2,rep,packed,name=roleLevels,proto3" json:"roleLevels,omitempty"`
+	GroupID       string                 `protobuf:"bytes,1,opt,name=groupID,proto3" json:"groupID"`
+	RoleLevels    []int32                `protobuf:"varint,2,rep,packed,name=roleLevels,proto3" json:"roleLevels"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -4076,7 +4076,7 @@ func (x *GetGroupMemberRoleLevelReq) GetRoleLevels() []int32 {
 
 type GetGroupMemberRoleLevelResp struct {
 	state         protoimpl.MessageState       `protogen:"open.v1"`
-	Members       []*sdkws.GroupMemberFullInfo `protobuf:"bytes,1,rep,name=members,proto3" json:"members,omitempty"`
+	Members       []*sdkws.GroupMemberFullInfo `protobuf:"bytes,1,rep,name=members,proto3" json:"members"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -4120,7 +4120,7 @@ func (x *GetGroupMemberRoleLevelResp) GetMembers() []*sdkws.GroupMemberFullInfo 
 
 type GetGroupInfoCacheReq struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	GroupID       string                 `protobuf:"bytes,1,opt,name=groupID,proto3" json:"groupID,omitempty"`
+	GroupID       string                 `protobuf:"bytes,1,opt,name=groupID,proto3" json:"groupID"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -4164,7 +4164,7 @@ func (x *GetGroupInfoCacheReq) GetGroupID() string {
 
 type GetGroupInfoCacheResp struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	GroupInfo     *sdkws.GroupInfo       `protobuf:"bytes,1,opt,name=groupInfo,proto3" json:"groupInfo,omitempty"`
+	GroupInfo     *sdkws.GroupInfo       `protobuf:"bytes,1,opt,name=groupInfo,proto3" json:"groupInfo"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -4208,8 +4208,8 @@ func (x *GetGroupInfoCacheResp) GetGroupInfo() *sdkws.GroupInfo {
 
 type GetGroupMemberCacheReq struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	GroupID       string                 `protobuf:"bytes,1,opt,name=groupID,proto3" json:"groupID,omitempty"`
-	GroupMemberID string                 `protobuf:"bytes,2,opt,name=groupMemberID,proto3" json:"groupMemberID,omitempty"`
+	GroupID       string                 `protobuf:"bytes,1,opt,name=groupID,proto3" json:"groupID"`
+	GroupMemberID string                 `protobuf:"bytes,2,opt,name=groupMemberID,proto3" json:"groupMemberID"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -4260,7 +4260,7 @@ func (x *GetGroupMemberCacheReq) GetGroupMemberID() string {
 
 type GetGroupMemberCacheResp struct {
 	state         protoimpl.MessageState     `protogen:"open.v1"`
-	Member        *sdkws.GroupMemberFullInfo `protobuf:"bytes,1,opt,name=member,proto3" json:"member,omitempty"`
+	Member        *sdkws.GroupMemberFullInfo `protobuf:"bytes,1,opt,name=member,proto3" json:"member"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -4304,8 +4304,8 @@ func (x *GetGroupMemberCacheResp) GetMember() *sdkws.GroupMemberFullInfo {
 
 type GroupCreateCountReq struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	Start         int64                  `protobuf:"varint,1,opt,name=start,proto3" json:"start,omitempty"`
-	End           int64                  `protobuf:"varint,2,opt,name=end,proto3" json:"end,omitempty"`
+	Start         int64                  `protobuf:"varint,1,opt,name=start,proto3" json:"start"`
+	End           int64                  `protobuf:"varint,2,opt,name=end,proto3" json:"end"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -4356,8 +4356,8 @@ func (x *GroupCreateCountReq) GetEnd() int64 {
 
 type GroupCreateCountResp struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	Total         int64                  `protobuf:"varint,1,opt,name=total,proto3" json:"total,omitempty"`
-	Before        int64                  `protobuf:"varint,2,opt,name=before,proto3" json:"before,omitempty"`
+	Total         int64                  `protobuf:"varint,1,opt,name=total,proto3" json:"total"`
+	Before        int64                  `protobuf:"varint,2,opt,name=before,proto3" json:"before"`
 	Count         map[string]int64       `protobuf:"bytes,3,rep,name=count,proto3" json:"count,omitempty" protobuf_key:"bytes,1,opt,name=key" protobuf_val:"varint,2,opt,name=value"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
@@ -4416,8 +4416,8 @@ func (x *GroupCreateCountResp) GetCount() map[string]int64 {
 
 type GetGroupUsersReqApplicationListReq struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	GroupID       string                 `protobuf:"bytes,1,opt,name=groupID,proto3" json:"groupID,omitempty"`
-	UserIDs       []string               `protobuf:"bytes,2,rep,name=userIDs,proto3" json:"userIDs,omitempty"`
+	GroupID       string                 `protobuf:"bytes,1,opt,name=groupID,proto3" json:"groupID"`
+	UserIDs       []string               `protobuf:"bytes,2,rep,name=userIDs,proto3" json:"userIDs"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -4468,8 +4468,8 @@ func (x *GetGroupUsersReqApplicationListReq) GetUserIDs() []string {
 
 type GetGroupUsersReqApplicationListResp struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	Total         int64                  `protobuf:"varint,1,opt,name=total,proto3" json:"total,omitempty"`
-	GroupRequests []*sdkws.GroupRequest  `protobuf:"bytes,2,rep,name=groupRequests,proto3" json:"groupRequests,omitempty"`
+	Total         int64                  `protobuf:"varint,1,opt,name=total,proto3" json:"total"`
+	GroupRequests []*sdkws.GroupRequest  `protobuf:"bytes,2,rep,name=groupRequests,proto3" json:"groupRequests"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -4520,9 +4520,9 @@ func (x *GetGroupUsersReqApplicationListResp) GetGroupRequests() []*sdkws.GroupR
 
 type NotificationUserInfoUpdateReq struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	UserID        string                 `protobuf:"bytes,1,opt,name=userID,proto3" json:"userID,omitempty"`
-	OldUserInfo   *sdkws.UserInfo        `protobuf:"bytes,2,opt,name=oldUserInfo,proto3" json:"oldUserInfo,omitempty"`
-	NewUserInfo   *sdkws.UserInfo        `protobuf:"bytes,3,opt,name=newUserInfo,proto3" json:"newUserInfo,omitempty"`
+	UserID        string                 `protobuf:"bytes,1,opt,name=userID,proto3" json:"userID"`
+	OldUserInfo   *sdkws.UserInfo        `protobuf:"bytes,2,opt,name=oldUserInfo,proto3" json:"oldUserInfo"`
+	NewUserInfo   *sdkws.UserInfo        `protobuf:"bytes,3,opt,name=newUserInfo,proto3" json:"newUserInfo"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -4616,9 +4616,9 @@ func (*NotificationUserInfoUpdateResp) Descriptor() ([]byte, []int) {
 
 type GetIncrementalGroupMemberReq struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	GroupID       string                 `protobuf:"bytes,1,opt,name=groupID,proto3" json:"groupID,omitempty"`
-	VersionID     string                 `protobuf:"bytes,2,opt,name=versionID,proto3" json:"versionID,omitempty"`
-	Version       uint64                 `protobuf:"varint,3,opt,name=version,proto3" json:"version,omitempty"`
+	GroupID       string                 `protobuf:"bytes,1,opt,name=groupID,proto3" json:"groupID"`
+	VersionID     string                 `protobuf:"bytes,2,opt,name=versionID,proto3" json:"versionID"`
+	Version       uint64                 `protobuf:"varint,3,opt,name=version,proto3" json:"version"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -4676,14 +4676,14 @@ func (x *GetIncrementalGroupMemberReq) GetVersion() uint64 {
 
 type GetIncrementalGroupMemberResp struct {
 	state         protoimpl.MessageState       `protogen:"open.v1"`
-	Version       uint64                       `protobuf:"varint,1,opt,name=version,proto3" json:"version,omitempty"`
-	VersionID     string                       `protobuf:"bytes,2,opt,name=versionID,proto3" json:"versionID,omitempty"`
-	Full          bool                         `protobuf:"varint,3,opt,name=full,proto3" json:"full,omitempty"`
-	Delete        []string                     `protobuf:"bytes,4,rep,name=delete,proto3" json:"delete,omitempty"`
-	Insert        []*sdkws.GroupMemberFullInfo `protobuf:"bytes,5,rep,name=insert,proto3" json:"insert,omitempty"`
-	Update        []*sdkws.GroupMemberFullInfo `protobuf:"bytes,6,rep,name=update,proto3" json:"update,omitempty"`
-	Group         *sdkws.GroupInfo             `protobuf:"bytes,7,opt,name=group,proto3" json:"group,omitempty"`
-	SortVersion   uint64                       `protobuf:"varint,8,opt,name=sortVersion,proto3" json:"sortVersion,omitempty"`
+	Version       uint64                       `protobuf:"varint,1,opt,name=version,proto3" json:"version"`
+	VersionID     string                       `protobuf:"bytes,2,opt,name=versionID,proto3" json:"versionID"`
+	Full          bool                         `protobuf:"varint,3,opt,name=full,proto3" json:"full"`
+	Delete        []string                     `protobuf:"bytes,4,rep,name=delete,proto3" json:"delete"`
+	Insert        []*sdkws.GroupMemberFullInfo `protobuf:"bytes,5,rep,name=insert,proto3" json:"insert"`
+	Update        []*sdkws.GroupMemberFullInfo `protobuf:"bytes,6,rep,name=update,proto3" json:"update"`
+	Group         *sdkws.GroupInfo             `protobuf:"bytes,7,opt,name=group,proto3" json:"group"`
+	SortVersion   uint64                       `protobuf:"varint,8,opt,name=sortVersion,proto3" json:"sortVersion"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -4776,9 +4776,9 @@ func (x *GetIncrementalGroupMemberResp) GetSortVersion() uint64 {
 
 type GetIncrementalJoinGroupReq struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	UserID        string                 `protobuf:"bytes,1,opt,name=userID,proto3" json:"userID,omitempty"`
-	VersionID     string                 `protobuf:"bytes,2,opt,name=versionID,proto3" json:"versionID,omitempty"`
-	Version       uint64                 `protobuf:"varint,3,opt,name=version,proto3" json:"version,omitempty"`
+	UserID        string                 `protobuf:"bytes,1,opt,name=userID,proto3" json:"userID"`
+	VersionID     string                 `protobuf:"bytes,2,opt,name=versionID,proto3" json:"versionID"`
+	Version       uint64                 `protobuf:"varint,3,opt,name=version,proto3" json:"version"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -4836,13 +4836,13 @@ func (x *GetIncrementalJoinGroupReq) GetVersion() uint64 {
 
 type GetIncrementalJoinGroupResp struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	Version       uint64                 `protobuf:"varint,1,opt,name=version,proto3" json:"version,omitempty"`
-	VersionID     string                 `protobuf:"bytes,2,opt,name=versionID,proto3" json:"versionID,omitempty"`
-	Full          bool                   `protobuf:"varint,3,opt,name=full,proto3" json:"full,omitempty"`
-	Delete        []string               `protobuf:"bytes,4,rep,name=delete,proto3" json:"delete,omitempty"`
-	Insert        []*sdkws.GroupInfo     `protobuf:"bytes,5,rep,name=insert,proto3" json:"insert,omitempty"`
-	Update        []*sdkws.GroupInfo     `protobuf:"bytes,6,rep,name=update,proto3" json:"update,omitempty"`
-	SortVersion   uint64                 `protobuf:"varint,7,opt,name=sortVersion,proto3" json:"sortVersion,omitempty"`
+	Version       uint64                 `protobuf:"varint,1,opt,name=version,proto3" json:"version"`
+	VersionID     string                 `protobuf:"bytes,2,opt,name=versionID,proto3" json:"versionID"`
+	Full          bool                   `protobuf:"varint,3,opt,name=full,proto3" json:"full"`
+	Delete        []string               `protobuf:"bytes,4,rep,name=delete,proto3" json:"delete"`
+	Insert        []*sdkws.GroupInfo     `protobuf:"bytes,5,rep,name=insert,proto3" json:"insert"`
+	Update        []*sdkws.GroupInfo     `protobuf:"bytes,6,rep,name=update,proto3" json:"update"`
+	SortVersion   uint64                 `protobuf:"varint,7,opt,name=sortVersion,proto3" json:"sortVersion"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -4928,8 +4928,8 @@ func (x *GetIncrementalJoinGroupResp) GetSortVersion() uint64 {
 
 type GetFullGroupMemberUserIDsReq struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	IdHash        uint64                 `protobuf:"varint,1,opt,name=idHash,proto3" json:"idHash,omitempty"`
-	GroupID       string                 `protobuf:"bytes,2,opt,name=groupID,proto3" json:"groupID,omitempty"`
+	IdHash        uint64                 `protobuf:"varint,1,opt,name=idHash,proto3" json:"idHash"`
+	GroupID       string                 `protobuf:"bytes,2,opt,name=groupID,proto3" json:"groupID"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -4980,10 +4980,10 @@ func (x *GetFullGroupMemberUserIDsReq) GetGroupID() string {
 
 type GetFullGroupMemberUserIDsResp struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	Version       uint64                 `protobuf:"varint,1,opt,name=version,proto3" json:"version,omitempty"`
-	VersionID     string                 `protobuf:"bytes,2,opt,name=versionID,proto3" json:"versionID,omitempty"`
-	Equal         bool                   `protobuf:"varint,3,opt,name=equal,proto3" json:"equal,omitempty"`
-	UserIDs       []string               `protobuf:"bytes,4,rep,name=userIDs,proto3" json:"userIDs,omitempty"`
+	Version       uint64                 `protobuf:"varint,1,opt,name=version,proto3" json:"version"`
+	VersionID     string                 `protobuf:"bytes,2,opt,name=versionID,proto3" json:"versionID"`
+	Equal         bool                   `protobuf:"varint,3,opt,name=equal,proto3" json:"equal"`
+	UserIDs       []string               `protobuf:"bytes,4,rep,name=userIDs,proto3" json:"userIDs"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -5048,8 +5048,8 @@ func (x *GetFullGroupMemberUserIDsResp) GetUserIDs() []string {
 
 type GetFullJoinGroupIDsReq struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	IdHash        uint64                 `protobuf:"varint,1,opt,name=idHash,proto3" json:"idHash,omitempty"`
-	UserID        string                 `protobuf:"bytes,2,opt,name=userID,proto3" json:"userID,omitempty"`
+	IdHash        uint64                 `protobuf:"varint,1,opt,name=idHash,proto3" json:"idHash"`
+	UserID        string                 `protobuf:"bytes,2,opt,name=userID,proto3" json:"userID"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -5100,10 +5100,10 @@ func (x *GetFullJoinGroupIDsReq) GetUserID() string {
 
 type GetFullJoinGroupIDsResp struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	Version       uint64                 `protobuf:"varint,1,opt,name=version,proto3" json:"version,omitempty"`
-	VersionID     string                 `protobuf:"bytes,2,opt,name=versionID,proto3" json:"versionID,omitempty"`
-	Equal         bool                   `protobuf:"varint,3,opt,name=equal,proto3" json:"equal,omitempty"`
-	GroupIDs      []string               `protobuf:"bytes,4,rep,name=groupIDs,proto3" json:"groupIDs,omitempty"`
+	Version       uint64                 `protobuf:"varint,1,opt,name=version,proto3" json:"version"`
+	VersionID     string                 `protobuf:"bytes,2,opt,name=versionID,proto3" json:"versionID"`
+	Equal         bool                   `protobuf:"varint,3,opt,name=equal,proto3" json:"equal"`
+	GroupIDs      []string               `protobuf:"bytes,4,rep,name=groupIDs,proto3" json:"groupIDs"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -5168,8 +5168,8 @@ func (x *GetFullJoinGroupIDsResp) GetGroupIDs() []string {
 
 type BatchGetIncrementalGroupMemberReq struct {
 	state         protoimpl.MessageState          `protogen:"open.v1"`
-	UserID        string                          `protobuf:"bytes,1,opt,name=userID,proto3" json:"userID,omitempty"`
-	ReqList       []*GetIncrementalGroupMemberReq `protobuf:"bytes,2,rep,name=reqList,proto3" json:"reqList,omitempty"`
+	UserID        string                          `protobuf:"bytes,1,opt,name=userID,proto3" json:"userID"`
+	ReqList       []*GetIncrementalGroupMemberReq `protobuf:"bytes,2,rep,name=reqList,proto3" json:"reqList"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -5258,6 +5258,181 @@ func (*BatchGetIncrementalGroupMemberResp) Descriptor() ([]byte, []int) {
 func (x *BatchGetIncrementalGroupMemberResp) GetRespList() map[string]*GetIncrementalGroupMemberResp {
 	if x != nil {
 		return x.RespList
+	}
+	return nil
+}
+
+type GetGroupCreationDefaultsReq struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *GetGroupCreationDefaultsReq) Reset() {
+	*x = GetGroupCreationDefaultsReq{}
+	mi := &file_group_group_proto_msgTypes[99]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *GetGroupCreationDefaultsReq) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*GetGroupCreationDefaultsReq) ProtoMessage() {}
+
+func (x *GetGroupCreationDefaultsReq) ProtoReflect() protoreflect.Message {
+	mi := &file_group_group_proto_msgTypes[99]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use GetGroupCreationDefaultsReq.ProtoReflect.Descriptor instead.
+func (*GetGroupCreationDefaultsReq) Descriptor() ([]byte, []int) {
+	return file_group_group_proto_rawDescGZIP(), []int{99}
+}
+
+type GetGroupCreationDefaultsResp struct {
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// Always fully populated, built-in defaults filled in for anything an
+	// admin has never set — so the console renders the values a group
+	// would actually be created with, not the subset stored.
+	Defaults      *sdkws.GroupCreationDefaults `protobuf:"bytes,1,opt,name=defaults,proto3" json:"defaults"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *GetGroupCreationDefaultsResp) Reset() {
+	*x = GetGroupCreationDefaultsResp{}
+	mi := &file_group_group_proto_msgTypes[100]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *GetGroupCreationDefaultsResp) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*GetGroupCreationDefaultsResp) ProtoMessage() {}
+
+func (x *GetGroupCreationDefaultsResp) ProtoReflect() protoreflect.Message {
+	mi := &file_group_group_proto_msgTypes[100]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use GetGroupCreationDefaultsResp.ProtoReflect.Descriptor instead.
+func (*GetGroupCreationDefaultsResp) Descriptor() ([]byte, []int) {
+	return file_group_group_proto_rawDescGZIP(), []int{100}
+}
+
+func (x *GetGroupCreationDefaultsResp) GetDefaults() *sdkws.GroupCreationDefaults {
+	if x != nil {
+		return x.Defaults
+	}
+	return nil
+}
+
+type SetGroupCreationDefaultsReq struct {
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// Merged, not replaced: fields left absent keep their current values.
+	Defaults      *sdkws.GroupCreationDefaults `protobuf:"bytes,1,opt,name=defaults,proto3" json:"defaults"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *SetGroupCreationDefaultsReq) Reset() {
+	*x = SetGroupCreationDefaultsReq{}
+	mi := &file_group_group_proto_msgTypes[101]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *SetGroupCreationDefaultsReq) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*SetGroupCreationDefaultsReq) ProtoMessage() {}
+
+func (x *SetGroupCreationDefaultsReq) ProtoReflect() protoreflect.Message {
+	mi := &file_group_group_proto_msgTypes[101]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use SetGroupCreationDefaultsReq.ProtoReflect.Descriptor instead.
+func (*SetGroupCreationDefaultsReq) Descriptor() ([]byte, []int) {
+	return file_group_group_proto_rawDescGZIP(), []int{101}
+}
+
+func (x *SetGroupCreationDefaultsReq) GetDefaults() *sdkws.GroupCreationDefaults {
+	if x != nil {
+		return x.Defaults
+	}
+	return nil
+}
+
+type SetGroupCreationDefaultsResp struct {
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// The whole object as it now stands, for the same reason
+	// SetAppSettingsResp returns one: the console should render what is
+	// stored, not the subset it happened to send.
+	Defaults      *sdkws.GroupCreationDefaults `protobuf:"bytes,1,opt,name=defaults,proto3" json:"defaults"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *SetGroupCreationDefaultsResp) Reset() {
+	*x = SetGroupCreationDefaultsResp{}
+	mi := &file_group_group_proto_msgTypes[102]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *SetGroupCreationDefaultsResp) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*SetGroupCreationDefaultsResp) ProtoMessage() {}
+
+func (x *SetGroupCreationDefaultsResp) ProtoReflect() protoreflect.Message {
+	mi := &file_group_group_proto_msgTypes[102]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use SetGroupCreationDefaultsResp.ProtoReflect.Descriptor instead.
+func (*SetGroupCreationDefaultsResp) Descriptor() ([]byte, []int) {
+	return file_group_group_proto_rawDescGZIP(), []int{102}
+}
+
+func (x *SetGroupCreationDefaultsResp) GetDefaults() *sdkws.GroupCreationDefaults {
+	if x != nil {
+		return x.Defaults
 	}
 	return nil
 }
@@ -5620,7 +5795,14 @@ const file_group_group_proto_rawDesc = "" +
 	"\brespList\x18\x01 \x03(\v2>.openim.group.BatchGetIncrementalGroupMemberResp.RespListEntryR\brespList\x1ah\n" +
 	"\rRespListEntry\x12\x10\n" +
 	"\x03key\x18\x01 \x01(\tR\x03key\x12A\n" +
-	"\x05value\x18\x02 \x01(\v2+.openim.group.getIncrementalGroupMemberRespR\x05value:\x028\x012\xcd#\n" +
+	"\x05value\x18\x02 \x01(\v2+.openim.group.getIncrementalGroupMemberRespR\x05value:\x028\x01\"\x1d\n" +
+	"\x1bGetGroupCreationDefaultsReq\"_\n" +
+	"\x1cGetGroupCreationDefaultsResp\x12?\n" +
+	"\bdefaults\x18\x01 \x01(\v2#.openim.sdkws.GroupCreationDefaultsR\bdefaults\"^\n" +
+	"\x1bSetGroupCreationDefaultsReq\x12?\n" +
+	"\bdefaults\x18\x01 \x01(\v2#.openim.sdkws.GroupCreationDefaultsR\bdefaults\"_\n" +
+	"\x1cSetGroupCreationDefaultsResp\x12?\n" +
+	"\bdefaults\x18\x01 \x01(\v2#.openim.sdkws.GroupCreationDefaultsR\bdefaults2\xb3%\n" +
 	"\x05group\x12J\n" +
 	"\vcreateGroup\x12\x1c.openim.group.CreateGroupReq\x1a\x1d.openim.group.CreateGroupResp\x12D\n" +
 	"\tjoinGroup\x12\x1a.openim.group.JoinGroupReq\x1a\x1b.openim.group.JoinGroupResp\x12D\n" +
@@ -5667,7 +5849,9 @@ const file_group_group_proto_rawDesc = "" +
 	"\x13GetFullJoinGroupIDs\x12$.openim.group.GetFullJoinGroupIDsReq\x1a%.openim.group.GetFullJoinGroupIDsResp\x12\\\n" +
 	"\x11createGroupQrcode\x12\".openim.group.CreateGroupQrcodeReq\x1a#.openim.group.CreateGroupQrcodeResp\x12J\n" +
 	"\vparseQrcode\x12\x1c.openim.group.ParseQrcodeReq\x1a\x1d.openim.group.ParseQrcodeResp\x12P\n" +
-	"\rscanJoinGroup\x12\x1e.openim.group.ScanJoinGroupReq\x1a\x1f.openim.group.ScanJoinGroupRespB%Z#github.com/openimsdk/protocol/groupb\x06proto3"
+	"\rscanJoinGroup\x12\x1e.openim.group.ScanJoinGroupReq\x1a\x1f.openim.group.ScanJoinGroupResp\x12q\n" +
+	"\x18getGroupCreationDefaults\x12).openim.group.GetGroupCreationDefaultsReq\x1a*.openim.group.GetGroupCreationDefaultsResp\x12q\n" +
+	"\x18setGroupCreationDefaults\x12).openim.group.SetGroupCreationDefaultsReq\x1a*.openim.group.SetGroupCreationDefaultsRespB%Z#github.com/openimsdk/protocol/groupb\x06proto3"
 
 var (
 	file_group_group_proto_rawDescOnce sync.Once
@@ -5681,7 +5865,7 @@ func file_group_group_proto_rawDescGZIP() []byte {
 	return file_group_group_proto_rawDescData
 }
 
-var file_group_group_proto_msgTypes = make([]protoimpl.MessageInfo, 101)
+var file_group_group_proto_msgTypes = make([]protoimpl.MessageInfo, 105)
 var file_group_group_proto_goTypes = []any{
 	(*CreateGroupReq)(nil),                        // 0: openim.group.CreateGroupReq
 	(*CreateGroupResp)(nil),                       // 1: openim.group.CreateGroupResp
@@ -5782,173 +5966,185 @@ var file_group_group_proto_goTypes = []any{
 	(*GetFullJoinGroupIDsResp)(nil),               // 96: openim.group.GetFullJoinGroupIDsResp
 	(*BatchGetIncrementalGroupMemberReq)(nil),     // 97: openim.group.BatchGetIncrementalGroupMemberReq
 	(*BatchGetIncrementalGroupMemberResp)(nil),    // 98: openim.group.BatchGetIncrementalGroupMemberResp
-	nil,                               // 99: openim.group.GroupCreateCountResp.CountEntry
-	nil,                               // 100: openim.group.BatchGetIncrementalGroupMemberResp.RespListEntry
-	(*sdkws.GroupInfo)(nil),           // 101: openim.sdkws.GroupInfo
-	(*sdkws.GroupInfoForSet)(nil),     // 102: openim.sdkws.GroupInfoForSet
-	(*sdkws.RequestPagination)(nil),   // 103: openim.sdkws.RequestPagination
-	(*wrapperspb.StringValue)(nil),    // 104: openim.protobuf.StringValue
-	(*wrapperspb.Int32Value)(nil),     // 105: openim.protobuf.Int32Value
-	(*sdkws.GroupRequest)(nil),        // 106: openim.sdkws.GroupRequest
-	(*sdkws.GroupMemberFullInfo)(nil), // 107: openim.sdkws.GroupMemberFullInfo
-	(*sdkws.UserInfo)(nil),            // 108: openim.sdkws.UserInfo
+	(*GetGroupCreationDefaultsReq)(nil),           // 99: openim.group.GetGroupCreationDefaultsReq
+	(*GetGroupCreationDefaultsResp)(nil),          // 100: openim.group.GetGroupCreationDefaultsResp
+	(*SetGroupCreationDefaultsReq)(nil),           // 101: openim.group.SetGroupCreationDefaultsReq
+	(*SetGroupCreationDefaultsResp)(nil),          // 102: openim.group.SetGroupCreationDefaultsResp
+	nil,                                           // 103: openim.group.GroupCreateCountResp.CountEntry
+	nil,                                           // 104: openim.group.BatchGetIncrementalGroupMemberResp.RespListEntry
+	(*sdkws.GroupInfo)(nil),                       // 105: openim.sdkws.GroupInfo
+	(*sdkws.GroupInfoForSet)(nil),                 // 106: openim.sdkws.GroupInfoForSet
+	(*sdkws.RequestPagination)(nil),               // 107: openim.sdkws.RequestPagination
+	(*wrapperspb.StringValue)(nil),                // 108: openim.protobuf.StringValue
+	(*wrapperspb.Int32Value)(nil),                 // 109: openim.protobuf.Int32Value
+	(*sdkws.GroupRequest)(nil),                    // 110: openim.sdkws.GroupRequest
+	(*sdkws.GroupMemberFullInfo)(nil),             // 111: openim.sdkws.GroupMemberFullInfo
+	(*sdkws.UserInfo)(nil),                        // 112: openim.sdkws.UserInfo
+	(*sdkws.GroupCreationDefaults)(nil),           // 113: openim.sdkws.GroupCreationDefaults
 }
 var file_group_group_proto_depIdxs = []int32{
-	101, // 0: openim.group.CreateGroupReq.groupInfo:type_name -> openim.sdkws.GroupInfo
-	101, // 1: openim.group.CreateGroupResp.groupInfo:type_name -> openim.sdkws.GroupInfo
-	101, // 2: openim.group.GetGroupsInfoResp.groupInfos:type_name -> openim.sdkws.GroupInfo
-	102, // 3: openim.group.SetGroupInfoReq.groupInfoForSet:type_name -> openim.sdkws.GroupInfoForSet
-	103, // 4: openim.group.GetGroupBlacklistReq.pagination:type_name -> openim.sdkws.RequestPagination
+	105, // 0: openim.group.CreateGroupReq.groupInfo:type_name -> openim.sdkws.GroupInfo
+	105, // 1: openim.group.CreateGroupResp.groupInfo:type_name -> openim.sdkws.GroupInfo
+	105, // 2: openim.group.GetGroupsInfoResp.groupInfos:type_name -> openim.sdkws.GroupInfo
+	106, // 3: openim.group.SetGroupInfoReq.groupInfoForSet:type_name -> openim.sdkws.GroupInfoForSet
+	107, // 4: openim.group.GetGroupBlacklistReq.pagination:type_name -> openim.sdkws.RequestPagination
 	6,   // 5: openim.group.GetGroupBlacklistResp.users:type_name -> openim.group.GroupBlacklistUser
-	104, // 6: openim.group.SetGroupInfoExReq.groupName:type_name -> openim.protobuf.StringValue
-	104, // 7: openim.group.SetGroupInfoExReq.notification:type_name -> openim.protobuf.StringValue
-	104, // 8: openim.group.SetGroupInfoExReq.introduction:type_name -> openim.protobuf.StringValue
-	104, // 9: openim.group.SetGroupInfoExReq.faceURL:type_name -> openim.protobuf.StringValue
-	104, // 10: openim.group.SetGroupInfoExReq.ex:type_name -> openim.protobuf.StringValue
-	105, // 11: openim.group.SetGroupInfoExReq.needVerification:type_name -> openim.protobuf.Int32Value
-	105, // 12: openim.group.SetGroupInfoExReq.lookMemberInfo:type_name -> openim.protobuf.Int32Value
-	105, // 13: openim.group.SetGroupInfoExReq.applyMemberFriend:type_name -> openim.protobuf.Int32Value
-	105, // 14: openim.group.SetGroupInfoExReq.deleteConversationOnKick:type_name -> openim.protobuf.Int32Value
-	105, // 15: openim.group.SetGroupInfoExReq.historyForNewMembers:type_name -> openim.protobuf.Int32Value
-	105, // 16: openim.group.SetGroupInfoExReq.readReceipts:type_name -> openim.protobuf.Int32Value
-	105, // 17: openim.group.SetGroupInfoExReq.memberPin:type_name -> openim.protobuf.Int32Value
-	103, // 18: openim.group.GetGroupApplicationListReq.pagination:type_name -> openim.sdkws.RequestPagination
-	106, // 19: openim.group.GetGroupApplicationListResp.groupRequests:type_name -> openim.sdkws.GroupRequest
-	103, // 20: openim.group.GetUserReqApplicationListReq.pagination:type_name -> openim.sdkws.RequestPagination
-	106, // 21: openim.group.GetUserReqApplicationListResp.groupRequests:type_name -> openim.sdkws.GroupRequest
-	106, // 22: openim.group.GetSpecifiedUserGroupRequestInfoResp.groupRequests:type_name -> openim.sdkws.GroupRequest
-	101, // 23: openim.group.ParseQrcodeResp.groupInfo:type_name -> openim.sdkws.GroupInfo
-	103, // 24: openim.group.GetGroupMemberListReq.pagination:type_name -> openim.sdkws.RequestPagination
-	107, // 25: openim.group.GetGroupMemberListResp.members:type_name -> openim.sdkws.GroupMemberFullInfo
-	107, // 26: openim.group.GetGroupMembersInfoResp.members:type_name -> openim.sdkws.GroupMemberFullInfo
-	103, // 27: openim.group.GetJoinedGroupListReq.pagination:type_name -> openim.sdkws.RequestPagination
-	101, // 28: openim.group.GetJoinedGroupListResp.groups:type_name -> openim.sdkws.GroupInfo
-	103, // 29: openim.group.GetGroupAllMemberReq.pagination:type_name -> openim.sdkws.RequestPagination
-	107, // 30: openim.group.GetGroupAllMemberResp.members:type_name -> openim.sdkws.GroupMemberFullInfo
-	101, // 31: openim.group.CMSGroup.groupInfo:type_name -> openim.sdkws.GroupInfo
-	103, // 32: openim.group.GetGroupsReq.pagination:type_name -> openim.sdkws.RequestPagination
+	108, // 6: openim.group.SetGroupInfoExReq.groupName:type_name -> openim.protobuf.StringValue
+	108, // 7: openim.group.SetGroupInfoExReq.notification:type_name -> openim.protobuf.StringValue
+	108, // 8: openim.group.SetGroupInfoExReq.introduction:type_name -> openim.protobuf.StringValue
+	108, // 9: openim.group.SetGroupInfoExReq.faceURL:type_name -> openim.protobuf.StringValue
+	108, // 10: openim.group.SetGroupInfoExReq.ex:type_name -> openim.protobuf.StringValue
+	109, // 11: openim.group.SetGroupInfoExReq.needVerification:type_name -> openim.protobuf.Int32Value
+	109, // 12: openim.group.SetGroupInfoExReq.lookMemberInfo:type_name -> openim.protobuf.Int32Value
+	109, // 13: openim.group.SetGroupInfoExReq.applyMemberFriend:type_name -> openim.protobuf.Int32Value
+	109, // 14: openim.group.SetGroupInfoExReq.deleteConversationOnKick:type_name -> openim.protobuf.Int32Value
+	109, // 15: openim.group.SetGroupInfoExReq.historyForNewMembers:type_name -> openim.protobuf.Int32Value
+	109, // 16: openim.group.SetGroupInfoExReq.readReceipts:type_name -> openim.protobuf.Int32Value
+	109, // 17: openim.group.SetGroupInfoExReq.memberPin:type_name -> openim.protobuf.Int32Value
+	107, // 18: openim.group.GetGroupApplicationListReq.pagination:type_name -> openim.sdkws.RequestPagination
+	110, // 19: openim.group.GetGroupApplicationListResp.groupRequests:type_name -> openim.sdkws.GroupRequest
+	107, // 20: openim.group.GetUserReqApplicationListReq.pagination:type_name -> openim.sdkws.RequestPagination
+	110, // 21: openim.group.GetUserReqApplicationListResp.groupRequests:type_name -> openim.sdkws.GroupRequest
+	110, // 22: openim.group.GetSpecifiedUserGroupRequestInfoResp.groupRequests:type_name -> openim.sdkws.GroupRequest
+	105, // 23: openim.group.ParseQrcodeResp.groupInfo:type_name -> openim.sdkws.GroupInfo
+	107, // 24: openim.group.GetGroupMemberListReq.pagination:type_name -> openim.sdkws.RequestPagination
+	111, // 25: openim.group.GetGroupMemberListResp.members:type_name -> openim.sdkws.GroupMemberFullInfo
+	111, // 26: openim.group.GetGroupMembersInfoResp.members:type_name -> openim.sdkws.GroupMemberFullInfo
+	107, // 27: openim.group.GetJoinedGroupListReq.pagination:type_name -> openim.sdkws.RequestPagination
+	105, // 28: openim.group.GetJoinedGroupListResp.groups:type_name -> openim.sdkws.GroupInfo
+	107, // 29: openim.group.GetGroupAllMemberReq.pagination:type_name -> openim.sdkws.RequestPagination
+	111, // 30: openim.group.GetGroupAllMemberResp.members:type_name -> openim.sdkws.GroupMemberFullInfo
+	105, // 31: openim.group.CMSGroup.groupInfo:type_name -> openim.sdkws.GroupInfo
+	107, // 32: openim.group.GetGroupsReq.pagination:type_name -> openim.sdkws.RequestPagination
 	51,  // 33: openim.group.GetGroupsResp.groups:type_name -> openim.group.CMSGroup
-	103, // 34: openim.group.GetGroupMembersCMSReq.pagination:type_name -> openim.sdkws.RequestPagination
-	107, // 35: openim.group.GetGroupMembersCMSResp.members:type_name -> openim.sdkws.GroupMemberFullInfo
-	104, // 36: openim.group.SetGroupMemberInfo.nickname:type_name -> openim.protobuf.StringValue
-	104, // 37: openim.group.SetGroupMemberInfo.faceURL:type_name -> openim.protobuf.StringValue
-	105, // 38: openim.group.SetGroupMemberInfo.roleLevel:type_name -> openim.protobuf.Int32Value
-	104, // 39: openim.group.SetGroupMemberInfo.ex:type_name -> openim.protobuf.StringValue
+	107, // 34: openim.group.GetGroupMembersCMSReq.pagination:type_name -> openim.sdkws.RequestPagination
+	111, // 35: openim.group.GetGroupMembersCMSResp.members:type_name -> openim.sdkws.GroupMemberFullInfo
+	108, // 36: openim.group.SetGroupMemberInfo.nickname:type_name -> openim.protobuf.StringValue
+	108, // 37: openim.group.SetGroupMemberInfo.faceURL:type_name -> openim.protobuf.StringValue
+	109, // 38: openim.group.SetGroupMemberInfo.roleLevel:type_name -> openim.protobuf.Int32Value
+	108, // 39: openim.group.SetGroupMemberInfo.ex:type_name -> openim.protobuf.StringValue
 	67,  // 40: openim.group.SetGroupMemberInfoReq.members:type_name -> openim.group.SetGroupMemberInfo
 	71,  // 41: openim.group.GetGroupAbstractInfoResp.groupAbstractInfos:type_name -> openim.group.GroupAbstractInfo
-	107, // 42: openim.group.GetUserInGroupMembersResp.members:type_name -> openim.sdkws.GroupMemberFullInfo
-	107, // 43: openim.group.GetGroupMemberRoleLevelResp.members:type_name -> openim.sdkws.GroupMemberFullInfo
-	101, // 44: openim.group.GetGroupInfoCacheResp.groupInfo:type_name -> openim.sdkws.GroupInfo
-	107, // 45: openim.group.GetGroupMemberCacheResp.member:type_name -> openim.sdkws.GroupMemberFullInfo
-	99,  // 46: openim.group.GroupCreateCountResp.count:type_name -> openim.group.GroupCreateCountResp.CountEntry
-	106, // 47: openim.group.getGroupUsersReqApplicationListResp.groupRequests:type_name -> openim.sdkws.GroupRequest
-	108, // 48: openim.group.notificationUserInfoUpdateReq.oldUserInfo:type_name -> openim.sdkws.UserInfo
-	108, // 49: openim.group.notificationUserInfoUpdateReq.newUserInfo:type_name -> openim.sdkws.UserInfo
-	107, // 50: openim.group.getIncrementalGroupMemberResp.insert:type_name -> openim.sdkws.GroupMemberFullInfo
-	107, // 51: openim.group.getIncrementalGroupMemberResp.update:type_name -> openim.sdkws.GroupMemberFullInfo
-	101, // 52: openim.group.getIncrementalGroupMemberResp.group:type_name -> openim.sdkws.GroupInfo
-	101, // 53: openim.group.getIncrementalJoinGroupResp.insert:type_name -> openim.sdkws.GroupInfo
-	101, // 54: openim.group.getIncrementalJoinGroupResp.update:type_name -> openim.sdkws.GroupInfo
+	111, // 42: openim.group.GetUserInGroupMembersResp.members:type_name -> openim.sdkws.GroupMemberFullInfo
+	111, // 43: openim.group.GetGroupMemberRoleLevelResp.members:type_name -> openim.sdkws.GroupMemberFullInfo
+	105, // 44: openim.group.GetGroupInfoCacheResp.groupInfo:type_name -> openim.sdkws.GroupInfo
+	111, // 45: openim.group.GetGroupMemberCacheResp.member:type_name -> openim.sdkws.GroupMemberFullInfo
+	103, // 46: openim.group.GroupCreateCountResp.count:type_name -> openim.group.GroupCreateCountResp.CountEntry
+	110, // 47: openim.group.getGroupUsersReqApplicationListResp.groupRequests:type_name -> openim.sdkws.GroupRequest
+	112, // 48: openim.group.notificationUserInfoUpdateReq.oldUserInfo:type_name -> openim.sdkws.UserInfo
+	112, // 49: openim.group.notificationUserInfoUpdateReq.newUserInfo:type_name -> openim.sdkws.UserInfo
+	111, // 50: openim.group.getIncrementalGroupMemberResp.insert:type_name -> openim.sdkws.GroupMemberFullInfo
+	111, // 51: openim.group.getIncrementalGroupMemberResp.update:type_name -> openim.sdkws.GroupMemberFullInfo
+	105, // 52: openim.group.getIncrementalGroupMemberResp.group:type_name -> openim.sdkws.GroupInfo
+	105, // 53: openim.group.getIncrementalJoinGroupResp.insert:type_name -> openim.sdkws.GroupInfo
+	105, // 54: openim.group.getIncrementalJoinGroupResp.update:type_name -> openim.sdkws.GroupInfo
 	89,  // 55: openim.group.BatchGetIncrementalGroupMemberReq.reqList:type_name -> openim.group.getIncrementalGroupMemberReq
-	100, // 56: openim.group.BatchGetIncrementalGroupMemberResp.respList:type_name -> openim.group.BatchGetIncrementalGroupMemberResp.RespListEntry
-	90,  // 57: openim.group.BatchGetIncrementalGroupMemberResp.RespListEntry.value:type_name -> openim.group.getIncrementalGroupMemberResp
-	0,   // 58: openim.group.group.createGroup:input_type -> openim.group.CreateGroupReq
-	27,  // 59: openim.group.group.joinGroup:input_type -> openim.group.JoinGroupReq
-	37,  // 60: openim.group.group.quitGroup:input_type -> openim.group.QuitGroupReq
-	2,   // 61: openim.group.group.getGroupsInfo:input_type -> openim.group.GetGroupsInfoReq
-	4,   // 62: openim.group.group.setGroupInfo:input_type -> openim.group.SetGroupInfoReq
-	15,  // 63: openim.group.group.setGroupInfoEx:input_type -> openim.group.SetGroupInfoExReq
-	7,   // 64: openim.group.group.addGroupBlacklist:input_type -> openim.group.AddGroupBlacklistReq
-	9,   // 65: openim.group.group.removeGroupBlacklist:input_type -> openim.group.RemoveGroupBlacklistReq
-	11,  // 66: openim.group.group.getGroupBlacklist:input_type -> openim.group.GetGroupBlacklistReq
-	13,  // 67: openim.group.group.isGroupBlacklisted:input_type -> openim.group.IsGroupBlacklistedReq
-	17,  // 68: openim.group.group.getGroupApplicationList:input_type -> openim.group.GetGroupApplicationListReq
-	19,  // 69: openim.group.group.getGroupApplicationUnhandledCount:input_type -> openim.group.GetGroupApplicationUnhandledCountReq
-	21,  // 70: openim.group.group.getUserReqApplicationList:input_type -> openim.group.GetUserReqApplicationListReq
-	85,  // 71: openim.group.group.getGroupUsersReqApplicationList:input_type -> openim.group.getGroupUsersReqApplicationListReq
-	23,  // 72: openim.group.group.getSpecifiedUserGroupRequestInfo:input_type -> openim.group.GetSpecifiedUserGroupRequestInfoReq
-	25,  // 73: openim.group.group.transferGroupOwner:input_type -> openim.group.TransferGroupOwnerReq
-	35,  // 74: openim.group.group.groupApplicationResponse:input_type -> openim.group.GroupApplicationResponseReq
-	39,  // 75: openim.group.group.getGroupMemberList:input_type -> openim.group.GetGroupMemberListReq
-	41,  // 76: openim.group.group.getGroupMembersInfo:input_type -> openim.group.GetGroupMembersInfoReq
-	43,  // 77: openim.group.group.kickGroupMember:input_type -> openim.group.KickGroupMemberReq
-	45,  // 78: openim.group.group.getJoinedGroupList:input_type -> openim.group.GetJoinedGroupListReq
-	47,  // 79: openim.group.group.inviteUserToGroup:input_type -> openim.group.InviteUserToGroupReq
-	52,  // 80: openim.group.group.getGroups:input_type -> openim.group.GetGroupsReq
-	55,  // 81: openim.group.group.getGroupMembersCMS:input_type -> openim.group.GetGroupMembersCMSReq
-	57,  // 82: openim.group.group.dismissGroup:input_type -> openim.group.DismissGroupReq
-	59,  // 83: openim.group.group.muteGroupMember:input_type -> openim.group.MuteGroupMemberReq
-	61,  // 84: openim.group.group.cancelMuteGroupMember:input_type -> openim.group.CancelMuteGroupMemberReq
-	63,  // 85: openim.group.group.muteGroup:input_type -> openim.group.MuteGroupReq
-	65,  // 86: openim.group.group.cancelMuteGroup:input_type -> openim.group.CancelMuteGroupReq
-	68,  // 87: openim.group.group.setGroupMemberInfo:input_type -> openim.group.SetGroupMemberInfoReq
-	70,  // 88: openim.group.group.getGroupAbstractInfo:input_type -> openim.group.GetGroupAbstractInfoReq
-	73,  // 89: openim.group.group.getUserInGroupMembers:input_type -> openim.group.GetUserInGroupMembersReq
-	75,  // 90: openim.group.group.getGroupMemberUserIDs:input_type -> openim.group.GetGroupMemberUserIDsReq
-	77,  // 91: openim.group.group.GetGroupMemberRoleLevel:input_type -> openim.group.GetGroupMemberRoleLevelReq
-	79,  // 92: openim.group.group.GetGroupInfoCache:input_type -> openim.group.GetGroupInfoCacheReq
-	81,  // 93: openim.group.group.GetGroupMemberCache:input_type -> openim.group.GetGroupMemberCacheReq
-	83,  // 94: openim.group.group.GroupCreateCount:input_type -> openim.group.GroupCreateCountReq
-	87,  // 95: openim.group.group.NotificationUserInfoUpdate:input_type -> openim.group.notificationUserInfoUpdateReq
-	89,  // 96: openim.group.group.getIncrementalGroupMember:input_type -> openim.group.getIncrementalGroupMemberReq
-	97,  // 97: openim.group.group.BatchGetIncrementalGroupMember:input_type -> openim.group.BatchGetIncrementalGroupMemberReq
-	91,  // 98: openim.group.group.getIncrementalJoinGroup:input_type -> openim.group.getIncrementalJoinGroupReq
-	93,  // 99: openim.group.group.GetFullGroupMemberUserIDs:input_type -> openim.group.GetFullGroupMemberUserIDsReq
-	95,  // 100: openim.group.group.GetFullJoinGroupIDs:input_type -> openim.group.GetFullJoinGroupIDsReq
-	29,  // 101: openim.group.group.createGroupQrcode:input_type -> openim.group.CreateGroupQrcodeReq
-	31,  // 102: openim.group.group.parseQrcode:input_type -> openim.group.ParseQrcodeReq
-	33,  // 103: openim.group.group.scanJoinGroup:input_type -> openim.group.ScanJoinGroupReq
-	1,   // 104: openim.group.group.createGroup:output_type -> openim.group.CreateGroupResp
-	28,  // 105: openim.group.group.joinGroup:output_type -> openim.group.JoinGroupResp
-	38,  // 106: openim.group.group.quitGroup:output_type -> openim.group.QuitGroupResp
-	3,   // 107: openim.group.group.getGroupsInfo:output_type -> openim.group.GetGroupsInfoResp
-	5,   // 108: openim.group.group.setGroupInfo:output_type -> openim.group.SetGroupInfoResp
-	16,  // 109: openim.group.group.setGroupInfoEx:output_type -> openim.group.SetGroupInfoExResp
-	8,   // 110: openim.group.group.addGroupBlacklist:output_type -> openim.group.AddGroupBlacklistResp
-	10,  // 111: openim.group.group.removeGroupBlacklist:output_type -> openim.group.RemoveGroupBlacklistResp
-	12,  // 112: openim.group.group.getGroupBlacklist:output_type -> openim.group.GetGroupBlacklistResp
-	14,  // 113: openim.group.group.isGroupBlacklisted:output_type -> openim.group.IsGroupBlacklistedResp
-	18,  // 114: openim.group.group.getGroupApplicationList:output_type -> openim.group.GetGroupApplicationListResp
-	20,  // 115: openim.group.group.getGroupApplicationUnhandledCount:output_type -> openim.group.GetGroupApplicationUnhandledCountResp
-	22,  // 116: openim.group.group.getUserReqApplicationList:output_type -> openim.group.GetUserReqApplicationListResp
-	86,  // 117: openim.group.group.getGroupUsersReqApplicationList:output_type -> openim.group.getGroupUsersReqApplicationListResp
-	24,  // 118: openim.group.group.getSpecifiedUserGroupRequestInfo:output_type -> openim.group.GetSpecifiedUserGroupRequestInfoResp
-	26,  // 119: openim.group.group.transferGroupOwner:output_type -> openim.group.TransferGroupOwnerResp
-	36,  // 120: openim.group.group.groupApplicationResponse:output_type -> openim.group.GroupApplicationResponseResp
-	40,  // 121: openim.group.group.getGroupMemberList:output_type -> openim.group.GetGroupMemberListResp
-	42,  // 122: openim.group.group.getGroupMembersInfo:output_type -> openim.group.GetGroupMembersInfoResp
-	44,  // 123: openim.group.group.kickGroupMember:output_type -> openim.group.KickGroupMemberResp
-	46,  // 124: openim.group.group.getJoinedGroupList:output_type -> openim.group.GetJoinedGroupListResp
-	48,  // 125: openim.group.group.inviteUserToGroup:output_type -> openim.group.InviteUserToGroupResp
-	53,  // 126: openim.group.group.getGroups:output_type -> openim.group.GetGroupsResp
-	56,  // 127: openim.group.group.getGroupMembersCMS:output_type -> openim.group.GetGroupMembersCMSResp
-	58,  // 128: openim.group.group.dismissGroup:output_type -> openim.group.DismissGroupResp
-	60,  // 129: openim.group.group.muteGroupMember:output_type -> openim.group.MuteGroupMemberResp
-	62,  // 130: openim.group.group.cancelMuteGroupMember:output_type -> openim.group.CancelMuteGroupMemberResp
-	64,  // 131: openim.group.group.muteGroup:output_type -> openim.group.MuteGroupResp
-	66,  // 132: openim.group.group.cancelMuteGroup:output_type -> openim.group.CancelMuteGroupResp
-	69,  // 133: openim.group.group.setGroupMemberInfo:output_type -> openim.group.SetGroupMemberInfoResp
-	72,  // 134: openim.group.group.getGroupAbstractInfo:output_type -> openim.group.GetGroupAbstractInfoResp
-	74,  // 135: openim.group.group.getUserInGroupMembers:output_type -> openim.group.GetUserInGroupMembersResp
-	76,  // 136: openim.group.group.getGroupMemberUserIDs:output_type -> openim.group.GetGroupMemberUserIDsResp
-	78,  // 137: openim.group.group.GetGroupMemberRoleLevel:output_type -> openim.group.GetGroupMemberRoleLevelResp
-	80,  // 138: openim.group.group.GetGroupInfoCache:output_type -> openim.group.GetGroupInfoCacheResp
-	82,  // 139: openim.group.group.GetGroupMemberCache:output_type -> openim.group.GetGroupMemberCacheResp
-	84,  // 140: openim.group.group.GroupCreateCount:output_type -> openim.group.GroupCreateCountResp
-	88,  // 141: openim.group.group.NotificationUserInfoUpdate:output_type -> openim.group.notificationUserInfoUpdateResp
-	90,  // 142: openim.group.group.getIncrementalGroupMember:output_type -> openim.group.getIncrementalGroupMemberResp
-	98,  // 143: openim.group.group.BatchGetIncrementalGroupMember:output_type -> openim.group.BatchGetIncrementalGroupMemberResp
-	92,  // 144: openim.group.group.getIncrementalJoinGroup:output_type -> openim.group.getIncrementalJoinGroupResp
-	94,  // 145: openim.group.group.GetFullGroupMemberUserIDs:output_type -> openim.group.GetFullGroupMemberUserIDsResp
-	96,  // 146: openim.group.group.GetFullJoinGroupIDs:output_type -> openim.group.GetFullJoinGroupIDsResp
-	30,  // 147: openim.group.group.createGroupQrcode:output_type -> openim.group.CreateGroupQrcodeResp
-	32,  // 148: openim.group.group.parseQrcode:output_type -> openim.group.ParseQrcodeResp
-	34,  // 149: openim.group.group.scanJoinGroup:output_type -> openim.group.ScanJoinGroupResp
-	104, // [104:150] is the sub-list for method output_type
-	58,  // [58:104] is the sub-list for method input_type
-	58,  // [58:58] is the sub-list for extension type_name
-	58,  // [58:58] is the sub-list for extension extendee
-	0,   // [0:58] is the sub-list for field type_name
+	104, // 56: openim.group.BatchGetIncrementalGroupMemberResp.respList:type_name -> openim.group.BatchGetIncrementalGroupMemberResp.RespListEntry
+	113, // 57: openim.group.GetGroupCreationDefaultsResp.defaults:type_name -> openim.sdkws.GroupCreationDefaults
+	113, // 58: openim.group.SetGroupCreationDefaultsReq.defaults:type_name -> openim.sdkws.GroupCreationDefaults
+	113, // 59: openim.group.SetGroupCreationDefaultsResp.defaults:type_name -> openim.sdkws.GroupCreationDefaults
+	90,  // 60: openim.group.BatchGetIncrementalGroupMemberResp.RespListEntry.value:type_name -> openim.group.getIncrementalGroupMemberResp
+	0,   // 61: openim.group.group.createGroup:input_type -> openim.group.CreateGroupReq
+	27,  // 62: openim.group.group.joinGroup:input_type -> openim.group.JoinGroupReq
+	37,  // 63: openim.group.group.quitGroup:input_type -> openim.group.QuitGroupReq
+	2,   // 64: openim.group.group.getGroupsInfo:input_type -> openim.group.GetGroupsInfoReq
+	4,   // 65: openim.group.group.setGroupInfo:input_type -> openim.group.SetGroupInfoReq
+	15,  // 66: openim.group.group.setGroupInfoEx:input_type -> openim.group.SetGroupInfoExReq
+	7,   // 67: openim.group.group.addGroupBlacklist:input_type -> openim.group.AddGroupBlacklistReq
+	9,   // 68: openim.group.group.removeGroupBlacklist:input_type -> openim.group.RemoveGroupBlacklistReq
+	11,  // 69: openim.group.group.getGroupBlacklist:input_type -> openim.group.GetGroupBlacklistReq
+	13,  // 70: openim.group.group.isGroupBlacklisted:input_type -> openim.group.IsGroupBlacklistedReq
+	17,  // 71: openim.group.group.getGroupApplicationList:input_type -> openim.group.GetGroupApplicationListReq
+	19,  // 72: openim.group.group.getGroupApplicationUnhandledCount:input_type -> openim.group.GetGroupApplicationUnhandledCountReq
+	21,  // 73: openim.group.group.getUserReqApplicationList:input_type -> openim.group.GetUserReqApplicationListReq
+	85,  // 74: openim.group.group.getGroupUsersReqApplicationList:input_type -> openim.group.getGroupUsersReqApplicationListReq
+	23,  // 75: openim.group.group.getSpecifiedUserGroupRequestInfo:input_type -> openim.group.GetSpecifiedUserGroupRequestInfoReq
+	25,  // 76: openim.group.group.transferGroupOwner:input_type -> openim.group.TransferGroupOwnerReq
+	35,  // 77: openim.group.group.groupApplicationResponse:input_type -> openim.group.GroupApplicationResponseReq
+	39,  // 78: openim.group.group.getGroupMemberList:input_type -> openim.group.GetGroupMemberListReq
+	41,  // 79: openim.group.group.getGroupMembersInfo:input_type -> openim.group.GetGroupMembersInfoReq
+	43,  // 80: openim.group.group.kickGroupMember:input_type -> openim.group.KickGroupMemberReq
+	45,  // 81: openim.group.group.getJoinedGroupList:input_type -> openim.group.GetJoinedGroupListReq
+	47,  // 82: openim.group.group.inviteUserToGroup:input_type -> openim.group.InviteUserToGroupReq
+	52,  // 83: openim.group.group.getGroups:input_type -> openim.group.GetGroupsReq
+	55,  // 84: openim.group.group.getGroupMembersCMS:input_type -> openim.group.GetGroupMembersCMSReq
+	57,  // 85: openim.group.group.dismissGroup:input_type -> openim.group.DismissGroupReq
+	59,  // 86: openim.group.group.muteGroupMember:input_type -> openim.group.MuteGroupMemberReq
+	61,  // 87: openim.group.group.cancelMuteGroupMember:input_type -> openim.group.CancelMuteGroupMemberReq
+	63,  // 88: openim.group.group.muteGroup:input_type -> openim.group.MuteGroupReq
+	65,  // 89: openim.group.group.cancelMuteGroup:input_type -> openim.group.CancelMuteGroupReq
+	68,  // 90: openim.group.group.setGroupMemberInfo:input_type -> openim.group.SetGroupMemberInfoReq
+	70,  // 91: openim.group.group.getGroupAbstractInfo:input_type -> openim.group.GetGroupAbstractInfoReq
+	73,  // 92: openim.group.group.getUserInGroupMembers:input_type -> openim.group.GetUserInGroupMembersReq
+	75,  // 93: openim.group.group.getGroupMemberUserIDs:input_type -> openim.group.GetGroupMemberUserIDsReq
+	77,  // 94: openim.group.group.GetGroupMemberRoleLevel:input_type -> openim.group.GetGroupMemberRoleLevelReq
+	79,  // 95: openim.group.group.GetGroupInfoCache:input_type -> openim.group.GetGroupInfoCacheReq
+	81,  // 96: openim.group.group.GetGroupMemberCache:input_type -> openim.group.GetGroupMemberCacheReq
+	83,  // 97: openim.group.group.GroupCreateCount:input_type -> openim.group.GroupCreateCountReq
+	87,  // 98: openim.group.group.NotificationUserInfoUpdate:input_type -> openim.group.notificationUserInfoUpdateReq
+	89,  // 99: openim.group.group.getIncrementalGroupMember:input_type -> openim.group.getIncrementalGroupMemberReq
+	97,  // 100: openim.group.group.BatchGetIncrementalGroupMember:input_type -> openim.group.BatchGetIncrementalGroupMemberReq
+	91,  // 101: openim.group.group.getIncrementalJoinGroup:input_type -> openim.group.getIncrementalJoinGroupReq
+	93,  // 102: openim.group.group.GetFullGroupMemberUserIDs:input_type -> openim.group.GetFullGroupMemberUserIDsReq
+	95,  // 103: openim.group.group.GetFullJoinGroupIDs:input_type -> openim.group.GetFullJoinGroupIDsReq
+	29,  // 104: openim.group.group.createGroupQrcode:input_type -> openim.group.CreateGroupQrcodeReq
+	31,  // 105: openim.group.group.parseQrcode:input_type -> openim.group.ParseQrcodeReq
+	33,  // 106: openim.group.group.scanJoinGroup:input_type -> openim.group.ScanJoinGroupReq
+	99,  // 107: openim.group.group.getGroupCreationDefaults:input_type -> openim.group.GetGroupCreationDefaultsReq
+	101, // 108: openim.group.group.setGroupCreationDefaults:input_type -> openim.group.SetGroupCreationDefaultsReq
+	1,   // 109: openim.group.group.createGroup:output_type -> openim.group.CreateGroupResp
+	28,  // 110: openim.group.group.joinGroup:output_type -> openim.group.JoinGroupResp
+	38,  // 111: openim.group.group.quitGroup:output_type -> openim.group.QuitGroupResp
+	3,   // 112: openim.group.group.getGroupsInfo:output_type -> openim.group.GetGroupsInfoResp
+	5,   // 113: openim.group.group.setGroupInfo:output_type -> openim.group.SetGroupInfoResp
+	16,  // 114: openim.group.group.setGroupInfoEx:output_type -> openim.group.SetGroupInfoExResp
+	8,   // 115: openim.group.group.addGroupBlacklist:output_type -> openim.group.AddGroupBlacklistResp
+	10,  // 116: openim.group.group.removeGroupBlacklist:output_type -> openim.group.RemoveGroupBlacklistResp
+	12,  // 117: openim.group.group.getGroupBlacklist:output_type -> openim.group.GetGroupBlacklistResp
+	14,  // 118: openim.group.group.isGroupBlacklisted:output_type -> openim.group.IsGroupBlacklistedResp
+	18,  // 119: openim.group.group.getGroupApplicationList:output_type -> openim.group.GetGroupApplicationListResp
+	20,  // 120: openim.group.group.getGroupApplicationUnhandledCount:output_type -> openim.group.GetGroupApplicationUnhandledCountResp
+	22,  // 121: openim.group.group.getUserReqApplicationList:output_type -> openim.group.GetUserReqApplicationListResp
+	86,  // 122: openim.group.group.getGroupUsersReqApplicationList:output_type -> openim.group.getGroupUsersReqApplicationListResp
+	24,  // 123: openim.group.group.getSpecifiedUserGroupRequestInfo:output_type -> openim.group.GetSpecifiedUserGroupRequestInfoResp
+	26,  // 124: openim.group.group.transferGroupOwner:output_type -> openim.group.TransferGroupOwnerResp
+	36,  // 125: openim.group.group.groupApplicationResponse:output_type -> openim.group.GroupApplicationResponseResp
+	40,  // 126: openim.group.group.getGroupMemberList:output_type -> openim.group.GetGroupMemberListResp
+	42,  // 127: openim.group.group.getGroupMembersInfo:output_type -> openim.group.GetGroupMembersInfoResp
+	44,  // 128: openim.group.group.kickGroupMember:output_type -> openim.group.KickGroupMemberResp
+	46,  // 129: openim.group.group.getJoinedGroupList:output_type -> openim.group.GetJoinedGroupListResp
+	48,  // 130: openim.group.group.inviteUserToGroup:output_type -> openim.group.InviteUserToGroupResp
+	53,  // 131: openim.group.group.getGroups:output_type -> openim.group.GetGroupsResp
+	56,  // 132: openim.group.group.getGroupMembersCMS:output_type -> openim.group.GetGroupMembersCMSResp
+	58,  // 133: openim.group.group.dismissGroup:output_type -> openim.group.DismissGroupResp
+	60,  // 134: openim.group.group.muteGroupMember:output_type -> openim.group.MuteGroupMemberResp
+	62,  // 135: openim.group.group.cancelMuteGroupMember:output_type -> openim.group.CancelMuteGroupMemberResp
+	64,  // 136: openim.group.group.muteGroup:output_type -> openim.group.MuteGroupResp
+	66,  // 137: openim.group.group.cancelMuteGroup:output_type -> openim.group.CancelMuteGroupResp
+	69,  // 138: openim.group.group.setGroupMemberInfo:output_type -> openim.group.SetGroupMemberInfoResp
+	72,  // 139: openim.group.group.getGroupAbstractInfo:output_type -> openim.group.GetGroupAbstractInfoResp
+	74,  // 140: openim.group.group.getUserInGroupMembers:output_type -> openim.group.GetUserInGroupMembersResp
+	76,  // 141: openim.group.group.getGroupMemberUserIDs:output_type -> openim.group.GetGroupMemberUserIDsResp
+	78,  // 142: openim.group.group.GetGroupMemberRoleLevel:output_type -> openim.group.GetGroupMemberRoleLevelResp
+	80,  // 143: openim.group.group.GetGroupInfoCache:output_type -> openim.group.GetGroupInfoCacheResp
+	82,  // 144: openim.group.group.GetGroupMemberCache:output_type -> openim.group.GetGroupMemberCacheResp
+	84,  // 145: openim.group.group.GroupCreateCount:output_type -> openim.group.GroupCreateCountResp
+	88,  // 146: openim.group.group.NotificationUserInfoUpdate:output_type -> openim.group.notificationUserInfoUpdateResp
+	90,  // 147: openim.group.group.getIncrementalGroupMember:output_type -> openim.group.getIncrementalGroupMemberResp
+	98,  // 148: openim.group.group.BatchGetIncrementalGroupMember:output_type -> openim.group.BatchGetIncrementalGroupMemberResp
+	92,  // 149: openim.group.group.getIncrementalJoinGroup:output_type -> openim.group.getIncrementalJoinGroupResp
+	94,  // 150: openim.group.group.GetFullGroupMemberUserIDs:output_type -> openim.group.GetFullGroupMemberUserIDsResp
+	96,  // 151: openim.group.group.GetFullJoinGroupIDs:output_type -> openim.group.GetFullJoinGroupIDsResp
+	30,  // 152: openim.group.group.createGroupQrcode:output_type -> openim.group.CreateGroupQrcodeResp
+	32,  // 153: openim.group.group.parseQrcode:output_type -> openim.group.ParseQrcodeResp
+	34,  // 154: openim.group.group.scanJoinGroup:output_type -> openim.group.ScanJoinGroupResp
+	100, // 155: openim.group.group.getGroupCreationDefaults:output_type -> openim.group.GetGroupCreationDefaultsResp
+	102, // 156: openim.group.group.setGroupCreationDefaults:output_type -> openim.group.SetGroupCreationDefaultsResp
+	109, // [109:157] is the sub-list for method output_type
+	61,  // [61:109] is the sub-list for method input_type
+	61,  // [61:61] is the sub-list for extension type_name
+	61,  // [61:61] is the sub-list for extension extendee
+	0,   // [0:61] is the sub-list for field type_name
 }
 
 func init() { file_group_group_proto_init() }
@@ -5966,7 +6162,7 @@ func file_group_group_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_group_group_proto_rawDesc), len(file_group_group_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   101,
+			NumMessages:   105,
 			NumExtensions: 0,
 			NumServices:   1,
 		},

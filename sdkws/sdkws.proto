@@ -781,6 +781,45 @@ message AppSettingsChangedTips {
   AppSettings settings = 1;
 }
 
+// GroupCreationDefaults: what a group's seven owner-configurable
+// switches are set to at the moment it is created. Admin-configured,
+// stored in MongoDB, applied by CreateGroup — no client gets a say, so
+// the same policy holds whether a group was made from the web app, a
+// phone, or a script calling the REST API directly.
+//
+// Every field is `optional` and absent means "no admin has ever chosen",
+// which is what lets a write merge instead of replace and lets the
+// built-in default change later for everyone who never had an opinion.
+// See internal/rpc/group/creation_defaults.go for the built-ins.
+//
+// One encoding for all seven — 1 on, 2 off — rather than each field's
+// own. The underlying GroupInfo fields disagree with each other
+// (needVerification is a three-way enum, applyMemberFriend is 0/1, mute
+// is a group *status* of all things), and an admin console that had to
+// remember which is which would eventually set one the wrong way round.
+// The translation into each field's native encoding happens in exactly
+// one place, when a group is created.
+message GroupCreationDefaults {
+  // Mute the group from birth: only the owner and admins may send.
+  // Becomes GroupInfo.status — constant.GroupStatusMuted or GroupOk.
+  optional int32 muteAll = 1;
+  // Invited people join only after an owner or admin approves. Becomes
+  // needVerification — constant.AllNeedVerification, or
+  // ApplyNeedVerificationInviteDirectly when off.
+  optional int32 needVerification = 2;
+  // Members can't add each other as friends from this group. Becomes
+  // applyMemberFriend, which is 1 prohibited / 0 allowed.
+  optional int32 applyMemberFriend = 3;
+  // The four below map straight onto their GroupInfo fields, which
+  // already read 1 on / 2 off (constant.GroupSettingOn / Off). A
+  // created group is never left on 0: unset there means "ask someone
+  // else what the default is", and this message *is* that someone.
+  optional int32 deleteConversationOnKick = 4;
+  optional int32 historyForNewMembers = 5;
+  optional int32 readReceipts = 6;
+  optional int32 memberPin = 7;
+}
+
 // Pushed (constant.MsgEditNotification, 2104) to a conversation after
 // its author edits one of their messages.
 //

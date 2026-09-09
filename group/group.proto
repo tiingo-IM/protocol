@@ -509,6 +509,27 @@ message BatchGetIncrementalGroupMemberResp {
   map<string, getIncrementalGroupMemberResp> respList = 1;
 }
 
+message GetGroupCreationDefaultsReq {}
+
+message GetGroupCreationDefaultsResp {
+  // Always fully populated, built-in defaults filled in for anything an
+  // admin has never set — so the console renders the values a group
+  // would actually be created with, not the subset stored.
+  sdkws.GroupCreationDefaults defaults = 1;
+}
+
+message SetGroupCreationDefaultsReq {
+  // Merged, not replaced: fields left absent keep their current values.
+  sdkws.GroupCreationDefaults defaults = 1;
+}
+
+message SetGroupCreationDefaultsResp {
+  // The whole object as it now stands, for the same reason
+  // SetAppSettingsResp returns one: the console should render what is
+  // stored, not the subset it happened to send.
+  sdkws.GroupCreationDefaults defaults = 1;
+}
+
 service group {
   // Create group
   rpc createGroup(CreateGroupReq) returns (CreateGroupResp);
@@ -600,4 +621,11 @@ service group {
   rpc createGroupQrcode(CreateGroupQrcodeReq) returns (CreateGroupQrcodeResp);
   rpc parseQrcode(ParseQrcodeReq) returns (ParseQrcodeResp);
   rpc scanJoinGroup(ScanJoinGroupReq) returns (ScanJoinGroupResp);
+
+  // What every new group's switches start at. Both admin-only: unlike
+  // AppSettings, whose /get is open because every client reads it at
+  // startup, nothing but createGroup and the admin console ever needs
+  // these.
+  rpc getGroupCreationDefaults(GetGroupCreationDefaultsReq) returns (GetGroupCreationDefaultsResp);
+  rpc setGroupCreationDefaults(SetGroupCreationDefaultsReq) returns (SetGroupCreationDefaultsResp);
 }

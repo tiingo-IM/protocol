@@ -6158,6 +6158,127 @@ func (x *AppSettingsChangedTips) GetSettings() *AppSettings {
 	return nil
 }
 
+// GroupCreationDefaults: what a group's seven owner-configurable
+// switches are set to at the moment it is created. Admin-configured,
+// stored in MongoDB, applied by CreateGroup — no client gets a say, so
+// the same policy holds whether a group was made from the web app, a
+// phone, or a script calling the REST API directly.
+//
+// Every field is `optional` and absent means "no admin has ever chosen",
+// which is what lets a write merge instead of replace and lets the
+// built-in default change later for everyone who never had an opinion.
+// See internal/rpc/group/creation_defaults.go for the built-ins.
+//
+// One encoding for all seven — 1 on, 2 off — rather than each field's
+// own. The underlying GroupInfo fields disagree with each other
+// (needVerification is a three-way enum, applyMemberFriend is 0/1, mute
+// is a group *status* of all things), and an admin console that had to
+// remember which is which would eventually set one the wrong way round.
+// The translation into each field's native encoding happens in exactly
+// one place, when a group is created.
+type GroupCreationDefaults struct {
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// Mute the group from birth: only the owner and admins may send.
+	// Becomes GroupInfo.status — constant.GroupStatusMuted or GroupOk.
+	MuteAll *int32 `protobuf:"varint,1,opt,name=muteAll,proto3,oneof" json:"muteAll"`
+	// Invited people join only after an owner or admin approves. Becomes
+	// needVerification — constant.AllNeedVerification, or
+	// ApplyNeedVerificationInviteDirectly when off.
+	NeedVerification *int32 `protobuf:"varint,2,opt,name=needVerification,proto3,oneof" json:"needVerification"`
+	// Members can't add each other as friends from this group. Becomes
+	// applyMemberFriend, which is 1 prohibited / 0 allowed.
+	ApplyMemberFriend *int32 `protobuf:"varint,3,opt,name=applyMemberFriend,proto3,oneof" json:"applyMemberFriend"`
+	// The four below map straight onto their GroupInfo fields, which
+	// already read 1 on / 2 off (constant.GroupSettingOn / Off). A
+	// created group is never left on 0: unset there means "ask someone
+	// else what the default is", and this message *is* that someone.
+	DeleteConversationOnKick *int32 `protobuf:"varint,4,opt,name=deleteConversationOnKick,proto3,oneof" json:"deleteConversationOnKick"`
+	HistoryForNewMembers     *int32 `protobuf:"varint,5,opt,name=historyForNewMembers,proto3,oneof" json:"historyForNewMembers"`
+	ReadReceipts             *int32 `protobuf:"varint,6,opt,name=readReceipts,proto3,oneof" json:"readReceipts"`
+	MemberPin                *int32 `protobuf:"varint,7,opt,name=memberPin,proto3,oneof" json:"memberPin"`
+	unknownFields            protoimpl.UnknownFields
+	sizeCache                protoimpl.SizeCache
+}
+
+func (x *GroupCreationDefaults) Reset() {
+	*x = GroupCreationDefaults{}
+	mi := &file_sdkws_sdkws_proto_msgTypes[80]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *GroupCreationDefaults) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*GroupCreationDefaults) ProtoMessage() {}
+
+func (x *GroupCreationDefaults) ProtoReflect() protoreflect.Message {
+	mi := &file_sdkws_sdkws_proto_msgTypes[80]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use GroupCreationDefaults.ProtoReflect.Descriptor instead.
+func (*GroupCreationDefaults) Descriptor() ([]byte, []int) {
+	return file_sdkws_sdkws_proto_rawDescGZIP(), []int{80}
+}
+
+func (x *GroupCreationDefaults) GetMuteAll() int32 {
+	if x != nil && x.MuteAll != nil {
+		return *x.MuteAll
+	}
+	return 0
+}
+
+func (x *GroupCreationDefaults) GetNeedVerification() int32 {
+	if x != nil && x.NeedVerification != nil {
+		return *x.NeedVerification
+	}
+	return 0
+}
+
+func (x *GroupCreationDefaults) GetApplyMemberFriend() int32 {
+	if x != nil && x.ApplyMemberFriend != nil {
+		return *x.ApplyMemberFriend
+	}
+	return 0
+}
+
+func (x *GroupCreationDefaults) GetDeleteConversationOnKick() int32 {
+	if x != nil && x.DeleteConversationOnKick != nil {
+		return *x.DeleteConversationOnKick
+	}
+	return 0
+}
+
+func (x *GroupCreationDefaults) GetHistoryForNewMembers() int32 {
+	if x != nil && x.HistoryForNewMembers != nil {
+		return *x.HistoryForNewMembers
+	}
+	return 0
+}
+
+func (x *GroupCreationDefaults) GetReadReceipts() int32 {
+	if x != nil && x.ReadReceipts != nil {
+		return *x.ReadReceipts
+	}
+	return 0
+}
+
+func (x *GroupCreationDefaults) GetMemberPin() int32 {
+	if x != nil && x.MemberPin != nil {
+		return *x.MemberPin
+	}
+	return 0
+}
+
 // Pushed (constant.MsgEditNotification, 2104) to a conversation after
 // its author edits one of their messages.
 //
@@ -6184,7 +6305,7 @@ type EditMsgTips struct {
 
 func (x *EditMsgTips) Reset() {
 	*x = EditMsgTips{}
-	mi := &file_sdkws_sdkws_proto_msgTypes[80]
+	mi := &file_sdkws_sdkws_proto_msgTypes[81]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -6196,7 +6317,7 @@ func (x *EditMsgTips) String() string {
 func (*EditMsgTips) ProtoMessage() {}
 
 func (x *EditMsgTips) ProtoReflect() protoreflect.Message {
-	mi := &file_sdkws_sdkws_proto_msgTypes[80]
+	mi := &file_sdkws_sdkws_proto_msgTypes[81]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -6209,7 +6330,7 @@ func (x *EditMsgTips) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use EditMsgTips.ProtoReflect.Descriptor instead.
 func (*EditMsgTips) Descriptor() ([]byte, []int) {
-	return file_sdkws_sdkws_proto_rawDescGZIP(), []int{80}
+	return file_sdkws_sdkws_proto_rawDescGZIP(), []int{81}
 }
 
 func (x *EditMsgTips) GetConversationID() string {
@@ -6835,7 +6956,24 @@ const file_sdkws_sdkws_proto_rawDesc = "" +
 	"\x12_editWindowSecondsB\x16\n" +
 	"\x14_revokeWindowSeconds\"O\n" +
 	"\x16AppSettingsChangedTips\x125\n" +
-	"\bsettings\x18\x01 \x01(\v2\x19.openim.sdkws.AppSettingsR\bsettings\"\x87\x02\n" +
+	"\bsettings\x18\x01 \x01(\v2\x19.openim.sdkws.AppSettingsR\bsettings\"\xec\x03\n" +
+	"\x15GroupCreationDefaults\x12\x1d\n" +
+	"\amuteAll\x18\x01 \x01(\x05H\x00R\amuteAll\x88\x01\x01\x12/\n" +
+	"\x10needVerification\x18\x02 \x01(\x05H\x01R\x10needVerification\x88\x01\x01\x121\n" +
+	"\x11applyMemberFriend\x18\x03 \x01(\x05H\x02R\x11applyMemberFriend\x88\x01\x01\x12?\n" +
+	"\x18deleteConversationOnKick\x18\x04 \x01(\x05H\x03R\x18deleteConversationOnKick\x88\x01\x01\x127\n" +
+	"\x14historyForNewMembers\x18\x05 \x01(\x05H\x04R\x14historyForNewMembers\x88\x01\x01\x12'\n" +
+	"\freadReceipts\x18\x06 \x01(\x05H\x05R\freadReceipts\x88\x01\x01\x12!\n" +
+	"\tmemberPin\x18\a \x01(\x05H\x06R\tmemberPin\x88\x01\x01B\n" +
+	"\n" +
+	"\b_muteAllB\x13\n" +
+	"\x11_needVerificationB\x14\n" +
+	"\x12_applyMemberFriendB\x1b\n" +
+	"\x19_deleteConversationOnKickB\x17\n" +
+	"\x15_historyForNewMembersB\x0f\n" +
+	"\r_readReceiptsB\f\n" +
+	"\n" +
+	"_memberPin\"\x87\x02\n" +
 	"\vEditMsgTips\x12&\n" +
 	"\x0econversationID\x18\x01 \x01(\tR\x0econversationID\x12\x10\n" +
 	"\x03seq\x18\x02 \x01(\x03R\x03seq\x12 \n" +
@@ -6862,7 +7000,7 @@ func file_sdkws_sdkws_proto_rawDescGZIP() []byte {
 }
 
 var file_sdkws_sdkws_proto_enumTypes = make([]protoimpl.EnumInfo, 1)
-var file_sdkws_sdkws_proto_msgTypes = make([]protoimpl.MessageInfo, 88)
+var file_sdkws_sdkws_proto_msgTypes = make([]protoimpl.MessageInfo, 89)
 var file_sdkws_sdkws_proto_goTypes = []any{
 	(PullOrder)(0),                        // 0: openim.sdkws.PullOrder
 	(*GroupInfo)(nil),                     // 1: openim.sdkws.GroupInfo
@@ -6945,30 +7083,31 @@ var file_sdkws_sdkws_proto_goTypes = []any{
 	(*ConversationDeleteTips)(nil),        // 78: openim.sdkws.ConversationDeleteTips
 	(*AppSettings)(nil),                   // 79: openim.sdkws.AppSettings
 	(*AppSettingsChangedTips)(nil),        // 80: openim.sdkws.AppSettingsChangedTips
-	(*EditMsgTips)(nil),                   // 81: openim.sdkws.EditMsgTips
-	nil,                                   // 82: openim.sdkws.PullMessageBySeqsResp.MsgsEntry
-	nil,                                   // 83: openim.sdkws.PullMessageBySeqsResp.NotificationMsgsEntry
-	nil,                                   // 84: openim.sdkws.GetMaxSeqResp.MaxSeqsEntry
-	nil,                                   // 85: openim.sdkws.GetMaxSeqResp.MinSeqsEntry
-	nil,                                   // 86: openim.sdkws.MsgData.OptionsEntry
-	nil,                                   // 87: openim.sdkws.PushMessages.MsgsEntry
-	nil,                                   // 88: openim.sdkws.PushMessages.NotificationMsgsEntry
-	(*wrapperspb.StringValue)(nil),        // 89: openim.protobuf.StringValue
-	(*wrapperspb.Int32Value)(nil),         // 90: openim.protobuf.Int32Value
+	(*GroupCreationDefaults)(nil),         // 81: openim.sdkws.GroupCreationDefaults
+	(*EditMsgTips)(nil),                   // 82: openim.sdkws.EditMsgTips
+	nil,                                   // 83: openim.sdkws.PullMessageBySeqsResp.MsgsEntry
+	nil,                                   // 84: openim.sdkws.PullMessageBySeqsResp.NotificationMsgsEntry
+	nil,                                   // 85: openim.sdkws.GetMaxSeqResp.MaxSeqsEntry
+	nil,                                   // 86: openim.sdkws.GetMaxSeqResp.MinSeqsEntry
+	nil,                                   // 87: openim.sdkws.MsgData.OptionsEntry
+	nil,                                   // 88: openim.sdkws.PushMessages.MsgsEntry
+	nil,                                   // 89: openim.sdkws.PushMessages.NotificationMsgsEntry
+	(*wrapperspb.StringValue)(nil),        // 90: openim.protobuf.StringValue
+	(*wrapperspb.Int32Value)(nil),         // 91: openim.protobuf.Int32Value
 }
 var file_sdkws_sdkws_proto_depIdxs = []int32{
-	89, // 0: openim.sdkws.GroupInfoForSet.ex:type_name -> openim.protobuf.StringValue
-	90, // 1: openim.sdkws.GroupInfoForSet.needVerification:type_name -> openim.protobuf.Int32Value
-	90, // 2: openim.sdkws.GroupInfoForSet.lookMemberInfo:type_name -> openim.protobuf.Int32Value
-	90, // 3: openim.sdkws.GroupInfoForSet.applyMemberFriend:type_name -> openim.protobuf.Int32Value
-	90, // 4: openim.sdkws.GroupInfoForSet.deleteConversationOnKick:type_name -> openim.protobuf.Int32Value
-	90, // 5: openim.sdkws.GroupInfoForSet.historyForNewMembers:type_name -> openim.protobuf.Int32Value
-	90, // 6: openim.sdkws.GroupInfoForSet.readReceipts:type_name -> openim.protobuf.Int32Value
-	90, // 7: openim.sdkws.GroupInfoForSet.memberPin:type_name -> openim.protobuf.Int32Value
-	89, // 8: openim.sdkws.UserInfoWithEx.nickname:type_name -> openim.protobuf.StringValue
-	89, // 9: openim.sdkws.UserInfoWithEx.faceURL:type_name -> openim.protobuf.StringValue
-	89, // 10: openim.sdkws.UserInfoWithEx.ex:type_name -> openim.protobuf.StringValue
-	90, // 11: openim.sdkws.UserInfoWithEx.globalRecvMsgOpt:type_name -> openim.protobuf.Int32Value
+	90, // 0: openim.sdkws.GroupInfoForSet.ex:type_name -> openim.protobuf.StringValue
+	91, // 1: openim.sdkws.GroupInfoForSet.needVerification:type_name -> openim.protobuf.Int32Value
+	91, // 2: openim.sdkws.GroupInfoForSet.lookMemberInfo:type_name -> openim.protobuf.Int32Value
+	91, // 3: openim.sdkws.GroupInfoForSet.applyMemberFriend:type_name -> openim.protobuf.Int32Value
+	91, // 4: openim.sdkws.GroupInfoForSet.deleteConversationOnKick:type_name -> openim.protobuf.Int32Value
+	91, // 5: openim.sdkws.GroupInfoForSet.historyForNewMembers:type_name -> openim.protobuf.Int32Value
+	91, // 6: openim.sdkws.GroupInfoForSet.readReceipts:type_name -> openim.protobuf.Int32Value
+	91, // 7: openim.sdkws.GroupInfoForSet.memberPin:type_name -> openim.protobuf.Int32Value
+	90, // 8: openim.sdkws.UserInfoWithEx.nickname:type_name -> openim.protobuf.StringValue
+	90, // 9: openim.sdkws.UserInfoWithEx.faceURL:type_name -> openim.protobuf.StringValue
+	90, // 10: openim.sdkws.UserInfoWithEx.ex:type_name -> openim.protobuf.StringValue
+	91, // 11: openim.sdkws.UserInfoWithEx.globalRecvMsgOpt:type_name -> openim.protobuf.Int32Value
 	6,  // 12: openim.sdkws.FriendInfo.friendUser:type_name -> openim.sdkws.UserInfo
 	5,  // 13: openim.sdkws.BlackInfo.blackUserInfo:type_name -> openim.sdkws.PublicUserInfo
 	5,  // 14: openim.sdkws.GroupRequest.userInfo:type_name -> openim.sdkws.PublicUserInfo
@@ -6976,14 +7115,14 @@ var file_sdkws_sdkws_proto_depIdxs = []int32{
 	13, // 16: openim.sdkws.PullMessageBySeqsReq.seqRanges:type_name -> openim.sdkws.SeqRange
 	0,  // 17: openim.sdkws.PullMessageBySeqsReq.order:type_name -> openim.sdkws.PullOrder
 	19, // 18: openim.sdkws.PullMsgs.Msgs:type_name -> openim.sdkws.MsgData
-	82, // 19: openim.sdkws.PullMessageBySeqsResp.msgs:type_name -> openim.sdkws.PullMessageBySeqsResp.MsgsEntry
-	83, // 20: openim.sdkws.PullMessageBySeqsResp.notificationMsgs:type_name -> openim.sdkws.PullMessageBySeqsResp.NotificationMsgsEntry
-	84, // 21: openim.sdkws.GetMaxSeqResp.maxSeqs:type_name -> openim.sdkws.GetMaxSeqResp.MaxSeqsEntry
-	85, // 22: openim.sdkws.GetMaxSeqResp.minSeqs:type_name -> openim.sdkws.GetMaxSeqResp.MinSeqsEntry
-	86, // 23: openim.sdkws.MsgData.options:type_name -> openim.sdkws.MsgData.OptionsEntry
+	83, // 19: openim.sdkws.PullMessageBySeqsResp.msgs:type_name -> openim.sdkws.PullMessageBySeqsResp.MsgsEntry
+	84, // 20: openim.sdkws.PullMessageBySeqsResp.notificationMsgs:type_name -> openim.sdkws.PullMessageBySeqsResp.NotificationMsgsEntry
+	85, // 21: openim.sdkws.GetMaxSeqResp.maxSeqs:type_name -> openim.sdkws.GetMaxSeqResp.MaxSeqsEntry
+	86, // 22: openim.sdkws.GetMaxSeqResp.minSeqs:type_name -> openim.sdkws.GetMaxSeqResp.MinSeqsEntry
+	87, // 23: openim.sdkws.MsgData.options:type_name -> openim.sdkws.MsgData.OptionsEntry
 	21, // 24: openim.sdkws.MsgData.offlinePushInfo:type_name -> openim.sdkws.OfflinePushInfo
-	87, // 25: openim.sdkws.PushMessages.msgs:type_name -> openim.sdkws.PushMessages.MsgsEntry
-	88, // 26: openim.sdkws.PushMessages.notificationMsgs:type_name -> openim.sdkws.PushMessages.NotificationMsgsEntry
+	88, // 25: openim.sdkws.PushMessages.msgs:type_name -> openim.sdkws.PushMessages.MsgsEntry
+	89, // 26: openim.sdkws.PushMessages.notificationMsgs:type_name -> openim.sdkws.PushMessages.NotificationMsgsEntry
 	1,  // 27: openim.sdkws.GroupCreatedTips.group:type_name -> openim.sdkws.GroupInfo
 	4,  // 28: openim.sdkws.GroupCreatedTips.opUser:type_name -> openim.sdkws.GroupMemberFullInfo
 	4,  // 29: openim.sdkws.GroupCreatedTips.memberList:type_name -> openim.sdkws.GroupMemberFullInfo
@@ -7067,13 +7206,14 @@ func file_sdkws_sdkws_proto_init() {
 	}
 	file_sdkws_sdkws_proto_msgTypes[18].OneofWrappers = []any{}
 	file_sdkws_sdkws_proto_msgTypes[78].OneofWrappers = []any{}
+	file_sdkws_sdkws_proto_msgTypes[80].OneofWrappers = []any{}
 	type x struct{}
 	out := protoimpl.TypeBuilder{
 		File: protoimpl.DescBuilder{
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_sdkws_sdkws_proto_rawDesc), len(file_sdkws_sdkws_proto_rawDesc)),
 			NumEnums:      1,
-			NumMessages:   88,
+			NumMessages:   89,
 			NumExtensions: 0,
 			NumServices:   0,
 		},
