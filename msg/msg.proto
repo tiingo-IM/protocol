@@ -245,9 +245,32 @@ message SeqsInfoResp {
   map<string, int64> maxSeqs = 1;
 }
 
+// The newest *visible* message in each conversation, for a
+// conversation-list preview.
+//
+// "Visible" is why userID and minSeqs are here. The newest seq is not
+// necessarily a message the reader may be shown: it can have been
+// physically deleted for everyone (the entry is blanked in place rather
+// than removed, so the seq still resolves — to nothing), deleted by this
+// reader for themselves, or fall below the floor a "clear conversation"
+// set for them. Without knowing who is asking, the only answers
+// available are the wrong ones: serve it anyway, or serve an empty row
+// that also loses the conversation's own ordering timestamp.
+//
+// So the server walks back from maxSeq to the newest entry this reader
+// may actually see, stopping at minSeq.
 message GetMsgByConversationIDsReq {
   repeated string conversationIDs = 1;
+  // Where to start looking, per conversation — normally the
+  // conversation's newest seq.
   map<string, int64> maxSeqs = 2;
+  // Who is reading. Required to honour per-reader deletions; an empty
+  // value walks back past physically deleted messages only.
+  string userID = 3;
+  // Per-reader floor, per conversation: the walk stops here rather than
+  // surfacing a message this reader has cleared. Absent means 0 (no
+  // floor).
+  map<string, int64> minSeqs = 4;
 }
 
 message GetMsgByConversationIDsResp {
@@ -591,6 +614,44 @@ message EditMsgResp {
   int64 editTime = 1;
 }
 
+// GetMsgExtraVersionReq asks whether anything in a conversation's message
+// history has been changed in place since the caller last checked.
+//
+// A client's local message cache is a snapshot, and three operations
+// rewrite history underneath it after the fact: a recall, an edit, and a
+// physical delete. Each is pushed as a notification too, but a
+// notification only reaches a client that is connected to receive it —
+// measured, a recall made while the recipient was offline never reached
+// their cache by any route at all, and the original wording stayed on
+// their disk with nothing in the system able to correct it.
+//
+// So this is the durable counterpart to those notifications: a single
+// monotonic counter per conversation, bumped by every in-place change.
+// It says only *that* something changed, never what. The client compares
+// it against what it stored, and if they differ re-reads the messages it
+// is actually holding — the message itself is where the new content
+// lives, and every read path materialises a recall on the way out.
+//
+// Deliberately a counter and not a change log. A log keyed by seq would
+// grow one entry per distinct message ever changed, without bound, and
+// the existing VersionLog infrastructure keeps exactly one entry per
+// distinct element id forever — fine for friends or group members, whose
+// id sets have a natural ceiling, fatal for messages, whose set does not.
+// A counter also self-heals: a bump that fails to be written is picked up
+// by the next change in the same conversation, where a lost log entry
+// would simply be lost.
+message GetMsgExtraVersionReq {
+  string userID = 1;
+  string conversationID = 2;
+}
+
+message GetMsgExtraVersionResp {
+  // 0 when nothing in this conversation has ever been changed in place —
+  // the same value a client starts from, so an untouched conversation
+  // costs nothing beyond this call.
+  int64 version = 1;
+}
+
 service msg {
   // Get min and max seq (including the user and specified groups)
   rpc GetMaxSeq(sdkws.GetMaxSeqReq) returns (sdkws.GetMaxSeqResp);
@@ -691,4 +752,8 @@ service msg {
   // Edit a message in place — see EditMsgReq for why this is not the
   // ModifyMessage stub above.
   rpc EditMsg(EditMsgReq) returns (EditMsgResp);
+
+  // Has anything in this conversation been rewritten in place since the
+  // caller last looked? See GetMsgExtraVersionReq.
+  rpc GetMsgExtraVersion(GetMsgExtraVersionReq) returns (GetMsgExtraVersionResp);
 }

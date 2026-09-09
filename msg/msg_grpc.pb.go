@@ -67,6 +67,7 @@ const (
 	Msg_GetAppSettings_FullMethodName                   = "/openim.msg.msg/GetAppSettings"
 	Msg_SetAppSettings_FullMethodName                   = "/openim.msg.msg/SetAppSettings"
 	Msg_EditMsg_FullMethodName                          = "/openim.msg.msg/EditMsg"
+	Msg_GetMsgExtraVersion_FullMethodName               = "/openim.msg.msg/GetMsgExtraVersion"
 )
 
 // MsgClient is the client API for Msg service.
@@ -161,6 +162,9 @@ type MsgClient interface {
 	// Edit a message in place — see EditMsgReq for why this is not the
 	// ModifyMessage stub above.
 	EditMsg(ctx context.Context, in *EditMsgReq, opts ...grpc.CallOption) (*EditMsgResp, error)
+	// Has anything in this conversation been rewritten in place since the
+	// caller last looked? See GetMsgExtraVersionReq.
+	GetMsgExtraVersion(ctx context.Context, in *GetMsgExtraVersionReq, opts ...grpc.CallOption) (*GetMsgExtraVersionResp, error)
 }
 
 type msgClient struct {
@@ -641,6 +645,16 @@ func (c *msgClient) EditMsg(ctx context.Context, in *EditMsgReq, opts ...grpc.Ca
 	return out, nil
 }
 
+func (c *msgClient) GetMsgExtraVersion(ctx context.Context, in *GetMsgExtraVersionReq, opts ...grpc.CallOption) (*GetMsgExtraVersionResp, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(GetMsgExtraVersionResp)
+	err := c.cc.Invoke(ctx, Msg_GetMsgExtraVersion_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // MsgServer is the server API for Msg service.
 // All implementations must embed UnimplementedMsgServer
 // for forward compatibility.
@@ -733,6 +747,9 @@ type MsgServer interface {
 	// Edit a message in place — see EditMsgReq for why this is not the
 	// ModifyMessage stub above.
 	EditMsg(context.Context, *EditMsgReq) (*EditMsgResp, error)
+	// Has anything in this conversation been rewritten in place since the
+	// caller last looked? See GetMsgExtraVersionReq.
+	GetMsgExtraVersion(context.Context, *GetMsgExtraVersionReq) (*GetMsgExtraVersionResp, error)
 	mustEmbedUnimplementedMsgServer()
 }
 
@@ -883,6 +900,9 @@ func (UnimplementedMsgServer) SetAppSettings(context.Context, *SetAppSettingsReq
 }
 func (UnimplementedMsgServer) EditMsg(context.Context, *EditMsgReq) (*EditMsgResp, error) {
 	return nil, status.Error(codes.Unimplemented, "method EditMsg not implemented")
+}
+func (UnimplementedMsgServer) GetMsgExtraVersion(context.Context, *GetMsgExtraVersionReq) (*GetMsgExtraVersionResp, error) {
+	return nil, status.Error(codes.Unimplemented, "method GetMsgExtraVersion not implemented")
 }
 func (UnimplementedMsgServer) mustEmbedUnimplementedMsgServer() {}
 func (UnimplementedMsgServer) testEmbeddedByValue()             {}
@@ -1751,6 +1771,24 @@ func _Msg_EditMsg_Handler(srv interface{}, ctx context.Context, dec func(interfa
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Msg_GetMsgExtraVersion_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetMsgExtraVersionReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(MsgServer).GetMsgExtraVersion(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Msg_GetMsgExtraVersion_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(MsgServer).GetMsgExtraVersion(ctx, req.(*GetMsgExtraVersionReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // Msg_ServiceDesc is the grpc.ServiceDesc for Msg service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -1945,6 +1983,10 @@ var Msg_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "EditMsg",
 			Handler:    _Msg_EditMsg_Handler,
+		},
+		{
+			MethodName: "GetMsgExtraVersion",
+			Handler:    _Msg_GetMsgExtraVersion_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
