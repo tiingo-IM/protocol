@@ -5332,19 +5332,23 @@ func (x *ModifyMessageResp) GetModifiedCount() int64 {
 	return 0
 }
 
-// SystemMsgVisibilityEntry: one admin-configured override deciding whether
-// a single group-lifecycle system notification contentType is shown to
-// clients on one exact PlatformID (1 iOS, 2 Android, 3 Windows, 4 OSX,
-// 5 Web, 6 MiniWeb, 7 Linux, 8 APad, 9 IPad, 10 Admin, 11 HarmonyOS,
-// 12 Bot). Keyed on the exact PlatformID rather than one of the coarser
-// PlatformID2class buckets ("PC"/"Mobile"/"Pad"): an admin hiding
-// group-created on Web must not silently also hide it on MiniWeb, and
-// bucketing left iPad/HarmonyOS/Bot in no bucket at all.
+// SystemMsgVisibilityEntry: whether one system notification contentType
+// is shown to clients on one exact PlatformID (1 iOS, 2 Android,
+// 3 Windows, 4 OSX, 5 Web, 6 MiniWeb, 7 Linux, 8 APad, 9 IPad,
+// 10 Admin, 11 HarmonyOS, 12 Bot). Keyed on the exact PlatformID rather
+// than one of the coarser PlatformID2class buckets ("PC"/"Mobile"/
+// "Pad"): an admin hiding group-created on Web must not silently also
+// hide it on MiniWeb, and bucketing left iPad/HarmonyOS/Bot in no
+// bucket at all.
 //
-// Absence of an entry for a (contentType, platformID) pair means "no
-// override configured", which is NOT the same as show=false — see
-// sdkws.MsgData.systemMsgVisible's own doc comment for how delivery
-// resolves it.
+// `show` is an ordinary bool with no third state. Every (contentType,
+// platformID) pair the table covers is visible until an admin says
+// otherwise, so a pair with no stored entry reads as show=true and the
+// full matrix is always answerable. It was a tri-state once, where a
+// missing entry meant "nobody has an opinion" and each client fell back
+// to a default of its own — which spread the decision across as many
+// places as there were clients, none of which matched what the admin
+// console's matrix was drawing.
 type SystemMsgVisibilityEntry struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	ContentType   int32                  `protobuf:"varint,1,opt,name=contentType,proto3" json:"contentType"`
@@ -5487,7 +5491,9 @@ func (*SetSystemMsgVisibilityResp) Descriptor() ([]byte, []int) {
 
 type DelSystemMsgVisibilityReq struct {
 	state protoimpl.MessageState `protogen:"open.v1"`
-	// Only contentType and platformID are read; show is ignored.
+	// Only contentType and platformID are read; show is ignored. Deleting
+	// an entry restores the default, which is show=true — the same state
+	// Set with show=true describes, stored in the shorter way.
 	Entries       []*SystemMsgVisibilityEntry `protobuf:"bytes,1,rep,name=entries,proto3" json:"entries"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache

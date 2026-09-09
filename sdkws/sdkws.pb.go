@@ -1782,14 +1782,24 @@ type MsgData struct {
 	AtUserIDList     []string               `protobuf:"bytes,21,rep,name=atUserIDList,proto3" json:"atUserIDList"`
 	AttachedInfo     string                 `protobuf:"bytes,22,opt,name=attachedInfo,proto3" json:"attachedInfo"`
 	Ex               string                 `protobuf:"bytes,23,opt,name=ex,proto3" json:"ex"`
-	// Local extension, not part of upstream openimsdk/protocol: resolved,
-	// per-recipient-device override for whether this specific delivery of
-	// a system/notification message (msgFrom=Sys) should be shown to the
-	// client at all — resolved against an admin-configured
-	// (contentType, platformID) visibility table synced from the chat
-	// business-server. Absent means "no admin override configured" — the
-	// client falls back to its own default (show every system message
-	// type it already knows how to render).
+	// Local extension, not part of upstream openimsdk/protocol: the
+	// resolved, per-recipient-device answer to whether this specific
+	// delivery of a system/notification message (msgFrom=Sys) should be
+	// shown to the client at all — read from the admin-configured
+	// (contentType, platformID) visibility table that openim-server owns
+	// (see msg.SystemMsgVisibilityEntry).
+	//
+	// Carries an answer, not an override. Every contentType the table
+	// covers resolves to true or false on every platform — true being the
+	// default, until an admin says otherwise — and this field is set
+	// either way. Absent means only that the contentType is not one the
+	// table has any opinion about, and the client decides for itself
+	// whether to render it.
+	//
+	// Still `optional` even though it is always populated for a covered
+	// type: proto3 does not put a plain bool on the wire when it is
+	// false, so a non-optional field could never have carried "hide" at
+	// all — the one value that matters.
 	//
 	// Populated in two places, both keyed on the receiving device's exact
 	// PlatformID (openimsdk/protocol's own ID, not one of the coarser

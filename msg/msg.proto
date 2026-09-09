@@ -522,19 +522,23 @@ message ModifyMessageResp {
   int64 modifiedCount = 2;
 }
 
-// SystemMsgVisibilityEntry: one admin-configured override deciding whether
-// a single group-lifecycle system notification contentType is shown to
-// clients on one exact PlatformID (1 iOS, 2 Android, 3 Windows, 4 OSX,
-// 5 Web, 6 MiniWeb, 7 Linux, 8 APad, 9 IPad, 10 Admin, 11 HarmonyOS,
-// 12 Bot). Keyed on the exact PlatformID rather than one of the coarser
-// PlatformID2class buckets ("PC"/"Mobile"/"Pad"): an admin hiding
-// group-created on Web must not silently also hide it on MiniWeb, and
-// bucketing left iPad/HarmonyOS/Bot in no bucket at all.
+// SystemMsgVisibilityEntry: whether one system notification contentType
+// is shown to clients on one exact PlatformID (1 iOS, 2 Android,
+// 3 Windows, 4 OSX, 5 Web, 6 MiniWeb, 7 Linux, 8 APad, 9 IPad,
+// 10 Admin, 11 HarmonyOS, 12 Bot). Keyed on the exact PlatformID rather
+// than one of the coarser PlatformID2class buckets ("PC"/"Mobile"/
+// "Pad"): an admin hiding group-created on Web must not silently also
+// hide it on MiniWeb, and bucketing left iPad/HarmonyOS/Bot in no
+// bucket at all.
 //
-// Absence of an entry for a (contentType, platformID) pair means "no
-// override configured", which is NOT the same as show=false — see
-// sdkws.MsgData.systemMsgVisible's own doc comment for how delivery
-// resolves it.
+// `show` is an ordinary bool with no third state. Every (contentType,
+// platformID) pair the table covers is visible until an admin says
+// otherwise, so a pair with no stored entry reads as show=true and the
+// full matrix is always answerable. It was a tri-state once, where a
+// missing entry meant "nobody has an opinion" and each client fell back
+// to a default of its own — which spread the decision across as many
+// places as there were clients, none of which matched what the admin
+// console's matrix was drawing.
 message SystemMsgVisibilityEntry {
   int32 contentType = 1;
   int32 platformID = 2;
@@ -548,7 +552,9 @@ message SetSystemMsgVisibilityReq {
 message SetSystemMsgVisibilityResp {}
 
 message DelSystemMsgVisibilityReq {
-  // Only contentType and platformID are read; show is ignored.
+  // Only contentType and platformID are read; show is ignored. Deleting
+  // an entry restores the default, which is show=true — the same state
+  // Set with show=true describes, stored in the shorter way.
   repeated SystemMsgVisibilityEntry entries = 1;
 }
 
@@ -727,10 +733,11 @@ service msg {
   rpc GetStreamMsg(GetStreamMsgReq) returns (GetStreamMsgResp);
   rpc ModifyMessage(ModifyMessageReq) returns (ModifyMessageResp);
 
-  // Admin-configured show/hide table for group-lifecycle system
-  // notifications. Owned here rather than in the sibling `chat` business
-  // server because both keys are this protocol's own enums (contentType
-  // and PlatformID) and only open-im-server ever reads the result — see
+  // Admin-configured show/hide table for the system notifications that
+  // render as a line inside a chat transcript. Owned here rather than in
+  // the sibling `chat` business server because both keys are this
+  // protocol's own enums (contentType and PlatformID) and only
+  // open-im-server ever reads the result — see
   // SystemMsgVisibilityEntry above. Writes go to Mongo, then push a
   // snapshot into Redis and publish on cachekey.SystemMsgVisibilityChannel
   // so msggateway (which has no Mongo of its own) and this service both

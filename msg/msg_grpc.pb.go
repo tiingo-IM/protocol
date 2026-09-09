@@ -139,10 +139,11 @@ type MsgClient interface {
 	AppendStreamMsg(ctx context.Context, in *AppendStreamMsgReq, opts ...grpc.CallOption) (*AppendStreamMsgResp, error)
 	GetStreamMsg(ctx context.Context, in *GetStreamMsgReq, opts ...grpc.CallOption) (*GetStreamMsgResp, error)
 	ModifyMessage(ctx context.Context, in *ModifyMessageReq, opts ...grpc.CallOption) (*ModifyMessageResp, error)
-	// Admin-configured show/hide table for group-lifecycle system
-	// notifications. Owned here rather than in the sibling `chat` business
-	// server because both keys are this protocol's own enums (contentType
-	// and PlatformID) and only open-im-server ever reads the result — see
+	// Admin-configured show/hide table for the system notifications that
+	// render as a line inside a chat transcript. Owned here rather than in
+	// the sibling `chat` business server because both keys are this
+	// protocol's own enums (contentType and PlatformID) and only
+	// open-im-server ever reads the result — see
 	// SystemMsgVisibilityEntry above. Writes go to Mongo, then push a
 	// snapshot into Redis and publish on cachekey.SystemMsgVisibilityChannel
 	// so msggateway (which has no Mongo of its own) and this service both
@@ -724,10 +725,11 @@ type MsgServer interface {
 	AppendStreamMsg(context.Context, *AppendStreamMsgReq) (*AppendStreamMsgResp, error)
 	GetStreamMsg(context.Context, *GetStreamMsgReq) (*GetStreamMsgResp, error)
 	ModifyMessage(context.Context, *ModifyMessageReq) (*ModifyMessageResp, error)
-	// Admin-configured show/hide table for group-lifecycle system
-	// notifications. Owned here rather than in the sibling `chat` business
-	// server because both keys are this protocol's own enums (contentType
-	// and PlatformID) and only open-im-server ever reads the result — see
+	// Admin-configured show/hide table for the system notifications that
+	// render as a line inside a chat transcript. Owned here rather than in
+	// the sibling `chat` business server because both keys are this
+	// protocol's own enums (contentType and PlatformID) and only
+	// open-im-server ever reads the result — see
 	// SystemMsgVisibilityEntry above. Writes go to Mongo, then push a
 	// snapshot into Redis and publish on cachekey.SystemMsgVisibilityChannel
 	// so msggateway (which has no Mongo of its own) and this service both
