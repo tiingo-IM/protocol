@@ -712,7 +712,21 @@ message FriendsInfoUpdateTips {
 
 message SubUserOnlineStatusElem {
   string userID = 1;
+  // Only the platforms an admin allows to be seen — the raw connection
+  // list is filtered before it leaves the gateway (see
+  // internal/msggateway/subscription.go). An empty list is what a
+  // subscriber gets both for someone genuinely offline and for someone
+  // online only from a platform that is configured invisible; that
+  // ambiguity is the point of the setting.
   repeated int32 onlinePlatformIDs = 2;
+  // When this user was last seen going offline, epoch ms, or 0 for
+  // "there is nothing to show" — never seen, too old to keep, or an
+  // admin has turned last-seen off for every platform it could have come
+  // from. Only meaningful while onlinePlatformIDs is empty.
+  int64 lastOfflineTime = 3;
+  // Which platform that disconnect was from, or 0 alongside a
+  // lastOfflineTime of 0.
+  int32 lastOfflinePlatformID = 4;
 }
 
 message SubUserOnlineStatusTips {
@@ -782,6 +796,51 @@ message AppSettings {
   // before this setting existed and has never been time-bounded, so the
   // default has to keep meaning what the absence of a setting meant.
   optional int32 revokeWindowSeconds = 2;
+}
+
+// PlatformPresenceSetting: what one platform's presence is allowed to
+// reveal. Plain bools, not optional: a platform is either in the map or
+// it isn't, and the key's presence is what says an admin has an opinion,
+// so a third state inside the value would only duplicate that.
+message PlatformPresenceSetting {
+  // Whether a connection from this platform may make its owner look
+  // online at all. Off means connections from here are invisible: they
+  // neither light the dot nor keep it lit.
+  bool enableOnline = 1;
+  // Whether this platform's disconnect may be reported as a last-seen
+  // time once the user has no visible connection left. Meaningless
+  // without enableOnline — a platform that never shows as online has no
+  // going-offline to report — and the server enforces that rather than
+  // trusting the console to.
+  bool enableLastOnlineTime = 2;
+}
+
+// PresenceSettings: who is allowed to see that someone is online, and
+// when they were last seen, decided per platform by an admin.
+//
+// Not part of AppSettings, though it is the same shape of thing.
+// GetAppSettings is open to every signed-in client because every client
+// needs the edit/recall windows to render its own UI. This is the
+// opposite: it is the policy that decides what those clients are told,
+// and handing it to them would tell each one exactly which platforms are
+// being hidden. Admin-only, like GroupCreationDefaults.
+message PresenceSettings {
+  // The master switch. Absent means no admin has ever chosen, which
+  // reads as on — presence worked before this setting existed, and the
+  // absence of a setting has to keep meaning what it meant. Off makes
+  // everyone look offline with no last-seen time, on every platform,
+  // whatever the map below says.
+  optional bool enablePresence = 1;
+  // Keyed by the protocol's own PlatformID (1 iOS, 2 Android, 3 Windows,
+  // 4 OSX, 5 Web, 6 MiniWeb, 7 Linux, 8 APad, 9 IPad, 10 Admin,
+  // 11 HarmonyOS, 12 Bot). A platform with no entry is fully visible:
+  // both switches on. An empty map is therefore not "hide everything",
+  // it is "nobody has decided anything yet".
+  //
+  // A write replaces this map wholesale rather than merging key by key —
+  // merging leaves no way to say "this platform has no opinion again",
+  // and the console always sends every platform anyway.
+  map<int32, PlatformPresenceSetting> platformSettings = 2;
 }
 
 // Pushed (constant.AppSettingsChangedNotification, 2400) to every user

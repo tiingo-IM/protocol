@@ -163,7 +163,18 @@ message getSubscribeUsersStatusResp {
 message onlineStatus {
   string userID = 1;
   int32 status = 2;
+  // Only the platforms an admin allows to be seen. A user connected
+  // solely from a platform configured invisible reports Offline with an
+  // empty list — see internal/rpc/user/online.go.
   repeated int32 platformIDs = 3;
+  // When this user was last seen going offline, epoch ms, or 0 for
+  // "there is nothing to show": never seen, older than the server keeps,
+  // or an admin has turned last-seen off for every platform it could
+  // have come from. Only meaningful while status is Offline.
+  int64 lastOfflineTime = 4;
+  // Which platform that disconnect was from, or 0 alongside a
+  // lastOfflineTime of 0.
+  int32 lastOfflinePlatformID = 5;
 }
 
 message getUserStatusReq {
@@ -197,6 +208,30 @@ message setUserOnlineStatusReq {
 }
 
 message setUserOnlineStatusResp {}
+
+// Read the admin-configured presence policy. Admin-only, both ways:
+// unlike AppSettings, this is not something a client needs in order to
+// render itself — it is the rule that decides what a client is told, and
+// serving it to everyone would tell every client which platforms are
+// being hidden. See sdkws.PresenceSettings.
+message getPresenceSettingsReq {}
+
+message getPresenceSettingsResp {
+  // Always fully populated, defaults applied — every platform present.
+  sdkws.PresenceSettings settings = 1;
+}
+
+message setPresenceSettingsReq {
+  // enablePresence merges: absent leaves the stored value alone.
+  // platformSettings replaces: a non-empty map becomes the whole stored
+  // map, so a platform can be given back its default by leaving it out.
+  sdkws.PresenceSettings settings = 1;
+}
+
+message setPresenceSettingsResp {
+  // The whole policy as it stands after the write, defaults applied.
+  sdkws.PresenceSettings settings = 1;
+}
 
 message processUserCommandAddReq {
   string userID = 1;
@@ -415,6 +450,16 @@ service user {
   rpc sortQuery(sortQueryReq) returns (sortQueryResp);
 
   rpc setUserOnlineStatus(setUserOnlineStatusReq) returns (setUserOnlineStatusResp);
+
+  // Who may be seen as online, and whose last-seen time may be shown,
+  // decided per platform. Owned here because this service is the one
+  // that answers getUserStatus and therefore has to enforce it. Writes
+  // go to Mongo, then push a snapshot into Redis and publish on
+  // cachekey.PresenceSettingsChannel so msggateway — which has no Mongo
+  // of its own and pushes the live updates — enforces the same policy
+  // without polling anything.
+  rpc getPresenceSettings(getPresenceSettingsReq) returns (getPresenceSettingsResp);
+  rpc setPresenceSettings(setPresenceSettingsReq) returns (setPresenceSettingsResp);
   // get all online users
   rpc getAllOnlineUsers(getAllOnlineUsersReq) returns (getAllOnlineUsersResp);
 

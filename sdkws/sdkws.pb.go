@@ -5670,11 +5670,25 @@ func (x *FriendsInfoUpdateTips) GetFriendVersionID() string {
 }
 
 type SubUserOnlineStatusElem struct {
-	state             protoimpl.MessageState `protogen:"open.v1"`
-	UserID            string                 `protobuf:"bytes,1,opt,name=userID,proto3" json:"userID"`
-	OnlinePlatformIDs []int32                `protobuf:"varint,2,rep,packed,name=onlinePlatformIDs,proto3" json:"onlinePlatformIDs"`
-	unknownFields     protoimpl.UnknownFields
-	sizeCache         protoimpl.SizeCache
+	state  protoimpl.MessageState `protogen:"open.v1"`
+	UserID string                 `protobuf:"bytes,1,opt,name=userID,proto3" json:"userID"`
+	// Only the platforms an admin allows to be seen — the raw connection
+	// list is filtered before it leaves the gateway (see
+	// internal/msggateway/subscription.go). An empty list is what a
+	// subscriber gets both for someone genuinely offline and for someone
+	// online only from a platform that is configured invisible; that
+	// ambiguity is the point of the setting.
+	OnlinePlatformIDs []int32 `protobuf:"varint,2,rep,packed,name=onlinePlatformIDs,proto3" json:"onlinePlatformIDs"`
+	// When this user was last seen going offline, epoch ms, or 0 for
+	// "there is nothing to show" — never seen, too old to keep, or an
+	// admin has turned last-seen off for every platform it could have come
+	// from. Only meaningful while onlinePlatformIDs is empty.
+	LastOfflineTime int64 `protobuf:"varint,3,opt,name=lastOfflineTime,proto3" json:"lastOfflineTime"`
+	// Which platform that disconnect was from, or 0 alongside a
+	// lastOfflineTime of 0.
+	LastOfflinePlatformID int32 `protobuf:"varint,4,opt,name=lastOfflinePlatformID,proto3" json:"lastOfflinePlatformID"`
+	unknownFields         protoimpl.UnknownFields
+	sizeCache             protoimpl.SizeCache
 }
 
 func (x *SubUserOnlineStatusElem) Reset() {
@@ -5719,6 +5733,20 @@ func (x *SubUserOnlineStatusElem) GetOnlinePlatformIDs() []int32 {
 		return x.OnlinePlatformIDs
 	}
 	return nil
+}
+
+func (x *SubUserOnlineStatusElem) GetLastOfflineTime() int64 {
+	if x != nil {
+		return x.LastOfflineTime
+	}
+	return 0
+}
+
+func (x *SubUserOnlineStatusElem) GetLastOfflinePlatformID() int32 {
+	if x != nil {
+		return x.LastOfflinePlatformID
+	}
+	return 0
 }
 
 type SubUserOnlineStatusTips struct {
@@ -6121,6 +6149,145 @@ func (x *AppSettings) GetRevokeWindowSeconds() int32 {
 	return 0
 }
 
+// PlatformPresenceSetting: what one platform's presence is allowed to
+// reveal. Plain bools, not optional: a platform is either in the map or
+// it isn't, and the key's presence is what says an admin has an opinion,
+// so a third state inside the value would only duplicate that.
+type PlatformPresenceSetting struct {
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// Whether a connection from this platform may make its owner look
+	// online at all. Off means connections from here are invisible: they
+	// neither light the dot nor keep it lit.
+	EnableOnline bool `protobuf:"varint,1,opt,name=enableOnline,proto3" json:"enableOnline"`
+	// Whether this platform's disconnect may be reported as a last-seen
+	// time once the user has no visible connection left. Meaningless
+	// without enableOnline — a platform that never shows as online has no
+	// going-offline to report — and the server enforces that rather than
+	// trusting the console to.
+	EnableLastOnlineTime bool `protobuf:"varint,2,opt,name=enableLastOnlineTime,proto3" json:"enableLastOnlineTime"`
+	unknownFields        protoimpl.UnknownFields
+	sizeCache            protoimpl.SizeCache
+}
+
+func (x *PlatformPresenceSetting) Reset() {
+	*x = PlatformPresenceSetting{}
+	mi := &file_sdkws_sdkws_proto_msgTypes[79]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *PlatformPresenceSetting) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*PlatformPresenceSetting) ProtoMessage() {}
+
+func (x *PlatformPresenceSetting) ProtoReflect() protoreflect.Message {
+	mi := &file_sdkws_sdkws_proto_msgTypes[79]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use PlatformPresenceSetting.ProtoReflect.Descriptor instead.
+func (*PlatformPresenceSetting) Descriptor() ([]byte, []int) {
+	return file_sdkws_sdkws_proto_rawDescGZIP(), []int{79}
+}
+
+func (x *PlatformPresenceSetting) GetEnableOnline() bool {
+	if x != nil {
+		return x.EnableOnline
+	}
+	return false
+}
+
+func (x *PlatformPresenceSetting) GetEnableLastOnlineTime() bool {
+	if x != nil {
+		return x.EnableLastOnlineTime
+	}
+	return false
+}
+
+// PresenceSettings: who is allowed to see that someone is online, and
+// when they were last seen, decided per platform by an admin.
+//
+// Not part of AppSettings, though it is the same shape of thing.
+// GetAppSettings is open to every signed-in client because every client
+// needs the edit/recall windows to render its own UI. This is the
+// opposite: it is the policy that decides what those clients are told,
+// and handing it to them would tell each one exactly which platforms are
+// being hidden. Admin-only, like GroupCreationDefaults.
+type PresenceSettings struct {
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// The master switch. Absent means no admin has ever chosen, which
+	// reads as on — presence worked before this setting existed, and the
+	// absence of a setting has to keep meaning what it meant. Off makes
+	// everyone look offline with no last-seen time, on every platform,
+	// whatever the map below says.
+	EnablePresence *bool `protobuf:"varint,1,opt,name=enablePresence,proto3,oneof" json:"enablePresence"`
+	// Keyed by the protocol's own PlatformID (1 iOS, 2 Android, 3 Windows,
+	// 4 OSX, 5 Web, 6 MiniWeb, 7 Linux, 8 APad, 9 IPad, 10 Admin,
+	// 11 HarmonyOS, 12 Bot). A platform with no entry is fully visible:
+	// both switches on. An empty map is therefore not "hide everything",
+	// it is "nobody has decided anything yet".
+	//
+	// A write replaces this map wholesale rather than merging key by key —
+	// merging leaves no way to say "this platform has no opinion again",
+	// and the console always sends every platform anyway.
+	PlatformSettings map[int32]*PlatformPresenceSetting `protobuf:"bytes,2,rep,name=platformSettings,proto3" json:"platformSettings,omitempty" protobuf_key:"varint,1,opt,name=key" protobuf_val:"bytes,2,opt,name=value"`
+	unknownFields    protoimpl.UnknownFields
+	sizeCache        protoimpl.SizeCache
+}
+
+func (x *PresenceSettings) Reset() {
+	*x = PresenceSettings{}
+	mi := &file_sdkws_sdkws_proto_msgTypes[80]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *PresenceSettings) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*PresenceSettings) ProtoMessage() {}
+
+func (x *PresenceSettings) ProtoReflect() protoreflect.Message {
+	mi := &file_sdkws_sdkws_proto_msgTypes[80]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use PresenceSettings.ProtoReflect.Descriptor instead.
+func (*PresenceSettings) Descriptor() ([]byte, []int) {
+	return file_sdkws_sdkws_proto_rawDescGZIP(), []int{80}
+}
+
+func (x *PresenceSettings) GetEnablePresence() bool {
+	if x != nil && x.EnablePresence != nil {
+		return *x.EnablePresence
+	}
+	return false
+}
+
+func (x *PresenceSettings) GetPlatformSettings() map[int32]*PlatformPresenceSetting {
+	if x != nil {
+		return x.PlatformSettings
+	}
+	return nil
+}
+
 // Pushed (constant.AppSettingsChangedNotification, 2400) to every user
 // online when an admin saves. Carries the settings themselves rather
 // than a "go and look" marker, so one push is the whole change.
@@ -6133,7 +6300,7 @@ type AppSettingsChangedTips struct {
 
 func (x *AppSettingsChangedTips) Reset() {
 	*x = AppSettingsChangedTips{}
-	mi := &file_sdkws_sdkws_proto_msgTypes[79]
+	mi := &file_sdkws_sdkws_proto_msgTypes[81]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -6145,7 +6312,7 @@ func (x *AppSettingsChangedTips) String() string {
 func (*AppSettingsChangedTips) ProtoMessage() {}
 
 func (x *AppSettingsChangedTips) ProtoReflect() protoreflect.Message {
-	mi := &file_sdkws_sdkws_proto_msgTypes[79]
+	mi := &file_sdkws_sdkws_proto_msgTypes[81]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -6158,7 +6325,7 @@ func (x *AppSettingsChangedTips) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use AppSettingsChangedTips.ProtoReflect.Descriptor instead.
 func (*AppSettingsChangedTips) Descriptor() ([]byte, []int) {
-	return file_sdkws_sdkws_proto_rawDescGZIP(), []int{79}
+	return file_sdkws_sdkws_proto_rawDescGZIP(), []int{81}
 }
 
 func (x *AppSettingsChangedTips) GetSettings() *AppSettings {
@@ -6212,7 +6379,7 @@ type GroupCreationDefaults struct {
 
 func (x *GroupCreationDefaults) Reset() {
 	*x = GroupCreationDefaults{}
-	mi := &file_sdkws_sdkws_proto_msgTypes[80]
+	mi := &file_sdkws_sdkws_proto_msgTypes[82]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -6224,7 +6391,7 @@ func (x *GroupCreationDefaults) String() string {
 func (*GroupCreationDefaults) ProtoMessage() {}
 
 func (x *GroupCreationDefaults) ProtoReflect() protoreflect.Message {
-	mi := &file_sdkws_sdkws_proto_msgTypes[80]
+	mi := &file_sdkws_sdkws_proto_msgTypes[82]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -6237,7 +6404,7 @@ func (x *GroupCreationDefaults) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GroupCreationDefaults.ProtoReflect.Descriptor instead.
 func (*GroupCreationDefaults) Descriptor() ([]byte, []int) {
-	return file_sdkws_sdkws_proto_rawDescGZIP(), []int{80}
+	return file_sdkws_sdkws_proto_rawDescGZIP(), []int{82}
 }
 
 func (x *GroupCreationDefaults) GetMuteAll() int32 {
@@ -6315,7 +6482,7 @@ type EditMsgTips struct {
 
 func (x *EditMsgTips) Reset() {
 	*x = EditMsgTips{}
-	mi := &file_sdkws_sdkws_proto_msgTypes[81]
+	mi := &file_sdkws_sdkws_proto_msgTypes[83]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -6327,7 +6494,7 @@ func (x *EditMsgTips) String() string {
 func (*EditMsgTips) ProtoMessage() {}
 
 func (x *EditMsgTips) ProtoReflect() protoreflect.Message {
-	mi := &file_sdkws_sdkws_proto_msgTypes[81]
+	mi := &file_sdkws_sdkws_proto_msgTypes[83]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -6340,7 +6507,7 @@ func (x *EditMsgTips) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use EditMsgTips.ProtoReflect.Descriptor instead.
 func (*EditMsgTips) Descriptor() ([]byte, []int) {
-	return file_sdkws_sdkws_proto_rawDescGZIP(), []int{81}
+	return file_sdkws_sdkws_proto_rawDescGZIP(), []int{83}
 }
 
 func (x *EditMsgTips) GetConversationID() string {
@@ -6930,10 +7097,12 @@ const file_sdkws_sdkws_proto_rawDesc = "" +
 	"\ffromToUserID\x18\x01 \x01(\v2\x1a.openim.sdkws.FromToUserIDR\ffromToUserID\x12\x1c\n" +
 	"\tfriendIDs\x18\x02 \x03(\tR\tfriendIDs\x12$\n" +
 	"\rfriendVersion\x18\x03 \x01(\x04R\rfriendVersion\x12(\n" +
-	"\x0ffriendVersionID\x18\x04 \x01(\tR\x0ffriendVersionID\"_\n" +
+	"\x0ffriendVersionID\x18\x04 \x01(\tR\x0ffriendVersionID\"\xbf\x01\n" +
 	"\x17SubUserOnlineStatusElem\x12\x16\n" +
 	"\x06userID\x18\x01 \x01(\tR\x06userID\x12,\n" +
-	"\x11onlinePlatformIDs\x18\x02 \x03(\x05R\x11onlinePlatformIDs\"b\n" +
+	"\x11onlinePlatformIDs\x18\x02 \x03(\x05R\x11onlinePlatformIDs\x12(\n" +
+	"\x0flastOfflineTime\x18\x03 \x01(\x03R\x0flastOfflineTime\x124\n" +
+	"\x15lastOfflinePlatformID\x18\x04 \x01(\x05R\x15lastOfflinePlatformID\"b\n" +
 	"\x17SubUserOnlineStatusTips\x12G\n" +
 	"\vsubscribers\x18\x01 \x03(\v2%.openim.sdkws.SubUserOnlineStatusElemR\vsubscribers\"m\n" +
 	"\x13SubUserOnlineStatus\x12(\n" +
@@ -6964,7 +7133,17 @@ const file_sdkws_sdkws_proto_rawDesc = "" +
 	"\x11editWindowSeconds\x18\x01 \x01(\x05H\x00R\x11editWindowSeconds\x88\x01\x01\x125\n" +
 	"\x13revokeWindowSeconds\x18\x02 \x01(\x05H\x01R\x13revokeWindowSeconds\x88\x01\x01B\x14\n" +
 	"\x12_editWindowSecondsB\x16\n" +
-	"\x14_revokeWindowSeconds\"O\n" +
+	"\x14_revokeWindowSeconds\"q\n" +
+	"\x17PlatformPresenceSetting\x12\"\n" +
+	"\fenableOnline\x18\x01 \x01(\bR\fenableOnline\x122\n" +
+	"\x14enableLastOnlineTime\x18\x02 \x01(\bR\x14enableLastOnlineTime\"\xa0\x02\n" +
+	"\x10PresenceSettings\x12+\n" +
+	"\x0eenablePresence\x18\x01 \x01(\bH\x00R\x0eenablePresence\x88\x01\x01\x12`\n" +
+	"\x10platformSettings\x18\x02 \x03(\v24.openim.sdkws.PresenceSettings.PlatformSettingsEntryR\x10platformSettings\x1aj\n" +
+	"\x15PlatformSettingsEntry\x12\x10\n" +
+	"\x03key\x18\x01 \x01(\x05R\x03key\x12;\n" +
+	"\x05value\x18\x02 \x01(\v2%.openim.sdkws.PlatformPresenceSettingR\x05value:\x028\x01B\x11\n" +
+	"\x0f_enablePresence\"O\n" +
 	"\x16AppSettingsChangedTips\x125\n" +
 	"\bsettings\x18\x01 \x01(\v2\x19.openim.sdkws.AppSettingsR\bsettings\"\xec\x03\n" +
 	"\x15GroupCreationDefaults\x12\x1d\n" +
@@ -7010,7 +7189,7 @@ func file_sdkws_sdkws_proto_rawDescGZIP() []byte {
 }
 
 var file_sdkws_sdkws_proto_enumTypes = make([]protoimpl.EnumInfo, 1)
-var file_sdkws_sdkws_proto_msgTypes = make([]protoimpl.MessageInfo, 89)
+var file_sdkws_sdkws_proto_msgTypes = make([]protoimpl.MessageInfo, 92)
 var file_sdkws_sdkws_proto_goTypes = []any{
 	(PullOrder)(0),                        // 0: openim.sdkws.PullOrder
 	(*GroupInfo)(nil),                     // 1: openim.sdkws.GroupInfo
@@ -7092,32 +7271,35 @@ var file_sdkws_sdkws_proto_goTypes = []any{
 	(*ModifyMsgTips)(nil),                 // 77: openim.sdkws.ModifyMsgTips
 	(*ConversationDeleteTips)(nil),        // 78: openim.sdkws.ConversationDeleteTips
 	(*AppSettings)(nil),                   // 79: openim.sdkws.AppSettings
-	(*AppSettingsChangedTips)(nil),        // 80: openim.sdkws.AppSettingsChangedTips
-	(*GroupCreationDefaults)(nil),         // 81: openim.sdkws.GroupCreationDefaults
-	(*EditMsgTips)(nil),                   // 82: openim.sdkws.EditMsgTips
-	nil,                                   // 83: openim.sdkws.PullMessageBySeqsResp.MsgsEntry
-	nil,                                   // 84: openim.sdkws.PullMessageBySeqsResp.NotificationMsgsEntry
-	nil,                                   // 85: openim.sdkws.GetMaxSeqResp.MaxSeqsEntry
-	nil,                                   // 86: openim.sdkws.GetMaxSeqResp.MinSeqsEntry
-	nil,                                   // 87: openim.sdkws.MsgData.OptionsEntry
-	nil,                                   // 88: openim.sdkws.PushMessages.MsgsEntry
-	nil,                                   // 89: openim.sdkws.PushMessages.NotificationMsgsEntry
-	(*wrapperspb.StringValue)(nil),        // 90: openim.protobuf.StringValue
-	(*wrapperspb.Int32Value)(nil),         // 91: openim.protobuf.Int32Value
+	(*PlatformPresenceSetting)(nil),       // 80: openim.sdkws.PlatformPresenceSetting
+	(*PresenceSettings)(nil),              // 81: openim.sdkws.PresenceSettings
+	(*AppSettingsChangedTips)(nil),        // 82: openim.sdkws.AppSettingsChangedTips
+	(*GroupCreationDefaults)(nil),         // 83: openim.sdkws.GroupCreationDefaults
+	(*EditMsgTips)(nil),                   // 84: openim.sdkws.EditMsgTips
+	nil,                                   // 85: openim.sdkws.PullMessageBySeqsResp.MsgsEntry
+	nil,                                   // 86: openim.sdkws.PullMessageBySeqsResp.NotificationMsgsEntry
+	nil,                                   // 87: openim.sdkws.GetMaxSeqResp.MaxSeqsEntry
+	nil,                                   // 88: openim.sdkws.GetMaxSeqResp.MinSeqsEntry
+	nil,                                   // 89: openim.sdkws.MsgData.OptionsEntry
+	nil,                                   // 90: openim.sdkws.PushMessages.MsgsEntry
+	nil,                                   // 91: openim.sdkws.PushMessages.NotificationMsgsEntry
+	nil,                                   // 92: openim.sdkws.PresenceSettings.PlatformSettingsEntry
+	(*wrapperspb.StringValue)(nil),        // 93: openim.protobuf.StringValue
+	(*wrapperspb.Int32Value)(nil),         // 94: openim.protobuf.Int32Value
 }
 var file_sdkws_sdkws_proto_depIdxs = []int32{
-	90, // 0: openim.sdkws.GroupInfoForSet.ex:type_name -> openim.protobuf.StringValue
-	91, // 1: openim.sdkws.GroupInfoForSet.needVerification:type_name -> openim.protobuf.Int32Value
-	91, // 2: openim.sdkws.GroupInfoForSet.lookMemberInfo:type_name -> openim.protobuf.Int32Value
-	91, // 3: openim.sdkws.GroupInfoForSet.applyMemberFriend:type_name -> openim.protobuf.Int32Value
-	91, // 4: openim.sdkws.GroupInfoForSet.deleteConversationOnKick:type_name -> openim.protobuf.Int32Value
-	91, // 5: openim.sdkws.GroupInfoForSet.historyForNewMembers:type_name -> openim.protobuf.Int32Value
-	91, // 6: openim.sdkws.GroupInfoForSet.readReceipts:type_name -> openim.protobuf.Int32Value
-	91, // 7: openim.sdkws.GroupInfoForSet.memberPin:type_name -> openim.protobuf.Int32Value
-	90, // 8: openim.sdkws.UserInfoWithEx.nickname:type_name -> openim.protobuf.StringValue
-	90, // 9: openim.sdkws.UserInfoWithEx.faceURL:type_name -> openim.protobuf.StringValue
-	90, // 10: openim.sdkws.UserInfoWithEx.ex:type_name -> openim.protobuf.StringValue
-	91, // 11: openim.sdkws.UserInfoWithEx.globalRecvMsgOpt:type_name -> openim.protobuf.Int32Value
+	93, // 0: openim.sdkws.GroupInfoForSet.ex:type_name -> openim.protobuf.StringValue
+	94, // 1: openim.sdkws.GroupInfoForSet.needVerification:type_name -> openim.protobuf.Int32Value
+	94, // 2: openim.sdkws.GroupInfoForSet.lookMemberInfo:type_name -> openim.protobuf.Int32Value
+	94, // 3: openim.sdkws.GroupInfoForSet.applyMemberFriend:type_name -> openim.protobuf.Int32Value
+	94, // 4: openim.sdkws.GroupInfoForSet.deleteConversationOnKick:type_name -> openim.protobuf.Int32Value
+	94, // 5: openim.sdkws.GroupInfoForSet.historyForNewMembers:type_name -> openim.protobuf.Int32Value
+	94, // 6: openim.sdkws.GroupInfoForSet.readReceipts:type_name -> openim.protobuf.Int32Value
+	94, // 7: openim.sdkws.GroupInfoForSet.memberPin:type_name -> openim.protobuf.Int32Value
+	93, // 8: openim.sdkws.UserInfoWithEx.nickname:type_name -> openim.protobuf.StringValue
+	93, // 9: openim.sdkws.UserInfoWithEx.faceURL:type_name -> openim.protobuf.StringValue
+	93, // 10: openim.sdkws.UserInfoWithEx.ex:type_name -> openim.protobuf.StringValue
+	94, // 11: openim.sdkws.UserInfoWithEx.globalRecvMsgOpt:type_name -> openim.protobuf.Int32Value
 	6,  // 12: openim.sdkws.FriendInfo.friendUser:type_name -> openim.sdkws.UserInfo
 	5,  // 13: openim.sdkws.BlackInfo.blackUserInfo:type_name -> openim.sdkws.PublicUserInfo
 	5,  // 14: openim.sdkws.GroupRequest.userInfo:type_name -> openim.sdkws.PublicUserInfo
@@ -7125,14 +7307,14 @@ var file_sdkws_sdkws_proto_depIdxs = []int32{
 	13, // 16: openim.sdkws.PullMessageBySeqsReq.seqRanges:type_name -> openim.sdkws.SeqRange
 	0,  // 17: openim.sdkws.PullMessageBySeqsReq.order:type_name -> openim.sdkws.PullOrder
 	19, // 18: openim.sdkws.PullMsgs.Msgs:type_name -> openim.sdkws.MsgData
-	83, // 19: openim.sdkws.PullMessageBySeqsResp.msgs:type_name -> openim.sdkws.PullMessageBySeqsResp.MsgsEntry
-	84, // 20: openim.sdkws.PullMessageBySeqsResp.notificationMsgs:type_name -> openim.sdkws.PullMessageBySeqsResp.NotificationMsgsEntry
-	85, // 21: openim.sdkws.GetMaxSeqResp.maxSeqs:type_name -> openim.sdkws.GetMaxSeqResp.MaxSeqsEntry
-	86, // 22: openim.sdkws.GetMaxSeqResp.minSeqs:type_name -> openim.sdkws.GetMaxSeqResp.MinSeqsEntry
-	87, // 23: openim.sdkws.MsgData.options:type_name -> openim.sdkws.MsgData.OptionsEntry
+	85, // 19: openim.sdkws.PullMessageBySeqsResp.msgs:type_name -> openim.sdkws.PullMessageBySeqsResp.MsgsEntry
+	86, // 20: openim.sdkws.PullMessageBySeqsResp.notificationMsgs:type_name -> openim.sdkws.PullMessageBySeqsResp.NotificationMsgsEntry
+	87, // 21: openim.sdkws.GetMaxSeqResp.maxSeqs:type_name -> openim.sdkws.GetMaxSeqResp.MaxSeqsEntry
+	88, // 22: openim.sdkws.GetMaxSeqResp.minSeqs:type_name -> openim.sdkws.GetMaxSeqResp.MinSeqsEntry
+	89, // 23: openim.sdkws.MsgData.options:type_name -> openim.sdkws.MsgData.OptionsEntry
 	21, // 24: openim.sdkws.MsgData.offlinePushInfo:type_name -> openim.sdkws.OfflinePushInfo
-	88, // 25: openim.sdkws.PushMessages.msgs:type_name -> openim.sdkws.PushMessages.MsgsEntry
-	89, // 26: openim.sdkws.PushMessages.notificationMsgs:type_name -> openim.sdkws.PushMessages.NotificationMsgsEntry
+	90, // 25: openim.sdkws.PushMessages.msgs:type_name -> openim.sdkws.PushMessages.MsgsEntry
+	91, // 26: openim.sdkws.PushMessages.notificationMsgs:type_name -> openim.sdkws.PushMessages.NotificationMsgsEntry
 	1,  // 27: openim.sdkws.GroupCreatedTips.group:type_name -> openim.sdkws.GroupInfo
 	4,  // 28: openim.sdkws.GroupCreatedTips.opUser:type_name -> openim.sdkws.GroupMemberFullInfo
 	4,  // 29: openim.sdkws.GroupCreatedTips.memberList:type_name -> openim.sdkws.GroupMemberFullInfo
@@ -7197,16 +7379,18 @@ var file_sdkws_sdkws_proto_depIdxs = []int32{
 	67, // 88: openim.sdkws.MarkAsReadTips.seqReadCounts:type_name -> openim.sdkws.SeqReadCount
 	42, // 89: openim.sdkws.FriendsInfoUpdateTips.fromToUserID:type_name -> openim.sdkws.FromToUserID
 	73, // 90: openim.sdkws.SubUserOnlineStatusTips.subscribers:type_name -> openim.sdkws.SubUserOnlineStatusElem
-	79, // 91: openim.sdkws.AppSettingsChangedTips.settings:type_name -> openim.sdkws.AppSettings
-	14, // 92: openim.sdkws.PullMessageBySeqsResp.MsgsEntry.value:type_name -> openim.sdkws.PullMsgs
-	14, // 93: openim.sdkws.PullMessageBySeqsResp.NotificationMsgsEntry.value:type_name -> openim.sdkws.PullMsgs
-	14, // 94: openim.sdkws.PushMessages.MsgsEntry.value:type_name -> openim.sdkws.PullMsgs
-	14, // 95: openim.sdkws.PushMessages.NotificationMsgsEntry.value:type_name -> openim.sdkws.PullMsgs
-	96, // [96:96] is the sub-list for method output_type
-	96, // [96:96] is the sub-list for method input_type
-	96, // [96:96] is the sub-list for extension type_name
-	96, // [96:96] is the sub-list for extension extendee
-	0,  // [0:96] is the sub-list for field type_name
+	92, // 91: openim.sdkws.PresenceSettings.platformSettings:type_name -> openim.sdkws.PresenceSettings.PlatformSettingsEntry
+	79, // 92: openim.sdkws.AppSettingsChangedTips.settings:type_name -> openim.sdkws.AppSettings
+	14, // 93: openim.sdkws.PullMessageBySeqsResp.MsgsEntry.value:type_name -> openim.sdkws.PullMsgs
+	14, // 94: openim.sdkws.PullMessageBySeqsResp.NotificationMsgsEntry.value:type_name -> openim.sdkws.PullMsgs
+	14, // 95: openim.sdkws.PushMessages.MsgsEntry.value:type_name -> openim.sdkws.PullMsgs
+	14, // 96: openim.sdkws.PushMessages.NotificationMsgsEntry.value:type_name -> openim.sdkws.PullMsgs
+	80, // 97: openim.sdkws.PresenceSettings.PlatformSettingsEntry.value:type_name -> openim.sdkws.PlatformPresenceSetting
+	98, // [98:98] is the sub-list for method output_type
+	98, // [98:98] is the sub-list for method input_type
+	98, // [98:98] is the sub-list for extension type_name
+	98, // [98:98] is the sub-list for extension extendee
+	0,  // [0:98] is the sub-list for field type_name
 }
 
 func init() { file_sdkws_sdkws_proto_init() }
@@ -7217,13 +7401,14 @@ func file_sdkws_sdkws_proto_init() {
 	file_sdkws_sdkws_proto_msgTypes[18].OneofWrappers = []any{}
 	file_sdkws_sdkws_proto_msgTypes[78].OneofWrappers = []any{}
 	file_sdkws_sdkws_proto_msgTypes[80].OneofWrappers = []any{}
+	file_sdkws_sdkws_proto_msgTypes[82].OneofWrappers = []any{}
 	type x struct{}
 	out := protoimpl.TypeBuilder{
 		File: protoimpl.DescBuilder{
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_sdkws_sdkws_proto_rawDesc), len(file_sdkws_sdkws_proto_rawDesc)),
 			NumEnums:      1,
-			NumMessages:   89,
+			NumMessages:   92,
 			NumExtensions: 0,
 			NumServices:   0,
 		},
