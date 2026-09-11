@@ -766,7 +766,7 @@ message ConversationDeleteTips {
 // endpoint per knob — so the next knob costs a field here instead of a
 // round trip everywhere.
 //
-// Every field is `optional` so that a write can merge. An admin console
+// Every scalar field is `optional` so that a write can merge. An admin console
 // one release behind the server sends only the fields it knows about,
 // and the ones it has never heard of keep their values instead of being
 // silently zeroed by their own absence.
@@ -796,6 +796,21 @@ message AppSettings {
   // before this setting existed and has never been time-bounded, so the
   // default has to keep meaning what the absence of a setting meant.
   optional int32 revokeWindowSeconds = 2;
+  // The durations an owner or admin picks from when muting a group
+  // member, in seconds, ascending — each one is sent back verbatim as
+  // MuteGroupMemberReq.mutedSeconds, hence uint32. Not a window, so the
+  // -1/0 rule above does not apply: every entry is a positive length.
+  //
+  // The one field here that cannot be `optional` (proto3 has no presence
+  // on a repeated field), so on a write an empty list stands in for
+  // absent and leaves the stored list alone. That costs nothing: an empty
+  // list is never a valid configuration — muting needs at least one
+  // duration to offer.
+  //
+  // Defaults to 1 minute, 10 minutes, 1 hour, 1 day, 1 week, 30 days,
+  // 365 days, and 99 years — the last is what clients present as
+  // permanent, there being no "forever" in a uint32 of seconds.
+  repeated uint32 muteDurationSeconds = 3;
 }
 
 // PlatformPresenceSetting: what one platform's presence is allowed to

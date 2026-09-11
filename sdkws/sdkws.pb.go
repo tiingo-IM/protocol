@@ -6070,7 +6070,7 @@ func (x *ConversationDeleteTips) GetConversationIDs() []string {
 // endpoint per knob — so the next knob costs a field here instead of a
 // round trip everywhere.
 //
-// Every field is `optional` so that a write can merge. An admin console
+// Every scalar field is `optional` so that a write can merge. An admin console
 // one release behind the server sends only the fields it knows about,
 // and the ones it has never heard of keep their values instead of being
 // silently zeroed by their own absence.
@@ -6101,6 +6101,21 @@ type AppSettings struct {
 	// before this setting existed and has never been time-bounded, so the
 	// default has to keep meaning what the absence of a setting meant.
 	RevokeWindowSeconds *int32 `protobuf:"varint,2,opt,name=revokeWindowSeconds,proto3,oneof" json:"revokeWindowSeconds"`
+	// The durations an owner or admin picks from when muting a group
+	// member, in seconds, ascending — each one is sent back verbatim as
+	// MuteGroupMemberReq.mutedSeconds, hence uint32. Not a window, so the
+	// -1/0 rule above does not apply: every entry is a positive length.
+	//
+	// The one field here that cannot be `optional` (proto3 has no presence
+	// on a repeated field), so on a write an empty list stands in for
+	// absent and leaves the stored list alone. That costs nothing: an empty
+	// list is never a valid configuration — muting needs at least one
+	// duration to offer.
+	//
+	// Defaults to 1 minute, 10 minutes, 1 hour, 1 day, 1 week, 30 days,
+	// 365 days, and 99 years — the last is what clients present as
+	// permanent, there being no "forever" in a uint32 of seconds.
+	MuteDurationSeconds []uint32 `protobuf:"varint,3,rep,packed,name=muteDurationSeconds,proto3" json:"muteDurationSeconds"`
 	unknownFields       protoimpl.UnknownFields
 	sizeCache           protoimpl.SizeCache
 }
@@ -6147,6 +6162,13 @@ func (x *AppSettings) GetRevokeWindowSeconds() int32 {
 		return *x.RevokeWindowSeconds
 	}
 	return 0
+}
+
+func (x *AppSettings) GetMuteDurationSeconds() []uint32 {
+	if x != nil {
+		return x.MuteDurationSeconds
+	}
+	return nil
 }
 
 // PlatformPresenceSetting: what one platform's presence is allowed to
@@ -7145,10 +7167,11 @@ const file_sdkws_sdkws_proto_rawDesc = "" +
 	"\rmodifiedCount\x18\a \x01(\x03R\rmodifiedCount\"Z\n" +
 	"\x16ConversationDeleteTips\x12\x16\n" +
 	"\x06userID\x18\x01 \x01(\tR\x06userID\x12(\n" +
-	"\x0fconversationIDs\x18\x02 \x03(\tR\x0fconversationIDs\"\xa5\x01\n" +
+	"\x0fconversationIDs\x18\x02 \x03(\tR\x0fconversationIDs\"\xd7\x01\n" +
 	"\vAppSettings\x121\n" +
 	"\x11editWindowSeconds\x18\x01 \x01(\x05H\x00R\x11editWindowSeconds\x88\x01\x01\x125\n" +
-	"\x13revokeWindowSeconds\x18\x02 \x01(\x05H\x01R\x13revokeWindowSeconds\x88\x01\x01B\x14\n" +
+	"\x13revokeWindowSeconds\x18\x02 \x01(\x05H\x01R\x13revokeWindowSeconds\x88\x01\x01\x120\n" +
+	"\x13muteDurationSeconds\x18\x03 \x03(\rR\x13muteDurationSecondsB\x14\n" +
 	"\x12_editWindowSecondsB\x16\n" +
 	"\x14_revokeWindowSeconds\"q\n" +
 	"\x17PlatformPresenceSetting\x12\"\n" +
