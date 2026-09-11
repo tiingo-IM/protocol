@@ -658,6 +658,129 @@ message GetMsgExtraVersionResp {
   int64 version = 1;
 }
 
+// Scheduled messages: written now, sent by the server later under their
+// owner's name — whether or not any of the owner's devices are online.
+// Nobody but the owner can see one before it is sent.
+
+// How a recurring scheduled message repeats. hour:minute is a wall-clock
+// time in the schedule's timeZone, so "09:00 every day" stays 09:00 across
+// daylight-saving changes rather than drifting by an hour.
+message ScheduledMsgRecurrence {
+  // constant.ScheduledMsgDaily / Weekly / Monthly.
+  int32 frequency = 1;
+  // Weekly only: 0 Sunday … 6 Saturday, at least one.
+  repeated int32 weekdays = 2;
+  // Monthly only: 1–31. A month with fewer days sends on its last day.
+  int32 monthDay = 3;
+  int32 hour = 4;
+  int32 minute = 5;
+  // constant.ScheduledMsgEndNever / EndUntil / EndCount.
+  int32 endType = 6;
+  // EndUntil only: "YYYY-MM-DD" in timeZone, inclusive.
+  string untilDate = 7;
+  // EndCount only: 1–365 successful sends. Skipped occurrences do not count.
+  int32 count = 8;
+}
+
+// When a scheduled message goes out.
+//
+// One-time: sendAt is the instant, and timeZone plus localTime are what
+// the owner picked it as — kept so another device can say "09:00 Vietnam
+// time" without redoing timezone arithmetic of its own.
+//
+// Recurring: recurrence is set, sendAt is ignored on a write (the server
+// works out the first occurrence), and timeZone is the zone the rule's
+// wall-clock times are in.
+message ScheduledMsgSchedule {
+  int64 sendAt = 1;
+  // IANA name, e.g. "Asia/Ho_Chi_Minh". Required.
+  string timeZone = 2;
+  // One-time only: "YYYY-MM-DDTHH:mm" as picked, in timeZone.
+  string localTime = 3;
+  ScheduledMsgRecurrence recurrence = 4;
+}
+
+message ScheduledMsg {
+  string scheduleID = 1;
+  string conversationID = 2;
+  // The message as it will be sent. content is re-sent verbatim; sendTime,
+  // serverMsgID and seq are assigned when it actually goes out.
+  sdkws.MsgData msgData = 3;
+  ScheduledMsgSchedule schedule = 4;
+  // The next time it will be sent: the one-time instant, or a recurring
+  // schedule's next occurrence. Unchanged once a message has ended.
+  int64 sendAt = 5;
+  // constant.ScheduledMsgPending … ScheduledMsgCompleted.
+  int32 status = 6;
+  // Failed only: the error code that ended it (a servererrs code) and why.
+  int32 failCode = 7;
+  string failReason = 8;
+  // Recurring only.
+  int32 sentCount = 9;
+  int64 lastSentAt = 10;
+  // constant.ScheduledMsgResult*: what happened the last time it came due.
+  int32 lastResult = 11;
+  int64 createTime = 12;
+  int64 updateTime = 13;
+}
+
+message CreateScheduledMsgReq {
+  // sendID must be the caller. Text, AtText and Quote only.
+  sdkws.MsgData msgData = 1;
+  ScheduledMsgSchedule schedule = 2;
+}
+message CreateScheduledMsgResp {
+  ScheduledMsg scheduledMsg = 1;
+}
+
+// Pending messages only. Either part may be left out to keep it; the
+// conversation a message goes to cannot change.
+message UpdateScheduledMsgReq {
+  string scheduleID = 1;
+  sdkws.MsgData msgData = 2;
+  ScheduledMsgSchedule schedule = 3;
+}
+message UpdateScheduledMsgResp {
+  ScheduledMsg scheduledMsg = 1;
+}
+
+// Pending or failed messages: a pending one will not be sent, a failed one
+// leaves the owner's list.
+message CancelScheduledMsgReq {
+  string scheduleID = 1;
+}
+message CancelScheduledMsgResp {}
+
+// Sends now instead of waiting. A one-time message is then done; a
+// recurring one sends an extra copy and keeps its schedule.
+message SendScheduledMsgNowReq {
+  string scheduleID = 1;
+}
+message SendScheduledMsgNowResp {
+  ScheduledMsg scheduledMsg = 1;
+}
+
+// The caller's pending, sending and failed messages, soonest first —
+// in one conversation, or across all of them when conversationID is empty.
+message GetScheduledMsgsReq {
+  string conversationID = 1;
+  sdkws.RequestPagination pagination = 2;
+}
+message GetScheduledMsgsResp {
+  repeated ScheduledMsg scheduledMsgs = 1;
+  int32 total = 2;
+}
+
+// Admin only. Cancels everything a user has scheduled that has not gone
+// out yet — for an account being blocked or removed, whose messages must
+// not keep arriving under their name.
+message CancelUserScheduledMsgsReq {
+  string userID = 1;
+}
+message CancelUserScheduledMsgsResp {
+  int32 count = 1;
+}
+
 service msg {
   // Get min and max seq (including the user and specified groups)
   rpc GetMaxSeq(sdkws.GetMaxSeqReq) returns (sdkws.GetMaxSeqResp);
@@ -763,4 +886,13 @@ service msg {
   // Has anything in this conversation been rewritten in place since the
   // caller last looked? See GetMsgExtraVersionReq.
   rpc GetMsgExtraVersion(GetMsgExtraVersionReq) returns (GetMsgExtraVersionResp);
+
+  // Scheduled messages — see ScheduledMsg. Every call but the last acts on
+  // the caller's own messages only.
+  rpc CreateScheduledMsg(CreateScheduledMsgReq) returns (CreateScheduledMsgResp);
+  rpc UpdateScheduledMsg(UpdateScheduledMsgReq) returns (UpdateScheduledMsgResp);
+  rpc CancelScheduledMsg(CancelScheduledMsgReq) returns (CancelScheduledMsgResp);
+  rpc SendScheduledMsgNow(SendScheduledMsgNowReq) returns (SendScheduledMsgNowResp);
+  rpc GetScheduledMsgs(GetScheduledMsgsReq) returns (GetScheduledMsgsResp);
+  rpc CancelUserScheduledMsgs(CancelUserScheduledMsgsReq) returns (CancelUserScheduledMsgsResp);
 }

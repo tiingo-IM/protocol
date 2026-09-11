@@ -100,6 +100,11 @@ const (
 	// than fixed, because a conversation may be a single chat or a
 	// group and the pinned bar is the same feature in both.
 	PinnedMessageChangedNotification = 1705
+	// One of the caller's own scheduled messages changed state. Sent only
+	// to its owner (sendID == recvID), never stored: it tells their other
+	// devices to refetch that conversation's list, and a device that was
+	// offline fetches the list when it next opens the conversation anyway.
+	ScheduledMsgChangedNotification = 1706
 
 	BusinessNotificationBegin = 2000
 	BusinessNotification      = 2001
@@ -365,6 +370,49 @@ const (
 	PinnedMessagePinned   = 1
 	PinnedMessageUnpinned = 2
 	PinnedMessageCleared  = 3
+)
+
+// Where a scheduled message stands, carried on msg.ScheduledMsg.status.
+//
+// A one-time message ends sent, failed or canceled. A recurring one goes
+// back to pending after every occurrence — sent or skipped — and ends
+// completed when its end condition is reached, or failed when it can
+// never be sent again (its owner left the group, the peer blocked them).
+const (
+	ScheduledMsgPending   = 1
+	ScheduledMsgSending   = 2
+	ScheduledMsgSent      = 3
+	ScheduledMsgFailed    = 4
+	ScheduledMsgCanceled  = 5
+	ScheduledMsgCompleted = 6
+)
+
+// How a recurring scheduled message repeats (msg.ScheduledMsgRecurrence).
+const (
+	ScheduledMsgDaily   = 1
+	ScheduledMsgWeekly  = 2 // on the weekdays listed
+	ScheduledMsgMonthly = 3 // on monthDay, or the month's last day when it has fewer
+)
+
+// When a recurring scheduled message stops.
+const (
+	ScheduledMsgEndNever = 1
+	ScheduledMsgEndUntil = 2 // after untilDate, inclusive
+	ScheduledMsgEndCount = 3 // after `count` successful sends
+)
+
+// What happened the last time a recurring scheduled message came due
+// (msg.ScheduledMsg.lastResult). Skips keep the series; see
+// ScheduledMsgFailed for the ones that end it.
+const (
+	ScheduledMsgResultSent            = 1
+	ScheduledMsgResultSkippedDisabled = 2 // an admin had turned the feature (or recurring) off
+	ScheduledMsgResultSkippedRole     = 3 // the owner's role was no longer allowed to schedule
+	ScheduledMsgResultSkippedMuted    = 4
+	ScheduledMsgResultSkippedExpired  = 5 // came due too long ago to still be worth sending
+	ScheduledMsgResultSkippedRejected = 6 // refused for some other lasting reason (a webhook, the peer's receive setting)
+	ScheduledMsgResultFailedTransient = 7 // kept failing on a temporary error
+	ScheduledMsgResultUnknown         = 8 // the sender stopped mid-send; it may or may not have gone out
 )
 
 const (

@@ -811,6 +811,25 @@ message AppSettings {
   // 365 days, and 99 years — the last is what clients present as
   // permanent, there being no "forever" in a uint32 of seconds.
   repeated uint32 muteDurationSeconds = 3;
+
+  // Scheduled messages. All default to true: the feature is on for
+  // everyone until an admin narrows it.
+  //
+  // Turning any of these off never cancels what is already scheduled.
+  // It is checked again when each message comes due: a one-time message
+  // due while it is off fails, a recurring one skips that occurrence and
+  // keeps its schedule — see ScheduledMsgResultSkippedDisabled.
+  optional bool scheduledMsgEnabled = 4;
+  // Recurring schedules specifically; one-time ones are governed by
+  // scheduledMsgEnabled alone.
+  optional bool scheduledMsgRecurringEnabled = 5;
+  // Which group roles may schedule into a group, by the role they hold
+  // when the message is created and again when it comes due.
+  optional bool scheduledMsgAllowGroupOwner = 6;
+  optional bool scheduledMsgAllowGroupAdmin = 7;
+  optional bool scheduledMsgAllowGroupMember = 8;
+  // One-to-one chats, which have no roles to go by.
+  optional bool scheduledMsgAllowSingleChat = 9;
 }
 
 // PlatformPresenceSetting: what one platform's presence is allowed to
@@ -873,6 +892,17 @@ message PresenceSettings {
 // than a "go and look" marker, so one push is the whole change.
 message AppSettingsChangedTips {
   AppSettings settings = 1;
+}
+
+// Pushed (constant.ScheduledMsgChangedNotification, 1706) to the owner of
+// a scheduled message, on their own devices only. A marker rather than
+// the message: the receiving device refetches that conversation's list,
+// so the tips never has to carry — or stay in step with — the whole row.
+message ScheduledMsgChangedTips {
+  string conversationID = 1;
+  string scheduleID = 2;
+  // constant.ScheduledMsgPending … ScheduledMsgCompleted, as it now stands.
+  int32 status = 3;
 }
 
 // GroupCreationDefaults: what a group's seven owner-configurable

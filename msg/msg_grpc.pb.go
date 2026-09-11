@@ -68,6 +68,12 @@ const (
 	Msg_SetAppSettings_FullMethodName                   = "/openim.msg.msg/SetAppSettings"
 	Msg_EditMsg_FullMethodName                          = "/openim.msg.msg/EditMsg"
 	Msg_GetMsgExtraVersion_FullMethodName               = "/openim.msg.msg/GetMsgExtraVersion"
+	Msg_CreateScheduledMsg_FullMethodName               = "/openim.msg.msg/CreateScheduledMsg"
+	Msg_UpdateScheduledMsg_FullMethodName               = "/openim.msg.msg/UpdateScheduledMsg"
+	Msg_CancelScheduledMsg_FullMethodName               = "/openim.msg.msg/CancelScheduledMsg"
+	Msg_SendScheduledMsgNow_FullMethodName              = "/openim.msg.msg/SendScheduledMsgNow"
+	Msg_GetScheduledMsgs_FullMethodName                 = "/openim.msg.msg/GetScheduledMsgs"
+	Msg_CancelUserScheduledMsgs_FullMethodName          = "/openim.msg.msg/CancelUserScheduledMsgs"
 )
 
 // MsgClient is the client API for Msg service.
@@ -166,6 +172,14 @@ type MsgClient interface {
 	// Has anything in this conversation been rewritten in place since the
 	// caller last looked? See GetMsgExtraVersionReq.
 	GetMsgExtraVersion(ctx context.Context, in *GetMsgExtraVersionReq, opts ...grpc.CallOption) (*GetMsgExtraVersionResp, error)
+	// Scheduled messages — see ScheduledMsg. Every call but the last acts on
+	// the caller's own messages only.
+	CreateScheduledMsg(ctx context.Context, in *CreateScheduledMsgReq, opts ...grpc.CallOption) (*CreateScheduledMsgResp, error)
+	UpdateScheduledMsg(ctx context.Context, in *UpdateScheduledMsgReq, opts ...grpc.CallOption) (*UpdateScheduledMsgResp, error)
+	CancelScheduledMsg(ctx context.Context, in *CancelScheduledMsgReq, opts ...grpc.CallOption) (*CancelScheduledMsgResp, error)
+	SendScheduledMsgNow(ctx context.Context, in *SendScheduledMsgNowReq, opts ...grpc.CallOption) (*SendScheduledMsgNowResp, error)
+	GetScheduledMsgs(ctx context.Context, in *GetScheduledMsgsReq, opts ...grpc.CallOption) (*GetScheduledMsgsResp, error)
+	CancelUserScheduledMsgs(ctx context.Context, in *CancelUserScheduledMsgsReq, opts ...grpc.CallOption) (*CancelUserScheduledMsgsResp, error)
 }
 
 type msgClient struct {
@@ -656,6 +670,66 @@ func (c *msgClient) GetMsgExtraVersion(ctx context.Context, in *GetMsgExtraVersi
 	return out, nil
 }
 
+func (c *msgClient) CreateScheduledMsg(ctx context.Context, in *CreateScheduledMsgReq, opts ...grpc.CallOption) (*CreateScheduledMsgResp, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(CreateScheduledMsgResp)
+	err := c.cc.Invoke(ctx, Msg_CreateScheduledMsg_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *msgClient) UpdateScheduledMsg(ctx context.Context, in *UpdateScheduledMsgReq, opts ...grpc.CallOption) (*UpdateScheduledMsgResp, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(UpdateScheduledMsgResp)
+	err := c.cc.Invoke(ctx, Msg_UpdateScheduledMsg_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *msgClient) CancelScheduledMsg(ctx context.Context, in *CancelScheduledMsgReq, opts ...grpc.CallOption) (*CancelScheduledMsgResp, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(CancelScheduledMsgResp)
+	err := c.cc.Invoke(ctx, Msg_CancelScheduledMsg_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *msgClient) SendScheduledMsgNow(ctx context.Context, in *SendScheduledMsgNowReq, opts ...grpc.CallOption) (*SendScheduledMsgNowResp, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(SendScheduledMsgNowResp)
+	err := c.cc.Invoke(ctx, Msg_SendScheduledMsgNow_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *msgClient) GetScheduledMsgs(ctx context.Context, in *GetScheduledMsgsReq, opts ...grpc.CallOption) (*GetScheduledMsgsResp, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(GetScheduledMsgsResp)
+	err := c.cc.Invoke(ctx, Msg_GetScheduledMsgs_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *msgClient) CancelUserScheduledMsgs(ctx context.Context, in *CancelUserScheduledMsgsReq, opts ...grpc.CallOption) (*CancelUserScheduledMsgsResp, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(CancelUserScheduledMsgsResp)
+	err := c.cc.Invoke(ctx, Msg_CancelUserScheduledMsgs_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // MsgServer is the server API for Msg service.
 // All implementations must embed UnimplementedMsgServer
 // for forward compatibility.
@@ -752,6 +826,14 @@ type MsgServer interface {
 	// Has anything in this conversation been rewritten in place since the
 	// caller last looked? See GetMsgExtraVersionReq.
 	GetMsgExtraVersion(context.Context, *GetMsgExtraVersionReq) (*GetMsgExtraVersionResp, error)
+	// Scheduled messages — see ScheduledMsg. Every call but the last acts on
+	// the caller's own messages only.
+	CreateScheduledMsg(context.Context, *CreateScheduledMsgReq) (*CreateScheduledMsgResp, error)
+	UpdateScheduledMsg(context.Context, *UpdateScheduledMsgReq) (*UpdateScheduledMsgResp, error)
+	CancelScheduledMsg(context.Context, *CancelScheduledMsgReq) (*CancelScheduledMsgResp, error)
+	SendScheduledMsgNow(context.Context, *SendScheduledMsgNowReq) (*SendScheduledMsgNowResp, error)
+	GetScheduledMsgs(context.Context, *GetScheduledMsgsReq) (*GetScheduledMsgsResp, error)
+	CancelUserScheduledMsgs(context.Context, *CancelUserScheduledMsgsReq) (*CancelUserScheduledMsgsResp, error)
 	mustEmbedUnimplementedMsgServer()
 }
 
@@ -905,6 +987,24 @@ func (UnimplementedMsgServer) EditMsg(context.Context, *EditMsgReq) (*EditMsgRes
 }
 func (UnimplementedMsgServer) GetMsgExtraVersion(context.Context, *GetMsgExtraVersionReq) (*GetMsgExtraVersionResp, error) {
 	return nil, status.Error(codes.Unimplemented, "method GetMsgExtraVersion not implemented")
+}
+func (UnimplementedMsgServer) CreateScheduledMsg(context.Context, *CreateScheduledMsgReq) (*CreateScheduledMsgResp, error) {
+	return nil, status.Error(codes.Unimplemented, "method CreateScheduledMsg not implemented")
+}
+func (UnimplementedMsgServer) UpdateScheduledMsg(context.Context, *UpdateScheduledMsgReq) (*UpdateScheduledMsgResp, error) {
+	return nil, status.Error(codes.Unimplemented, "method UpdateScheduledMsg not implemented")
+}
+func (UnimplementedMsgServer) CancelScheduledMsg(context.Context, *CancelScheduledMsgReq) (*CancelScheduledMsgResp, error) {
+	return nil, status.Error(codes.Unimplemented, "method CancelScheduledMsg not implemented")
+}
+func (UnimplementedMsgServer) SendScheduledMsgNow(context.Context, *SendScheduledMsgNowReq) (*SendScheduledMsgNowResp, error) {
+	return nil, status.Error(codes.Unimplemented, "method SendScheduledMsgNow not implemented")
+}
+func (UnimplementedMsgServer) GetScheduledMsgs(context.Context, *GetScheduledMsgsReq) (*GetScheduledMsgsResp, error) {
+	return nil, status.Error(codes.Unimplemented, "method GetScheduledMsgs not implemented")
+}
+func (UnimplementedMsgServer) CancelUserScheduledMsgs(context.Context, *CancelUserScheduledMsgsReq) (*CancelUserScheduledMsgsResp, error) {
+	return nil, status.Error(codes.Unimplemented, "method CancelUserScheduledMsgs not implemented")
 }
 func (UnimplementedMsgServer) mustEmbedUnimplementedMsgServer() {}
 func (UnimplementedMsgServer) testEmbeddedByValue()             {}
@@ -1791,6 +1891,114 @@ func _Msg_GetMsgExtraVersion_Handler(srv interface{}, ctx context.Context, dec f
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Msg_CreateScheduledMsg_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(CreateScheduledMsgReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(MsgServer).CreateScheduledMsg(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Msg_CreateScheduledMsg_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(MsgServer).CreateScheduledMsg(ctx, req.(*CreateScheduledMsgReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Msg_UpdateScheduledMsg_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(UpdateScheduledMsgReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(MsgServer).UpdateScheduledMsg(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Msg_UpdateScheduledMsg_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(MsgServer).UpdateScheduledMsg(ctx, req.(*UpdateScheduledMsgReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Msg_CancelScheduledMsg_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(CancelScheduledMsgReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(MsgServer).CancelScheduledMsg(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Msg_CancelScheduledMsg_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(MsgServer).CancelScheduledMsg(ctx, req.(*CancelScheduledMsgReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Msg_SendScheduledMsgNow_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(SendScheduledMsgNowReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(MsgServer).SendScheduledMsgNow(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Msg_SendScheduledMsgNow_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(MsgServer).SendScheduledMsgNow(ctx, req.(*SendScheduledMsgNowReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Msg_GetScheduledMsgs_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetScheduledMsgsReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(MsgServer).GetScheduledMsgs(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Msg_GetScheduledMsgs_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(MsgServer).GetScheduledMsgs(ctx, req.(*GetScheduledMsgsReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Msg_CancelUserScheduledMsgs_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(CancelUserScheduledMsgsReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(MsgServer).CancelUserScheduledMsgs(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Msg_CancelUserScheduledMsgs_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(MsgServer).CancelUserScheduledMsgs(ctx, req.(*CancelUserScheduledMsgsReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // Msg_ServiceDesc is the grpc.ServiceDesc for Msg service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -1989,6 +2197,30 @@ var Msg_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "GetMsgExtraVersion",
 			Handler:    _Msg_GetMsgExtraVersion_Handler,
+		},
+		{
+			MethodName: "CreateScheduledMsg",
+			Handler:    _Msg_CreateScheduledMsg_Handler,
+		},
+		{
+			MethodName: "UpdateScheduledMsg",
+			Handler:    _Msg_UpdateScheduledMsg_Handler,
+		},
+		{
+			MethodName: "CancelScheduledMsg",
+			Handler:    _Msg_CancelScheduledMsg_Handler,
+		},
+		{
+			MethodName: "SendScheduledMsgNow",
+			Handler:    _Msg_SendScheduledMsgNow_Handler,
+		},
+		{
+			MethodName: "GetScheduledMsgs",
+			Handler:    _Msg_GetScheduledMsgs_Handler,
+		},
+		{
+			MethodName: "CancelUserScheduledMsgs",
+			Handler:    _Msg_CancelUserScheduledMsgs_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
