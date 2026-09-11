@@ -841,6 +841,16 @@ message PresenceSettings {
   // merging leaves no way to say "this platform has no opinion again",
   // and the console always sends every platform anyway.
   map<int32, PlatformPresenceSetting> platformSettings = 2;
+  // Whether a user's own "hide my online status" choice is honoured.
+  // Absent means no admin has ever chosen, which reads as off: the
+  // per-user choice is a privacy control that did not exist before, and
+  // an admin has to decide to let users opt out of being seen.
+  //
+  // Off does not erase anyone's stored choice, it only stops acting on
+  // it — turning this back on restores exactly who had hidden themselves.
+  // On means a user who has hidden themselves is reported as offline with
+  // no last-seen time, on every platform, whatever the map above says.
+  optional bool allowUserHideOnlineStatus = 3;
 }
 
 // Pushed (constant.AppSettingsChangedNotification, 2400) to every user

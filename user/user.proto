@@ -233,6 +233,35 @@ message setPresenceSettingsResp {
   sdkws.PresenceSettings settings = 1;
 }
 
+// A user's own choice to always appear offline. Readable and writable by
+// that user (or an admin acting for them), and by nobody else — whether
+// someone has hidden themselves has to be as private as the thing it
+// hides, which is why this is not a field on sdkws.UserInfo, served to
+// anyone who can look a user up.
+message getSelfPresencePrivacyReq {
+  string userID = 1;
+}
+
+message getSelfPresencePrivacyResp {
+  // What the user has chosen, whether or not it is currently honoured.
+  bool hideOnlineStatus = 1;
+  // Whether an admin currently lets that choice take effect. A client
+  // uses this to decide whether to offer the switch at all — the
+  // PresenceSettings it comes from stay admin-only, and this one bit is
+  // all a user needs from them.
+  bool userControlEnabled = 2;
+}
+
+message setSelfPresencePrivacyReq {
+  string userID = 1;
+  bool hideOnlineStatus = 2;
+}
+
+message setSelfPresencePrivacyResp {
+  bool hideOnlineStatus = 1;
+  bool userControlEnabled = 2;
+}
+
 message processUserCommandAddReq {
   string userID = 1;
   int32 type = 2;
@@ -460,6 +489,13 @@ service user {
   // without polling anything.
   rpc getPresenceSettings(getPresenceSettingsReq) returns (getPresenceSettingsResp);
   rpc setPresenceSettings(setPresenceSettingsReq) returns (setPresenceSettingsResp);
+
+  // A user's own choice to always appear offline — honoured only while
+  // PresenceSettings.allowUserHideOnlineStatus is on. Stored whether or
+  // not it is, so an admin turning the feature off and on again does not
+  // quietly reveal everyone who had hidden themselves.
+  rpc getSelfPresencePrivacy(getSelfPresencePrivacyReq) returns (getSelfPresencePrivacyResp);
+  rpc setSelfPresencePrivacy(setSelfPresencePrivacyReq) returns (setSelfPresencePrivacyResp);
   // get all online users
   rpc getAllOnlineUsers(getAllOnlineUsersReq) returns (getAllOnlineUsersResp);
 

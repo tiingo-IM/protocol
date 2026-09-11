@@ -46,6 +46,8 @@ const (
 	User_SetUserOnlineStatus_FullMethodName           = "/openim.user.user/setUserOnlineStatus"
 	User_GetPresenceSettings_FullMethodName           = "/openim.user.user/getPresenceSettings"
 	User_SetPresenceSettings_FullMethodName           = "/openim.user.user/setPresenceSettings"
+	User_GetSelfPresencePrivacy_FullMethodName        = "/openim.user.user/getSelfPresencePrivacy"
+	User_SetSelfPresencePrivacy_FullMethodName        = "/openim.user.user/setSelfPresencePrivacy"
 	User_GetAllOnlineUsers_FullMethodName             = "/openim.user.user/getAllOnlineUsers"
 	User_GetUserClientConfig_FullMethodName           = "/openim.user.user/getUserClientConfig"
 	User_SetUserClientConfig_FullMethodName           = "/openim.user.user/setUserClientConfig"
@@ -113,6 +115,12 @@ type UserClient interface {
 	// without polling anything.
 	GetPresenceSettings(ctx context.Context, in *GetPresenceSettingsReq, opts ...grpc.CallOption) (*GetPresenceSettingsResp, error)
 	SetPresenceSettings(ctx context.Context, in *SetPresenceSettingsReq, opts ...grpc.CallOption) (*SetPresenceSettingsResp, error)
+	// A user's own choice to always appear offline — honoured only while
+	// PresenceSettings.allowUserHideOnlineStatus is on. Stored whether or
+	// not it is, so an admin turning the feature off and on again does not
+	// quietly reveal everyone who had hidden themselves.
+	GetSelfPresencePrivacy(ctx context.Context, in *GetSelfPresencePrivacyReq, opts ...grpc.CallOption) (*GetSelfPresencePrivacyResp, error)
+	SetSelfPresencePrivacy(ctx context.Context, in *SetSelfPresencePrivacyReq, opts ...grpc.CallOption) (*SetSelfPresencePrivacyResp, error)
 	// get all online users
 	GetAllOnlineUsers(ctx context.Context, in *GetAllOnlineUsersReq, opts ...grpc.CallOption) (*GetAllOnlineUsersResp, error)
 	GetUserClientConfig(ctx context.Context, in *GetUserClientConfigReq, opts ...grpc.CallOption) (*GetUserClientConfigResp, error)
@@ -399,6 +407,26 @@ func (c *userClient) SetPresenceSettings(ctx context.Context, in *SetPresenceSet
 	return out, nil
 }
 
+func (c *userClient) GetSelfPresencePrivacy(ctx context.Context, in *GetSelfPresencePrivacyReq, opts ...grpc.CallOption) (*GetSelfPresencePrivacyResp, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(GetSelfPresencePrivacyResp)
+	err := c.cc.Invoke(ctx, User_GetSelfPresencePrivacy_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *userClient) SetSelfPresencePrivacy(ctx context.Context, in *SetSelfPresencePrivacyReq, opts ...grpc.CallOption) (*SetSelfPresencePrivacyResp, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(SetSelfPresencePrivacyResp)
+	err := c.cc.Invoke(ctx, User_SetSelfPresencePrivacy_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 func (c *userClient) GetAllOnlineUsers(ctx context.Context, in *GetAllOnlineUsersReq, opts ...grpc.CallOption) (*GetAllOnlineUsersResp, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(GetAllOnlineUsersResp)
@@ -509,6 +537,12 @@ type UserServer interface {
 	// without polling anything.
 	GetPresenceSettings(context.Context, *GetPresenceSettingsReq) (*GetPresenceSettingsResp, error)
 	SetPresenceSettings(context.Context, *SetPresenceSettingsReq) (*SetPresenceSettingsResp, error)
+	// A user's own choice to always appear offline — honoured only while
+	// PresenceSettings.allowUserHideOnlineStatus is on. Stored whether or
+	// not it is, so an admin turning the feature off and on again does not
+	// quietly reveal everyone who had hidden themselves.
+	GetSelfPresencePrivacy(context.Context, *GetSelfPresencePrivacyReq) (*GetSelfPresencePrivacyResp, error)
+	SetSelfPresencePrivacy(context.Context, *SetSelfPresencePrivacyReq) (*SetSelfPresencePrivacyResp, error)
 	// get all online users
 	GetAllOnlineUsers(context.Context, *GetAllOnlineUsersReq) (*GetAllOnlineUsersResp, error)
 	GetUserClientConfig(context.Context, *GetUserClientConfigReq) (*GetUserClientConfigResp, error)
@@ -605,6 +639,12 @@ func (UnimplementedUserServer) GetPresenceSettings(context.Context, *GetPresence
 }
 func (UnimplementedUserServer) SetPresenceSettings(context.Context, *SetPresenceSettingsReq) (*SetPresenceSettingsResp, error) {
 	return nil, status.Error(codes.Unimplemented, "method SetPresenceSettings not implemented")
+}
+func (UnimplementedUserServer) GetSelfPresencePrivacy(context.Context, *GetSelfPresencePrivacyReq) (*GetSelfPresencePrivacyResp, error) {
+	return nil, status.Error(codes.Unimplemented, "method GetSelfPresencePrivacy not implemented")
+}
+func (UnimplementedUserServer) SetSelfPresencePrivacy(context.Context, *SetSelfPresencePrivacyReq) (*SetSelfPresencePrivacyResp, error) {
+	return nil, status.Error(codes.Unimplemented, "method SetSelfPresencePrivacy not implemented")
 }
 func (UnimplementedUserServer) GetAllOnlineUsers(context.Context, *GetAllOnlineUsersReq) (*GetAllOnlineUsersResp, error) {
 	return nil, status.Error(codes.Unimplemented, "method GetAllOnlineUsers not implemented")
@@ -1128,6 +1168,42 @@ func _User_SetPresenceSettings_Handler(srv interface{}, ctx context.Context, dec
 	return interceptor(ctx, in, info, handler)
 }
 
+func _User_GetSelfPresencePrivacy_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetSelfPresencePrivacyReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(UserServer).GetSelfPresencePrivacy(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: User_GetSelfPresencePrivacy_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(UserServer).GetSelfPresencePrivacy(ctx, req.(*GetSelfPresencePrivacyReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _User_SetSelfPresencePrivacy_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(SetSelfPresencePrivacyReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(UserServer).SetSelfPresencePrivacy(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: User_SetSelfPresencePrivacy_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(UserServer).SetSelfPresencePrivacy(ctx, req.(*SetSelfPresencePrivacyReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 func _User_GetAllOnlineUsers_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(GetAllOnlineUsersReq)
 	if err := dec(in); err != nil {
@@ -1332,6 +1408,14 @@ var User_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "setPresenceSettings",
 			Handler:    _User_SetPresenceSettings_Handler,
+		},
+		{
+			MethodName: "getSelfPresencePrivacy",
+			Handler:    _User_GetSelfPresencePrivacy_Handler,
+		},
+		{
+			MethodName: "setSelfPresencePrivacy",
+			Handler:    _User_SetSelfPresencePrivacy_Handler,
 		},
 		{
 			MethodName: "getAllOnlineUsers",

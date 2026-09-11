@@ -6240,8 +6240,18 @@ type PresenceSettings struct {
 	// merging leaves no way to say "this platform has no opinion again",
 	// and the console always sends every platform anyway.
 	PlatformSettings map[int32]*PlatformPresenceSetting `protobuf:"bytes,2,rep,name=platformSettings,proto3" json:"platformSettings,omitempty" protobuf_key:"varint,1,opt,name=key" protobuf_val:"bytes,2,opt,name=value"`
-	unknownFields    protoimpl.UnknownFields
-	sizeCache        protoimpl.SizeCache
+	// Whether a user's own "hide my online status" choice is honoured.
+	// Absent means no admin has ever chosen, which reads as off: the
+	// per-user choice is a privacy control that did not exist before, and
+	// an admin has to decide to let users opt out of being seen.
+	//
+	// Off does not erase anyone's stored choice, it only stops acting on
+	// it — turning this back on restores exactly who had hidden themselves.
+	// On means a user who has hidden themselves is reported as offline with
+	// no last-seen time, on every platform, whatever the map above says.
+	AllowUserHideOnlineStatus *bool `protobuf:"varint,3,opt,name=allowUserHideOnlineStatus,proto3,oneof" json:"allowUserHideOnlineStatus"`
+	unknownFields             protoimpl.UnknownFields
+	sizeCache                 protoimpl.SizeCache
 }
 
 func (x *PresenceSettings) Reset() {
@@ -6286,6 +6296,13 @@ func (x *PresenceSettings) GetPlatformSettings() map[int32]*PlatformPresenceSett
 		return x.PlatformSettings
 	}
 	return nil
+}
+
+func (x *PresenceSettings) GetAllowUserHideOnlineStatus() bool {
+	if x != nil && x.AllowUserHideOnlineStatus != nil {
+		return *x.AllowUserHideOnlineStatus
+	}
+	return false
 }
 
 // Pushed (constant.AppSettingsChangedNotification, 2400) to every user
@@ -7136,14 +7153,16 @@ const file_sdkws_sdkws_proto_rawDesc = "" +
 	"\x14_revokeWindowSeconds\"q\n" +
 	"\x17PlatformPresenceSetting\x12\"\n" +
 	"\fenableOnline\x18\x01 \x01(\bR\fenableOnline\x122\n" +
-	"\x14enableLastOnlineTime\x18\x02 \x01(\bR\x14enableLastOnlineTime\"\xa0\x02\n" +
+	"\x14enableLastOnlineTime\x18\x02 \x01(\bR\x14enableLastOnlineTime\"\x81\x03\n" +
 	"\x10PresenceSettings\x12+\n" +
 	"\x0eenablePresence\x18\x01 \x01(\bH\x00R\x0eenablePresence\x88\x01\x01\x12`\n" +
-	"\x10platformSettings\x18\x02 \x03(\v24.openim.sdkws.PresenceSettings.PlatformSettingsEntryR\x10platformSettings\x1aj\n" +
+	"\x10platformSettings\x18\x02 \x03(\v24.openim.sdkws.PresenceSettings.PlatformSettingsEntryR\x10platformSettings\x12A\n" +
+	"\x19allowUserHideOnlineStatus\x18\x03 \x01(\bH\x01R\x19allowUserHideOnlineStatus\x88\x01\x01\x1aj\n" +
 	"\x15PlatformSettingsEntry\x12\x10\n" +
 	"\x03key\x18\x01 \x01(\x05R\x03key\x12;\n" +
 	"\x05value\x18\x02 \x01(\v2%.openim.sdkws.PlatformPresenceSettingR\x05value:\x028\x01B\x11\n" +
-	"\x0f_enablePresence\"O\n" +
+	"\x0f_enablePresenceB\x1c\n" +
+	"\x1a_allowUserHideOnlineStatus\"O\n" +
 	"\x16AppSettingsChangedTips\x125\n" +
 	"\bsettings\x18\x01 \x01(\v2\x19.openim.sdkws.AppSettingsR\bsettings\"\xec\x03\n" +
 	"\x15GroupCreationDefaults\x12\x1d\n" +
