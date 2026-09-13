@@ -28,6 +28,7 @@ const (
 	Msg_PullMessageBySeqs_FullMethodName                = "/openim.msg.msg/PullMessageBySeqs"
 	Msg_GetSeqMessage_FullMethodName                    = "/openim.msg.msg/GetSeqMessage"
 	Msg_SearchMessage_FullMethodName                    = "/openim.msg.msg/SearchMessage"
+	Msg_SearchMessages_FullMethodName                   = "/openim.msg.msg/SearchMessages"
 	Msg_SendMsg_FullMethodName                          = "/openim.msg.msg/SendMsg"
 	Msg_SendSimpleMsg_FullMethodName                    = "/openim.msg.msg/SendSimpleMsg"
 	Msg_SetUserConversationsMinSeq_FullMethodName       = "/openim.msg.msg/SetUserConversationsMinSeq"
@@ -92,7 +93,11 @@ type MsgClient interface {
 	// Pull historical messages (including the user and specified groups)
 	PullMessageBySeqs(ctx context.Context, in *sdkws.PullMessageBySeqsReq, opts ...grpc.CallOption) (*sdkws.PullMessageBySeqsResp, error)
 	GetSeqMessage(ctx context.Context, in *GetSeqMessageReq, opts ...grpc.CallOption) (*GetSeqMessageResp, error)
+	// Admin console only — see SearchMessageReq.
 	SearchMessage(ctx context.Context, in *SearchMessageReq, opts ...grpc.CallOption) (*SearchMessageResp, error)
+	// Keyword search a user runs on their own history, in one conversation
+	// or across all of them.
+	SearchMessages(ctx context.Context, in *SearchMessagesReq, opts ...grpc.CallOption) (*SearchMessagesResp, error)
 	// Send message
 	SendMsg(ctx context.Context, in *SendMsgReq, opts ...grpc.CallOption) (*SendMsgResp, error)
 	// Send message with simplified request
@@ -264,6 +269,16 @@ func (c *msgClient) SearchMessage(ctx context.Context, in *SearchMessageReq, opt
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(SearchMessageResp)
 	err := c.cc.Invoke(ctx, Msg_SearchMessage_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *msgClient) SearchMessages(ctx context.Context, in *SearchMessagesReq, opts ...grpc.CallOption) (*SearchMessagesResp, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(SearchMessagesResp)
+	err := c.cc.Invoke(ctx, Msg_SearchMessages_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
@@ -746,7 +761,11 @@ type MsgServer interface {
 	// Pull historical messages (including the user and specified groups)
 	PullMessageBySeqs(context.Context, *sdkws.PullMessageBySeqsReq) (*sdkws.PullMessageBySeqsResp, error)
 	GetSeqMessage(context.Context, *GetSeqMessageReq) (*GetSeqMessageResp, error)
+	// Admin console only — see SearchMessageReq.
 	SearchMessage(context.Context, *SearchMessageReq) (*SearchMessageResp, error)
+	// Keyword search a user runs on their own history, in one conversation
+	// or across all of them.
+	SearchMessages(context.Context, *SearchMessagesReq) (*SearchMessagesResp, error)
 	// Send message
 	SendMsg(context.Context, *SendMsgReq) (*SendMsgResp, error)
 	// Send message with simplified request
@@ -867,6 +886,9 @@ func (UnimplementedMsgServer) GetSeqMessage(context.Context, *GetSeqMessageReq) 
 }
 func (UnimplementedMsgServer) SearchMessage(context.Context, *SearchMessageReq) (*SearchMessageResp, error) {
 	return nil, status.Error(codes.Unimplemented, "method SearchMessage not implemented")
+}
+func (UnimplementedMsgServer) SearchMessages(context.Context, *SearchMessagesReq) (*SearchMessagesResp, error) {
+	return nil, status.Error(codes.Unimplemented, "method SearchMessages not implemented")
 }
 func (UnimplementedMsgServer) SendMsg(context.Context, *SendMsgReq) (*SendMsgResp, error) {
 	return nil, status.Error(codes.Unimplemented, "method SendMsg not implemented")
@@ -1167,6 +1189,24 @@ func _Msg_SearchMessage_Handler(srv interface{}, ctx context.Context, dec func(i
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(MsgServer).SearchMessage(ctx, req.(*SearchMessageReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Msg_SearchMessages_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(SearchMessagesReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(MsgServer).SearchMessages(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Msg_SearchMessages_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(MsgServer).SearchMessages(ctx, req.(*SearchMessagesReq))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -2037,6 +2077,10 @@ var Msg_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "SearchMessage",
 			Handler:    _Msg_SearchMessage_Handler,
+		},
+		{
+			MethodName: "SearchMessages",
+			Handler:    _Msg_SearchMessages_Handler,
 		},
 		{
 			MethodName: "SendMsg",

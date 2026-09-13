@@ -365,6 +365,49 @@ message SearchMessageResp {
   int32 chatLogsNum = 2;
 }
 
+// Keyword search over a user's own message history.
+//
+// Deliberately separate from SearchMessageReq above, which is the admin
+// console's browser: that one filters metadata across every conversation
+// on the server and is admin-only for exactly that reason. This one is
+// the opposite — it answers only within what the calling user is allowed
+// to read, and it matches on the words in a message.
+//
+// One request serves both places a user searches from. With
+// conversationID set it searches inside that conversation; empty, it
+// searches every conversation the user is in. The two differ by a filter,
+// not by an endpoint, so the results cannot disagree with each other.
+message SearchMessagesReq {
+  // Keywords are matched after both sides are folded to a common form
+  // (lower case, Vietnamese diacritics removed), so "da giao" finds
+  // "đã giao".
+  repeated string keywords = 1;
+  // true (the usual search box) requires every keyword; false matches
+  // any one of them.
+  bool matchAll = 2;
+  // Empty searches every conversation the caller belongs to.
+  string conversationID = 3;
+  // Optional filters, both empty by default.
+  string sendID = 4;
+  repeated int32 contentTypes = 5;
+  // Paging: pass the previous response's nextBeforeSendTime to continue.
+  // Zero starts from the newest message. Milliseconds.
+  int64 beforeSendTime = 6;
+  int32 limit = 7;
+}
+
+message SearchMessagesResp {
+  // Newest first. These are real messages read back from storage, with
+  // recalls and per-user deletions already applied — never the search
+  // index's own copy.
+  repeated sdkws.MsgData msgs = 1;
+  // Cursor for the next page: the send time of the oldest message
+  // considered, in milliseconds. Meaningless when isEnd is true.
+  int64 nextBeforeSendTime = 2;
+  // No older message can match this search.
+  bool isEnd = 3;
+}
+
 message ChatLog {
   string serverMsgID = 1;
   string clientMsgID = 2;
@@ -794,7 +837,11 @@ service msg {
   // Pull historical messages (including the user and specified groups)
   rpc PullMessageBySeqs(sdkws.PullMessageBySeqsReq) returns (sdkws.PullMessageBySeqsResp);
   rpc GetSeqMessage(GetSeqMessageReq) returns (GetSeqMessageResp);
+  // Admin console only — see SearchMessageReq.
   rpc SearchMessage(SearchMessageReq) returns (SearchMessageResp);
+  // Keyword search a user runs on their own history, in one conversation
+  // or across all of them.
+  rpc SearchMessages(SearchMessagesReq) returns (SearchMessagesResp);
   // Send message
   rpc SendMsg(SendMsgReq) returns (SendMsgResp);
   // Send message with simplified request
