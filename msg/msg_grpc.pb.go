@@ -69,6 +69,7 @@ const (
 	Msg_SetAppSettings_FullMethodName                   = "/openim.msg.msg/SetAppSettings"
 	Msg_EditMsg_FullMethodName                          = "/openim.msg.msg/EditMsg"
 	Msg_GetMsgExtraVersion_FullMethodName               = "/openim.msg.msg/GetMsgExtraVersion"
+	Msg_GetMsgExtraVersions_FullMethodName              = "/openim.msg.msg/GetMsgExtraVersions"
 	Msg_CreateScheduledMsg_FullMethodName               = "/openim.msg.msg/CreateScheduledMsg"
 	Msg_UpdateScheduledMsg_FullMethodName               = "/openim.msg.msg/UpdateScheduledMsg"
 	Msg_CancelScheduledMsg_FullMethodName               = "/openim.msg.msg/CancelScheduledMsg"
@@ -177,6 +178,9 @@ type MsgClient interface {
 	// Has anything in this conversation been rewritten in place since the
 	// caller last looked? See GetMsgExtraVersionReq.
 	GetMsgExtraVersion(ctx context.Context, in *GetMsgExtraVersionReq, opts ...grpc.CallOption) (*GetMsgExtraVersionResp, error)
+	// The same question for many conversations at once — see
+	// GetMsgExtraVersionsReq.
+	GetMsgExtraVersions(ctx context.Context, in *GetMsgExtraVersionsReq, opts ...grpc.CallOption) (*GetMsgExtraVersionsResp, error)
 	// Scheduled messages — see ScheduledMsg. Every call but the last acts on
 	// the caller's own messages only.
 	CreateScheduledMsg(ctx context.Context, in *CreateScheduledMsgReq, opts ...grpc.CallOption) (*CreateScheduledMsgResp, error)
@@ -685,6 +689,16 @@ func (c *msgClient) GetMsgExtraVersion(ctx context.Context, in *GetMsgExtraVersi
 	return out, nil
 }
 
+func (c *msgClient) GetMsgExtraVersions(ctx context.Context, in *GetMsgExtraVersionsReq, opts ...grpc.CallOption) (*GetMsgExtraVersionsResp, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(GetMsgExtraVersionsResp)
+	err := c.cc.Invoke(ctx, Msg_GetMsgExtraVersions_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 func (c *msgClient) CreateScheduledMsg(ctx context.Context, in *CreateScheduledMsgReq, opts ...grpc.CallOption) (*CreateScheduledMsgResp, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(CreateScheduledMsgResp)
@@ -845,6 +859,9 @@ type MsgServer interface {
 	// Has anything in this conversation been rewritten in place since the
 	// caller last looked? See GetMsgExtraVersionReq.
 	GetMsgExtraVersion(context.Context, *GetMsgExtraVersionReq) (*GetMsgExtraVersionResp, error)
+	// The same question for many conversations at once — see
+	// GetMsgExtraVersionsReq.
+	GetMsgExtraVersions(context.Context, *GetMsgExtraVersionsReq) (*GetMsgExtraVersionsResp, error)
 	// Scheduled messages — see ScheduledMsg. Every call but the last acts on
 	// the caller's own messages only.
 	CreateScheduledMsg(context.Context, *CreateScheduledMsgReq) (*CreateScheduledMsgResp, error)
@@ -1009,6 +1026,9 @@ func (UnimplementedMsgServer) EditMsg(context.Context, *EditMsgReq) (*EditMsgRes
 }
 func (UnimplementedMsgServer) GetMsgExtraVersion(context.Context, *GetMsgExtraVersionReq) (*GetMsgExtraVersionResp, error) {
 	return nil, status.Error(codes.Unimplemented, "method GetMsgExtraVersion not implemented")
+}
+func (UnimplementedMsgServer) GetMsgExtraVersions(context.Context, *GetMsgExtraVersionsReq) (*GetMsgExtraVersionsResp, error) {
+	return nil, status.Error(codes.Unimplemented, "method GetMsgExtraVersions not implemented")
 }
 func (UnimplementedMsgServer) CreateScheduledMsg(context.Context, *CreateScheduledMsgReq) (*CreateScheduledMsgResp, error) {
 	return nil, status.Error(codes.Unimplemented, "method CreateScheduledMsg not implemented")
@@ -1931,6 +1951,24 @@ func _Msg_GetMsgExtraVersion_Handler(srv interface{}, ctx context.Context, dec f
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Msg_GetMsgExtraVersions_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetMsgExtraVersionsReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(MsgServer).GetMsgExtraVersions(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Msg_GetMsgExtraVersions_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(MsgServer).GetMsgExtraVersions(ctx, req.(*GetMsgExtraVersionsReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 func _Msg_CreateScheduledMsg_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(CreateScheduledMsgReq)
 	if err := dec(in); err != nil {
@@ -2241,6 +2279,10 @@ var Msg_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "GetMsgExtraVersion",
 			Handler:    _Msg_GetMsgExtraVersion_Handler,
+		},
+		{
+			MethodName: "GetMsgExtraVersions",
+			Handler:    _Msg_GetMsgExtraVersions_Handler,
 		},
 		{
 			MethodName: "CreateScheduledMsg",

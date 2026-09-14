@@ -701,6 +701,27 @@ message GetMsgExtraVersionResp {
   int64 version = 1;
 }
 
+// GetMsgExtraVersionsReq is GetMsgExtraVersionReq for many conversations
+// in one request — what a client sends once when it comes back online, to
+// learn which of the conversations it holds a cache for were rewritten in
+// place while it was away, instead of asking about each in turn. It then
+// re-reads only the ones whose version moved.
+message GetMsgExtraVersionsReq {
+  string userID = 1;
+  // At most 1000 per request; a client holding more splits them.
+  repeated string conversationIDs = 2;
+}
+
+message GetMsgExtraVersionsResp {
+  // conversationID → version, with the same meaning as
+  // GetMsgExtraVersionResp.version (0 included). A requested conversation
+  // the caller is not a member of is left out rather than failing the
+  // request: one conversation the caller has since left must not stop
+  // every other one from being checked, and the caller has no business
+  // re-reading the one it left.
+  map<string, int64> versions = 1;
+}
+
 // Scheduled messages: written now, sent by the server later under their
 // owner's name — whether or not any of the owner's devices are online.
 // Nobody but the owner can see one before it is sent.
@@ -933,6 +954,9 @@ service msg {
   // Has anything in this conversation been rewritten in place since the
   // caller last looked? See GetMsgExtraVersionReq.
   rpc GetMsgExtraVersion(GetMsgExtraVersionReq) returns (GetMsgExtraVersionResp);
+  // The same question for many conversations at once — see
+  // GetMsgExtraVersionsReq.
+  rpc GetMsgExtraVersions(GetMsgExtraVersionsReq) returns (GetMsgExtraVersionsResp);
 
   // Scheduled messages — see ScheduledMsg. Every call but the last acts on
   // the caller's own messages only.
