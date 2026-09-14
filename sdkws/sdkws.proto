@@ -55,6 +55,11 @@ message GroupInfo {
   // something in front of the whole group, so it starts as a
   // moderator's act.
   int32 memberPin = 21;
+  // Seconds after sending that each message sent into this group is
+  // deleted for everyone; 0 is off. Only the durations in
+  // constant.MsgAutoDeleteOptions are accepted. Applies to messages sent
+  // after it is set — see MsgData.expireAt.
+  int64 msgAutoDelete = 22;
 }
 
 // A conversation's pinned-message list changed — pushed to everyone in
@@ -95,6 +100,7 @@ message GroupInfoForSet {
   openim.protobuf.Int32Value historyForNewMembers = 11;
   openim.protobuf.Int32Value readReceipts = 12;
   openim.protobuf.Int32Value memberPin = 13;
+  openim.protobuf.Int64Value msgAutoDelete = 14;
 }
 
 message GroupMemberFullInfo {
@@ -313,6 +319,16 @@ message MsgData {
   // to the same client action — report it — so presence would carry no
   // information a client could act on differently.
   bool readByMe = 26;
+  // When this message is deleted for everyone, in epoch ms, or 0 if it
+  // never is. Stamped by the server as it accepts the message — its own
+  // clock plus the conversation's auto-delete setting at that moment — and
+  // never taken from the client. Fixed from then on: changing or turning
+  // off the setting does not move it.
+  //
+  // From this time on the server stops serving the message on every read
+  // path, whether or not the background deletion has caught up yet, so a
+  // client should stop showing it at the same moment.
+  int64 expireAt = 27;
 }
 message PushMessages {
   map<string, PullMsgs> msgs = 1;
@@ -602,6 +618,15 @@ message ConversationSetPrivateTips {
   string sendID = 2;
   bool isPrivate = 3;
   string conversationID = 4;
+}
+
+// A one-to-one conversation's auto-delete setting changed
+// (constant.ConversationAutoDeleteChangedNotification). Reaches both
+// participants. `seconds` is the new setting, 0 when turned off.
+message ConversationAutoDeleteChangedTips {
+  string conversationID = 1;
+  string opUserID = 2;
+  int64 seconds = 3;
 }
 
 message ConversationHasReadTips {

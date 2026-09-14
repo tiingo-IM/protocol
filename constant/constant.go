@@ -105,6 +105,11 @@ const (
 	// devices to refetch that conversation's list, and a device that was
 	// offline fetches the list when it next opens the conversation anyway.
 	ScheduledMsgChangedNotification = 1706
+	// A one-to-one conversation's auto-delete setting changed; see
+	// sdkws.ConversationAutoDeleteChangedTips. Reaches both participants.
+	// A group's setting travels on GroupInfoSetNotification instead, like
+	// every other group setting.
+	ConversationAutoDeleteChangedNotification = 1707
 
 	BusinessNotificationBegin = 2000
 	BusinessNotification      = 2001

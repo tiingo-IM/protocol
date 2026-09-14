@@ -43,6 +43,9 @@ message SendMsgResp {
   string clientMsgID = 2;
   int64 sendTime = 3;
   sdkws.MsgData modify = 4;
+  // MsgData.expireAt as the server stamped it, so the sending device
+  // knows when its own message goes without waiting for sync. 0 if never.
+  int64 expireAt = 5;
 }
 
 message SendSimpleMsgReq {

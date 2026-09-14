@@ -372,11 +372,14 @@ func (x *SendMsgReq) GetMsgData() *sdkws.MsgData {
 }
 
 type SendMsgResp struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	ServerMsgID   string                 `protobuf:"bytes,1,opt,name=serverMsgID,proto3" json:"serverMsgID"`
-	ClientMsgID   string                 `protobuf:"bytes,2,opt,name=clientMsgID,proto3" json:"clientMsgID"`
-	SendTime      int64                  `protobuf:"varint,3,opt,name=sendTime,proto3" json:"sendTime"`
-	Modify        *sdkws.MsgData         `protobuf:"bytes,4,opt,name=modify,proto3" json:"modify"`
+	state       protoimpl.MessageState `protogen:"open.v1"`
+	ServerMsgID string                 `protobuf:"bytes,1,opt,name=serverMsgID,proto3" json:"serverMsgID"`
+	ClientMsgID string                 `protobuf:"bytes,2,opt,name=clientMsgID,proto3" json:"clientMsgID"`
+	SendTime    int64                  `protobuf:"varint,3,opt,name=sendTime,proto3" json:"sendTime"`
+	Modify      *sdkws.MsgData         `protobuf:"bytes,4,opt,name=modify,proto3" json:"modify"`
+	// MsgData.expireAt as the server stamped it, so the sending device
+	// knows when its own message goes without waiting for sync. 0 if never.
+	ExpireAt      int64 `protobuf:"varint,5,opt,name=expireAt,proto3" json:"expireAt"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -437,6 +440,13 @@ func (x *SendMsgResp) GetModify() *sdkws.MsgData {
 		return x.Modify
 	}
 	return nil
+}
+
+func (x *SendMsgResp) GetExpireAt() int64 {
+	if x != nil {
+		return x.ExpireAt
+	}
+	return 0
 }
 
 type SendSimpleMsgReq struct {
@@ -7313,12 +7323,13 @@ const file_msg_msg_proto_rawDesc = "" +
 	"\x06MinSeq\x18\x02 \x01(\x03R\x06MinSeq\"=\n" +
 	"\n" +
 	"SendMsgReq\x12/\n" +
-	"\amsgData\x18\x03 \x01(\v2\x15.openim.sdkws.MsgDataR\amsgData\"\x9c\x01\n" +
+	"\amsgData\x18\x03 \x01(\v2\x15.openim.sdkws.MsgDataR\amsgData\"\xb8\x01\n" +
 	"\vSendMsgResp\x12 \n" +
 	"\vserverMsgID\x18\x01 \x01(\tR\vserverMsgID\x12 \n" +
 	"\vclientMsgID\x18\x02 \x01(\tR\vclientMsgID\x12\x1a\n" +
 	"\bsendTime\x18\x03 \x01(\x03R\bsendTime\x12-\n" +
-	"\x06modify\x18\x04 \x01(\v2\x15.openim.sdkws.MsgDataR\x06modify\"C\n" +
+	"\x06modify\x18\x04 \x01(\v2\x15.openim.sdkws.MsgDataR\x06modify\x12\x1a\n" +
+	"\bexpireAt\x18\x05 \x01(\x03R\bexpireAt\"C\n" +
 	"\x10SendSimpleMsgReq\x12/\n" +
 	"\amsgData\x18\x03 \x01(\v2\x15.openim.sdkws.MsgDataR\amsgData\"\xa2\x01\n" +
 	"\x11SendSimpleMsgResp\x12 \n" +
