@@ -253,6 +253,92 @@ message GetPollVotersResp {
   repeated PollVoter voters = 2;
 }
 
+// Reactions. A reaction is not a message: it is stored beside the
+// message it is given to, named by conversation and seq, and read with
+// GetMessageReactions. Every request that acts on one message names it
+// by seq *and* clientMsgID, as polls do.
+
+message ReactionSummary {
+  string emoji = 1;
+  int64 count = 2;
+  // Up to three who gave it, earliest first — enough to say "A, B and
+  // 3 others" without a second request.
+  repeated string sampleUserIDs = 3;
+}
+
+// One message's reactions as seen by the user who asked.
+message MessageReactionState {
+  int64 seq = 1;
+  string clientMsgID = 2;
+  // Bumped by every change. 0 for a message nobody has ever reacted to.
+  // Compare it, never the counts: two changes can cancel out.
+  int64 version = 3;
+  // Most given first; ties by who was given first.
+  repeated ReactionSummary reactions = 4;
+  // What the asking user gave; empty when nothing.
+  repeated string myEmojis = 5;
+}
+
+// Add or remove one of the caller's reactions. action is
+// constant.ReactionActionAdd or ReactionActionRemove; 0 is refused.
+// Adding an emoji already given, or removing one not given, changes
+// nothing and is not an error.
+message ReactMessageReq {
+  string conversationID = 1;
+  string userID = 2;
+  int64 seq = 3;
+  string clientMsgID = 4;
+  string emoji = 5;
+  int32 action = 6;
+}
+message ReactMessageResp {
+  MessageReactionState state = 1;
+}
+
+message MessageReactionQuery {
+  int64 seq = 1;
+  // The version the client holds; 0 when it holds nothing.
+  int64 version = 2;
+}
+
+// Reactions on several messages in one conversation. A message whose
+// version equals the one given is left out of `states` — so a client
+// asking with 0 hears nothing about messages nobody reacted to. A seq
+// that is not a message the caller can read (recalled, deleted, below
+// their floor) is listed in `unavailableSeqs`, but only when its version
+// differs, since only then is it looked at.
+message GetMessageReactionsReq {
+  string conversationID = 1;
+  string userID = 2;
+  repeated MessageReactionQuery messages = 3;
+}
+message GetMessageReactionsResp {
+  repeated MessageReactionState states = 1;
+  repeated int64 unavailableSeqs = 2;
+}
+
+message MessageReactionUser {
+  string userID = 1;
+  // What they gave. One emoji while constant ReactionMaxPerUser is 1.
+  repeated string emojis = 2;
+  // When they last changed it, Unix milli.
+  int64 time = 3;
+}
+
+// Who reacted to one message, most recent first; emoji "" for everyone.
+message GetMessageReactionUsersReq {
+  string conversationID = 1;
+  string userID = 2;
+  int64 seq = 3;
+  string clientMsgID = 4;
+  string emoji = 5;
+  openim.sdkws.RequestPagination pagination = 6;
+}
+message GetMessageReactionUsersResp {
+  int64 total = 1;
+  repeated MessageReactionUser users = 2;
+}
+
 message GetMessagesReadCountReq {
   string conversationID = 1;
   repeated int64 seqs = 2;
@@ -1006,6 +1092,11 @@ service msg {
   rpc ClosePoll(ClosePollReq) returns (ClosePollResp);
   rpc GetPollStates(GetPollStatesReq) returns (GetPollStatesResp);
   rpc GetPollVoters(GetPollVotersReq) returns (GetPollVotersResp);
+  // Reactions: give or take one back, and read them. See
+  // MessageReactionState and sdkws.MessageReactionsChangedTips.
+  rpc ReactMessage(ReactMessageReq) returns (ReactMessageResp);
+  rpc GetMessageReactions(GetMessageReactionsReq) returns (GetMessageReactionsResp);
+  rpc GetMessageReactionUsers(GetMessageReactionUsersReq) returns (GetMessageReactionUsersResp);
 
   rpc GetConversationsHasReadAndMaxSeq(GetConversationsHasReadAndMaxSeqReq) returns (GetConversationsHasReadAndMaxSeqResp);
   rpc GetActiveUser(GetActiveUserReq) returns (GetActiveUserResp);

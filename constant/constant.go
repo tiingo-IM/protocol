@@ -118,6 +118,11 @@ const (
 	// A group's setting travels on GroupInfoSetNotification instead, like
 	// every other group setting.
 	ConversationAutoDeleteChangedNotification = 1707
+	// Reactions on messages in a conversation changed; see
+	// sdkws.MessageReactionsChangedTips. Pushed to everyone in the
+	// conversation, single chat or group, several changes gathered into
+	// one push. Never stored.
+	MessageReactionsChangedNotification = 1709
 
 	BusinessNotificationBegin = 2000
 	BusinessNotification      = 2001
@@ -384,6 +389,13 @@ const (
 	PinnedMessagePinned   = 1
 	PinnedMessageUnpinned = 2
 	PinnedMessageCleared  = 3
+)
+
+// What msg.ReactMessageReq asks for. Zero is refused rather than read as
+// either, so a caller that forgot the field changes nothing.
+const (
+	ReactionActionAdd    = 1
+	ReactionActionRemove = 2
 )
 
 // Where a scheduled message stands, carried on msg.ScheduledMsg.status.

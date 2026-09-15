@@ -85,6 +85,45 @@ message PollChangedTips {
   int64 version = 5;
 }
 
+// How many people gave one emoji to one message.
+message ReactionCount {
+  string emoji = 1;
+  int64 count = 2;
+}
+
+// Where one message's reactions stood when a push was sent.
+message MessageReactionChange {
+  int64 seq = 1;
+  string clientMsgID = 2;
+  // See msg.MessageReactionState.version.
+  int64 version = 3;
+  // Every emoji the message has, most given first. Carries no user IDs:
+  // the push reaches members who cannot read the message (they joined
+  // after it), and counts are as little as it can say.
+  repeated ReactionCount reactions = 4;
+  // Who changed their reactions to it since the last push. A device
+  // whose own user is listed changed something on another device and
+  // asks GetMessageReactions for its own choice; everyone else keeps
+  // theirs and takes the counts.
+  repeated string changedUserIDs = 5;
+  // More people changed it than changedUserIDs holds. Every device
+  // holding the message then asks GetMessageReactions, since any of them
+  // may be among those left out.
+  bool changedUsersTruncated = 6;
+}
+
+// Reactions changed on messages in one conversation. Pushed to everyone
+// in it, never stored: changes are gathered for a moment and sent
+// together, so a busy conversation pushes a few times a second however
+// many messages are being reacted to. A device that missed a push asks
+// GetMessageReactions when it next shows the messages.
+message MessageReactionsChangedTips {
+  string conversationID = 1;
+  int32 sessionType = 2;
+  string groupID = 3;
+  repeated MessageReactionChange changes = 4;
+}
+
 // A conversation's pinned-message list changed — pushed to everyone in
 // the conversation so the pinned bar moves without a refetch, and, for a
 // pin, also written into the timeline as a tip ("X pinned a message").
@@ -884,6 +923,11 @@ message AppSettings {
   // vote in one or close one; polls already sent still show where they
   // stood, since GetPollStates keeps answering.
   optional bool pollEnabled = 10;
+
+  // Reactions on messages. Defaults to true. Off, nobody can add or
+  // remove one; reactions already given still show, since
+  // GetMessageReactions keeps answering.
+  optional bool reactionEnabled = 11;
 }
 
 // PlatformPresenceSetting: what one platform's presence is allowed to

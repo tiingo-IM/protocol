@@ -52,6 +52,9 @@ const (
 	Msg_ClosePoll_FullMethodName                        = "/openim.msg.msg/ClosePoll"
 	Msg_GetPollStates_FullMethodName                    = "/openim.msg.msg/GetPollStates"
 	Msg_GetPollVoters_FullMethodName                    = "/openim.msg.msg/GetPollVoters"
+	Msg_ReactMessage_FullMethodName                     = "/openim.msg.msg/ReactMessage"
+	Msg_GetMessageReactions_FullMethodName              = "/openim.msg.msg/GetMessageReactions"
+	Msg_GetMessageReactionUsers_FullMethodName          = "/openim.msg.msg/GetMessageReactionUsers"
 	Msg_GetConversationsHasReadAndMaxSeq_FullMethodName = "/openim.msg.msg/GetConversationsHasReadAndMaxSeq"
 	Msg_GetActiveUser_FullMethodName                    = "/openim.msg.msg/GetActiveUser"
 	Msg_GetActiveGroup_FullMethodName                   = "/openim.msg.msg/GetActiveGroup"
@@ -147,6 +150,11 @@ type MsgClient interface {
 	ClosePoll(ctx context.Context, in *ClosePollReq, opts ...grpc.CallOption) (*ClosePollResp, error)
 	GetPollStates(ctx context.Context, in *GetPollStatesReq, opts ...grpc.CallOption) (*GetPollStatesResp, error)
 	GetPollVoters(ctx context.Context, in *GetPollVotersReq, opts ...grpc.CallOption) (*GetPollVotersResp, error)
+	// Reactions: give or take one back, and read them. See
+	// MessageReactionState and sdkws.MessageReactionsChangedTips.
+	ReactMessage(ctx context.Context, in *ReactMessageReq, opts ...grpc.CallOption) (*ReactMessageResp, error)
+	GetMessageReactions(ctx context.Context, in *GetMessageReactionsReq, opts ...grpc.CallOption) (*GetMessageReactionsResp, error)
+	GetMessageReactionUsers(ctx context.Context, in *GetMessageReactionUsersReq, opts ...grpc.CallOption) (*GetMessageReactionUsersResp, error)
 	GetConversationsHasReadAndMaxSeq(ctx context.Context, in *GetConversationsHasReadAndMaxSeqReq, opts ...grpc.CallOption) (*GetConversationsHasReadAndMaxSeqResp, error)
 	GetActiveUser(ctx context.Context, in *GetActiveUserReq, opts ...grpc.CallOption) (*GetActiveUserResp, error)
 	GetActiveGroup(ctx context.Context, in *GetActiveGroupReq, opts ...grpc.CallOption) (*GetActiveGroupResp, error)
@@ -529,6 +537,36 @@ func (c *msgClient) GetPollVoters(ctx context.Context, in *GetPollVotersReq, opt
 	return out, nil
 }
 
+func (c *msgClient) ReactMessage(ctx context.Context, in *ReactMessageReq, opts ...grpc.CallOption) (*ReactMessageResp, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(ReactMessageResp)
+	err := c.cc.Invoke(ctx, Msg_ReactMessage_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *msgClient) GetMessageReactions(ctx context.Context, in *GetMessageReactionsReq, opts ...grpc.CallOption) (*GetMessageReactionsResp, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(GetMessageReactionsResp)
+	err := c.cc.Invoke(ctx, Msg_GetMessageReactions_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *msgClient) GetMessageReactionUsers(ctx context.Context, in *GetMessageReactionUsersReq, opts ...grpc.CallOption) (*GetMessageReactionUsersResp, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(GetMessageReactionUsersResp)
+	err := c.cc.Invoke(ctx, Msg_GetMessageReactionUsers_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 func (c *msgClient) GetConversationsHasReadAndMaxSeq(ctx context.Context, in *GetConversationsHasReadAndMaxSeqReq, opts ...grpc.CallOption) (*GetConversationsHasReadAndMaxSeqResp, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(GetConversationsHasReadAndMaxSeqResp)
@@ -874,6 +912,11 @@ type MsgServer interface {
 	ClosePoll(context.Context, *ClosePollReq) (*ClosePollResp, error)
 	GetPollStates(context.Context, *GetPollStatesReq) (*GetPollStatesResp, error)
 	GetPollVoters(context.Context, *GetPollVotersReq) (*GetPollVotersResp, error)
+	// Reactions: give or take one back, and read them. See
+	// MessageReactionState and sdkws.MessageReactionsChangedTips.
+	ReactMessage(context.Context, *ReactMessageReq) (*ReactMessageResp, error)
+	GetMessageReactions(context.Context, *GetMessageReactionsReq) (*GetMessageReactionsResp, error)
+	GetMessageReactionUsers(context.Context, *GetMessageReactionUsersReq) (*GetMessageReactionUsersResp, error)
 	GetConversationsHasReadAndMaxSeq(context.Context, *GetConversationsHasReadAndMaxSeqReq) (*GetConversationsHasReadAndMaxSeqResp, error)
 	GetActiveUser(context.Context, *GetActiveUserReq) (*GetActiveUserResp, error)
 	GetActiveGroup(context.Context, *GetActiveGroupReq) (*GetActiveGroupResp, error)
@@ -1031,6 +1074,15 @@ func (UnimplementedMsgServer) GetPollStates(context.Context, *GetPollStatesReq) 
 }
 func (UnimplementedMsgServer) GetPollVoters(context.Context, *GetPollVotersReq) (*GetPollVotersResp, error) {
 	return nil, status.Error(codes.Unimplemented, "method GetPollVoters not implemented")
+}
+func (UnimplementedMsgServer) ReactMessage(context.Context, *ReactMessageReq) (*ReactMessageResp, error) {
+	return nil, status.Error(codes.Unimplemented, "method ReactMessage not implemented")
+}
+func (UnimplementedMsgServer) GetMessageReactions(context.Context, *GetMessageReactionsReq) (*GetMessageReactionsResp, error) {
+	return nil, status.Error(codes.Unimplemented, "method GetMessageReactions not implemented")
+}
+func (UnimplementedMsgServer) GetMessageReactionUsers(context.Context, *GetMessageReactionUsersReq) (*GetMessageReactionUsersResp, error) {
+	return nil, status.Error(codes.Unimplemented, "method GetMessageReactionUsers not implemented")
 }
 func (UnimplementedMsgServer) GetConversationsHasReadAndMaxSeq(context.Context, *GetConversationsHasReadAndMaxSeqReq) (*GetConversationsHasReadAndMaxSeqResp, error) {
 	return nil, status.Error(codes.Unimplemented, "method GetConversationsHasReadAndMaxSeq not implemented")
@@ -1713,6 +1765,60 @@ func _Msg_GetPollVoters_Handler(srv interface{}, ctx context.Context, dec func(i
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Msg_ReactMessage_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ReactMessageReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(MsgServer).ReactMessage(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Msg_ReactMessage_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(MsgServer).ReactMessage(ctx, req.(*ReactMessageReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Msg_GetMessageReactions_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetMessageReactionsReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(MsgServer).GetMessageReactions(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Msg_GetMessageReactions_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(MsgServer).GetMessageReactions(ctx, req.(*GetMessageReactionsReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Msg_GetMessageReactionUsers_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetMessageReactionUsersReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(MsgServer).GetMessageReactionUsers(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Msg_GetMessageReactionUsers_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(MsgServer).GetMessageReactionUsers(ctx, req.(*GetMessageReactionUsersReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 func _Msg_GetConversationsHasReadAndMaxSeq_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(GetConversationsHasReadAndMaxSeqReq)
 	if err := dec(in); err != nil {
@@ -2351,6 +2457,18 @@ var Msg_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "GetPollVoters",
 			Handler:    _Msg_GetPollVoters_Handler,
+		},
+		{
+			MethodName: "ReactMessage",
+			Handler:    _Msg_ReactMessage_Handler,
+		},
+		{
+			MethodName: "GetMessageReactions",
+			Handler:    _Msg_GetMessageReactions_Handler,
+		},
+		{
+			MethodName: "GetMessageReactionUsers",
+			Handler:    _Msg_GetMessageReactionUsers_Handler,
 		},
 		{
 			MethodName: "GetConversationsHasReadAndMaxSeq",
