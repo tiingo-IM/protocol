@@ -60,6 +60,29 @@ message GroupInfo {
   // constant.MsgAutoDeleteOptions are accepted. Applies to messages sent
   // after it is set — see MsgData.expireAt.
   int64 msgAutoDelete = 22;
+  // On: ordinary members may create polls here. Off, only the owner and
+  // admins can. Unset behaves as on — unlike memberPin, a poll asks the
+  // group something rather than putting something in front of it, and
+  // every member may already ask the group anything by writing it.
+  int32 memberPoll = 23;
+}
+
+// A poll changed: someone voted, changed or withdrew a vote, or the poll
+// was closed. Pushed to whoever in the group is online, never stored —
+// a device that missed it asks GetPollStates when it next shows the poll.
+//
+// A marker, not the result. It carries no counts and no voter, so the
+// same push serves an anonymous poll without saying who just voted, and
+// a device that is not showing the poll does no work beyond noting the
+// version. Addressed from the poll's author for the same reason: sent
+// from the voter, the push itself would name them.
+message PollChangedTips {
+  string conversationID = 1;
+  string groupID = 2;
+  int64 seq = 3;
+  string clientMsgID = 4;
+  // The poll's version after this change; see msg.PollState.version.
+  int64 version = 5;
 }
 
 // A conversation's pinned-message list changed — pushed to everyone in
@@ -101,6 +124,7 @@ message GroupInfoForSet {
   openim.protobuf.Int32Value readReceipts = 12;
   openim.protobuf.Int32Value memberPin = 13;
   openim.protobuf.Int64Value msgAutoDelete = 14;
+  openim.protobuf.Int32Value memberPoll = 15;
 }
 
 message GroupMemberFullInfo {
@@ -855,6 +879,11 @@ message AppSettings {
   optional bool scheduledMsgAllowGroupMember = 8;
   // One-to-one chats, which have no roles to go by.
   optional bool scheduledMsgAllowSingleChat = 9;
+
+  // Polls in groups. Defaults to true. Off, nobody can create a poll,
+  // vote in one or close one; polls already sent still show where they
+  // stood, since GetPollStates keeps answering.
+  optional bool pollEnabled = 10;
 }
 
 // PlatformPresenceSetting: what one platform's presence is allowed to
@@ -967,6 +996,7 @@ message GroupCreationDefaults {
   optional int32 historyForNewMembers = 5;
   optional int32 readReceipts = 6;
   optional int32 memberPin = 7;
+  optional int32 memberPoll = 8;
 }
 
 // Pushed (constant.MsgEditNotification, 2104) to a conversation after

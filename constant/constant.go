@@ -25,6 +25,11 @@ const (
 	CustomOnlineOnly             = 120
 	ReactionMessageModifier      = 121
 	ReactionMessageDeleter       = 122
+	// A poll in a group: one question, its options, and how it may be
+	// answered. The message holds only that definition, which never
+	// changes after sending; who voted for what lives on the server and
+	// is read through msg.GetPollStates. See msgprocessor.PollContent.
+	Poll                         = 123
 	Stream                       = 143
 	Common                       = 200
 	GroupMsg                     = 201
@@ -105,6 +110,9 @@ const (
 	// devices to refetch that conversation's list, and a device that was
 	// offline fetches the list when it next opens the conversation anyway.
 	ScheduledMsgChangedNotification = 1706
+	// A poll in a group changed; see sdkws.PollChangedTips. Sent to the
+	// group from the poll's author, never stored.
+	PollChangedNotification = 1708
 	// A one-to-one conversation's auto-delete setting changed; see
 	// sdkws.ConversationAutoDeleteChangedTips. Reaches both participants.
 	// A group's setting travels on GroupInfoSetNotification instead, like
@@ -305,6 +313,7 @@ var ContentType2PushContent = map[int64]string{
 	GroupMsg:  "[GROUPMSG]]",
 	Common:    "[NEWMSG]",
 	SignalMsg: "[SIGNALINVITE]",
+	Poll:      "[POLL]",
 }
 
 const (

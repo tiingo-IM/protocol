@@ -48,6 +48,10 @@ const (
 	Msg_PinMessage_FullMethodName                       = "/openim.msg.msg/PinMessage"
 	Msg_ClearPinnedMessages_FullMethodName              = "/openim.msg.msg/ClearPinnedMessages"
 	Msg_GetPinnedMessages_FullMethodName                = "/openim.msg.msg/GetPinnedMessages"
+	Msg_VotePoll_FullMethodName                         = "/openim.msg.msg/VotePoll"
+	Msg_ClosePoll_FullMethodName                        = "/openim.msg.msg/ClosePoll"
+	Msg_GetPollStates_FullMethodName                    = "/openim.msg.msg/GetPollStates"
+	Msg_GetPollVoters_FullMethodName                    = "/openim.msg.msg/GetPollVoters"
 	Msg_GetConversationsHasReadAndMaxSeq_FullMethodName = "/openim.msg.msg/GetConversationsHasReadAndMaxSeq"
 	Msg_GetActiveUser_FullMethodName                    = "/openim.msg.msg/GetActiveUser"
 	Msg_GetActiveGroup_FullMethodName                   = "/openim.msg.msg/GetActiveGroup"
@@ -137,6 +141,12 @@ type MsgClient interface {
 	PinMessage(ctx context.Context, in *PinMessageReq, opts ...grpc.CallOption) (*PinMessageResp, error)
 	ClearPinnedMessages(ctx context.Context, in *ClearPinnedMessagesReq, opts ...grpc.CallOption) (*ClearPinnedMessagesResp, error)
 	GetPinnedMessages(ctx context.Context, in *GetPinnedMessagesReq, opts ...grpc.CallOption) (*GetPinnedMessagesResp, error)
+	// Polls: vote, close, and read where polls stand. See PollState and
+	// sdkws.PollChangedTips.
+	VotePoll(ctx context.Context, in *VotePollReq, opts ...grpc.CallOption) (*VotePollResp, error)
+	ClosePoll(ctx context.Context, in *ClosePollReq, opts ...grpc.CallOption) (*ClosePollResp, error)
+	GetPollStates(ctx context.Context, in *GetPollStatesReq, opts ...grpc.CallOption) (*GetPollStatesResp, error)
+	GetPollVoters(ctx context.Context, in *GetPollVotersReq, opts ...grpc.CallOption) (*GetPollVotersResp, error)
 	GetConversationsHasReadAndMaxSeq(ctx context.Context, in *GetConversationsHasReadAndMaxSeqReq, opts ...grpc.CallOption) (*GetConversationsHasReadAndMaxSeqResp, error)
 	GetActiveUser(ctx context.Context, in *GetActiveUserReq, opts ...grpc.CallOption) (*GetActiveUserResp, error)
 	GetActiveGroup(ctx context.Context, in *GetActiveGroupReq, opts ...grpc.CallOption) (*GetActiveGroupResp, error)
@@ -473,6 +483,46 @@ func (c *msgClient) GetPinnedMessages(ctx context.Context, in *GetPinnedMessages
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(GetPinnedMessagesResp)
 	err := c.cc.Invoke(ctx, Msg_GetPinnedMessages_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *msgClient) VotePoll(ctx context.Context, in *VotePollReq, opts ...grpc.CallOption) (*VotePollResp, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(VotePollResp)
+	err := c.cc.Invoke(ctx, Msg_VotePoll_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *msgClient) ClosePoll(ctx context.Context, in *ClosePollReq, opts ...grpc.CallOption) (*ClosePollResp, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(ClosePollResp)
+	err := c.cc.Invoke(ctx, Msg_ClosePoll_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *msgClient) GetPollStates(ctx context.Context, in *GetPollStatesReq, opts ...grpc.CallOption) (*GetPollStatesResp, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(GetPollStatesResp)
+	err := c.cc.Invoke(ctx, Msg_GetPollStates_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *msgClient) GetPollVoters(ctx context.Context, in *GetPollVotersReq, opts ...grpc.CallOption) (*GetPollVotersResp, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(GetPollVotersResp)
+	err := c.cc.Invoke(ctx, Msg_GetPollVoters_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
@@ -818,6 +868,12 @@ type MsgServer interface {
 	PinMessage(context.Context, *PinMessageReq) (*PinMessageResp, error)
 	ClearPinnedMessages(context.Context, *ClearPinnedMessagesReq) (*ClearPinnedMessagesResp, error)
 	GetPinnedMessages(context.Context, *GetPinnedMessagesReq) (*GetPinnedMessagesResp, error)
+	// Polls: vote, close, and read where polls stand. See PollState and
+	// sdkws.PollChangedTips.
+	VotePoll(context.Context, *VotePollReq) (*VotePollResp, error)
+	ClosePoll(context.Context, *ClosePollReq) (*ClosePollResp, error)
+	GetPollStates(context.Context, *GetPollStatesReq) (*GetPollStatesResp, error)
+	GetPollVoters(context.Context, *GetPollVotersReq) (*GetPollVotersResp, error)
 	GetConversationsHasReadAndMaxSeq(context.Context, *GetConversationsHasReadAndMaxSeqReq) (*GetConversationsHasReadAndMaxSeqResp, error)
 	GetActiveUser(context.Context, *GetActiveUserReq) (*GetActiveUserResp, error)
 	GetActiveGroup(context.Context, *GetActiveGroupReq) (*GetActiveGroupResp, error)
@@ -963,6 +1019,18 @@ func (UnimplementedMsgServer) ClearPinnedMessages(context.Context, *ClearPinnedM
 }
 func (UnimplementedMsgServer) GetPinnedMessages(context.Context, *GetPinnedMessagesReq) (*GetPinnedMessagesResp, error) {
 	return nil, status.Error(codes.Unimplemented, "method GetPinnedMessages not implemented")
+}
+func (UnimplementedMsgServer) VotePoll(context.Context, *VotePollReq) (*VotePollResp, error) {
+	return nil, status.Error(codes.Unimplemented, "method VotePoll not implemented")
+}
+func (UnimplementedMsgServer) ClosePoll(context.Context, *ClosePollReq) (*ClosePollResp, error) {
+	return nil, status.Error(codes.Unimplemented, "method ClosePoll not implemented")
+}
+func (UnimplementedMsgServer) GetPollStates(context.Context, *GetPollStatesReq) (*GetPollStatesResp, error) {
+	return nil, status.Error(codes.Unimplemented, "method GetPollStates not implemented")
+}
+func (UnimplementedMsgServer) GetPollVoters(context.Context, *GetPollVotersReq) (*GetPollVotersResp, error) {
+	return nil, status.Error(codes.Unimplemented, "method GetPollVoters not implemented")
 }
 func (UnimplementedMsgServer) GetConversationsHasReadAndMaxSeq(context.Context, *GetConversationsHasReadAndMaxSeqReq) (*GetConversationsHasReadAndMaxSeqResp, error) {
 	return nil, status.Error(codes.Unimplemented, "method GetConversationsHasReadAndMaxSeq not implemented")
@@ -1569,6 +1637,78 @@ func _Msg_GetPinnedMessages_Handler(srv interface{}, ctx context.Context, dec fu
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(MsgServer).GetPinnedMessages(ctx, req.(*GetPinnedMessagesReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Msg_VotePoll_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(VotePollReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(MsgServer).VotePoll(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Msg_VotePoll_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(MsgServer).VotePoll(ctx, req.(*VotePollReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Msg_ClosePoll_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ClosePollReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(MsgServer).ClosePoll(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Msg_ClosePoll_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(MsgServer).ClosePoll(ctx, req.(*ClosePollReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Msg_GetPollStates_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetPollStatesReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(MsgServer).GetPollStates(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Msg_GetPollStates_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(MsgServer).GetPollStates(ctx, req.(*GetPollStatesReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Msg_GetPollVoters_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetPollVotersReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(MsgServer).GetPollVoters(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Msg_GetPollVoters_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(MsgServer).GetPollVoters(ctx, req.(*GetPollVotersReq))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -2195,6 +2335,22 @@ var Msg_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "GetPinnedMessages",
 			Handler:    _Msg_GetPinnedMessages_Handler,
+		},
+		{
+			MethodName: "VotePoll",
+			Handler:    _Msg_VotePoll_Handler,
+		},
+		{
+			MethodName: "ClosePoll",
+			Handler:    _Msg_ClosePoll_Handler,
+		},
+		{
+			MethodName: "GetPollStates",
+			Handler:    _Msg_GetPollStates_Handler,
+		},
+		{
+			MethodName: "GetPollVoters",
+			Handler:    _Msg_GetPollVoters_Handler,
 		},
 		{
 			MethodName: "GetConversationsHasReadAndMaxSeq",

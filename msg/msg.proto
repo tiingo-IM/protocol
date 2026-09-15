@@ -160,6 +160,99 @@ message GetPinnedMessagesResp {
   repeated PinnedMessage messages = 3;
 }
 
+// Polls. A poll is a message (constant.Poll) whose content defines the
+// question; everything below is the part that changes after it is sent.
+// Every request names the poll by seq *and* clientMsgID, so a stale
+// client can never act on whatever message now sits at a seq it
+// remembers.
+
+// Where one poll stands, as seen by the user who asked.
+message PollState {
+  int64 seq = 1;
+  string clientMsgID = 2;
+  // Bumped by every vote, change of vote, withdrawal and close. 0 for a
+  // poll nobody has touched yet. Compare it, never the counts: two
+  // changes can leave the counts where they were.
+  int64 version = 3;
+  // Votes per option, indexed by option id (which is the option's
+  // position in the poll's content).
+  repeated int64 optionCounts = 4;
+  // People who currently have a vote in, whatever they chose.
+  int64 voterCount = 5;
+  // True once closed by hand or past its endTime.
+  bool closed = 6;
+  // Unix milli, 0 unless closed by hand. A poll that ran out of time
+  // reads closed with closedAt 0: nobody closed it.
+  int64 closedAt = 7;
+  string closedBy = 8;
+  // What the asking user chose; empty when they have not voted.
+  repeated int32 myOptionIDs = 9;
+}
+
+// Cast, change or withdraw a vote. optionIDs replaces the user's vote
+// as a whole; empty withdraws it.
+message VotePollReq {
+  string conversationID = 1;
+  string userID = 2;
+  int64 seq = 3;
+  string clientMsgID = 4;
+  repeated int32 optionIDs = 5;
+}
+message VotePollResp {
+  PollState state = 1;
+}
+
+// Close a poll for good. The author, the group owner and admins may.
+message ClosePollReq {
+  string conversationID = 1;
+  string userID = 2;
+  int64 seq = 3;
+  string clientMsgID = 4;
+}
+message ClosePollResp {
+  PollState state = 1;
+}
+
+message PollStateQuery {
+  int64 seq = 1;
+  // The version the client holds; -1 when it holds nothing.
+  int64 version = 2;
+}
+
+// Where several polls in one conversation stand. A poll whose version
+// matches what the client holds is left out of `states`; a seq that is
+// not a readable poll (recalled, deleted, below the caller's floor) is
+// listed in `unavailableSeqs` so the client can stop asking.
+message GetPollStatesReq {
+  string conversationID = 1;
+  string userID = 2;
+  repeated PollStateQuery polls = 3;
+}
+message GetPollStatesResp {
+  repeated PollState states = 1;
+  repeated int64 unavailableSeqs = 2;
+}
+
+message PollVoter {
+  string userID = 1;
+  int64 voteTime = 2;
+}
+
+// Who chose one option of a public poll, most recent vote first.
+// Refused for an anonymous poll, whoever asks.
+message GetPollVotersReq {
+  string conversationID = 1;
+  string userID = 2;
+  int64 seq = 3;
+  string clientMsgID = 4;
+  int32 optionID = 5;
+  openim.sdkws.RequestPagination pagination = 6;
+}
+message GetPollVotersResp {
+  int64 total = 1;
+  repeated PollVoter voters = 2;
+}
+
 message GetMessagesReadCountReq {
   string conversationID = 1;
   repeated int64 seqs = 2;
@@ -907,6 +1000,12 @@ service msg {
   rpc PinMessage(PinMessageReq) returns (PinMessageResp);
   rpc ClearPinnedMessages(ClearPinnedMessagesReq) returns (ClearPinnedMessagesResp);
   rpc GetPinnedMessages(GetPinnedMessagesReq) returns (GetPinnedMessagesResp);
+  // Polls: vote, close, and read where polls stand. See PollState and
+  // sdkws.PollChangedTips.
+  rpc VotePoll(VotePollReq) returns (VotePollResp);
+  rpc ClosePoll(ClosePollReq) returns (ClosePollResp);
+  rpc GetPollStates(GetPollStatesReq) returns (GetPollStatesResp);
+  rpc GetPollVoters(GetPollVotersReq) returns (GetPollVotersResp);
 
   rpc GetConversationsHasReadAndMaxSeq(GetConversationsHasReadAndMaxSeqReq) returns (GetConversationsHasReadAndMaxSeqResp);
   rpc GetActiveUser(GetActiveUserReq) returns (GetActiveUserResp);
