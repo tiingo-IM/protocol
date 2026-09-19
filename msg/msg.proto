@@ -1027,6 +1027,177 @@ message CancelUserScheduledMsgsResp {
   int32 count = 1;
 }
 
+// One person in a call.
+message CallParticipant {
+  string userID = 1;
+  // invited | joined | left | rejected
+  string status = 2;
+  int64 joinedAt = 3;
+  int64 leftAt = 4;
+  // When this person was last rung; 0 if never (a group member who
+  // joined on their own). A client rings for at most the ring timeout
+  // from here, so being rung mid-call does not ring for ever.
+  int64 ringedAt = 5;
+}
+
+// A call, as the server knows it. `callID` is also the LiveKit room name,
+// and carries the moment the call was created so that two calls in the
+// same conversation never share a room — a second call must not walk into
+// a room the first one left participants in.
+//
+// The states are deliberately only the ones the server can decide:
+// ringing, accepted, and the ways a call can finish. Connecting,
+// connected and reconnecting belong to the media layer and are the
+// client's to read from LiveKit.
+message CallSession {
+  string callID = 1;
+  string conversationID = 2;
+  string callerID = 3;
+  // audio | video
+  string mediaType = 4;
+  // single | group
+  string mode = 5;
+  // ringing | accepted | ended | rejected | canceled | missed | busy | failed
+  string status = 6;
+  repeated CallParticipant participants = 7;
+  int64 createdAt = 8;
+  // 0 until somebody answers. Duration is measured from here, not from
+  // createdAt: the time spent ringing is not time spent talking.
+  int64 acceptedAt = 9;
+  int64 endedAt = 10;
+  int32 duration = 11;
+  string endReason = 12;
+}
+
+message CreateCallReq {
+  string conversationID = 1;
+  string userID = 2;
+  // audio | video
+  string mediaType = 3;
+  // Group calls only: whom to ring, when the group is too big to ring
+  // everyone. Ignored for a small group, which rings every member, and
+  // for one-to-one. The server filters and caps it; see the call config.
+  repeated string ringUserIDs = 4;
+}
+message CreateCallResp {
+  CallSession session = 1;
+  // A LiveKit token for this caller and this room only, short-lived.
+  string token = 2;
+  string liveURL = 3;
+}
+
+message AcceptCallReq {
+  string callID = 1;
+  string userID = 2;
+}
+message AcceptCallResp {
+  CallSession session = 1;
+  string token = 2;
+  string liveURL = 3;
+}
+
+message RejectCallReq {
+  string callID = 1;
+  string userID = 2;
+}
+message RejectCallResp {
+  CallSession session = 1;
+}
+
+// Only the caller may cancel, and only while it is still ringing.
+message CancelCallReq {
+  string callID = 1;
+  string userID = 2;
+}
+message CancelCallResp {
+  CallSession session = 1;
+}
+
+message EndCallReq {
+  string callID = 1;
+  string userID = 2;
+}
+message EndCallResp {
+  CallSession session = 1;
+}
+
+// Group calls: join one that is in progress — whether rung or not. Any
+// member may; the only limits are capacity (CallFull) and being on
+// another call (CallBusy).
+message JoinCallReq {
+  string callID = 1;
+  string userID = 2;
+}
+message JoinCallResp {
+  CallSession session = 1;
+  string token = 2;
+  string liveURL = 3;
+}
+
+// Group calls: leave. The call goes on for everyone else, and ends when
+// the last person leaves.
+message LeaveCallReq {
+  string callID = 1;
+  string userID = 2;
+}
+message LeaveCallResp {
+  CallSession session = 1;
+}
+
+// Group calls: ring more members while the call is going on. Anyone on
+// the line may; a few at a time.
+message RingCallReq {
+  string callID = 1;
+  string userID = 2;
+  repeated string ringUserIDs = 3;
+}
+message RingCallResp {
+  CallSession session = 1;
+}
+
+// Group calls: an owner or admin silences somebody else's microphone,
+// or gives it back. Enforced by LiveKit, not by the other person's app:
+// muting also takes away their permission to publish audio, so they
+// cannot simply switch it back on.
+message MuteCallParticipantReq {
+  string callID = 1;
+  string userID = 2;
+  string targetUserID = 3;
+  bool muted = 4;
+}
+message MuteCallParticipantResp {
+  CallSession session = 1;
+}
+
+// Where a call stands. Either by callID, or — with conversationID — the
+// live call in that conversation, which is what a device that has just
+// come back asks so it can rejoin or close a screen it left open. With
+// neither, the call this user is on or is being rung by right now, if
+// any: what a device asks as it comes online, since a ring sent while it
+// was not listening is not replayed.
+message GetCallReq {
+  string callID = 1;
+  string userID = 2;
+  string conversationID = 3;
+}
+message GetCallResp {
+  // Absent when there is nothing live to report.
+  CallSession session = 1;
+}
+
+// A LiveKit webhook, passed through untouched by the API. Verifying it is
+// this service's job, not the API's: the signature is made with the same
+// LiveKit secret that mints room tokens, and that secret lives with the
+// msg service alone. body is the raw request body, byte for byte — the
+// signature covers its SHA-256, so it must not be re-encoded on the way.
+message CallWebhookReq {
+  string body = 1;
+  // The request's Authorization header: a JWT signed with the LiveKit
+  // API secret, carrying the body's hash.
+  string authorization = 2;
+}
+message CallWebhookResp {}
+
 service msg {
   // Get min and max seq (including the user and specified groups)
   rpc GetMaxSeq(sdkws.GetMaxSeqReq) returns (sdkws.GetMaxSeqResp);
@@ -1097,6 +1268,24 @@ service msg {
   rpc ReactMessage(ReactMessageReq) returns (ReactMessageResp);
   rpc GetMessageReactions(GetMessageReactionsReq) returns (GetMessageReactionsResp);
   rpc GetMessageReactionUsers(GetMessageReactionUsersReq) returns (GetMessageReactionUsersResp);
+  // Calls: audio and video, carried by LiveKit. These move the call's
+  // state and hand out room tokens; the media never touches this server.
+  // Each change is pushed as constant.SignalingNotification with
+  // sdkws.CallSignalTips, and the call leaves one constant.Call message
+  // behind in the conversation when it finishes.
+  rpc CreateCall(CreateCallReq) returns (CreateCallResp);
+  rpc AcceptCall(AcceptCallReq) returns (AcceptCallResp);
+  rpc RejectCall(RejectCallReq) returns (RejectCallResp);
+  rpc CancelCall(CancelCallReq) returns (CancelCallResp);
+  rpc EndCall(EndCallReq) returns (EndCallResp);
+  rpc GetCall(GetCallReq) returns (GetCallResp);
+  rpc JoinCall(JoinCallReq) returns (JoinCallResp);
+  rpc LeaveCall(LeaveCallReq) returns (LeaveCallResp);
+  rpc RingCall(RingCallReq) returns (RingCallResp);
+  rpc MuteCallParticipant(MuteCallParticipantReq) returns (MuteCallParticipantResp);
+  // LiveKit's word that a room emptied. Not called by users — see
+  // CallWebhookReq.
+  rpc CallWebhook(CallWebhookReq) returns (CallWebhookResp);
 
   rpc GetConversationsHasReadAndMaxSeq(GetConversationsHasReadAndMaxSeqReq) returns (GetConversationsHasReadAndMaxSeqResp);
   rpc GetActiveUser(GetActiveUserReq) returns (GetActiveUserResp);

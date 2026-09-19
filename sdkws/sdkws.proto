@@ -65,6 +65,11 @@ message GroupInfo {
   // group something rather than putting something in front of it, and
   // every member may already ask the group anything by writing it.
   int32 memberPoll = 23;
+  // On: ordinary members may start a group call here. Off, only the
+  // owner and admins can. Unset behaves as on, like memberPoll: a call is
+  // an invitation anyone may decline, not something put in front of the
+  // whole group. Joining a call somebody else started is never gated.
+  int32 memberCall = 24;
 }
 
 // A poll changed: someone voted, changed or withdrew a vote, or the poll
@@ -83,6 +88,68 @@ message PollChangedTips {
   string clientMsgID = 4;
   // The poll's version after this change; see msg.PollState.version.
   int64 version = 5;
+}
+
+// A call changed: it started ringing, was answered, declined, cancelled,
+// hung up, or ran out of ringing time. Pushed to everyone the call
+// concerns, on every device they have, and never stored — a device that
+// missed one asks msg.GetCall when it comes back.
+//
+// This is the ring. It goes out as constant.SignalingNotification (1601),
+// which sits in the 1600–1699 band that the push service already lets
+// through to offline push (shouldPushOffline in push_handler.go), so a
+// phone with no socket still rings. Because it is a notification it also
+// skips the muted-conversation check, which is what a call wants and an
+// ordinary message does not.
+//
+// The permanent half of a call — the "you called for 2:35" row — is a
+// separate ordinary message with contentType constant.Call, sent once
+// when the call ends.
+message CallSignalTips {
+  string callID = 1;
+  string conversationID = 2;
+  string callerID = 3;
+  // audio | video
+  string mediaType = 4;
+  // ringing | accepted | ended | rejected | canceled | missed | busy | failed
+  string status = 5;
+  // Whoever caused this change: the one who answered, declined, cancelled
+  // or hung up. Empty when nobody did — a call that timed out.
+  string operatorID = 6;
+  repeated string participantIDs = 7;
+  int64 createdAt = 8;
+  // Seconds actually spent talking; 0 unless the call was answered.
+  int32 duration = 9;
+  string endReason = 10;
+  // single | group
+  string mode = 11;
+  // For a group call, the group; empty for one-to-one.
+  string groupID = 12;
+  // Whose phone should be ringing now: people rung within the ring
+  // timeout who have neither joined nor declined. A group call goes to
+  // every member in one send, so this — not being a member — is what
+  // decides between a ringing screen and a quiet "call in progress" bar.
+  repeated string ringedUserIDs = 13;
+  // Who is on the line right now.
+  repeated string joinedUserIDs = 14;
+  // What just happened, for a client that wants to say so ("B joined"):
+  // ring | join | leave | reject | end. Status is what to act on; this
+  // is only the reason it changed.
+  string event = 15;
+}
+
+// "X started a group call" — contentType 1606, stored with a seq so the
+// call is in the transcript for anyone who opens the group while it is
+// going on. Where the call stands now is msg.GetCall's to say; this row
+// only records that it began. See constant.CallStartedNotification.
+message CallStartedTips {
+  string callID = 1;
+  string conversationID = 2;
+  string groupID = 3;
+  string callerID = 4;
+  // audio | video
+  string mediaType = 5;
+  int64 createdAt = 6;
 }
 
 // How many people gave one emoji to one message.
@@ -164,6 +231,7 @@ message GroupInfoForSet {
   openim.protobuf.Int32Value memberPin = 13;
   openim.protobuf.Int64Value msgAutoDelete = 14;
   openim.protobuf.Int32Value memberPoll = 15;
+  openim.protobuf.Int32Value memberCall = 16;
 }
 
 message GroupMemberFullInfo {
@@ -1041,6 +1109,7 @@ message GroupCreationDefaults {
   optional int32 readReceipts = 6;
   optional int32 memberPin = 7;
   optional int32 memberPoll = 8;
+  optional int32 memberCall = 9;
 }
 
 // Pushed (constant.MsgEditNotification, 2104) to a conversation after

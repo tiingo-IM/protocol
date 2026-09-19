@@ -55,6 +55,17 @@ const (
 	Msg_ReactMessage_FullMethodName                     = "/openim.msg.msg/ReactMessage"
 	Msg_GetMessageReactions_FullMethodName              = "/openim.msg.msg/GetMessageReactions"
 	Msg_GetMessageReactionUsers_FullMethodName          = "/openim.msg.msg/GetMessageReactionUsers"
+	Msg_CreateCall_FullMethodName                       = "/openim.msg.msg/CreateCall"
+	Msg_AcceptCall_FullMethodName                       = "/openim.msg.msg/AcceptCall"
+	Msg_RejectCall_FullMethodName                       = "/openim.msg.msg/RejectCall"
+	Msg_CancelCall_FullMethodName                       = "/openim.msg.msg/CancelCall"
+	Msg_EndCall_FullMethodName                          = "/openim.msg.msg/EndCall"
+	Msg_GetCall_FullMethodName                          = "/openim.msg.msg/GetCall"
+	Msg_JoinCall_FullMethodName                         = "/openim.msg.msg/JoinCall"
+	Msg_LeaveCall_FullMethodName                        = "/openim.msg.msg/LeaveCall"
+	Msg_RingCall_FullMethodName                         = "/openim.msg.msg/RingCall"
+	Msg_MuteCallParticipant_FullMethodName              = "/openim.msg.msg/MuteCallParticipant"
+	Msg_CallWebhook_FullMethodName                      = "/openim.msg.msg/CallWebhook"
 	Msg_GetConversationsHasReadAndMaxSeq_FullMethodName = "/openim.msg.msg/GetConversationsHasReadAndMaxSeq"
 	Msg_GetActiveUser_FullMethodName                    = "/openim.msg.msg/GetActiveUser"
 	Msg_GetActiveGroup_FullMethodName                   = "/openim.msg.msg/GetActiveGroup"
@@ -155,6 +166,24 @@ type MsgClient interface {
 	ReactMessage(ctx context.Context, in *ReactMessageReq, opts ...grpc.CallOption) (*ReactMessageResp, error)
 	GetMessageReactions(ctx context.Context, in *GetMessageReactionsReq, opts ...grpc.CallOption) (*GetMessageReactionsResp, error)
 	GetMessageReactionUsers(ctx context.Context, in *GetMessageReactionUsersReq, opts ...grpc.CallOption) (*GetMessageReactionUsersResp, error)
+	// Calls: audio and video, carried by LiveKit. These move the call's
+	// state and hand out room tokens; the media never touches this server.
+	// Each change is pushed as constant.SignalingNotification with
+	// sdkws.CallSignalTips, and the call leaves one constant.Call message
+	// behind in the conversation when it finishes.
+	CreateCall(ctx context.Context, in *CreateCallReq, opts ...grpc.CallOption) (*CreateCallResp, error)
+	AcceptCall(ctx context.Context, in *AcceptCallReq, opts ...grpc.CallOption) (*AcceptCallResp, error)
+	RejectCall(ctx context.Context, in *RejectCallReq, opts ...grpc.CallOption) (*RejectCallResp, error)
+	CancelCall(ctx context.Context, in *CancelCallReq, opts ...grpc.CallOption) (*CancelCallResp, error)
+	EndCall(ctx context.Context, in *EndCallReq, opts ...grpc.CallOption) (*EndCallResp, error)
+	GetCall(ctx context.Context, in *GetCallReq, opts ...grpc.CallOption) (*GetCallResp, error)
+	JoinCall(ctx context.Context, in *JoinCallReq, opts ...grpc.CallOption) (*JoinCallResp, error)
+	LeaveCall(ctx context.Context, in *LeaveCallReq, opts ...grpc.CallOption) (*LeaveCallResp, error)
+	RingCall(ctx context.Context, in *RingCallReq, opts ...grpc.CallOption) (*RingCallResp, error)
+	MuteCallParticipant(ctx context.Context, in *MuteCallParticipantReq, opts ...grpc.CallOption) (*MuteCallParticipantResp, error)
+	// LiveKit's word that a room emptied. Not called by users — see
+	// CallWebhookReq.
+	CallWebhook(ctx context.Context, in *CallWebhookReq, opts ...grpc.CallOption) (*CallWebhookResp, error)
 	GetConversationsHasReadAndMaxSeq(ctx context.Context, in *GetConversationsHasReadAndMaxSeqReq, opts ...grpc.CallOption) (*GetConversationsHasReadAndMaxSeqResp, error)
 	GetActiveUser(ctx context.Context, in *GetActiveUserReq, opts ...grpc.CallOption) (*GetActiveUserResp, error)
 	GetActiveGroup(ctx context.Context, in *GetActiveGroupReq, opts ...grpc.CallOption) (*GetActiveGroupResp, error)
@@ -567,6 +596,116 @@ func (c *msgClient) GetMessageReactionUsers(ctx context.Context, in *GetMessageR
 	return out, nil
 }
 
+func (c *msgClient) CreateCall(ctx context.Context, in *CreateCallReq, opts ...grpc.CallOption) (*CreateCallResp, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(CreateCallResp)
+	err := c.cc.Invoke(ctx, Msg_CreateCall_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *msgClient) AcceptCall(ctx context.Context, in *AcceptCallReq, opts ...grpc.CallOption) (*AcceptCallResp, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(AcceptCallResp)
+	err := c.cc.Invoke(ctx, Msg_AcceptCall_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *msgClient) RejectCall(ctx context.Context, in *RejectCallReq, opts ...grpc.CallOption) (*RejectCallResp, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(RejectCallResp)
+	err := c.cc.Invoke(ctx, Msg_RejectCall_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *msgClient) CancelCall(ctx context.Context, in *CancelCallReq, opts ...grpc.CallOption) (*CancelCallResp, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(CancelCallResp)
+	err := c.cc.Invoke(ctx, Msg_CancelCall_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *msgClient) EndCall(ctx context.Context, in *EndCallReq, opts ...grpc.CallOption) (*EndCallResp, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(EndCallResp)
+	err := c.cc.Invoke(ctx, Msg_EndCall_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *msgClient) GetCall(ctx context.Context, in *GetCallReq, opts ...grpc.CallOption) (*GetCallResp, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(GetCallResp)
+	err := c.cc.Invoke(ctx, Msg_GetCall_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *msgClient) JoinCall(ctx context.Context, in *JoinCallReq, opts ...grpc.CallOption) (*JoinCallResp, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(JoinCallResp)
+	err := c.cc.Invoke(ctx, Msg_JoinCall_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *msgClient) LeaveCall(ctx context.Context, in *LeaveCallReq, opts ...grpc.CallOption) (*LeaveCallResp, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(LeaveCallResp)
+	err := c.cc.Invoke(ctx, Msg_LeaveCall_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *msgClient) RingCall(ctx context.Context, in *RingCallReq, opts ...grpc.CallOption) (*RingCallResp, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(RingCallResp)
+	err := c.cc.Invoke(ctx, Msg_RingCall_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *msgClient) MuteCallParticipant(ctx context.Context, in *MuteCallParticipantReq, opts ...grpc.CallOption) (*MuteCallParticipantResp, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(MuteCallParticipantResp)
+	err := c.cc.Invoke(ctx, Msg_MuteCallParticipant_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *msgClient) CallWebhook(ctx context.Context, in *CallWebhookReq, opts ...grpc.CallOption) (*CallWebhookResp, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(CallWebhookResp)
+	err := c.cc.Invoke(ctx, Msg_CallWebhook_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 func (c *msgClient) GetConversationsHasReadAndMaxSeq(ctx context.Context, in *GetConversationsHasReadAndMaxSeqReq, opts ...grpc.CallOption) (*GetConversationsHasReadAndMaxSeqResp, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(GetConversationsHasReadAndMaxSeqResp)
@@ -917,6 +1056,24 @@ type MsgServer interface {
 	ReactMessage(context.Context, *ReactMessageReq) (*ReactMessageResp, error)
 	GetMessageReactions(context.Context, *GetMessageReactionsReq) (*GetMessageReactionsResp, error)
 	GetMessageReactionUsers(context.Context, *GetMessageReactionUsersReq) (*GetMessageReactionUsersResp, error)
+	// Calls: audio and video, carried by LiveKit. These move the call's
+	// state and hand out room tokens; the media never touches this server.
+	// Each change is pushed as constant.SignalingNotification with
+	// sdkws.CallSignalTips, and the call leaves one constant.Call message
+	// behind in the conversation when it finishes.
+	CreateCall(context.Context, *CreateCallReq) (*CreateCallResp, error)
+	AcceptCall(context.Context, *AcceptCallReq) (*AcceptCallResp, error)
+	RejectCall(context.Context, *RejectCallReq) (*RejectCallResp, error)
+	CancelCall(context.Context, *CancelCallReq) (*CancelCallResp, error)
+	EndCall(context.Context, *EndCallReq) (*EndCallResp, error)
+	GetCall(context.Context, *GetCallReq) (*GetCallResp, error)
+	JoinCall(context.Context, *JoinCallReq) (*JoinCallResp, error)
+	LeaveCall(context.Context, *LeaveCallReq) (*LeaveCallResp, error)
+	RingCall(context.Context, *RingCallReq) (*RingCallResp, error)
+	MuteCallParticipant(context.Context, *MuteCallParticipantReq) (*MuteCallParticipantResp, error)
+	// LiveKit's word that a room emptied. Not called by users — see
+	// CallWebhookReq.
+	CallWebhook(context.Context, *CallWebhookReq) (*CallWebhookResp, error)
 	GetConversationsHasReadAndMaxSeq(context.Context, *GetConversationsHasReadAndMaxSeqReq) (*GetConversationsHasReadAndMaxSeqResp, error)
 	GetActiveUser(context.Context, *GetActiveUserReq) (*GetActiveUserResp, error)
 	GetActiveGroup(context.Context, *GetActiveGroupReq) (*GetActiveGroupResp, error)
@@ -1083,6 +1240,39 @@ func (UnimplementedMsgServer) GetMessageReactions(context.Context, *GetMessageRe
 }
 func (UnimplementedMsgServer) GetMessageReactionUsers(context.Context, *GetMessageReactionUsersReq) (*GetMessageReactionUsersResp, error) {
 	return nil, status.Error(codes.Unimplemented, "method GetMessageReactionUsers not implemented")
+}
+func (UnimplementedMsgServer) CreateCall(context.Context, *CreateCallReq) (*CreateCallResp, error) {
+	return nil, status.Error(codes.Unimplemented, "method CreateCall not implemented")
+}
+func (UnimplementedMsgServer) AcceptCall(context.Context, *AcceptCallReq) (*AcceptCallResp, error) {
+	return nil, status.Error(codes.Unimplemented, "method AcceptCall not implemented")
+}
+func (UnimplementedMsgServer) RejectCall(context.Context, *RejectCallReq) (*RejectCallResp, error) {
+	return nil, status.Error(codes.Unimplemented, "method RejectCall not implemented")
+}
+func (UnimplementedMsgServer) CancelCall(context.Context, *CancelCallReq) (*CancelCallResp, error) {
+	return nil, status.Error(codes.Unimplemented, "method CancelCall not implemented")
+}
+func (UnimplementedMsgServer) EndCall(context.Context, *EndCallReq) (*EndCallResp, error) {
+	return nil, status.Error(codes.Unimplemented, "method EndCall not implemented")
+}
+func (UnimplementedMsgServer) GetCall(context.Context, *GetCallReq) (*GetCallResp, error) {
+	return nil, status.Error(codes.Unimplemented, "method GetCall not implemented")
+}
+func (UnimplementedMsgServer) JoinCall(context.Context, *JoinCallReq) (*JoinCallResp, error) {
+	return nil, status.Error(codes.Unimplemented, "method JoinCall not implemented")
+}
+func (UnimplementedMsgServer) LeaveCall(context.Context, *LeaveCallReq) (*LeaveCallResp, error) {
+	return nil, status.Error(codes.Unimplemented, "method LeaveCall not implemented")
+}
+func (UnimplementedMsgServer) RingCall(context.Context, *RingCallReq) (*RingCallResp, error) {
+	return nil, status.Error(codes.Unimplemented, "method RingCall not implemented")
+}
+func (UnimplementedMsgServer) MuteCallParticipant(context.Context, *MuteCallParticipantReq) (*MuteCallParticipantResp, error) {
+	return nil, status.Error(codes.Unimplemented, "method MuteCallParticipant not implemented")
+}
+func (UnimplementedMsgServer) CallWebhook(context.Context, *CallWebhookReq) (*CallWebhookResp, error) {
+	return nil, status.Error(codes.Unimplemented, "method CallWebhook not implemented")
 }
 func (UnimplementedMsgServer) GetConversationsHasReadAndMaxSeq(context.Context, *GetConversationsHasReadAndMaxSeqReq) (*GetConversationsHasReadAndMaxSeqResp, error) {
 	return nil, status.Error(codes.Unimplemented, "method GetConversationsHasReadAndMaxSeq not implemented")
@@ -1819,6 +2009,204 @@ func _Msg_GetMessageReactionUsers_Handler(srv interface{}, ctx context.Context, 
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Msg_CreateCall_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(CreateCallReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(MsgServer).CreateCall(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Msg_CreateCall_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(MsgServer).CreateCall(ctx, req.(*CreateCallReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Msg_AcceptCall_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(AcceptCallReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(MsgServer).AcceptCall(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Msg_AcceptCall_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(MsgServer).AcceptCall(ctx, req.(*AcceptCallReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Msg_RejectCall_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(RejectCallReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(MsgServer).RejectCall(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Msg_RejectCall_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(MsgServer).RejectCall(ctx, req.(*RejectCallReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Msg_CancelCall_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(CancelCallReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(MsgServer).CancelCall(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Msg_CancelCall_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(MsgServer).CancelCall(ctx, req.(*CancelCallReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Msg_EndCall_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(EndCallReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(MsgServer).EndCall(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Msg_EndCall_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(MsgServer).EndCall(ctx, req.(*EndCallReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Msg_GetCall_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetCallReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(MsgServer).GetCall(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Msg_GetCall_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(MsgServer).GetCall(ctx, req.(*GetCallReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Msg_JoinCall_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(JoinCallReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(MsgServer).JoinCall(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Msg_JoinCall_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(MsgServer).JoinCall(ctx, req.(*JoinCallReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Msg_LeaveCall_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(LeaveCallReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(MsgServer).LeaveCall(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Msg_LeaveCall_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(MsgServer).LeaveCall(ctx, req.(*LeaveCallReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Msg_RingCall_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(RingCallReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(MsgServer).RingCall(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Msg_RingCall_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(MsgServer).RingCall(ctx, req.(*RingCallReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Msg_MuteCallParticipant_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(MuteCallParticipantReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(MsgServer).MuteCallParticipant(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Msg_MuteCallParticipant_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(MsgServer).MuteCallParticipant(ctx, req.(*MuteCallParticipantReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Msg_CallWebhook_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(CallWebhookReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(MsgServer).CallWebhook(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Msg_CallWebhook_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(MsgServer).CallWebhook(ctx, req.(*CallWebhookReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 func _Msg_GetConversationsHasReadAndMaxSeq_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(GetConversationsHasReadAndMaxSeqReq)
 	if err := dec(in); err != nil {
@@ -2469,6 +2857,50 @@ var Msg_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "GetMessageReactionUsers",
 			Handler:    _Msg_GetMessageReactionUsers_Handler,
+		},
+		{
+			MethodName: "CreateCall",
+			Handler:    _Msg_CreateCall_Handler,
+		},
+		{
+			MethodName: "AcceptCall",
+			Handler:    _Msg_AcceptCall_Handler,
+		},
+		{
+			MethodName: "RejectCall",
+			Handler:    _Msg_RejectCall_Handler,
+		},
+		{
+			MethodName: "CancelCall",
+			Handler:    _Msg_CancelCall_Handler,
+		},
+		{
+			MethodName: "EndCall",
+			Handler:    _Msg_EndCall_Handler,
+		},
+		{
+			MethodName: "GetCall",
+			Handler:    _Msg_GetCall_Handler,
+		},
+		{
+			MethodName: "JoinCall",
+			Handler:    _Msg_JoinCall_Handler,
+		},
+		{
+			MethodName: "LeaveCall",
+			Handler:    _Msg_LeaveCall_Handler,
+		},
+		{
+			MethodName: "RingCall",
+			Handler:    _Msg_RingCall_Handler,
+		},
+		{
+			MethodName: "MuteCallParticipant",
+			Handler:    _Msg_MuteCallParticipant_Handler,
+		},
+		{
+			MethodName: "CallWebhook",
+			Handler:    _Msg_CallWebhook_Handler,
 		},
 		{
 			MethodName: "GetConversationsHasReadAndMaxSeq",

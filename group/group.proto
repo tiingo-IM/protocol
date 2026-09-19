@@ -92,6 +92,7 @@ message SetGroupInfoExReq {
   openim.protobuf.Int32Value memberPin = 13;
   openim.protobuf.Int64Value msgAutoDelete = 14;
   openim.protobuf.Int32Value memberPoll = 15;
+  openim.protobuf.Int32Value memberCall = 16;
 }
 message SetGroupInfoExResp {}
 

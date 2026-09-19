@@ -18,6 +18,13 @@ const (
 	Revoke           = 111
 	Typing           = 113
 	Quote            = 114
+	// The record one call leaves in the conversation once it is over:
+	// who called, audio or video, how it ended and how long it lasted.
+	// An ordinary message — it has a seq and is kept in history — sent
+	// once by the server when the call ends, never by a client. The
+	// ringing itself is not this; that is SignalingNotification (1601)
+	// with sdkws.CallSignalTips. See msgprocessor.CallContent.
+	Call = 115
 
 	AdvancedText                 = 117
 	MarkdownText                 = 118
@@ -29,12 +36,12 @@ const (
 	// answered. The message holds only that definition, which never
 	// changes after sending; who voted for what lives on the server and
 	// is read through msg.GetPollStates. See msgprocessor.PollContent.
-	Poll                         = 123
-	Stream                       = 143
-	Common                       = 200
-	GroupMsg                     = 201
-	SignalMsg                    = 202
-	CustomNotification           = 203
+	Poll               = 123
+	Stream             = 143
+	Common             = 200
+	GroupMsg           = 201
+	SignalMsg          = 202
+	CustomNotification = 203
 
 	// SysRelated.
 	NotificationBegin = 1000
@@ -141,7 +148,7 @@ const (
 	// starts using it.
 	MsgEditNotification = 2104
 
-	HasReadReceipt        = 2200
+	HasReadReceipt = 2200
 
 	// AppSettingsChangedNotification carries the whole new AppSettings
 	// object after an admin edits it, so a client applies the change
