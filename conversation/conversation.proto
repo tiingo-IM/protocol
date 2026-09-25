@@ -81,6 +81,10 @@ message GetSortedConversationListResp {
   int64 conversationTotal = 1;
   int64 unreadTotal = 2;
   repeated ConversationElem conversationElems = 3;
+  // The number for the app icon: unreadTotal without the conversations the
+  // user muted (recvMsgOpt != 0), which send no push and so should not
+  // move the icon either.
+  int64 badgeTotal = 4;
 }
 
 message ConversationElem {

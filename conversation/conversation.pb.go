@@ -618,8 +618,12 @@ type GetSortedConversationListResp struct {
 	ConversationTotal int64                  `protobuf:"varint,1,opt,name=conversationTotal,proto3" json:"conversationTotal,omitempty"`
 	UnreadTotal       int64                  `protobuf:"varint,2,opt,name=unreadTotal,proto3" json:"unreadTotal,omitempty"`
 	ConversationElems []*ConversationElem    `protobuf:"bytes,3,rep,name=conversationElems,proto3" json:"conversationElems,omitempty"`
-	unknownFields     protoimpl.UnknownFields
-	sizeCache         protoimpl.SizeCache
+	// The number for the app icon: unreadTotal without the conversations the
+	// user muted (recvMsgOpt != 0), which send no push and so should not
+	// move the icon either.
+	BadgeTotal    int64 `protobuf:"varint,4,opt,name=badgeTotal,proto3" json:"badgeTotal,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
 }
 
 func (x *GetSortedConversationListResp) Reset() {
@@ -671,6 +675,13 @@ func (x *GetSortedConversationListResp) GetConversationElems() []*ConversationEl
 		return x.ConversationElems
 	}
 	return nil
+}
+
+func (x *GetSortedConversationListResp) GetBadgeTotal() int64 {
+	if x != nil {
+		return x.BadgeTotal
+	}
+	return 0
 }
 
 type ConversationElem struct {
@@ -3441,11 +3452,14 @@ const file_conversation_conversation_proto_rawDesc = "" +
 	"\x0fconversationIDs\x18\x02 \x03(\tR\x0fconversationIDs\x12?\n" +
 	"\n" +
 	"pagination\x18\x03 \x01(\v2\x1f.openim.sdkws.RequestPaginationR\n" +
-	"pagination\"\xc4\x01\n" +
+	"pagination\"\xe4\x01\n" +
 	"\x1dGetSortedConversationListResp\x12,\n" +
 	"\x11conversationTotal\x18\x01 \x01(\x03R\x11conversationTotal\x12 \n" +
 	"\vunreadTotal\x18\x02 \x01(\x03R\vunreadTotal\x12S\n" +
-	"\x11conversationElems\x18\x03 \x03(\v2%.openim.conversation.ConversationElemR\x11conversationElems\"\xee\x01\n" +
+	"\x11conversationElems\x18\x03 \x03(\v2%.openim.conversation.ConversationElemR\x11conversationElems\x12\x1e\n" +
+	"\n" +
+	"badgeTotal\x18\x04 \x01(\x03R\n" +
+	"badgeTotal\"\xee\x01\n" +
 	"\x10ConversationElem\x12&\n" +
 	"\x0econversationID\x18\x01 \x01(\tR\x0econversationID\x12\x1e\n" +
 	"\n" +
