@@ -24,3 +24,34 @@ func (x *DelUserPushTokenReq) Check() error {
 	}
 	return nil
 }
+
+func (x *TestPushReq) Check() error {
+	if x.UserID == "" {
+		return errors.New("UserID is empty")
+	}
+	return nil
+}
+
+func (x *GetUserPushDevicesReq) Check() error {
+	if x.UserID == "" {
+		return errors.New("UserID is empty")
+	}
+	return nil
+}
+
+func (x *DelUserPushDeviceReq) Check() error {
+	if x.UserID == "" {
+		return errors.New("UserID is empty")
+	}
+	if x.PlatformID < 1 || x.PlatformID > 12 {
+		return errors.New("PlatformID is invalid")
+	}
+	return nil
+}
+
+func (x *VerifyPushProviderReq) Check() error {
+	if x.Provider == "" {
+		return errors.New("Provider is empty")
+	}
+	return nil
+}

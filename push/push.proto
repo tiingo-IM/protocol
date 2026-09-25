@@ -13,14 +13,186 @@ message PushMsgReq {
 
 message PushMsgResp {}
 
+// DelUserPushTokenReq forgets a device's push channels. An empty vendor
+// forgets every channel the device registered (sign-out); a named one
+// forgets only that one.
 message DelUserPushTokenReq {
   string userID = 1;
   int32 platformID = 2;
+  string vendor = 3;
 }
 
 message DelUserPushTokenResp {}
 
+// ---- Push settings (admin) ----
+//
+// The settings travel as JSON rather than as proto messages: their shape
+// is defined once, in open-im-server's pushsettings package, together
+// with the schema the admin console draws its forms from. A proto copy
+// would be a second definition to keep in step with the first. Secrets
+// never leave the push service: a read shows {"set":true,"hint":"…abcd"}
+// where a secret is.
+
+message GetPushSettingsReq {}
+
+message GetPushSettingsResp {
+  // The stored settings, secrets masked.
+  string settings = 1;
+  // Every field the console may show: path, type, label, options.
+  string schema = 2;
+  // The effective values after defaults, secrets masked.
+  string effective = 3;
+  int64 version = 4;
+  string seededFrom = 5;
+  int64 seededAt = 6;
+  int64 updatedAt = 7;
+  string updatedBy = 8;
+  // Why the last reload of this instance failed, if it did.
+  string lastReloadError = 9;
+  // Whether this instance can store a new secret (settingsStore.secretKey set).
+  bool canStoreSecrets = 10;
+  // The offline push mode this service runs (openim-push.yml enable:).
+  string mode = 11;
+}
+
+message SetPushSettingsReq {
+  // A JSON object with only the fields to change. A secret is a string
+  // to replace it, {"clear":true} to remove it; leaving it out (or "")
+  // keeps it.
+  string patch = 1;
+  // Who asked, for the audit trail: the console's own admin account.
+  string operator = 2;
+}
+
+message SetPushSettingsResp {
+  GetPushSettingsResp settings = 1;
+}
+
+message ImportPushSettingsReq {
+  string operator = 1;
+}
+
+message ImportPushSettingsResp {
+  GetPushSettingsResp settings = 1;
+}
+
+message ExportPushSettingsReq {}
+
+message ExportPushSettingsResp {
+  // YAML for openim-push.yml's settings: section, secrets as "<set>".
+  string yaml = 1;
+}
+
+message VerifyPushProviderReq {
+  // fcm, hms, honor, xiaomi, oppo, vivo.
+  string provider = 1;
+  string operator = 2;
+}
+
+message VerifyPushProviderResp {
+  bool ok = 1;
+  string error = 2;
+  int64 latencyMs = 3;
+}
+
+message TestPushReq {
+  string userID = 1;
+  // "auto" routes as a real push would; a provider name forces that one.
+  string provider = 2;
+  // message or callRing.
+  string kind = 3;
+  string operator = 4;
+}
+
+message TestPushResult {
+  int32 platformID = 1;
+  string provider = 2;
+  string tokenHint = 3;
+  bool ok = 4;
+  string error = 5;
+  // A fallback to FCM after the vendor refused.
+  bool fallback = 6;
+}
+
+message TestPushResp {
+  repeated TestPushResult results = 1;
+}
+
+message PushDevice {
+  int32 platformID = 1;
+  string vendor = 2;
+  string tokenHint = 3;
+  string region = 4;
+  string locale = 5;
+  int64 updatedAt = 6;
+  string lastResult = 7;
+  string lastError = 8;
+  int64 lastSentAt = 9;
+}
+
+message GetUserPushDevicesReq {
+  string userID = 1;
+}
+
+message GetUserPushDevicesResp {
+  repeated PushDevice devices = 1;
+}
+
+message DelUserPushDeviceReq {
+  string userID = 1;
+  int32 platformID = 2;
+  string vendor = 3;
+  string operator = 4;
+}
+
+message DelUserPushDeviceResp {}
+
+message PushStat {
+  // yyyymmdd, UTC.
+  string date = 1;
+  string provider = 2;
+  // sent, failed, dead, fallback, quota.
+  string outcome = 3;
+  int64 count = 4;
+}
+
+message GetPushStatsReq {
+  int32 days = 1;
+}
+
+message GetPushStatsResp {
+  repeated PushStat stats = 1;
+}
+
+message PushSettingsAudit {
+  int64 at = 1;
+  string operator = 2;
+  // seed, fill, set, import, verify, test, delDevice.
+  string action = 3;
+  repeated string fields = 4;
+  string detail = 5;
+}
+
+message GetPushSettingsAuditReq {
+  int32 limit = 1;
+}
+
+message GetPushSettingsAuditResp {
+  repeated PushSettingsAudit entries = 1;
+}
+
 service PushMsgService {
   rpc PushMsg(PushMsgReq) returns (PushMsgResp);
   rpc DelUserPushToken(DelUserPushTokenReq) returns (DelUserPushTokenResp);
+
+  rpc GetPushSettings(GetPushSettingsReq) returns (GetPushSettingsResp);
+  rpc SetPushSettings(SetPushSettingsReq) returns (SetPushSettingsResp);
+  rpc ImportPushSettings(ImportPushSettingsReq) returns (ImportPushSettingsResp);
+  rpc ExportPushSettings(ExportPushSettingsReq) returns (ExportPushSettingsResp);
+  rpc VerifyPushProvider(VerifyPushProviderReq) returns (VerifyPushProviderResp);
+  rpc TestPush(TestPushReq) returns (TestPushResp);
+  rpc GetUserPushDevices(GetUserPushDevicesReq) returns (GetUserPushDevicesResp);
+  rpc DelUserPushDevice(DelUserPushDeviceReq) returns (DelUserPushDeviceResp);
+  rpc GetPushStats(GetPushStatsReq) returns (GetPushStatsResp);
+  rpc GetPushSettingsAudit(GetPushSettingsAuditReq) returns (GetPushSettingsAuditResp);
 }

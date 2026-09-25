@@ -145,6 +145,25 @@ message FcmUpdateTokenReq {
 
 message FcmUpdateTokenResp {}
 
+// UpdatePushTokenReq registers one push channel of one device: FCM, or a
+// phone maker's own push service (hms, honor, xiaomi, oppo, vivo). A
+// device may hold one token per vendor at once; the push service picks
+// the channel. region is where the vendor's server keeps this token
+// (Xiaomi and OPPO run separate China and global services), locale is
+// the language the device shows, for the pushes the server has to word
+// itself.
+message UpdatePushTokenReq {
+  int32 platformID = 1;
+  string vendor = 2;
+  string token = 3;
+  string region = 4;
+  string locale = 5;
+  string account = 6;
+  int64 expireTime = 7;
+}
+
+message UpdatePushTokenResp {}
+
 message SetAppBadgeReq {
   string userID = 1;
   int32 appUnreadCount = 2;
@@ -210,6 +229,7 @@ service third {
   rpc DeleteOutdatedData(DeleteOutdatedDataReq) returns (DeleteOutdatedDataResp);
 
   rpc FcmUpdateToken(FcmUpdateTokenReq) returns (FcmUpdateTokenResp);
+  rpc UpdatePushToken(UpdatePushTokenReq) returns (UpdatePushTokenResp);
   rpc SetAppBadge(SetAppBadgeReq) returns (SetAppBadgeResp);
 
   // Logs
