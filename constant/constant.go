@@ -130,6 +130,10 @@ const (
 	// conversation, single chat or group, several changes gathered into
 	// one push. Never stored.
 	MessageReactionsChangedNotification = 1709
+	// A user's call history changed on one of their devices — calls
+	// deleted, or the history looked at; see sdkws.CallHistoryChangedTips.
+	// Sent only to its owner (sendID == recvID), never stored.
+	CallHistoryChangedNotification = 1710
 
 	BusinessNotificationBegin = 2000
 	BusinessNotification      = 2001

@@ -1185,6 +1185,86 @@ message GetCallResp {
   CallSession session = 1;
 }
 
+// Call history: every call this user was part of, newest first, as seen
+// from their side. What a call *was* for them — missed, answered,
+// outgoing — is worked out here, on the server, and handed over with each
+// row, so that every client lists the same history and none has to know
+// the ring timeout or the rules for reading a group call's participants.
+//
+// A user's history is the calls they appear in as a participant, not the
+// calls of the groups they are in now: leaving a group does not erase the
+// calls they had there, and joining one does not bring in calls they were
+// never part of.
+message CallHistoryItem {
+  CallSession session = 1;
+  // live | missed | incoming | outgoing. "live" is a call still going that
+  // this user is on or placed; a call still ringing this user is not in
+  // the history at all — the ringing screen is where that is.
+  string kind = 2;
+  // How it went, for this user: answered | declined | canceled | busy |
+  // noAnswer | failed for a finished call, and ringing | accepted while
+  // live. "busy" on an incoming call means this user was on another call.
+  string result = 3;
+  // When it became what it is for this user: the end of the call, or for
+  // a group call whose ring ran out on them while it went on, the moment
+  // it did. What the missed-call count is measured against.
+  int64 settledAt = 4;
+}
+
+// Where a page of history ends. Rows are ordered by (createdAt, callID),
+// both descending; the next page starts strictly after this row.
+message CallHistoryCursor {
+  int64 createdAt = 1;
+  string callID = 2;
+}
+
+message GetCallHistoryReq {
+  string userID = 1;
+  // all | missed | incoming | outgoing; empty means all.
+  string filter = 2;
+  // audio | video; empty means both.
+  string mediaType = 3;
+  // Absent for the first page.
+  CallHistoryCursor cursor = 4;
+  // 1..100; 0 means 20.
+  int32 limit = 5;
+}
+message GetCallHistoryResp {
+  repeated CallHistoryItem calls = 1;
+  // Absent when there is nothing after this page.
+  CallHistoryCursor nextCursor = 2;
+}
+
+// Remove calls from this user's history, for them alone. The calls, and
+// the records they left in conversations, stay as they are for everyone
+// else — and for this user too, in the conversation itself.
+message DeleteCallHistoryReq {
+  string userID = 1;
+  // Up to 100 at a time. Ignored when all is set.
+  repeated string callIDs = 2;
+  // Everything up to now.
+  bool all = 3;
+}
+message DeleteCallHistoryResp {}
+
+// How many calls this user has missed since they last looked at their
+// history (MarkCallHistorySeen), on any device.
+message GetMissedCallCountReq {
+  string userID = 1;
+}
+message GetMissedCallCountResp {
+  int32 count = 1;
+  // When they last looked, in ms; 0 if never.
+  int64 seenAt = 2;
+}
+
+message MarkCallHistorySeenReq {
+  string userID = 1;
+}
+message MarkCallHistorySeenResp {
+  int64 seenAt = 1;
+}
+
 // A LiveKit webhook, passed through untouched by the API. Verifying it is
 // this service's job, not the API's: the signature is made with the same
 // LiveKit secret that mints room tokens, and that secret lives with the
@@ -1283,6 +1363,12 @@ service msg {
   rpc LeaveCall(LeaveCallReq) returns (LeaveCallResp);
   rpc RingCall(RingCallReq) returns (RingCallResp);
   rpc MuteCallParticipant(MuteCallParticipantReq) returns (MuteCallParticipantResp);
+  // Call history, per user. A change made on one device reaches the
+  // user's others as constant.CallHistoryChangedNotification.
+  rpc GetCallHistory(GetCallHistoryReq) returns (GetCallHistoryResp);
+  rpc DeleteCallHistory(DeleteCallHistoryReq) returns (DeleteCallHistoryResp);
+  rpc GetMissedCallCount(GetMissedCallCountReq) returns (GetMissedCallCountResp);
+  rpc MarkCallHistorySeen(MarkCallHistorySeenReq) returns (MarkCallHistorySeenResp);
   // LiveKit's word that a room emptied. Not called by users — see
   // CallWebhookReq.
   rpc CallWebhook(CallWebhookReq) returns (CallWebhookResp);

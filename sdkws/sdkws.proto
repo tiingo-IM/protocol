@@ -1071,6 +1071,22 @@ message ScheduledMsgChangedTips {
   int32 status = 3;
 }
 
+// Pushed (constant.CallHistoryChangedNotification, 1710) to a user's own
+// devices when their call history changed there: calls deleted, or the
+// history looked at (which clears the missed-call count). A marker: the
+// device refetches what it shows. New calls need no such push — each one
+// leaves a constant.Call record in its conversation, which every device
+// receives anyway.
+message CallHistoryChangedTips {
+  // deleted | seen
+  string change = 1;
+  // For deleted: the calls removed, empty when all were.
+  repeated string callIDs = 2;
+  bool all = 3;
+  // For seen: when, in ms.
+  int64 seenAt = 4;
+}
+
 // GroupCreationDefaults: what a group's seven owner-configurable
 // switches are set to at the moment it is created. Admin-configured,
 // stored in MongoDB, applied by CreateGroup — no client gets a say, so

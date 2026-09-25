@@ -65,6 +65,10 @@ const (
 	Msg_LeaveCall_FullMethodName                        = "/openim.msg.msg/LeaveCall"
 	Msg_RingCall_FullMethodName                         = "/openim.msg.msg/RingCall"
 	Msg_MuteCallParticipant_FullMethodName              = "/openim.msg.msg/MuteCallParticipant"
+	Msg_GetCallHistory_FullMethodName                   = "/openim.msg.msg/GetCallHistory"
+	Msg_DeleteCallHistory_FullMethodName                = "/openim.msg.msg/DeleteCallHistory"
+	Msg_GetMissedCallCount_FullMethodName               = "/openim.msg.msg/GetMissedCallCount"
+	Msg_MarkCallHistorySeen_FullMethodName              = "/openim.msg.msg/MarkCallHistorySeen"
 	Msg_CallWebhook_FullMethodName                      = "/openim.msg.msg/CallWebhook"
 	Msg_GetConversationsHasReadAndMaxSeq_FullMethodName = "/openim.msg.msg/GetConversationsHasReadAndMaxSeq"
 	Msg_GetActiveUser_FullMethodName                    = "/openim.msg.msg/GetActiveUser"
@@ -181,6 +185,12 @@ type MsgClient interface {
 	LeaveCall(ctx context.Context, in *LeaveCallReq, opts ...grpc.CallOption) (*LeaveCallResp, error)
 	RingCall(ctx context.Context, in *RingCallReq, opts ...grpc.CallOption) (*RingCallResp, error)
 	MuteCallParticipant(ctx context.Context, in *MuteCallParticipantReq, opts ...grpc.CallOption) (*MuteCallParticipantResp, error)
+	// Call history, per user. A change made on one device reaches the
+	// user's others as constant.CallHistoryChangedNotification.
+	GetCallHistory(ctx context.Context, in *GetCallHistoryReq, opts ...grpc.CallOption) (*GetCallHistoryResp, error)
+	DeleteCallHistory(ctx context.Context, in *DeleteCallHistoryReq, opts ...grpc.CallOption) (*DeleteCallHistoryResp, error)
+	GetMissedCallCount(ctx context.Context, in *GetMissedCallCountReq, opts ...grpc.CallOption) (*GetMissedCallCountResp, error)
+	MarkCallHistorySeen(ctx context.Context, in *MarkCallHistorySeenReq, opts ...grpc.CallOption) (*MarkCallHistorySeenResp, error)
 	// LiveKit's word that a room emptied. Not called by users — see
 	// CallWebhookReq.
 	CallWebhook(ctx context.Context, in *CallWebhookReq, opts ...grpc.CallOption) (*CallWebhookResp, error)
@@ -696,6 +706,46 @@ func (c *msgClient) MuteCallParticipant(ctx context.Context, in *MuteCallPartici
 	return out, nil
 }
 
+func (c *msgClient) GetCallHistory(ctx context.Context, in *GetCallHistoryReq, opts ...grpc.CallOption) (*GetCallHistoryResp, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(GetCallHistoryResp)
+	err := c.cc.Invoke(ctx, Msg_GetCallHistory_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *msgClient) DeleteCallHistory(ctx context.Context, in *DeleteCallHistoryReq, opts ...grpc.CallOption) (*DeleteCallHistoryResp, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(DeleteCallHistoryResp)
+	err := c.cc.Invoke(ctx, Msg_DeleteCallHistory_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *msgClient) GetMissedCallCount(ctx context.Context, in *GetMissedCallCountReq, opts ...grpc.CallOption) (*GetMissedCallCountResp, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(GetMissedCallCountResp)
+	err := c.cc.Invoke(ctx, Msg_GetMissedCallCount_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *msgClient) MarkCallHistorySeen(ctx context.Context, in *MarkCallHistorySeenReq, opts ...grpc.CallOption) (*MarkCallHistorySeenResp, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(MarkCallHistorySeenResp)
+	err := c.cc.Invoke(ctx, Msg_MarkCallHistorySeen_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 func (c *msgClient) CallWebhook(ctx context.Context, in *CallWebhookReq, opts ...grpc.CallOption) (*CallWebhookResp, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(CallWebhookResp)
@@ -1071,6 +1121,12 @@ type MsgServer interface {
 	LeaveCall(context.Context, *LeaveCallReq) (*LeaveCallResp, error)
 	RingCall(context.Context, *RingCallReq) (*RingCallResp, error)
 	MuteCallParticipant(context.Context, *MuteCallParticipantReq) (*MuteCallParticipantResp, error)
+	// Call history, per user. A change made on one device reaches the
+	// user's others as constant.CallHistoryChangedNotification.
+	GetCallHistory(context.Context, *GetCallHistoryReq) (*GetCallHistoryResp, error)
+	DeleteCallHistory(context.Context, *DeleteCallHistoryReq) (*DeleteCallHistoryResp, error)
+	GetMissedCallCount(context.Context, *GetMissedCallCountReq) (*GetMissedCallCountResp, error)
+	MarkCallHistorySeen(context.Context, *MarkCallHistorySeenReq) (*MarkCallHistorySeenResp, error)
 	// LiveKit's word that a room emptied. Not called by users — see
 	// CallWebhookReq.
 	CallWebhook(context.Context, *CallWebhookReq) (*CallWebhookResp, error)
@@ -1270,6 +1326,18 @@ func (UnimplementedMsgServer) RingCall(context.Context, *RingCallReq) (*RingCall
 }
 func (UnimplementedMsgServer) MuteCallParticipant(context.Context, *MuteCallParticipantReq) (*MuteCallParticipantResp, error) {
 	return nil, status.Error(codes.Unimplemented, "method MuteCallParticipant not implemented")
+}
+func (UnimplementedMsgServer) GetCallHistory(context.Context, *GetCallHistoryReq) (*GetCallHistoryResp, error) {
+	return nil, status.Error(codes.Unimplemented, "method GetCallHistory not implemented")
+}
+func (UnimplementedMsgServer) DeleteCallHistory(context.Context, *DeleteCallHistoryReq) (*DeleteCallHistoryResp, error) {
+	return nil, status.Error(codes.Unimplemented, "method DeleteCallHistory not implemented")
+}
+func (UnimplementedMsgServer) GetMissedCallCount(context.Context, *GetMissedCallCountReq) (*GetMissedCallCountResp, error) {
+	return nil, status.Error(codes.Unimplemented, "method GetMissedCallCount not implemented")
+}
+func (UnimplementedMsgServer) MarkCallHistorySeen(context.Context, *MarkCallHistorySeenReq) (*MarkCallHistorySeenResp, error) {
+	return nil, status.Error(codes.Unimplemented, "method MarkCallHistorySeen not implemented")
 }
 func (UnimplementedMsgServer) CallWebhook(context.Context, *CallWebhookReq) (*CallWebhookResp, error) {
 	return nil, status.Error(codes.Unimplemented, "method CallWebhook not implemented")
@@ -2189,6 +2257,78 @@ func _Msg_MuteCallParticipant_Handler(srv interface{}, ctx context.Context, dec 
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Msg_GetCallHistory_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetCallHistoryReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(MsgServer).GetCallHistory(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Msg_GetCallHistory_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(MsgServer).GetCallHistory(ctx, req.(*GetCallHistoryReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Msg_DeleteCallHistory_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(DeleteCallHistoryReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(MsgServer).DeleteCallHistory(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Msg_DeleteCallHistory_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(MsgServer).DeleteCallHistory(ctx, req.(*DeleteCallHistoryReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Msg_GetMissedCallCount_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetMissedCallCountReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(MsgServer).GetMissedCallCount(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Msg_GetMissedCallCount_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(MsgServer).GetMissedCallCount(ctx, req.(*GetMissedCallCountReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Msg_MarkCallHistorySeen_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(MarkCallHistorySeenReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(MsgServer).MarkCallHistorySeen(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Msg_MarkCallHistorySeen_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(MsgServer).MarkCallHistorySeen(ctx, req.(*MarkCallHistorySeenReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 func _Msg_CallWebhook_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(CallWebhookReq)
 	if err := dec(in); err != nil {
@@ -2897,6 +3037,22 @@ var Msg_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "MuteCallParticipant",
 			Handler:    _Msg_MuteCallParticipant_Handler,
+		},
+		{
+			MethodName: "GetCallHistory",
+			Handler:    _Msg_GetCallHistory_Handler,
+		},
+		{
+			MethodName: "DeleteCallHistory",
+			Handler:    _Msg_DeleteCallHistory_Handler,
+		},
+		{
+			MethodName: "GetMissedCallCount",
+			Handler:    _Msg_GetMissedCallCount_Handler,
+		},
+		{
+			MethodName: "MarkCallHistorySeen",
+			Handler:    _Msg_MarkCallHistorySeen_Handler,
 		},
 		{
 			MethodName: "CallWebhook",
