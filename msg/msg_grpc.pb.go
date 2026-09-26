@@ -89,6 +89,11 @@ const (
 	Msg_GetSystemMsgVisibilityList_FullMethodName       = "/openim.msg.msg/GetSystemMsgVisibilityList"
 	Msg_GetAppSettings_FullMethodName                   = "/openim.msg.msg/GetAppSettings"
 	Msg_SetAppSettings_FullMethodName                   = "/openim.msg.msg/SetAppSettings"
+	Msg_GetBannedWords_FullMethodName                   = "/openim.msg.msg/GetBannedWords"
+	Msg_AddBannedWords_FullMethodName                   = "/openim.msg.msg/AddBannedWords"
+	Msg_UpdateBannedWord_FullMethodName                 = "/openim.msg.msg/UpdateBannedWord"
+	Msg_DelBannedWords_FullMethodName                   = "/openim.msg.msg/DelBannedWords"
+	Msg_TestBannedWords_FullMethodName                  = "/openim.msg.msg/TestBannedWords"
 	Msg_EditMsg_FullMethodName                          = "/openim.msg.msg/EditMsg"
 	Msg_GetMsgExtraVersion_FullMethodName               = "/openim.msg.msg/GetMsgExtraVersion"
 	Msg_GetMsgExtraVersions_FullMethodName              = "/openim.msg.msg/GetMsgExtraVersions"
@@ -229,6 +234,14 @@ type MsgClient interface {
 	// costs no database read per message.
 	GetAppSettings(ctx context.Context, in *GetAppSettingsReq, opts ...grpc.CallOption) (*GetAppSettingsResp, error)
 	SetAppSettings(ctx context.Context, in *SetAppSettingsReq, opts ...grpc.CallOption) (*SetAppSettingsResp, error)
+	// The banned-word list (see BannedWord). Admin only. Owned here
+	// because this service enforces it on the send path, which must never
+	// wait on another service.
+	GetBannedWords(ctx context.Context, in *GetBannedWordsReq, opts ...grpc.CallOption) (*GetBannedWordsResp, error)
+	AddBannedWords(ctx context.Context, in *AddBannedWordsReq, opts ...grpc.CallOption) (*AddBannedWordsResp, error)
+	UpdateBannedWord(ctx context.Context, in *UpdateBannedWordReq, opts ...grpc.CallOption) (*UpdateBannedWordResp, error)
+	DelBannedWords(ctx context.Context, in *DelBannedWordsReq, opts ...grpc.CallOption) (*DelBannedWordsResp, error)
+	TestBannedWords(ctx context.Context, in *TestBannedWordsReq, opts ...grpc.CallOption) (*TestBannedWordsResp, error)
 	// Edit a message in place — see EditMsgReq for why this is not the
 	// ModifyMessage stub above.
 	EditMsg(ctx context.Context, in *EditMsgReq, opts ...grpc.CallOption) (*EditMsgResp, error)
@@ -946,6 +959,56 @@ func (c *msgClient) SetAppSettings(ctx context.Context, in *SetAppSettingsReq, o
 	return out, nil
 }
 
+func (c *msgClient) GetBannedWords(ctx context.Context, in *GetBannedWordsReq, opts ...grpc.CallOption) (*GetBannedWordsResp, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(GetBannedWordsResp)
+	err := c.cc.Invoke(ctx, Msg_GetBannedWords_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *msgClient) AddBannedWords(ctx context.Context, in *AddBannedWordsReq, opts ...grpc.CallOption) (*AddBannedWordsResp, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(AddBannedWordsResp)
+	err := c.cc.Invoke(ctx, Msg_AddBannedWords_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *msgClient) UpdateBannedWord(ctx context.Context, in *UpdateBannedWordReq, opts ...grpc.CallOption) (*UpdateBannedWordResp, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(UpdateBannedWordResp)
+	err := c.cc.Invoke(ctx, Msg_UpdateBannedWord_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *msgClient) DelBannedWords(ctx context.Context, in *DelBannedWordsReq, opts ...grpc.CallOption) (*DelBannedWordsResp, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(DelBannedWordsResp)
+	err := c.cc.Invoke(ctx, Msg_DelBannedWords_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *msgClient) TestBannedWords(ctx context.Context, in *TestBannedWordsReq, opts ...grpc.CallOption) (*TestBannedWordsResp, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(TestBannedWordsResp)
+	err := c.cc.Invoke(ctx, Msg_TestBannedWords_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 func (c *msgClient) EditMsg(ctx context.Context, in *EditMsgReq, opts ...grpc.CallOption) (*EditMsgResp, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(EditMsgResp)
@@ -1165,6 +1228,14 @@ type MsgServer interface {
 	// costs no database read per message.
 	GetAppSettings(context.Context, *GetAppSettingsReq) (*GetAppSettingsResp, error)
 	SetAppSettings(context.Context, *SetAppSettingsReq) (*SetAppSettingsResp, error)
+	// The banned-word list (see BannedWord). Admin only. Owned here
+	// because this service enforces it on the send path, which must never
+	// wait on another service.
+	GetBannedWords(context.Context, *GetBannedWordsReq) (*GetBannedWordsResp, error)
+	AddBannedWords(context.Context, *AddBannedWordsReq) (*AddBannedWordsResp, error)
+	UpdateBannedWord(context.Context, *UpdateBannedWordReq) (*UpdateBannedWordResp, error)
+	DelBannedWords(context.Context, *DelBannedWordsReq) (*DelBannedWordsResp, error)
+	TestBannedWords(context.Context, *TestBannedWordsReq) (*TestBannedWordsResp, error)
 	// Edit a message in place — see EditMsgReq for why this is not the
 	// ModifyMessage stub above.
 	EditMsg(context.Context, *EditMsgReq) (*EditMsgResp, error)
@@ -1398,6 +1469,21 @@ func (UnimplementedMsgServer) GetAppSettings(context.Context, *GetAppSettingsReq
 }
 func (UnimplementedMsgServer) SetAppSettings(context.Context, *SetAppSettingsReq) (*SetAppSettingsResp, error) {
 	return nil, status.Error(codes.Unimplemented, "method SetAppSettings not implemented")
+}
+func (UnimplementedMsgServer) GetBannedWords(context.Context, *GetBannedWordsReq) (*GetBannedWordsResp, error) {
+	return nil, status.Error(codes.Unimplemented, "method GetBannedWords not implemented")
+}
+func (UnimplementedMsgServer) AddBannedWords(context.Context, *AddBannedWordsReq) (*AddBannedWordsResp, error) {
+	return nil, status.Error(codes.Unimplemented, "method AddBannedWords not implemented")
+}
+func (UnimplementedMsgServer) UpdateBannedWord(context.Context, *UpdateBannedWordReq) (*UpdateBannedWordResp, error) {
+	return nil, status.Error(codes.Unimplemented, "method UpdateBannedWord not implemented")
+}
+func (UnimplementedMsgServer) DelBannedWords(context.Context, *DelBannedWordsReq) (*DelBannedWordsResp, error) {
+	return nil, status.Error(codes.Unimplemented, "method DelBannedWords not implemented")
+}
+func (UnimplementedMsgServer) TestBannedWords(context.Context, *TestBannedWordsReq) (*TestBannedWordsResp, error) {
+	return nil, status.Error(codes.Unimplemented, "method TestBannedWords not implemented")
 }
 func (UnimplementedMsgServer) EditMsg(context.Context, *EditMsgReq) (*EditMsgResp, error) {
 	return nil, status.Error(codes.Unimplemented, "method EditMsg not implemented")
@@ -2689,6 +2775,96 @@ func _Msg_SetAppSettings_Handler(srv interface{}, ctx context.Context, dec func(
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Msg_GetBannedWords_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetBannedWordsReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(MsgServer).GetBannedWords(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Msg_GetBannedWords_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(MsgServer).GetBannedWords(ctx, req.(*GetBannedWordsReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Msg_AddBannedWords_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(AddBannedWordsReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(MsgServer).AddBannedWords(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Msg_AddBannedWords_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(MsgServer).AddBannedWords(ctx, req.(*AddBannedWordsReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Msg_UpdateBannedWord_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(UpdateBannedWordReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(MsgServer).UpdateBannedWord(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Msg_UpdateBannedWord_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(MsgServer).UpdateBannedWord(ctx, req.(*UpdateBannedWordReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Msg_DelBannedWords_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(DelBannedWordsReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(MsgServer).DelBannedWords(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Msg_DelBannedWords_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(MsgServer).DelBannedWords(ctx, req.(*DelBannedWordsReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Msg_TestBannedWords_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(TestBannedWordsReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(MsgServer).TestBannedWords(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Msg_TestBannedWords_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(MsgServer).TestBannedWords(ctx, req.(*TestBannedWordsReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 func _Msg_EditMsg_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(EditMsgReq)
 	if err := dec(in); err != nil {
@@ -3133,6 +3309,26 @@ var Msg_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "SetAppSettings",
 			Handler:    _Msg_SetAppSettings_Handler,
+		},
+		{
+			MethodName: "GetBannedWords",
+			Handler:    _Msg_GetBannedWords_Handler,
+		},
+		{
+			MethodName: "AddBannedWords",
+			Handler:    _Msg_AddBannedWords_Handler,
+		},
+		{
+			MethodName: "UpdateBannedWord",
+			Handler:    _Msg_UpdateBannedWord_Handler,
+		},
+		{
+			MethodName: "DelBannedWords",
+			Handler:    _Msg_DelBannedWords_Handler,
+		},
+		{
+			MethodName: "TestBannedWords",
+			Handler:    _Msg_TestBannedWords_Handler,
 		},
 		{
 			MethodName: "EditMsg",

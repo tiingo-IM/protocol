@@ -813,6 +813,92 @@ message SetAppSettingsResp {
   sdkws.AppSettings settings = 1;
 }
 
+// A banned word ("từ cấm"): a word or phrase the admin forbids in what
+// users write in messages. One list for everyone, checked by this service
+// on every send and edit — see internal/rpc/msg/banned_words.go.
+message BannedWord {
+  string id = 1;
+  // As the admin typed it. Matched case-insensitively, as whole words.
+  string word = 2;
+  // 1 = Block (the message is refused), 2 = Mask (the word becomes ***).
+  int32 level = 3;
+  // Also match the text with its Vietnamese diacritics removed. Off by
+  // default: stripped, "đĩ" is "di", which is also "đi" and "dì".
+  bool ignoreDiacritics = 4;
+  // How many messages it has caught. No message content is kept.
+  int64 hits = 5;
+  int64 createTime = 6;
+  int64 updateTime = 7;
+}
+
+message GetBannedWordsReq {
+  // Substring of the word, case-insensitive; empty lists everything.
+  string keyword = 1;
+  sdkws.RequestPagination pagination = 2;
+}
+
+message GetBannedWordsResp {
+  repeated BannedWord words = 1;
+  int64 total = 2;
+}
+
+message BannedWordInput {
+  string word = 1;
+  int32 level = 2;
+  bool ignoreDiacritics = 3;
+}
+
+// One word or a whole pasted list — the same call, so a single add and a
+// bulk import validate and deduplicate the same way.
+message AddBannedWordsReq {
+  repeated BannedWordInput words = 1;
+}
+
+message RejectedBannedWord {
+  string word = 1;
+  // "duplicate", "empty", "too_long", "too_many_words", "bad_level" or
+  // "list_full".
+  string reason = 2;
+}
+
+message AddBannedWordsResp {
+  repeated BannedWord added = 1;
+  repeated RejectedBannedWord rejected = 2;
+}
+
+message UpdateBannedWordReq {
+  string id = 1;
+  string word = 2;
+  int32 level = 3;
+  bool ignoreDiacritics = 4;
+}
+
+message UpdateBannedWordResp {
+  BannedWord word = 1;
+}
+
+message DelBannedWordsReq {
+  repeated string ids = 1;
+}
+
+message DelBannedWordsResp {}
+
+// What the list would do to a message with this text, without sending
+// anything or counting a hit.
+message TestBannedWordsReq {
+  string text = 1;
+}
+
+message TestBannedWordsResp {
+  // 0 = allowed, 1 = blocked, 2 = masked.
+  int32 result = 1;
+  // The words that matched: the Block words when blocked, the Mask words
+  // when masked.
+  repeated string words = 2;
+  // The text as it would be sent (masked when result is 2).
+  string text = 3;
+}
+
 // EditMsgReq rewrites one message in place, at the same seq.
 //
 // Not ModifyMessage above, which is an upstream stub with no
@@ -843,6 +929,11 @@ message EditMsgReq {
 
 message EditMsgResp {
   int64 editTime = 1;
+  // The content as stored, which is not always what was sent: banned
+  // words at the Mask level come back as ***. The editor's own screen
+  // shows this, so it matches what everyone else is shown.
+  string content = 2;
+  int32 contentType = 3;
 }
 
 // GetMsgExtraVersionReq asks whether anything in a conversation's message
@@ -1414,6 +1505,15 @@ service msg {
   // costs no database read per message.
   rpc GetAppSettings(GetAppSettingsReq) returns (GetAppSettingsResp);
   rpc SetAppSettings(SetAppSettingsReq) returns (SetAppSettingsResp);
+
+  // The banned-word list (see BannedWord). Admin only. Owned here
+  // because this service enforces it on the send path, which must never
+  // wait on another service.
+  rpc GetBannedWords(GetBannedWordsReq) returns (GetBannedWordsResp);
+  rpc AddBannedWords(AddBannedWordsReq) returns (AddBannedWordsResp);
+  rpc UpdateBannedWord(UpdateBannedWordReq) returns (UpdateBannedWordResp);
+  rpc DelBannedWords(DelBannedWordsReq) returns (DelBannedWordsResp);
+  rpc TestBannedWords(TestBannedWordsReq) returns (TestBannedWordsResp);
 
   // Edit a message in place — see EditMsgReq for why this is not the
   // ModifyMessage stub above.
