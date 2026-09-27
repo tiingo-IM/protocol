@@ -996,6 +996,14 @@ message AppSettings {
   // remove one; reactions already given still show, since
   // GetMessageReactions keeps answering.
   optional bool reactionEnabled = 11;
+
+  // One-to-one chats only between mutual friends; unset = on. On, a
+  // single-chat message, reaction, edit or call goes through only when
+  // each user is in the other's friend list (1303 ErrNotPeersFriend
+  // otherwise), and CreateGroup / InviteUserToGroup add only the
+  // operator's friends. System, admin and bot accounts, Saved messages,
+  // typing and call records are exempt; groups are otherwise untouched.
+  optional bool friendOnlyChat = 12;
 }
 
 // PlatformPresenceSetting: what one platform's presence is allowed to

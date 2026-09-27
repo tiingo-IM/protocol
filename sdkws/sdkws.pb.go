@@ -6865,8 +6865,15 @@ type AppSettings struct {
 	// remove one; reactions already given still show, since
 	// GetMessageReactions keeps answering.
 	ReactionEnabled *bool `protobuf:"varint,11,opt,name=reactionEnabled,proto3,oneof" json:"reactionEnabled"`
-	unknownFields   protoimpl.UnknownFields
-	sizeCache       protoimpl.SizeCache
+	// One-to-one chats only between mutual friends; unset = on. On, a
+	// single-chat message, reaction, edit or call goes through only when
+	// each user is in the other's friend list (1303 ErrNotPeersFriend
+	// otherwise), and CreateGroup / InviteUserToGroup add only the
+	// operator's friends. System, admin and bot accounts, Saved messages,
+	// typing and call records are exempt; groups are otherwise untouched.
+	FriendOnlyChat *bool `protobuf:"varint,12,opt,name=friendOnlyChat,proto3,oneof" json:"friendOnlyChat"`
+	unknownFields  protoimpl.UnknownFields
+	sizeCache      protoimpl.SizeCache
 }
 
 func (x *AppSettings) Reset() {
@@ -6972,6 +6979,13 @@ func (x *AppSettings) GetPollEnabled() bool {
 func (x *AppSettings) GetReactionEnabled() bool {
 	if x != nil && x.ReactionEnabled != nil {
 		return *x.ReactionEnabled
+	}
+	return false
+}
+
+func (x *AppSettings) GetFriendOnlyChat() bool {
+	if x != nil && x.FriendOnlyChat != nil {
+		return *x.FriendOnlyChat
 	}
 	return false
 }
@@ -8196,7 +8210,7 @@ const file_sdkws_sdkws_proto_rawDesc = "" +
 	"\rmodifiedCount\x18\a \x01(\x03R\rmodifiedCount\"Z\n" +
 	"\x16ConversationDeleteTips\x12\x16\n" +
 	"\x06userID\x18\x01 \x01(\tR\x06userID\x12(\n" +
-	"\x0fconversationIDs\x18\x02 \x03(\tR\x0fconversationIDs\"\xa9\a\n" +
+	"\x0fconversationIDs\x18\x02 \x03(\tR\x0fconversationIDs\"\xe9\a\n" +
 	"\vAppSettings\x121\n" +
 	"\x11editWindowSeconds\x18\x01 \x01(\x05H\x00R\x11editWindowSeconds\x88\x01\x01\x125\n" +
 	"\x13revokeWindowSeconds\x18\x02 \x01(\x05H\x01R\x13revokeWindowSeconds\x88\x01\x01\x120\n" +
@@ -8209,7 +8223,9 @@ const file_sdkws_sdkws_proto_rawDesc = "" +
 	"\x1bscheduledMsgAllowSingleChat\x18\t \x01(\bH\aR\x1bscheduledMsgAllowSingleChat\x88\x01\x01\x12%\n" +
 	"\vpollEnabled\x18\n" +
 	" \x01(\bH\bR\vpollEnabled\x88\x01\x01\x12-\n" +
-	"\x0freactionEnabled\x18\v \x01(\bH\tR\x0freactionEnabled\x88\x01\x01B\x14\n" +
+	"\x0freactionEnabled\x18\v \x01(\bH\tR\x0freactionEnabled\x88\x01\x01\x12+\n" +
+	"\x0efriendOnlyChat\x18\f \x01(\bH\n" +
+	"R\x0efriendOnlyChat\x88\x01\x01B\x14\n" +
 	"\x12_editWindowSecondsB\x16\n" +
 	"\x14_revokeWindowSecondsB\x16\n" +
 	"\x14_scheduledMsgEnabledB\x1f\n" +
@@ -8219,7 +8235,8 @@ const file_sdkws_sdkws_proto_rawDesc = "" +
 	"\x1d_scheduledMsgAllowGroupMemberB\x1e\n" +
 	"\x1c_scheduledMsgAllowSingleChatB\x0e\n" +
 	"\f_pollEnabledB\x12\n" +
-	"\x10_reactionEnabled\"q\n" +
+	"\x10_reactionEnabledB\x11\n" +
+	"\x0f_friendOnlyChat\"q\n" +
 	"\x17PlatformPresenceSetting\x12\"\n" +
 	"\fenableOnline\x18\x01 \x01(\bR\fenableOnline\x122\n" +
 	"\x14enableLastOnlineTime\x18\x02 \x01(\bR\x14enableLastOnlineTime\"\x81\x03\n" +
