@@ -43,7 +43,9 @@ func (x *DelUserPushDeviceReq) Check() error {
 	if x.UserID == "" {
 		return errors.New("UserID is empty")
 	}
-	if x.PlatformID < 1 || x.PlatformID > 12 {
+	// 0 is every platform: signing a user out everywhere (chat's revoke
+	// path) drops all their devices at once.
+	if x.PlatformID < 0 || x.PlatformID > 12 {
 		return errors.New("PlatformID is invalid")
 	}
 	return nil
