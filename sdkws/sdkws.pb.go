@@ -7363,7 +7363,7 @@ type GroupCreationDefaults struct {
 	// ApplyNeedVerificationInviteDirectly when off.
 	NeedVerification *int32 `protobuf:"varint,2,opt,name=needVerification,proto3,oneof" json:"needVerification"`
 	// Members can't add each other as friends from this group. Becomes
-	// applyMemberFriend, which is 1 prohibited / 0 allowed.
+	// applyMemberFriend, which is 1 allowed / 0 prohibited.
 	ApplyMemberFriend *int32 `protobuf:"varint,3,opt,name=applyMemberFriend,proto3,oneof" json:"applyMemberFriend"`
 	// The four below map straight onto their GroupInfo fields, which
 	// already read 1 on / 2 off (constant.GroupSettingOn / Off). A
