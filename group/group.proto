@@ -461,6 +461,11 @@ message getIncrementalGroupMemberResp {
   repeated openim.sdkws.GroupMemberFullInfo update = 6;
   openim.sdkws.GroupInfo group = 7;
   uint64 sortVersion = 8;
+  // A full answer for a group too big to send in one: full is set, insert
+  // is empty, and the client fetches the IDs (GetFullGroupMemberUserIDs)
+  // and their info in pages of at most 500 (GetGroupMembersInfo), then
+  // replaces what it stored once, at the end.
+  bool paged = 9;
 }
 
 message getIncrementalJoinGroupReq {

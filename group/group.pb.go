@@ -4699,15 +4699,20 @@ func (x *GetIncrementalGroupMemberReq) GetVersion() uint64 {
 }
 
 type GetIncrementalGroupMemberResp struct {
-	state         protoimpl.MessageState       `protogen:"open.v1"`
-	Version       uint64                       `protobuf:"varint,1,opt,name=version,proto3" json:"version"`
-	VersionID     string                       `protobuf:"bytes,2,opt,name=versionID,proto3" json:"versionID"`
-	Full          bool                         `protobuf:"varint,3,opt,name=full,proto3" json:"full"`
-	Delete        []string                     `protobuf:"bytes,4,rep,name=delete,proto3" json:"delete"`
-	Insert        []*sdkws.GroupMemberFullInfo `protobuf:"bytes,5,rep,name=insert,proto3" json:"insert"`
-	Update        []*sdkws.GroupMemberFullInfo `protobuf:"bytes,6,rep,name=update,proto3" json:"update"`
-	Group         *sdkws.GroupInfo             `protobuf:"bytes,7,opt,name=group,proto3" json:"group"`
-	SortVersion   uint64                       `protobuf:"varint,8,opt,name=sortVersion,proto3" json:"sortVersion"`
+	state       protoimpl.MessageState       `protogen:"open.v1"`
+	Version     uint64                       `protobuf:"varint,1,opt,name=version,proto3" json:"version"`
+	VersionID   string                       `protobuf:"bytes,2,opt,name=versionID,proto3" json:"versionID"`
+	Full        bool                         `protobuf:"varint,3,opt,name=full,proto3" json:"full"`
+	Delete      []string                     `protobuf:"bytes,4,rep,name=delete,proto3" json:"delete"`
+	Insert      []*sdkws.GroupMemberFullInfo `protobuf:"bytes,5,rep,name=insert,proto3" json:"insert"`
+	Update      []*sdkws.GroupMemberFullInfo `protobuf:"bytes,6,rep,name=update,proto3" json:"update"`
+	Group       *sdkws.GroupInfo             `protobuf:"bytes,7,opt,name=group,proto3" json:"group"`
+	SortVersion uint64                       `protobuf:"varint,8,opt,name=sortVersion,proto3" json:"sortVersion"`
+	// A full answer for a group too big to send in one: full is set, insert
+	// is empty, and the client fetches the IDs (GetFullGroupMemberUserIDs)
+	// and their info in pages of at most 500 (GetGroupMembersInfo), then
+	// replaces what it stored once, at the end.
+	Paged         bool `protobuf:"varint,9,opt,name=paged,proto3" json:"paged"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -4796,6 +4801,13 @@ func (x *GetIncrementalGroupMemberResp) GetSortVersion() uint64 {
 		return x.SortVersion
 	}
 	return 0
+}
+
+func (x *GetIncrementalGroupMemberResp) GetPaged() bool {
+	if x != nil {
+		return x.Paged
+	}
+	return false
 }
 
 type GetIncrementalJoinGroupReq struct {
@@ -5781,7 +5793,7 @@ const file_group_group_proto_rawDesc = "" +
 	"\x1cgetIncrementalGroupMemberReq\x12\x18\n" +
 	"\agroupID\x18\x01 \x01(\tR\agroupID\x12\x1c\n" +
 	"\tversionID\x18\x02 \x01(\tR\tversionID\x12\x18\n" +
-	"\aversion\x18\x03 \x01(\x04R\aversion\"\xca\x02\n" +
+	"\aversion\x18\x03 \x01(\x04R\aversion\"\xe0\x02\n" +
 	"\x1dgetIncrementalGroupMemberResp\x12\x18\n" +
 	"\aversion\x18\x01 \x01(\x04R\aversion\x12\x1c\n" +
 	"\tversionID\x18\x02 \x01(\tR\tversionID\x12\x12\n" +
@@ -5790,7 +5802,8 @@ const file_group_group_proto_rawDesc = "" +
 	"\x06insert\x18\x05 \x03(\v2!.openim.sdkws.GroupMemberFullInfoR\x06insert\x129\n" +
 	"\x06update\x18\x06 \x03(\v2!.openim.sdkws.GroupMemberFullInfoR\x06update\x12-\n" +
 	"\x05group\x18\a \x01(\v2\x17.openim.sdkws.GroupInfoR\x05group\x12 \n" +
-	"\vsortVersion\x18\b \x01(\x04R\vsortVersion\"l\n" +
+	"\vsortVersion\x18\b \x01(\x04R\vsortVersion\x12\x14\n" +
+	"\x05paged\x18\t \x01(\bR\x05paged\"l\n" +
 	"\x1agetIncrementalJoinGroupReq\x12\x16\n" +
 	"\x06userID\x18\x01 \x01(\tR\x06userID\x12\x1c\n" +
 	"\tversionID\x18\x02 \x01(\tR\tversionID\x12\x18\n" +
