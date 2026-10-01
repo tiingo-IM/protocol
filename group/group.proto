@@ -282,6 +282,14 @@ message CMSGroup {
   openim.sdkws.GroupInfo groupInfo = 1;
   string groupOwnerUserName = 2;
   string groupOwnerUserID = 3;
+  // When the group was banned, in ms; 0 when it is not banned.
+  int64 bannedAt = 4;
+  // When and by whom it was dismissed; 0 and "" when it is not.
+  int64 dismissedAt = 5;
+  string dismissedBy = 6;
+  // Dismissed by a platform operator, members kept: only such a group can
+  // be restored.
+  bool dismissedByOperator = 7;
 }
 
 message GetGroupsReq {
@@ -321,6 +329,10 @@ message DismissGroupReq {
   string groupID = 1;
   bool deleteMember = 2;
   optional bool sendMessage = 3;
+  // A platform operator's dismissal (IM admins only): the members stay
+  // and are told in the group's chat, and the group can be restored.
+  // deleteMember and sendMessage are ignored.
+  bool keepMembers = 4;
 }
 
 message DismissGroupResp {}
@@ -352,6 +364,13 @@ message UnbanGroupReq {
   string groupID = 1;
 }
 message UnbanGroupResp {}
+
+// Restores a group a platform operator dismissed, to the status it had
+// before (running or banned); its members get it back. IM admins only.
+message RestoreGroupReq {
+  string groupID = 1;
+}
+message RestoreGroupResp {}
 
 message MuteGroupReq {
   string groupID = 1;
@@ -612,6 +631,7 @@ service group {
   rpc muteGroup(MuteGroupReq) returns (MuteGroupResp);
   rpc banGroup(BanGroupReq) returns (BanGroupResp);
   rpc unbanGroup(UnbanGroupReq) returns (UnbanGroupResp);
+  rpc restoreGroup(RestoreGroupReq) returns (RestoreGroupResp);
   // Unmute a group
   rpc cancelMuteGroup(CancelMuteGroupReq) returns (CancelMuteGroupResp);
 

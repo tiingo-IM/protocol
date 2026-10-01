@@ -96,6 +96,8 @@ const (
 	// A platform operator froze the group (Ban), or let it go again.
 	GroupBannedNotification   = 1521
 	GroupUnbannedNotification = 1522
+	// A platform operator restored a group it had dismissed.
+	GroupRestoredNotification = 1523
 
 	//SignalingNotificationBegin = 1600
 	//SignalingNotification      = 1601
