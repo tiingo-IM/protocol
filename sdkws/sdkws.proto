@@ -1004,6 +1004,13 @@ message AppSettings {
   // operator's friends. System, admin and bot accounts, Saved messages,
   // typing and call records are exempt; groups are otherwise untouched.
   optional bool friendOnlyChat = 12;
+
+  // The member count from which a group is large: its joins and leaves
+  // go only to its owner and admins, only they may @all, read receipts
+  // are off, and its members are not kept locally. From the server's
+  // openim-rpc-group.yml, filled on every read and live push; it is not
+  // an admin setting, and a write of it is ignored.
+  optional int32 largeGroupThreshold = 13;
 }
 
 // PlatformPresenceSetting: what one platform's presence is allowed to

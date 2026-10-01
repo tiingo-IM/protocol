@@ -6872,8 +6872,14 @@ type AppSettings struct {
 	// operator's friends. System, admin and bot accounts, Saved messages,
 	// typing and call records are exempt; groups are otherwise untouched.
 	FriendOnlyChat *bool `protobuf:"varint,12,opt,name=friendOnlyChat,proto3,oneof" json:"friendOnlyChat"`
-	unknownFields  protoimpl.UnknownFields
-	sizeCache      protoimpl.SizeCache
+	// The member count from which a group is large: its joins and leaves
+	// go only to its owner and admins, only they may @all, read receipts
+	// are off, and its members are not kept locally. From the server's
+	// openim-rpc-group.yml, filled on every read and live push; it is not
+	// an admin setting, and a write of it is ignored.
+	LargeGroupThreshold *int32 `protobuf:"varint,13,opt,name=largeGroupThreshold,proto3,oneof" json:"largeGroupThreshold"`
+	unknownFields       protoimpl.UnknownFields
+	sizeCache           protoimpl.SizeCache
 }
 
 func (x *AppSettings) Reset() {
@@ -6988,6 +6994,13 @@ func (x *AppSettings) GetFriendOnlyChat() bool {
 		return *x.FriendOnlyChat
 	}
 	return false
+}
+
+func (x *AppSettings) GetLargeGroupThreshold() int32 {
+	if x != nil && x.LargeGroupThreshold != nil {
+		return *x.LargeGroupThreshold
+	}
+	return 0
 }
 
 // PlatformPresenceSetting: what one platform's presence is allowed to
@@ -8210,7 +8223,7 @@ const file_sdkws_sdkws_proto_rawDesc = "" +
 	"\rmodifiedCount\x18\a \x01(\x03R\rmodifiedCount\"Z\n" +
 	"\x16ConversationDeleteTips\x12\x16\n" +
 	"\x06userID\x18\x01 \x01(\tR\x06userID\x12(\n" +
-	"\x0fconversationIDs\x18\x02 \x03(\tR\x0fconversationIDs\"\xe9\a\n" +
+	"\x0fconversationIDs\x18\x02 \x03(\tR\x0fconversationIDs\"\xb8\b\n" +
 	"\vAppSettings\x121\n" +
 	"\x11editWindowSeconds\x18\x01 \x01(\x05H\x00R\x11editWindowSeconds\x88\x01\x01\x125\n" +
 	"\x13revokeWindowSeconds\x18\x02 \x01(\x05H\x01R\x13revokeWindowSeconds\x88\x01\x01\x120\n" +
@@ -8225,7 +8238,8 @@ const file_sdkws_sdkws_proto_rawDesc = "" +
 	" \x01(\bH\bR\vpollEnabled\x88\x01\x01\x12-\n" +
 	"\x0freactionEnabled\x18\v \x01(\bH\tR\x0freactionEnabled\x88\x01\x01\x12+\n" +
 	"\x0efriendOnlyChat\x18\f \x01(\bH\n" +
-	"R\x0efriendOnlyChat\x88\x01\x01B\x14\n" +
+	"R\x0efriendOnlyChat\x88\x01\x01\x125\n" +
+	"\x13largeGroupThreshold\x18\r \x01(\x05H\vR\x13largeGroupThreshold\x88\x01\x01B\x14\n" +
 	"\x12_editWindowSecondsB\x16\n" +
 	"\x14_revokeWindowSecondsB\x16\n" +
 	"\x14_scheduledMsgEnabledB\x1f\n" +
@@ -8236,7 +8250,8 @@ const file_sdkws_sdkws_proto_rawDesc = "" +
 	"\x1c_scheduledMsgAllowSingleChatB\x0e\n" +
 	"\f_pollEnabledB\x12\n" +
 	"\x10_reactionEnabledB\x11\n" +
-	"\x0f_friendOnlyChat\"q\n" +
+	"\x0f_friendOnlyChatB\x16\n" +
+	"\x14_largeGroupThreshold\"q\n" +
 	"\x17PlatformPresenceSetting\x12\"\n" +
 	"\fenableOnline\x18\x01 \x01(\bR\fenableOnline\x122\n" +
 	"\x14enableLastOnlineTime\x18\x02 \x01(\bR\x14enableLastOnlineTime\"\x81\x03\n" +
