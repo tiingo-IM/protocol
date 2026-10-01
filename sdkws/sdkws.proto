@@ -619,6 +619,14 @@ message GroupRestoredTips {
   int64 operationTime = 3;
 }
 
+// A platform operator deleted the group (GroupDeletedNotification):
+// clients drop it and its conversation.
+message GroupDeletedTips {
+  GroupInfo group = 1;
+  GroupMemberFullInfo opUser = 2;
+  int64 operationTime = 3;
+}
+
 message GroupMemberMutedTips {
   GroupInfo group = 1;
   GroupMemberFullInfo opUser = 2;

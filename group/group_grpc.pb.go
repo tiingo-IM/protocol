@@ -50,6 +50,7 @@ const (
 	Group_BanGroup_FullMethodName                          = "/openim.group.group/banGroup"
 	Group_UnbanGroup_FullMethodName                        = "/openim.group.group/unbanGroup"
 	Group_RestoreGroup_FullMethodName                      = "/openim.group.group/restoreGroup"
+	Group_DeleteGroup_FullMethodName                       = "/openim.group.group/deleteGroup"
 	Group_CancelMuteGroup_FullMethodName                   = "/openim.group.group/cancelMuteGroup"
 	Group_SetGroupMemberInfo_FullMethodName                = "/openim.group.group/setGroupMemberInfo"
 	Group_GetGroupAbstractInfo_FullMethodName              = "/openim.group.group/getGroupAbstractInfo"
@@ -131,6 +132,7 @@ type GroupClient interface {
 	BanGroup(ctx context.Context, in *BanGroupReq, opts ...grpc.CallOption) (*BanGroupResp, error)
 	UnbanGroup(ctx context.Context, in *UnbanGroupReq, opts ...grpc.CallOption) (*UnbanGroupResp, error)
 	RestoreGroup(ctx context.Context, in *RestoreGroupReq, opts ...grpc.CallOption) (*RestoreGroupResp, error)
+	DeleteGroup(ctx context.Context, in *DeleteGroupReq, opts ...grpc.CallOption) (*DeleteGroupResp, error)
 	// Unmute a group
 	CancelMuteGroup(ctx context.Context, in *CancelMuteGroupReq, opts ...grpc.CallOption) (*CancelMuteGroupResp, error)
 	// Set group member info
@@ -483,6 +485,16 @@ func (c *groupClient) RestoreGroup(ctx context.Context, in *RestoreGroupReq, opt
 	return out, nil
 }
 
+func (c *groupClient) DeleteGroup(ctx context.Context, in *DeleteGroupReq, opts ...grpc.CallOption) (*DeleteGroupResp, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(DeleteGroupResp)
+	err := c.cc.Invoke(ctx, Group_DeleteGroup_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 func (c *groupClient) CancelMuteGroup(ctx context.Context, in *CancelMuteGroupReq, opts ...grpc.CallOption) (*CancelMuteGroupResp, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(CancelMuteGroupResp)
@@ -742,6 +754,7 @@ type GroupServer interface {
 	BanGroup(context.Context, *BanGroupReq) (*BanGroupResp, error)
 	UnbanGroup(context.Context, *UnbanGroupReq) (*UnbanGroupResp, error)
 	RestoreGroup(context.Context, *RestoreGroupReq) (*RestoreGroupResp, error)
+	DeleteGroup(context.Context, *DeleteGroupReq) (*DeleteGroupResp, error)
 	// Unmute a group
 	CancelMuteGroup(context.Context, *CancelMuteGroupReq) (*CancelMuteGroupResp, error)
 	// Set group member info
@@ -876,6 +889,9 @@ func (UnimplementedGroupServer) UnbanGroup(context.Context, *UnbanGroupReq) (*Un
 }
 func (UnimplementedGroupServer) RestoreGroup(context.Context, *RestoreGroupReq) (*RestoreGroupResp, error) {
 	return nil, status.Error(codes.Unimplemented, "method RestoreGroup not implemented")
+}
+func (UnimplementedGroupServer) DeleteGroup(context.Context, *DeleteGroupReq) (*DeleteGroupResp, error) {
+	return nil, status.Error(codes.Unimplemented, "method DeleteGroup not implemented")
 }
 func (UnimplementedGroupServer) CancelMuteGroup(context.Context, *CancelMuteGroupReq) (*CancelMuteGroupResp, error) {
 	return nil, status.Error(codes.Unimplemented, "method CancelMuteGroup not implemented")
@@ -1516,6 +1532,24 @@ func _Group_RestoreGroup_Handler(srv interface{}, ctx context.Context, dec func(
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Group_DeleteGroup_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(DeleteGroupReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(GroupServer).DeleteGroup(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Group_DeleteGroup_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(GroupServer).DeleteGroup(ctx, req.(*DeleteGroupReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 func _Group_CancelMuteGroup_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(CancelMuteGroupReq)
 	if err := dec(in); err != nil {
@@ -2006,6 +2040,10 @@ var Group_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "restoreGroup",
 			Handler:    _Group_RestoreGroup_Handler,
+		},
+		{
+			MethodName: "deleteGroup",
+			Handler:    _Group_DeleteGroup_Handler,
 		},
 		{
 			MethodName: "cancelMuteGroup",

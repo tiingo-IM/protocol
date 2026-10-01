@@ -290,6 +290,9 @@ message CMSGroup {
   // Dismissed by a platform operator, members kept: only such a group can
   // be restored.
   bool dismissedByOperator = 7;
+  // When and by whom it was deleted; 0 and "" when it is not.
+  int64 deletedAt = 8;
+  string deletedBy = 9;
 }
 
 message GetGroupsReq {
@@ -371,6 +374,14 @@ message RestoreGroupReq {
   string groupID = 1;
 }
 message RestoreGroupResp {}
+
+// Deletes a group for the platform (soft): it leaves every list and
+// refuses everything, its members' apps drop it, and its data stays
+// until retention removes it. IM admins only.
+message DeleteGroupReq {
+  string groupID = 1;
+}
+message DeleteGroupResp {}
 
 message MuteGroupReq {
   string groupID = 1;
@@ -632,6 +643,7 @@ service group {
   rpc banGroup(BanGroupReq) returns (BanGroupResp);
   rpc unbanGroup(UnbanGroupReq) returns (UnbanGroupResp);
   rpc restoreGroup(RestoreGroupReq) returns (RestoreGroupResp);
+  rpc deleteGroup(DeleteGroupReq) returns (DeleteGroupResp);
   // Unmute a group
   rpc cancelMuteGroup(CancelMuteGroupReq) returns (CancelMuteGroupResp);
 

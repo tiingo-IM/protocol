@@ -98,6 +98,8 @@ const (
 	GroupUnbannedNotification = 1522
 	// A platform operator restored a group it had dismissed.
 	GroupRestoredNotification = 1523
+	// A platform operator deleted the group.
+	GroupDeletedNotification = 1524
 
 	//SignalingNotificationBegin = 1600
 	//SignalingNotification      = 1601
@@ -242,6 +244,9 @@ const (
 	GroupBanChat         = 1
 	GroupStatusDismissed = 2
 	GroupStatusMuted     = 3
+	// Deleted by a platform operator: gone from every list, refusing
+	// everything; its data stays until retention removes it.
+	GroupStatusDeleted = 4
 
 	// GroupType.
 	NormalGroup  = 0
