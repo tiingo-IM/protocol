@@ -286,8 +286,15 @@ message CMSGroup {
 
 message GetGroupsReq {
   openim.sdkws.RequestPagination pagination = 1;
+  // Group names containing this, matched literally.
   string groupName = 2;
+  // One group, whatever its status; the other filters are then ignored.
   string groupID = 3;
+  // Only the groups this user owns.
+  string ownerUserID = 4;
+  // Only groups with these stored statuses (constant.GroupOk, ...);
+  // empty is every group but the dismissed ones.
+  repeated int32 statuses = 5;
 }
 
 message GetGroupsResp {

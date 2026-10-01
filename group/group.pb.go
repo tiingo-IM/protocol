@@ -2843,10 +2843,17 @@ func (x *CMSGroup) GetGroupOwnerUserID() string {
 }
 
 type GetGroupsReq struct {
-	state         protoimpl.MessageState   `protogen:"open.v1"`
-	Pagination    *sdkws.RequestPagination `protobuf:"bytes,1,opt,name=pagination,proto3" json:"pagination"`
-	GroupName     string                   `protobuf:"bytes,2,opt,name=groupName,proto3" json:"groupName"`
-	GroupID       string                   `protobuf:"bytes,3,opt,name=groupID,proto3" json:"groupID"`
+	state      protoimpl.MessageState   `protogen:"open.v1"`
+	Pagination *sdkws.RequestPagination `protobuf:"bytes,1,opt,name=pagination,proto3" json:"pagination"`
+	// Group names containing this, matched literally.
+	GroupName string `protobuf:"bytes,2,opt,name=groupName,proto3" json:"groupName"`
+	// One group, whatever its status; the other filters are then ignored.
+	GroupID string `protobuf:"bytes,3,opt,name=groupID,proto3" json:"groupID"`
+	// Only the groups this user owns.
+	OwnerUserID string `protobuf:"bytes,4,opt,name=ownerUserID,proto3" json:"ownerUserID"`
+	// Only groups with these stored statuses (constant.GroupOk, ...);
+	// empty is every group but the dismissed ones.
+	Statuses      []int32 `protobuf:"varint,5,rep,packed,name=statuses,proto3" json:"statuses"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -2900,6 +2907,20 @@ func (x *GetGroupsReq) GetGroupID() string {
 		return x.GroupID
 	}
 	return ""
+}
+
+func (x *GetGroupsReq) GetOwnerUserID() string {
+	if x != nil {
+		return x.OwnerUserID
+	}
+	return ""
+}
+
+func (x *GetGroupsReq) GetStatuses() []int32 {
+	if x != nil {
+		return x.Statuses
+	}
+	return nil
 }
 
 type GetGroupsResp struct {
@@ -5671,13 +5692,15 @@ const file_group_group_proto_rawDesc = "" +
 	"\bCMSGroup\x125\n" +
 	"\tgroupInfo\x18\x01 \x01(\v2\x17.openim.sdkws.GroupInfoR\tgroupInfo\x12.\n" +
 	"\x12groupOwnerUserName\x18\x02 \x01(\tR\x12groupOwnerUserName\x12*\n" +
-	"\x10groupOwnerUserID\x18\x03 \x01(\tR\x10groupOwnerUserID\"\x87\x01\n" +
+	"\x10groupOwnerUserID\x18\x03 \x01(\tR\x10groupOwnerUserID\"\xc5\x01\n" +
 	"\fGetGroupsReq\x12?\n" +
 	"\n" +
 	"pagination\x18\x01 \x01(\v2\x1f.openim.sdkws.RequestPaginationR\n" +
 	"pagination\x12\x1c\n" +
 	"\tgroupName\x18\x02 \x01(\tR\tgroupName\x12\x18\n" +
-	"\agroupID\x18\x03 \x01(\tR\agroupID\"U\n" +
+	"\agroupID\x18\x03 \x01(\tR\agroupID\x12 \n" +
+	"\vownerUserID\x18\x04 \x01(\tR\vownerUserID\x12\x1a\n" +
+	"\bstatuses\x18\x05 \x03(\x05R\bstatuses\"U\n" +
 	"\rGetGroupsResp\x12\x14\n" +
 	"\x05total\x18\x01 \x01(\rR\x05total\x12.\n" +
 	"\x06groups\x18\x02 \x03(\v2\x16.openim.group.CMSGroupR\x06groups\"-\n" +
