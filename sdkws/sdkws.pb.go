@@ -3954,6 +3954,68 @@ func (x *GroupDismissedTips) GetOperationTime() int64 {
 	return 0
 }
 
+// A platform operator banned the group (GroupBannedNotification) or lifted
+// the ban (GroupUnbannedNotification). group carries the status after it.
+type GroupBannedTips struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Group         *GroupInfo             `protobuf:"bytes,1,opt,name=group,proto3" json:"group"`
+	OpUser        *GroupMemberFullInfo   `protobuf:"bytes,2,opt,name=opUser,proto3" json:"opUser"`
+	OperationTime int64                  `protobuf:"varint,3,opt,name=operationTime,proto3" json:"operationTime"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *GroupBannedTips) Reset() {
+	*x = GroupBannedTips{}
+	mi := &file_sdkws_sdkws_proto_msgTypes[41]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *GroupBannedTips) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*GroupBannedTips) ProtoMessage() {}
+
+func (x *GroupBannedTips) ProtoReflect() protoreflect.Message {
+	mi := &file_sdkws_sdkws_proto_msgTypes[41]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use GroupBannedTips.ProtoReflect.Descriptor instead.
+func (*GroupBannedTips) Descriptor() ([]byte, []int) {
+	return file_sdkws_sdkws_proto_rawDescGZIP(), []int{41}
+}
+
+func (x *GroupBannedTips) GetGroup() *GroupInfo {
+	if x != nil {
+		return x.Group
+	}
+	return nil
+}
+
+func (x *GroupBannedTips) GetOpUser() *GroupMemberFullInfo {
+	if x != nil {
+		return x.OpUser
+	}
+	return nil
+}
+
+func (x *GroupBannedTips) GetOperationTime() int64 {
+	if x != nil {
+		return x.OperationTime
+	}
+	return 0
+}
+
 type GroupMemberMutedTips struct {
 	state                protoimpl.MessageState `protogen:"open.v1"`
 	Group                *GroupInfo             `protobuf:"bytes,1,opt,name=group,proto3" json:"group"`
@@ -3969,7 +4031,7 @@ type GroupMemberMutedTips struct {
 
 func (x *GroupMemberMutedTips) Reset() {
 	*x = GroupMemberMutedTips{}
-	mi := &file_sdkws_sdkws_proto_msgTypes[41]
+	mi := &file_sdkws_sdkws_proto_msgTypes[42]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -3981,7 +4043,7 @@ func (x *GroupMemberMutedTips) String() string {
 func (*GroupMemberMutedTips) ProtoMessage() {}
 
 func (x *GroupMemberMutedTips) ProtoReflect() protoreflect.Message {
-	mi := &file_sdkws_sdkws_proto_msgTypes[41]
+	mi := &file_sdkws_sdkws_proto_msgTypes[42]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -3994,7 +4056,7 @@ func (x *GroupMemberMutedTips) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GroupMemberMutedTips.ProtoReflect.Descriptor instead.
 func (*GroupMemberMutedTips) Descriptor() ([]byte, []int) {
-	return file_sdkws_sdkws_proto_rawDescGZIP(), []int{41}
+	return file_sdkws_sdkws_proto_rawDescGZIP(), []int{42}
 }
 
 func (x *GroupMemberMutedTips) GetGroup() *GroupInfo {
@@ -4060,7 +4122,7 @@ type GroupMemberCancelMutedTips struct {
 
 func (x *GroupMemberCancelMutedTips) Reset() {
 	*x = GroupMemberCancelMutedTips{}
-	mi := &file_sdkws_sdkws_proto_msgTypes[42]
+	mi := &file_sdkws_sdkws_proto_msgTypes[43]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -4072,7 +4134,7 @@ func (x *GroupMemberCancelMutedTips) String() string {
 func (*GroupMemberCancelMutedTips) ProtoMessage() {}
 
 func (x *GroupMemberCancelMutedTips) ProtoReflect() protoreflect.Message {
-	mi := &file_sdkws_sdkws_proto_msgTypes[42]
+	mi := &file_sdkws_sdkws_proto_msgTypes[43]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -4085,7 +4147,7 @@ func (x *GroupMemberCancelMutedTips) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GroupMemberCancelMutedTips.ProtoReflect.Descriptor instead.
 func (*GroupMemberCancelMutedTips) Descriptor() ([]byte, []int) {
-	return file_sdkws_sdkws_proto_rawDescGZIP(), []int{42}
+	return file_sdkws_sdkws_proto_rawDescGZIP(), []int{43}
 }
 
 func (x *GroupMemberCancelMutedTips) GetGroup() *GroupInfo {
@@ -4143,7 +4205,7 @@ type GroupMutedTips struct {
 
 func (x *GroupMutedTips) Reset() {
 	*x = GroupMutedTips{}
-	mi := &file_sdkws_sdkws_proto_msgTypes[43]
+	mi := &file_sdkws_sdkws_proto_msgTypes[44]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -4155,7 +4217,7 @@ func (x *GroupMutedTips) String() string {
 func (*GroupMutedTips) ProtoMessage() {}
 
 func (x *GroupMutedTips) ProtoReflect() protoreflect.Message {
-	mi := &file_sdkws_sdkws_proto_msgTypes[43]
+	mi := &file_sdkws_sdkws_proto_msgTypes[44]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -4168,7 +4230,7 @@ func (x *GroupMutedTips) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GroupMutedTips.ProtoReflect.Descriptor instead.
 func (*GroupMutedTips) Descriptor() ([]byte, []int) {
-	return file_sdkws_sdkws_proto_rawDescGZIP(), []int{43}
+	return file_sdkws_sdkws_proto_rawDescGZIP(), []int{44}
 }
 
 func (x *GroupMutedTips) GetGroup() *GroupInfo {
@@ -4219,7 +4281,7 @@ type GroupCancelMutedTips struct {
 
 func (x *GroupCancelMutedTips) Reset() {
 	*x = GroupCancelMutedTips{}
-	mi := &file_sdkws_sdkws_proto_msgTypes[44]
+	mi := &file_sdkws_sdkws_proto_msgTypes[45]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -4231,7 +4293,7 @@ func (x *GroupCancelMutedTips) String() string {
 func (*GroupCancelMutedTips) ProtoMessage() {}
 
 func (x *GroupCancelMutedTips) ProtoReflect() protoreflect.Message {
-	mi := &file_sdkws_sdkws_proto_msgTypes[44]
+	mi := &file_sdkws_sdkws_proto_msgTypes[45]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -4244,7 +4306,7 @@ func (x *GroupCancelMutedTips) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GroupCancelMutedTips.ProtoReflect.Descriptor instead.
 func (*GroupCancelMutedTips) Descriptor() ([]byte, []int) {
-	return file_sdkws_sdkws_proto_rawDescGZIP(), []int{44}
+	return file_sdkws_sdkws_proto_rawDescGZIP(), []int{45}
 }
 
 func (x *GroupCancelMutedTips) GetGroup() *GroupInfo {
@@ -4297,7 +4359,7 @@ type GroupMemberInfoSetTips struct {
 
 func (x *GroupMemberInfoSetTips) Reset() {
 	*x = GroupMemberInfoSetTips{}
-	mi := &file_sdkws_sdkws_proto_msgTypes[45]
+	mi := &file_sdkws_sdkws_proto_msgTypes[46]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -4309,7 +4371,7 @@ func (x *GroupMemberInfoSetTips) String() string {
 func (*GroupMemberInfoSetTips) ProtoMessage() {}
 
 func (x *GroupMemberInfoSetTips) ProtoReflect() protoreflect.Message {
-	mi := &file_sdkws_sdkws_proto_msgTypes[45]
+	mi := &file_sdkws_sdkws_proto_msgTypes[46]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -4322,7 +4384,7 @@ func (x *GroupMemberInfoSetTips) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GroupMemberInfoSetTips.ProtoReflect.Descriptor instead.
 func (*GroupMemberInfoSetTips) Descriptor() ([]byte, []int) {
-	return file_sdkws_sdkws_proto_rawDescGZIP(), []int{45}
+	return file_sdkws_sdkws_proto_rawDescGZIP(), []int{46}
 }
 
 func (x *GroupMemberInfoSetTips) GetGroup() *GroupInfo {
@@ -4385,7 +4447,7 @@ type FriendApplication struct {
 
 func (x *FriendApplication) Reset() {
 	*x = FriendApplication{}
-	mi := &file_sdkws_sdkws_proto_msgTypes[46]
+	mi := &file_sdkws_sdkws_proto_msgTypes[47]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -4397,7 +4459,7 @@ func (x *FriendApplication) String() string {
 func (*FriendApplication) ProtoMessage() {}
 
 func (x *FriendApplication) ProtoReflect() protoreflect.Message {
-	mi := &file_sdkws_sdkws_proto_msgTypes[46]
+	mi := &file_sdkws_sdkws_proto_msgTypes[47]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -4410,7 +4472,7 @@ func (x *FriendApplication) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use FriendApplication.ProtoReflect.Descriptor instead.
 func (*FriendApplication) Descriptor() ([]byte, []int) {
-	return file_sdkws_sdkws_proto_rawDescGZIP(), []int{46}
+	return file_sdkws_sdkws_proto_rawDescGZIP(), []int{47}
 }
 
 func (x *FriendApplication) GetAddTime() int64 {
@@ -4444,7 +4506,7 @@ type FromToUserID struct {
 
 func (x *FromToUserID) Reset() {
 	*x = FromToUserID{}
-	mi := &file_sdkws_sdkws_proto_msgTypes[47]
+	mi := &file_sdkws_sdkws_proto_msgTypes[48]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -4456,7 +4518,7 @@ func (x *FromToUserID) String() string {
 func (*FromToUserID) ProtoMessage() {}
 
 func (x *FromToUserID) ProtoReflect() protoreflect.Message {
-	mi := &file_sdkws_sdkws_proto_msgTypes[47]
+	mi := &file_sdkws_sdkws_proto_msgTypes[48]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -4469,7 +4531,7 @@ func (x *FromToUserID) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use FromToUserID.ProtoReflect.Descriptor instead.
 func (*FromToUserID) Descriptor() ([]byte, []int) {
-	return file_sdkws_sdkws_proto_rawDescGZIP(), []int{47}
+	return file_sdkws_sdkws_proto_rawDescGZIP(), []int{48}
 }
 
 func (x *FromToUserID) GetFromUserID() string {
@@ -4497,7 +4559,7 @@ type FriendApplicationTips struct {
 
 func (x *FriendApplicationTips) Reset() {
 	*x = FriendApplicationTips{}
-	mi := &file_sdkws_sdkws_proto_msgTypes[48]
+	mi := &file_sdkws_sdkws_proto_msgTypes[49]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -4509,7 +4571,7 @@ func (x *FriendApplicationTips) String() string {
 func (*FriendApplicationTips) ProtoMessage() {}
 
 func (x *FriendApplicationTips) ProtoReflect() protoreflect.Message {
-	mi := &file_sdkws_sdkws_proto_msgTypes[48]
+	mi := &file_sdkws_sdkws_proto_msgTypes[49]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -4522,7 +4584,7 @@ func (x *FriendApplicationTips) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use FriendApplicationTips.ProtoReflect.Descriptor instead.
 func (*FriendApplicationTips) Descriptor() ([]byte, []int) {
-	return file_sdkws_sdkws_proto_rawDescGZIP(), []int{48}
+	return file_sdkws_sdkws_proto_rawDescGZIP(), []int{49}
 }
 
 func (x *FriendApplicationTips) GetFromToUserID() *FromToUserID {
@@ -4553,7 +4615,7 @@ type FriendApplicationApprovedTips struct {
 
 func (x *FriendApplicationApprovedTips) Reset() {
 	*x = FriendApplicationApprovedTips{}
-	mi := &file_sdkws_sdkws_proto_msgTypes[49]
+	mi := &file_sdkws_sdkws_proto_msgTypes[50]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -4565,7 +4627,7 @@ func (x *FriendApplicationApprovedTips) String() string {
 func (*FriendApplicationApprovedTips) ProtoMessage() {}
 
 func (x *FriendApplicationApprovedTips) ProtoReflect() protoreflect.Message {
-	mi := &file_sdkws_sdkws_proto_msgTypes[49]
+	mi := &file_sdkws_sdkws_proto_msgTypes[50]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -4578,7 +4640,7 @@ func (x *FriendApplicationApprovedTips) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use FriendApplicationApprovedTips.ProtoReflect.Descriptor instead.
 func (*FriendApplicationApprovedTips) Descriptor() ([]byte, []int) {
-	return file_sdkws_sdkws_proto_rawDescGZIP(), []int{49}
+	return file_sdkws_sdkws_proto_rawDescGZIP(), []int{50}
 }
 
 func (x *FriendApplicationApprovedTips) GetFromToUserID() *FromToUserID {
@@ -4628,7 +4690,7 @@ type FriendApplicationRejectedTips struct {
 
 func (x *FriendApplicationRejectedTips) Reset() {
 	*x = FriendApplicationRejectedTips{}
-	mi := &file_sdkws_sdkws_proto_msgTypes[50]
+	mi := &file_sdkws_sdkws_proto_msgTypes[51]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -4640,7 +4702,7 @@ func (x *FriendApplicationRejectedTips) String() string {
 func (*FriendApplicationRejectedTips) ProtoMessage() {}
 
 func (x *FriendApplicationRejectedTips) ProtoReflect() protoreflect.Message {
-	mi := &file_sdkws_sdkws_proto_msgTypes[50]
+	mi := &file_sdkws_sdkws_proto_msgTypes[51]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -4653,7 +4715,7 @@ func (x *FriendApplicationRejectedTips) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use FriendApplicationRejectedTips.ProtoReflect.Descriptor instead.
 func (*FriendApplicationRejectedTips) Descriptor() ([]byte, []int) {
-	return file_sdkws_sdkws_proto_rawDescGZIP(), []int{50}
+	return file_sdkws_sdkws_proto_rawDescGZIP(), []int{51}
 }
 
 func (x *FriendApplicationRejectedTips) GetFromToUserID() *FromToUserID {
@@ -4691,7 +4753,7 @@ type FriendAddedTips struct {
 
 func (x *FriendAddedTips) Reset() {
 	*x = FriendAddedTips{}
-	mi := &file_sdkws_sdkws_proto_msgTypes[51]
+	mi := &file_sdkws_sdkws_proto_msgTypes[52]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -4703,7 +4765,7 @@ func (x *FriendAddedTips) String() string {
 func (*FriendAddedTips) ProtoMessage() {}
 
 func (x *FriendAddedTips) ProtoReflect() protoreflect.Message {
-	mi := &file_sdkws_sdkws_proto_msgTypes[51]
+	mi := &file_sdkws_sdkws_proto_msgTypes[52]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -4716,7 +4778,7 @@ func (x *FriendAddedTips) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use FriendAddedTips.ProtoReflect.Descriptor instead.
 func (*FriendAddedTips) Descriptor() ([]byte, []int) {
-	return file_sdkws_sdkws_proto_rawDescGZIP(), []int{51}
+	return file_sdkws_sdkws_proto_rawDescGZIP(), []int{52}
 }
 
 func (x *FriendAddedTips) GetFriend() *FriendInfo {
@@ -4766,7 +4828,7 @@ type FriendDeletedTips struct {
 
 func (x *FriendDeletedTips) Reset() {
 	*x = FriendDeletedTips{}
-	mi := &file_sdkws_sdkws_proto_msgTypes[52]
+	mi := &file_sdkws_sdkws_proto_msgTypes[53]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -4778,7 +4840,7 @@ func (x *FriendDeletedTips) String() string {
 func (*FriendDeletedTips) ProtoMessage() {}
 
 func (x *FriendDeletedTips) ProtoReflect() protoreflect.Message {
-	mi := &file_sdkws_sdkws_proto_msgTypes[52]
+	mi := &file_sdkws_sdkws_proto_msgTypes[53]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -4791,7 +4853,7 @@ func (x *FriendDeletedTips) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use FriendDeletedTips.ProtoReflect.Descriptor instead.
 func (*FriendDeletedTips) Descriptor() ([]byte, []int) {
-	return file_sdkws_sdkws_proto_rawDescGZIP(), []int{52}
+	return file_sdkws_sdkws_proto_rawDescGZIP(), []int{53}
 }
 
 func (x *FriendDeletedTips) GetFromToUserID() *FromToUserID {
@@ -4824,7 +4886,7 @@ type BlackAddedTips struct {
 
 func (x *BlackAddedTips) Reset() {
 	*x = BlackAddedTips{}
-	mi := &file_sdkws_sdkws_proto_msgTypes[53]
+	mi := &file_sdkws_sdkws_proto_msgTypes[54]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -4836,7 +4898,7 @@ func (x *BlackAddedTips) String() string {
 func (*BlackAddedTips) ProtoMessage() {}
 
 func (x *BlackAddedTips) ProtoReflect() protoreflect.Message {
-	mi := &file_sdkws_sdkws_proto_msgTypes[53]
+	mi := &file_sdkws_sdkws_proto_msgTypes[54]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -4849,7 +4911,7 @@ func (x *BlackAddedTips) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use BlackAddedTips.ProtoReflect.Descriptor instead.
 func (*BlackAddedTips) Descriptor() ([]byte, []int) {
-	return file_sdkws_sdkws_proto_rawDescGZIP(), []int{53}
+	return file_sdkws_sdkws_proto_rawDescGZIP(), []int{54}
 }
 
 func (x *BlackAddedTips) GetFromToUserID() *FromToUserID {
@@ -4868,7 +4930,7 @@ type BlackDeletedTips struct {
 
 func (x *BlackDeletedTips) Reset() {
 	*x = BlackDeletedTips{}
-	mi := &file_sdkws_sdkws_proto_msgTypes[54]
+	mi := &file_sdkws_sdkws_proto_msgTypes[55]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -4880,7 +4942,7 @@ func (x *BlackDeletedTips) String() string {
 func (*BlackDeletedTips) ProtoMessage() {}
 
 func (x *BlackDeletedTips) ProtoReflect() protoreflect.Message {
-	mi := &file_sdkws_sdkws_proto_msgTypes[54]
+	mi := &file_sdkws_sdkws_proto_msgTypes[55]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -4893,7 +4955,7 @@ func (x *BlackDeletedTips) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use BlackDeletedTips.ProtoReflect.Descriptor instead.
 func (*BlackDeletedTips) Descriptor() ([]byte, []int) {
-	return file_sdkws_sdkws_proto_rawDescGZIP(), []int{54}
+	return file_sdkws_sdkws_proto_rawDescGZIP(), []int{55}
 }
 
 func (x *BlackDeletedTips) GetFromToUserID() *FromToUserID {
@@ -4915,7 +4977,7 @@ type FriendInfoChangedTips struct {
 
 func (x *FriendInfoChangedTips) Reset() {
 	*x = FriendInfoChangedTips{}
-	mi := &file_sdkws_sdkws_proto_msgTypes[55]
+	mi := &file_sdkws_sdkws_proto_msgTypes[56]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -4927,7 +4989,7 @@ func (x *FriendInfoChangedTips) String() string {
 func (*FriendInfoChangedTips) ProtoMessage() {}
 
 func (x *FriendInfoChangedTips) ProtoReflect() protoreflect.Message {
-	mi := &file_sdkws_sdkws_proto_msgTypes[55]
+	mi := &file_sdkws_sdkws_proto_msgTypes[56]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -4940,7 +5002,7 @@ func (x *FriendInfoChangedTips) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use FriendInfoChangedTips.ProtoReflect.Descriptor instead.
 func (*FriendInfoChangedTips) Descriptor() ([]byte, []int) {
-	return file_sdkws_sdkws_proto_rawDescGZIP(), []int{55}
+	return file_sdkws_sdkws_proto_rawDescGZIP(), []int{56}
 }
 
 func (x *FriendInfoChangedTips) GetFromToUserID() *FromToUserID {
@@ -4981,7 +5043,7 @@ type UserInfoUpdatedTips struct {
 
 func (x *UserInfoUpdatedTips) Reset() {
 	*x = UserInfoUpdatedTips{}
-	mi := &file_sdkws_sdkws_proto_msgTypes[56]
+	mi := &file_sdkws_sdkws_proto_msgTypes[57]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -4993,7 +5055,7 @@ func (x *UserInfoUpdatedTips) String() string {
 func (*UserInfoUpdatedTips) ProtoMessage() {}
 
 func (x *UserInfoUpdatedTips) ProtoReflect() protoreflect.Message {
-	mi := &file_sdkws_sdkws_proto_msgTypes[56]
+	mi := &file_sdkws_sdkws_proto_msgTypes[57]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -5006,7 +5068,7 @@ func (x *UserInfoUpdatedTips) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use UserInfoUpdatedTips.ProtoReflect.Descriptor instead.
 func (*UserInfoUpdatedTips) Descriptor() ([]byte, []int) {
-	return file_sdkws_sdkws_proto_rawDescGZIP(), []int{56}
+	return file_sdkws_sdkws_proto_rawDescGZIP(), []int{57}
 }
 
 func (x *UserInfoUpdatedTips) GetUserID() string {
@@ -5028,7 +5090,7 @@ type UserStatusChangeTips struct {
 
 func (x *UserStatusChangeTips) Reset() {
 	*x = UserStatusChangeTips{}
-	mi := &file_sdkws_sdkws_proto_msgTypes[57]
+	mi := &file_sdkws_sdkws_proto_msgTypes[58]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -5040,7 +5102,7 @@ func (x *UserStatusChangeTips) String() string {
 func (*UserStatusChangeTips) ProtoMessage() {}
 
 func (x *UserStatusChangeTips) ProtoReflect() protoreflect.Message {
-	mi := &file_sdkws_sdkws_proto_msgTypes[57]
+	mi := &file_sdkws_sdkws_proto_msgTypes[58]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -5053,7 +5115,7 @@ func (x *UserStatusChangeTips) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use UserStatusChangeTips.ProtoReflect.Descriptor instead.
 func (*UserStatusChangeTips) Descriptor() ([]byte, []int) {
-	return file_sdkws_sdkws_proto_rawDescGZIP(), []int{57}
+	return file_sdkws_sdkws_proto_rawDescGZIP(), []int{58}
 }
 
 func (x *UserStatusChangeTips) GetFromUserID() string {
@@ -5094,7 +5156,7 @@ type UserCommandAddTips struct {
 
 func (x *UserCommandAddTips) Reset() {
 	*x = UserCommandAddTips{}
-	mi := &file_sdkws_sdkws_proto_msgTypes[58]
+	mi := &file_sdkws_sdkws_proto_msgTypes[59]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -5106,7 +5168,7 @@ func (x *UserCommandAddTips) String() string {
 func (*UserCommandAddTips) ProtoMessage() {}
 
 func (x *UserCommandAddTips) ProtoReflect() protoreflect.Message {
-	mi := &file_sdkws_sdkws_proto_msgTypes[58]
+	mi := &file_sdkws_sdkws_proto_msgTypes[59]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -5119,7 +5181,7 @@ func (x *UserCommandAddTips) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use UserCommandAddTips.ProtoReflect.Descriptor instead.
 func (*UserCommandAddTips) Descriptor() ([]byte, []int) {
-	return file_sdkws_sdkws_proto_rawDescGZIP(), []int{58}
+	return file_sdkws_sdkws_proto_rawDescGZIP(), []int{59}
 }
 
 func (x *UserCommandAddTips) GetFromUserID() string {
@@ -5146,7 +5208,7 @@ type UserCommandUpdateTips struct {
 
 func (x *UserCommandUpdateTips) Reset() {
 	*x = UserCommandUpdateTips{}
-	mi := &file_sdkws_sdkws_proto_msgTypes[59]
+	mi := &file_sdkws_sdkws_proto_msgTypes[60]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -5158,7 +5220,7 @@ func (x *UserCommandUpdateTips) String() string {
 func (*UserCommandUpdateTips) ProtoMessage() {}
 
 func (x *UserCommandUpdateTips) ProtoReflect() protoreflect.Message {
-	mi := &file_sdkws_sdkws_proto_msgTypes[59]
+	mi := &file_sdkws_sdkws_proto_msgTypes[60]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -5171,7 +5233,7 @@ func (x *UserCommandUpdateTips) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use UserCommandUpdateTips.ProtoReflect.Descriptor instead.
 func (*UserCommandUpdateTips) Descriptor() ([]byte, []int) {
-	return file_sdkws_sdkws_proto_rawDescGZIP(), []int{59}
+	return file_sdkws_sdkws_proto_rawDescGZIP(), []int{60}
 }
 
 func (x *UserCommandUpdateTips) GetFromUserID() string {
@@ -5198,7 +5260,7 @@ type UserCommandDeleteTips struct {
 
 func (x *UserCommandDeleteTips) Reset() {
 	*x = UserCommandDeleteTips{}
-	mi := &file_sdkws_sdkws_proto_msgTypes[60]
+	mi := &file_sdkws_sdkws_proto_msgTypes[61]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -5210,7 +5272,7 @@ func (x *UserCommandDeleteTips) String() string {
 func (*UserCommandDeleteTips) ProtoMessage() {}
 
 func (x *UserCommandDeleteTips) ProtoReflect() protoreflect.Message {
-	mi := &file_sdkws_sdkws_proto_msgTypes[60]
+	mi := &file_sdkws_sdkws_proto_msgTypes[61]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -5223,7 +5285,7 @@ func (x *UserCommandDeleteTips) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use UserCommandDeleteTips.ProtoReflect.Descriptor instead.
 func (*UserCommandDeleteTips) Descriptor() ([]byte, []int) {
-	return file_sdkws_sdkws_proto_rawDescGZIP(), []int{60}
+	return file_sdkws_sdkws_proto_rawDescGZIP(), []int{61}
 }
 
 func (x *UserCommandDeleteTips) GetFromUserID() string {
@@ -5251,7 +5313,7 @@ type ConversationUpdateTips struct {
 
 func (x *ConversationUpdateTips) Reset() {
 	*x = ConversationUpdateTips{}
-	mi := &file_sdkws_sdkws_proto_msgTypes[61]
+	mi := &file_sdkws_sdkws_proto_msgTypes[62]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -5263,7 +5325,7 @@ func (x *ConversationUpdateTips) String() string {
 func (*ConversationUpdateTips) ProtoMessage() {}
 
 func (x *ConversationUpdateTips) ProtoReflect() protoreflect.Message {
-	mi := &file_sdkws_sdkws_proto_msgTypes[61]
+	mi := &file_sdkws_sdkws_proto_msgTypes[62]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -5276,7 +5338,7 @@ func (x *ConversationUpdateTips) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ConversationUpdateTips.ProtoReflect.Descriptor instead.
 func (*ConversationUpdateTips) Descriptor() ([]byte, []int) {
-	return file_sdkws_sdkws_proto_rawDescGZIP(), []int{61}
+	return file_sdkws_sdkws_proto_rawDescGZIP(), []int{62}
 }
 
 func (x *ConversationUpdateTips) GetUserID() string {
@@ -5305,7 +5367,7 @@ type ConversationSetPrivateTips struct {
 
 func (x *ConversationSetPrivateTips) Reset() {
 	*x = ConversationSetPrivateTips{}
-	mi := &file_sdkws_sdkws_proto_msgTypes[62]
+	mi := &file_sdkws_sdkws_proto_msgTypes[63]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -5317,7 +5379,7 @@ func (x *ConversationSetPrivateTips) String() string {
 func (*ConversationSetPrivateTips) ProtoMessage() {}
 
 func (x *ConversationSetPrivateTips) ProtoReflect() protoreflect.Message {
-	mi := &file_sdkws_sdkws_proto_msgTypes[62]
+	mi := &file_sdkws_sdkws_proto_msgTypes[63]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -5330,7 +5392,7 @@ func (x *ConversationSetPrivateTips) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ConversationSetPrivateTips.ProtoReflect.Descriptor instead.
 func (*ConversationSetPrivateTips) Descriptor() ([]byte, []int) {
-	return file_sdkws_sdkws_proto_rawDescGZIP(), []int{62}
+	return file_sdkws_sdkws_proto_rawDescGZIP(), []int{63}
 }
 
 func (x *ConversationSetPrivateTips) GetRecvID() string {
@@ -5375,7 +5437,7 @@ type ConversationAutoDeleteChangedTips struct {
 
 func (x *ConversationAutoDeleteChangedTips) Reset() {
 	*x = ConversationAutoDeleteChangedTips{}
-	mi := &file_sdkws_sdkws_proto_msgTypes[63]
+	mi := &file_sdkws_sdkws_proto_msgTypes[64]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -5387,7 +5449,7 @@ func (x *ConversationAutoDeleteChangedTips) String() string {
 func (*ConversationAutoDeleteChangedTips) ProtoMessage() {}
 
 func (x *ConversationAutoDeleteChangedTips) ProtoReflect() protoreflect.Message {
-	mi := &file_sdkws_sdkws_proto_msgTypes[63]
+	mi := &file_sdkws_sdkws_proto_msgTypes[64]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -5400,7 +5462,7 @@ func (x *ConversationAutoDeleteChangedTips) ProtoReflect() protoreflect.Message 
 
 // Deprecated: Use ConversationAutoDeleteChangedTips.ProtoReflect.Descriptor instead.
 func (*ConversationAutoDeleteChangedTips) Descriptor() ([]byte, []int) {
-	return file_sdkws_sdkws_proto_rawDescGZIP(), []int{63}
+	return file_sdkws_sdkws_proto_rawDescGZIP(), []int{64}
 }
 
 func (x *ConversationAutoDeleteChangedTips) GetConversationID() string {
@@ -5436,7 +5498,7 @@ type ConversationHasReadTips struct {
 
 func (x *ConversationHasReadTips) Reset() {
 	*x = ConversationHasReadTips{}
-	mi := &file_sdkws_sdkws_proto_msgTypes[64]
+	mi := &file_sdkws_sdkws_proto_msgTypes[65]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -5448,7 +5510,7 @@ func (x *ConversationHasReadTips) String() string {
 func (*ConversationHasReadTips) ProtoMessage() {}
 
 func (x *ConversationHasReadTips) ProtoReflect() protoreflect.Message {
-	mi := &file_sdkws_sdkws_proto_msgTypes[64]
+	mi := &file_sdkws_sdkws_proto_msgTypes[65]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -5461,7 +5523,7 @@ func (x *ConversationHasReadTips) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ConversationHasReadTips.ProtoReflect.Descriptor instead.
 func (*ConversationHasReadTips) Descriptor() ([]byte, []int) {
-	return file_sdkws_sdkws_proto_rawDescGZIP(), []int{64}
+	return file_sdkws_sdkws_proto_rawDescGZIP(), []int{65}
 }
 
 func (x *ConversationHasReadTips) GetUserID() string {
@@ -5501,7 +5563,7 @@ type NotificationElem struct {
 
 func (x *NotificationElem) Reset() {
 	*x = NotificationElem{}
-	mi := &file_sdkws_sdkws_proto_msgTypes[65]
+	mi := &file_sdkws_sdkws_proto_msgTypes[66]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -5513,7 +5575,7 @@ func (x *NotificationElem) String() string {
 func (*NotificationElem) ProtoMessage() {}
 
 func (x *NotificationElem) ProtoReflect() protoreflect.Message {
-	mi := &file_sdkws_sdkws_proto_msgTypes[65]
+	mi := &file_sdkws_sdkws_proto_msgTypes[66]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -5526,7 +5588,7 @@ func (x *NotificationElem) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use NotificationElem.ProtoReflect.Descriptor instead.
 func (*NotificationElem) Descriptor() ([]byte, []int) {
-	return file_sdkws_sdkws_proto_rawDescGZIP(), []int{65}
+	return file_sdkws_sdkws_proto_rawDescGZIP(), []int{66}
 }
 
 func (x *NotificationElem) GetDetail() string {
@@ -5546,7 +5608,7 @@ type Seqs struct {
 
 func (x *Seqs) Reset() {
 	*x = Seqs{}
-	mi := &file_sdkws_sdkws_proto_msgTypes[66]
+	mi := &file_sdkws_sdkws_proto_msgTypes[67]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -5558,7 +5620,7 @@ func (x *Seqs) String() string {
 func (*Seqs) ProtoMessage() {}
 
 func (x *Seqs) ProtoReflect() protoreflect.Message {
-	mi := &file_sdkws_sdkws_proto_msgTypes[66]
+	mi := &file_sdkws_sdkws_proto_msgTypes[67]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -5571,7 +5633,7 @@ func (x *Seqs) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use Seqs.ProtoReflect.Descriptor instead.
 func (*Seqs) Descriptor() ([]byte, []int) {
-	return file_sdkws_sdkws_proto_rawDescGZIP(), []int{66}
+	return file_sdkws_sdkws_proto_rawDescGZIP(), []int{67}
 }
 
 func (x *Seqs) GetSeqs() []int64 {
@@ -5592,7 +5654,7 @@ type DeleteMessageTips struct {
 
 func (x *DeleteMessageTips) Reset() {
 	*x = DeleteMessageTips{}
-	mi := &file_sdkws_sdkws_proto_msgTypes[67]
+	mi := &file_sdkws_sdkws_proto_msgTypes[68]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -5604,7 +5666,7 @@ func (x *DeleteMessageTips) String() string {
 func (*DeleteMessageTips) ProtoMessage() {}
 
 func (x *DeleteMessageTips) ProtoReflect() protoreflect.Message {
-	mi := &file_sdkws_sdkws_proto_msgTypes[67]
+	mi := &file_sdkws_sdkws_proto_msgTypes[68]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -5617,7 +5679,7 @@ func (x *DeleteMessageTips) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use DeleteMessageTips.ProtoReflect.Descriptor instead.
 func (*DeleteMessageTips) Descriptor() ([]byte, []int) {
-	return file_sdkws_sdkws_proto_rawDescGZIP(), []int{67}
+	return file_sdkws_sdkws_proto_rawDescGZIP(), []int{68}
 }
 
 func (x *DeleteMessageTips) GetOpUserID() string {
@@ -5656,7 +5718,7 @@ type RevokeMsgTips struct {
 
 func (x *RevokeMsgTips) Reset() {
 	*x = RevokeMsgTips{}
-	mi := &file_sdkws_sdkws_proto_msgTypes[68]
+	mi := &file_sdkws_sdkws_proto_msgTypes[69]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -5668,7 +5730,7 @@ func (x *RevokeMsgTips) String() string {
 func (*RevokeMsgTips) ProtoMessage() {}
 
 func (x *RevokeMsgTips) ProtoReflect() protoreflect.Message {
-	mi := &file_sdkws_sdkws_proto_msgTypes[68]
+	mi := &file_sdkws_sdkws_proto_msgTypes[69]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -5681,7 +5743,7 @@ func (x *RevokeMsgTips) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use RevokeMsgTips.ProtoReflect.Descriptor instead.
 func (*RevokeMsgTips) Descriptor() ([]byte, []int) {
-	return file_sdkws_sdkws_proto_rawDescGZIP(), []int{68}
+	return file_sdkws_sdkws_proto_rawDescGZIP(), []int{69}
 }
 
 func (x *RevokeMsgTips) GetRevokerUserID() string {
@@ -5752,7 +5814,7 @@ type MessageRevokedContent struct {
 
 func (x *MessageRevokedContent) Reset() {
 	*x = MessageRevokedContent{}
-	mi := &file_sdkws_sdkws_proto_msgTypes[69]
+	mi := &file_sdkws_sdkws_proto_msgTypes[70]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -5764,7 +5826,7 @@ func (x *MessageRevokedContent) String() string {
 func (*MessageRevokedContent) ProtoMessage() {}
 
 func (x *MessageRevokedContent) ProtoReflect() protoreflect.Message {
-	mi := &file_sdkws_sdkws_proto_msgTypes[69]
+	mi := &file_sdkws_sdkws_proto_msgTypes[70]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -5777,7 +5839,7 @@ func (x *MessageRevokedContent) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use MessageRevokedContent.ProtoReflect.Descriptor instead.
 func (*MessageRevokedContent) Descriptor() ([]byte, []int) {
-	return file_sdkws_sdkws_proto_rawDescGZIP(), []int{69}
+	return file_sdkws_sdkws_proto_rawDescGZIP(), []int{70}
 }
 
 func (x *MessageRevokedContent) GetRevokerID() string {
@@ -5867,7 +5929,7 @@ type ClearConversationTips struct {
 
 func (x *ClearConversationTips) Reset() {
 	*x = ClearConversationTips{}
-	mi := &file_sdkws_sdkws_proto_msgTypes[70]
+	mi := &file_sdkws_sdkws_proto_msgTypes[71]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -5879,7 +5941,7 @@ func (x *ClearConversationTips) String() string {
 func (*ClearConversationTips) ProtoMessage() {}
 
 func (x *ClearConversationTips) ProtoReflect() protoreflect.Message {
-	mi := &file_sdkws_sdkws_proto_msgTypes[70]
+	mi := &file_sdkws_sdkws_proto_msgTypes[71]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -5892,7 +5954,7 @@ func (x *ClearConversationTips) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ClearConversationTips.ProtoReflect.Descriptor instead.
 func (*ClearConversationTips) Descriptor() ([]byte, []int) {
-	return file_sdkws_sdkws_proto_rawDescGZIP(), []int{70}
+	return file_sdkws_sdkws_proto_rawDescGZIP(), []int{71}
 }
 
 func (x *ClearConversationTips) GetUserID() string {
@@ -5920,7 +5982,7 @@ type DeleteMsgsTips struct {
 
 func (x *DeleteMsgsTips) Reset() {
 	*x = DeleteMsgsTips{}
-	mi := &file_sdkws_sdkws_proto_msgTypes[71]
+	mi := &file_sdkws_sdkws_proto_msgTypes[72]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -5932,7 +5994,7 @@ func (x *DeleteMsgsTips) String() string {
 func (*DeleteMsgsTips) ProtoMessage() {}
 
 func (x *DeleteMsgsTips) ProtoReflect() protoreflect.Message {
-	mi := &file_sdkws_sdkws_proto_msgTypes[71]
+	mi := &file_sdkws_sdkws_proto_msgTypes[72]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -5945,7 +6007,7 @@ func (x *DeleteMsgsTips) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use DeleteMsgsTips.ProtoReflect.Descriptor instead.
 func (*DeleteMsgsTips) Descriptor() ([]byte, []int) {
-	return file_sdkws_sdkws_proto_rawDescGZIP(), []int{71}
+	return file_sdkws_sdkws_proto_rawDescGZIP(), []int{72}
 }
 
 func (x *DeleteMsgsTips) GetUserID() string {
@@ -5989,7 +6051,7 @@ type MarkAsReadTips struct {
 
 func (x *MarkAsReadTips) Reset() {
 	*x = MarkAsReadTips{}
-	mi := &file_sdkws_sdkws_proto_msgTypes[72]
+	mi := &file_sdkws_sdkws_proto_msgTypes[73]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -6001,7 +6063,7 @@ func (x *MarkAsReadTips) String() string {
 func (*MarkAsReadTips) ProtoMessage() {}
 
 func (x *MarkAsReadTips) ProtoReflect() protoreflect.Message {
-	mi := &file_sdkws_sdkws_proto_msgTypes[72]
+	mi := &file_sdkws_sdkws_proto_msgTypes[73]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -6014,7 +6076,7 @@ func (x *MarkAsReadTips) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use MarkAsReadTips.ProtoReflect.Descriptor instead.
 func (*MarkAsReadTips) Descriptor() ([]byte, []int) {
-	return file_sdkws_sdkws_proto_rawDescGZIP(), []int{72}
+	return file_sdkws_sdkws_proto_rawDescGZIP(), []int{73}
 }
 
 func (x *MarkAsReadTips) GetMarkAsReadUserID() string {
@@ -6066,7 +6128,7 @@ type SeqReadCount struct {
 
 func (x *SeqReadCount) Reset() {
 	*x = SeqReadCount{}
-	mi := &file_sdkws_sdkws_proto_msgTypes[73]
+	mi := &file_sdkws_sdkws_proto_msgTypes[74]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -6078,7 +6140,7 @@ func (x *SeqReadCount) String() string {
 func (*SeqReadCount) ProtoMessage() {}
 
 func (x *SeqReadCount) ProtoReflect() protoreflect.Message {
-	mi := &file_sdkws_sdkws_proto_msgTypes[73]
+	mi := &file_sdkws_sdkws_proto_msgTypes[74]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -6091,7 +6153,7 @@ func (x *SeqReadCount) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use SeqReadCount.ProtoReflect.Descriptor instead.
 func (*SeqReadCount) Descriptor() ([]byte, []int) {
-	return file_sdkws_sdkws_proto_rawDescGZIP(), []int{73}
+	return file_sdkws_sdkws_proto_rawDescGZIP(), []int{74}
 }
 
 func (x *SeqReadCount) GetSeq() int64 {
@@ -6118,7 +6180,7 @@ type SetAppBackgroundStatusReq struct {
 
 func (x *SetAppBackgroundStatusReq) Reset() {
 	*x = SetAppBackgroundStatusReq{}
-	mi := &file_sdkws_sdkws_proto_msgTypes[74]
+	mi := &file_sdkws_sdkws_proto_msgTypes[75]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -6130,7 +6192,7 @@ func (x *SetAppBackgroundStatusReq) String() string {
 func (*SetAppBackgroundStatusReq) ProtoMessage() {}
 
 func (x *SetAppBackgroundStatusReq) ProtoReflect() protoreflect.Message {
-	mi := &file_sdkws_sdkws_proto_msgTypes[74]
+	mi := &file_sdkws_sdkws_proto_msgTypes[75]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -6143,7 +6205,7 @@ func (x *SetAppBackgroundStatusReq) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use SetAppBackgroundStatusReq.ProtoReflect.Descriptor instead.
 func (*SetAppBackgroundStatusReq) Descriptor() ([]byte, []int) {
-	return file_sdkws_sdkws_proto_rawDescGZIP(), []int{74}
+	return file_sdkws_sdkws_proto_rawDescGZIP(), []int{75}
 }
 
 func (x *SetAppBackgroundStatusReq) GetUserID() string {
@@ -6168,7 +6230,7 @@ type SetAppBackgroundStatusResp struct {
 
 func (x *SetAppBackgroundStatusResp) Reset() {
 	*x = SetAppBackgroundStatusResp{}
-	mi := &file_sdkws_sdkws_proto_msgTypes[75]
+	mi := &file_sdkws_sdkws_proto_msgTypes[76]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -6180,7 +6242,7 @@ func (x *SetAppBackgroundStatusResp) String() string {
 func (*SetAppBackgroundStatusResp) ProtoMessage() {}
 
 func (x *SetAppBackgroundStatusResp) ProtoReflect() protoreflect.Message {
-	mi := &file_sdkws_sdkws_proto_msgTypes[75]
+	mi := &file_sdkws_sdkws_proto_msgTypes[76]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -6193,7 +6255,7 @@ func (x *SetAppBackgroundStatusResp) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use SetAppBackgroundStatusResp.ProtoReflect.Descriptor instead.
 func (*SetAppBackgroundStatusResp) Descriptor() ([]byte, []int) {
-	return file_sdkws_sdkws_proto_rawDescGZIP(), []int{75}
+	return file_sdkws_sdkws_proto_rawDescGZIP(), []int{76}
 }
 
 type ProcessUserCommand struct {
@@ -6209,7 +6271,7 @@ type ProcessUserCommand struct {
 
 func (x *ProcessUserCommand) Reset() {
 	*x = ProcessUserCommand{}
-	mi := &file_sdkws_sdkws_proto_msgTypes[76]
+	mi := &file_sdkws_sdkws_proto_msgTypes[77]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -6221,7 +6283,7 @@ func (x *ProcessUserCommand) String() string {
 func (*ProcessUserCommand) ProtoMessage() {}
 
 func (x *ProcessUserCommand) ProtoReflect() protoreflect.Message {
-	mi := &file_sdkws_sdkws_proto_msgTypes[76]
+	mi := &file_sdkws_sdkws_proto_msgTypes[77]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -6234,7 +6296,7 @@ func (x *ProcessUserCommand) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ProcessUserCommand.ProtoReflect.Descriptor instead.
 func (*ProcessUserCommand) Descriptor() ([]byte, []int) {
-	return file_sdkws_sdkws_proto_rawDescGZIP(), []int{76}
+	return file_sdkws_sdkws_proto_rawDescGZIP(), []int{77}
 }
 
 func (x *ProcessUserCommand) GetUserID() string {
@@ -6282,7 +6344,7 @@ type RequestPagination struct {
 
 func (x *RequestPagination) Reset() {
 	*x = RequestPagination{}
-	mi := &file_sdkws_sdkws_proto_msgTypes[77]
+	mi := &file_sdkws_sdkws_proto_msgTypes[78]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -6294,7 +6356,7 @@ func (x *RequestPagination) String() string {
 func (*RequestPagination) ProtoMessage() {}
 
 func (x *RequestPagination) ProtoReflect() protoreflect.Message {
-	mi := &file_sdkws_sdkws_proto_msgTypes[77]
+	mi := &file_sdkws_sdkws_proto_msgTypes[78]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -6307,7 +6369,7 @@ func (x *RequestPagination) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use RequestPagination.ProtoReflect.Descriptor instead.
 func (*RequestPagination) Descriptor() ([]byte, []int) {
-	return file_sdkws_sdkws_proto_rawDescGZIP(), []int{77}
+	return file_sdkws_sdkws_proto_rawDescGZIP(), []int{78}
 }
 
 func (x *RequestPagination) GetPageNumber() int32 {
@@ -6336,7 +6398,7 @@ type FriendsInfoUpdateTips struct {
 
 func (x *FriendsInfoUpdateTips) Reset() {
 	*x = FriendsInfoUpdateTips{}
-	mi := &file_sdkws_sdkws_proto_msgTypes[78]
+	mi := &file_sdkws_sdkws_proto_msgTypes[79]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -6348,7 +6410,7 @@ func (x *FriendsInfoUpdateTips) String() string {
 func (*FriendsInfoUpdateTips) ProtoMessage() {}
 
 func (x *FriendsInfoUpdateTips) ProtoReflect() protoreflect.Message {
-	mi := &file_sdkws_sdkws_proto_msgTypes[78]
+	mi := &file_sdkws_sdkws_proto_msgTypes[79]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -6361,7 +6423,7 @@ func (x *FriendsInfoUpdateTips) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use FriendsInfoUpdateTips.ProtoReflect.Descriptor instead.
 func (*FriendsInfoUpdateTips) Descriptor() ([]byte, []int) {
-	return file_sdkws_sdkws_proto_rawDescGZIP(), []int{78}
+	return file_sdkws_sdkws_proto_rawDescGZIP(), []int{79}
 }
 
 func (x *FriendsInfoUpdateTips) GetFromToUserID() *FromToUserID {
@@ -6416,7 +6478,7 @@ type SubUserOnlineStatusElem struct {
 
 func (x *SubUserOnlineStatusElem) Reset() {
 	*x = SubUserOnlineStatusElem{}
-	mi := &file_sdkws_sdkws_proto_msgTypes[79]
+	mi := &file_sdkws_sdkws_proto_msgTypes[80]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -6428,7 +6490,7 @@ func (x *SubUserOnlineStatusElem) String() string {
 func (*SubUserOnlineStatusElem) ProtoMessage() {}
 
 func (x *SubUserOnlineStatusElem) ProtoReflect() protoreflect.Message {
-	mi := &file_sdkws_sdkws_proto_msgTypes[79]
+	mi := &file_sdkws_sdkws_proto_msgTypes[80]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -6441,7 +6503,7 @@ func (x *SubUserOnlineStatusElem) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use SubUserOnlineStatusElem.ProtoReflect.Descriptor instead.
 func (*SubUserOnlineStatusElem) Descriptor() ([]byte, []int) {
-	return file_sdkws_sdkws_proto_rawDescGZIP(), []int{79}
+	return file_sdkws_sdkws_proto_rawDescGZIP(), []int{80}
 }
 
 func (x *SubUserOnlineStatusElem) GetUserID() string {
@@ -6481,7 +6543,7 @@ type SubUserOnlineStatusTips struct {
 
 func (x *SubUserOnlineStatusTips) Reset() {
 	*x = SubUserOnlineStatusTips{}
-	mi := &file_sdkws_sdkws_proto_msgTypes[80]
+	mi := &file_sdkws_sdkws_proto_msgTypes[81]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -6493,7 +6555,7 @@ func (x *SubUserOnlineStatusTips) String() string {
 func (*SubUserOnlineStatusTips) ProtoMessage() {}
 
 func (x *SubUserOnlineStatusTips) ProtoReflect() protoreflect.Message {
-	mi := &file_sdkws_sdkws_proto_msgTypes[80]
+	mi := &file_sdkws_sdkws_proto_msgTypes[81]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -6506,7 +6568,7 @@ func (x *SubUserOnlineStatusTips) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use SubUserOnlineStatusTips.ProtoReflect.Descriptor instead.
 func (*SubUserOnlineStatusTips) Descriptor() ([]byte, []int) {
-	return file_sdkws_sdkws_proto_rawDescGZIP(), []int{80}
+	return file_sdkws_sdkws_proto_rawDescGZIP(), []int{81}
 }
 
 func (x *SubUserOnlineStatusTips) GetSubscribers() []*SubUserOnlineStatusElem {
@@ -6526,7 +6588,7 @@ type SubUserOnlineStatus struct {
 
 func (x *SubUserOnlineStatus) Reset() {
 	*x = SubUserOnlineStatus{}
-	mi := &file_sdkws_sdkws_proto_msgTypes[81]
+	mi := &file_sdkws_sdkws_proto_msgTypes[82]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -6538,7 +6600,7 @@ func (x *SubUserOnlineStatus) String() string {
 func (*SubUserOnlineStatus) ProtoMessage() {}
 
 func (x *SubUserOnlineStatus) ProtoReflect() protoreflect.Message {
-	mi := &file_sdkws_sdkws_proto_msgTypes[81]
+	mi := &file_sdkws_sdkws_proto_msgTypes[82]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -6551,7 +6613,7 @@ func (x *SubUserOnlineStatus) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use SubUserOnlineStatus.ProtoReflect.Descriptor instead.
 func (*SubUserOnlineStatus) Descriptor() ([]byte, []int) {
-	return file_sdkws_sdkws_proto_rawDescGZIP(), []int{81}
+	return file_sdkws_sdkws_proto_rawDescGZIP(), []int{82}
 }
 
 func (x *SubUserOnlineStatus) GetSubscribeUserID() []string {
@@ -6581,7 +6643,7 @@ type StreamMsgTips struct {
 
 func (x *StreamMsgTips) Reset() {
 	*x = StreamMsgTips{}
-	mi := &file_sdkws_sdkws_proto_msgTypes[82]
+	mi := &file_sdkws_sdkws_proto_msgTypes[83]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -6593,7 +6655,7 @@ func (x *StreamMsgTips) String() string {
 func (*StreamMsgTips) ProtoMessage() {}
 
 func (x *StreamMsgTips) ProtoReflect() protoreflect.Message {
-	mi := &file_sdkws_sdkws_proto_msgTypes[82]
+	mi := &file_sdkws_sdkws_proto_msgTypes[83]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -6606,7 +6668,7 @@ func (x *StreamMsgTips) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use StreamMsgTips.ProtoReflect.Descriptor instead.
 func (*StreamMsgTips) Descriptor() ([]byte, []int) {
-	return file_sdkws_sdkws_proto_rawDescGZIP(), []int{82}
+	return file_sdkws_sdkws_proto_rawDescGZIP(), []int{83}
 }
 
 func (x *StreamMsgTips) GetConversationID() string {
@@ -6659,7 +6721,7 @@ type ModifyMsgTips struct {
 
 func (x *ModifyMsgTips) Reset() {
 	*x = ModifyMsgTips{}
-	mi := &file_sdkws_sdkws_proto_msgTypes[83]
+	mi := &file_sdkws_sdkws_proto_msgTypes[84]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -6671,7 +6733,7 @@ func (x *ModifyMsgTips) String() string {
 func (*ModifyMsgTips) ProtoMessage() {}
 
 func (x *ModifyMsgTips) ProtoReflect() protoreflect.Message {
-	mi := &file_sdkws_sdkws_proto_msgTypes[83]
+	mi := &file_sdkws_sdkws_proto_msgTypes[84]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -6684,7 +6746,7 @@ func (x *ModifyMsgTips) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ModifyMsgTips.ProtoReflect.Descriptor instead.
 func (*ModifyMsgTips) Descriptor() ([]byte, []int) {
-	return file_sdkws_sdkws_proto_rawDescGZIP(), []int{83}
+	return file_sdkws_sdkws_proto_rawDescGZIP(), []int{84}
 }
 
 func (x *ModifyMsgTips) GetConversationID() string {
@@ -6746,7 +6808,7 @@ type ConversationDeleteTips struct {
 
 func (x *ConversationDeleteTips) Reset() {
 	*x = ConversationDeleteTips{}
-	mi := &file_sdkws_sdkws_proto_msgTypes[84]
+	mi := &file_sdkws_sdkws_proto_msgTypes[85]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -6758,7 +6820,7 @@ func (x *ConversationDeleteTips) String() string {
 func (*ConversationDeleteTips) ProtoMessage() {}
 
 func (x *ConversationDeleteTips) ProtoReflect() protoreflect.Message {
-	mi := &file_sdkws_sdkws_proto_msgTypes[84]
+	mi := &file_sdkws_sdkws_proto_msgTypes[85]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -6771,7 +6833,7 @@ func (x *ConversationDeleteTips) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ConversationDeleteTips.ProtoReflect.Descriptor instead.
 func (*ConversationDeleteTips) Descriptor() ([]byte, []int) {
-	return file_sdkws_sdkws_proto_rawDescGZIP(), []int{84}
+	return file_sdkws_sdkws_proto_rawDescGZIP(), []int{85}
 }
 
 func (x *ConversationDeleteTips) GetUserID() string {
@@ -6878,7 +6940,7 @@ type AppSettings struct {
 
 func (x *AppSettings) Reset() {
 	*x = AppSettings{}
-	mi := &file_sdkws_sdkws_proto_msgTypes[85]
+	mi := &file_sdkws_sdkws_proto_msgTypes[86]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -6890,7 +6952,7 @@ func (x *AppSettings) String() string {
 func (*AppSettings) ProtoMessage() {}
 
 func (x *AppSettings) ProtoReflect() protoreflect.Message {
-	mi := &file_sdkws_sdkws_proto_msgTypes[85]
+	mi := &file_sdkws_sdkws_proto_msgTypes[86]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -6903,7 +6965,7 @@ func (x *AppSettings) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use AppSettings.ProtoReflect.Descriptor instead.
 func (*AppSettings) Descriptor() ([]byte, []int) {
-	return file_sdkws_sdkws_proto_rawDescGZIP(), []int{85}
+	return file_sdkws_sdkws_proto_rawDescGZIP(), []int{86}
 }
 
 func (x *AppSettings) GetEditWindowSeconds() int32 {
@@ -7012,7 +7074,7 @@ type PlatformPresenceSetting struct {
 
 func (x *PlatformPresenceSetting) Reset() {
 	*x = PlatformPresenceSetting{}
-	mi := &file_sdkws_sdkws_proto_msgTypes[86]
+	mi := &file_sdkws_sdkws_proto_msgTypes[87]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -7024,7 +7086,7 @@ func (x *PlatformPresenceSetting) String() string {
 func (*PlatformPresenceSetting) ProtoMessage() {}
 
 func (x *PlatformPresenceSetting) ProtoReflect() protoreflect.Message {
-	mi := &file_sdkws_sdkws_proto_msgTypes[86]
+	mi := &file_sdkws_sdkws_proto_msgTypes[87]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -7037,7 +7099,7 @@ func (x *PlatformPresenceSetting) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use PlatformPresenceSetting.ProtoReflect.Descriptor instead.
 func (*PlatformPresenceSetting) Descriptor() ([]byte, []int) {
-	return file_sdkws_sdkws_proto_rawDescGZIP(), []int{86}
+	return file_sdkws_sdkws_proto_rawDescGZIP(), []int{87}
 }
 
 func (x *PlatformPresenceSetting) GetEnableOnline() bool {
@@ -7097,7 +7159,7 @@ type PresenceSettings struct {
 
 func (x *PresenceSettings) Reset() {
 	*x = PresenceSettings{}
-	mi := &file_sdkws_sdkws_proto_msgTypes[87]
+	mi := &file_sdkws_sdkws_proto_msgTypes[88]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -7109,7 +7171,7 @@ func (x *PresenceSettings) String() string {
 func (*PresenceSettings) ProtoMessage() {}
 
 func (x *PresenceSettings) ProtoReflect() protoreflect.Message {
-	mi := &file_sdkws_sdkws_proto_msgTypes[87]
+	mi := &file_sdkws_sdkws_proto_msgTypes[88]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -7122,7 +7184,7 @@ func (x *PresenceSettings) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use PresenceSettings.ProtoReflect.Descriptor instead.
 func (*PresenceSettings) Descriptor() ([]byte, []int) {
-	return file_sdkws_sdkws_proto_rawDescGZIP(), []int{87}
+	return file_sdkws_sdkws_proto_rawDescGZIP(), []int{88}
 }
 
 func (x *PresenceSettings) GetEnablePresence() bool {
@@ -7158,7 +7220,7 @@ type AppSettingsChangedTips struct {
 
 func (x *AppSettingsChangedTips) Reset() {
 	*x = AppSettingsChangedTips{}
-	mi := &file_sdkws_sdkws_proto_msgTypes[88]
+	mi := &file_sdkws_sdkws_proto_msgTypes[89]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -7170,7 +7232,7 @@ func (x *AppSettingsChangedTips) String() string {
 func (*AppSettingsChangedTips) ProtoMessage() {}
 
 func (x *AppSettingsChangedTips) ProtoReflect() protoreflect.Message {
-	mi := &file_sdkws_sdkws_proto_msgTypes[88]
+	mi := &file_sdkws_sdkws_proto_msgTypes[89]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -7183,7 +7245,7 @@ func (x *AppSettingsChangedTips) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use AppSettingsChangedTips.ProtoReflect.Descriptor instead.
 func (*AppSettingsChangedTips) Descriptor() ([]byte, []int) {
-	return file_sdkws_sdkws_proto_rawDescGZIP(), []int{88}
+	return file_sdkws_sdkws_proto_rawDescGZIP(), []int{89}
 }
 
 func (x *AppSettingsChangedTips) GetSettings() *AppSettings {
@@ -7209,7 +7271,7 @@ type ScheduledMsgChangedTips struct {
 
 func (x *ScheduledMsgChangedTips) Reset() {
 	*x = ScheduledMsgChangedTips{}
-	mi := &file_sdkws_sdkws_proto_msgTypes[89]
+	mi := &file_sdkws_sdkws_proto_msgTypes[90]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -7221,7 +7283,7 @@ func (x *ScheduledMsgChangedTips) String() string {
 func (*ScheduledMsgChangedTips) ProtoMessage() {}
 
 func (x *ScheduledMsgChangedTips) ProtoReflect() protoreflect.Message {
-	mi := &file_sdkws_sdkws_proto_msgTypes[89]
+	mi := &file_sdkws_sdkws_proto_msgTypes[90]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -7234,7 +7296,7 @@ func (x *ScheduledMsgChangedTips) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ScheduledMsgChangedTips.ProtoReflect.Descriptor instead.
 func (*ScheduledMsgChangedTips) Descriptor() ([]byte, []int) {
-	return file_sdkws_sdkws_proto_rawDescGZIP(), []int{89}
+	return file_sdkws_sdkws_proto_rawDescGZIP(), []int{90}
 }
 
 func (x *ScheduledMsgChangedTips) GetConversationID() string {
@@ -7279,7 +7341,7 @@ type CallHistoryChangedTips struct {
 
 func (x *CallHistoryChangedTips) Reset() {
 	*x = CallHistoryChangedTips{}
-	mi := &file_sdkws_sdkws_proto_msgTypes[90]
+	mi := &file_sdkws_sdkws_proto_msgTypes[91]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -7291,7 +7353,7 @@ func (x *CallHistoryChangedTips) String() string {
 func (*CallHistoryChangedTips) ProtoMessage() {}
 
 func (x *CallHistoryChangedTips) ProtoReflect() protoreflect.Message {
-	mi := &file_sdkws_sdkws_proto_msgTypes[90]
+	mi := &file_sdkws_sdkws_proto_msgTypes[91]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -7304,7 +7366,7 @@ func (x *CallHistoryChangedTips) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use CallHistoryChangedTips.ProtoReflect.Descriptor instead.
 func (*CallHistoryChangedTips) Descriptor() ([]byte, []int) {
-	return file_sdkws_sdkws_proto_rawDescGZIP(), []int{90}
+	return file_sdkws_sdkws_proto_rawDescGZIP(), []int{91}
 }
 
 func (x *CallHistoryChangedTips) GetChange() string {
@@ -7381,7 +7443,7 @@ type GroupCreationDefaults struct {
 
 func (x *GroupCreationDefaults) Reset() {
 	*x = GroupCreationDefaults{}
-	mi := &file_sdkws_sdkws_proto_msgTypes[91]
+	mi := &file_sdkws_sdkws_proto_msgTypes[92]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -7393,7 +7455,7 @@ func (x *GroupCreationDefaults) String() string {
 func (*GroupCreationDefaults) ProtoMessage() {}
 
 func (x *GroupCreationDefaults) ProtoReflect() protoreflect.Message {
-	mi := &file_sdkws_sdkws_proto_msgTypes[91]
+	mi := &file_sdkws_sdkws_proto_msgTypes[92]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -7406,7 +7468,7 @@ func (x *GroupCreationDefaults) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GroupCreationDefaults.ProtoReflect.Descriptor instead.
 func (*GroupCreationDefaults) Descriptor() ([]byte, []int) {
-	return file_sdkws_sdkws_proto_rawDescGZIP(), []int{91}
+	return file_sdkws_sdkws_proto_rawDescGZIP(), []int{92}
 }
 
 func (x *GroupCreationDefaults) GetMuteAll() int32 {
@@ -7498,7 +7560,7 @@ type EditMsgTips struct {
 
 func (x *EditMsgTips) Reset() {
 	*x = EditMsgTips{}
-	mi := &file_sdkws_sdkws_proto_msgTypes[92]
+	mi := &file_sdkws_sdkws_proto_msgTypes[93]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -7510,7 +7572,7 @@ func (x *EditMsgTips) String() string {
 func (*EditMsgTips) ProtoMessage() {}
 
 func (x *EditMsgTips) ProtoReflect() protoreflect.Message {
-	mi := &file_sdkws_sdkws_proto_msgTypes[92]
+	mi := &file_sdkws_sdkws_proto_msgTypes[93]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -7523,7 +7585,7 @@ func (x *EditMsgTips) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use EditMsgTips.ProtoReflect.Descriptor instead.
 func (*EditMsgTips) Descriptor() ([]byte, []int) {
-	return file_sdkws_sdkws_proto_rawDescGZIP(), []int{92}
+	return file_sdkws_sdkws_proto_rawDescGZIP(), []int{93}
 }
 
 func (x *EditMsgTips) GetConversationID() string {
@@ -7981,6 +8043,10 @@ const file_sdkws_sdkws_proto_rawDesc = "" +
 	"\x12GroupDismissedTips\x12-\n" +
 	"\x05group\x18\x01 \x01(\v2\x17.openim.sdkws.GroupInfoR\x05group\x129\n" +
 	"\x06opUser\x18\x02 \x01(\v2!.openim.sdkws.GroupMemberFullInfoR\x06opUser\x12$\n" +
+	"\roperationTime\x18\x03 \x01(\x03R\roperationTime\"\xa1\x01\n" +
+	"\x0fGroupBannedTips\x12-\n" +
+	"\x05group\x18\x01 \x01(\v2\x17.openim.sdkws.GroupInfoR\x05group\x129\n" +
+	"\x06opUser\x18\x02 \x01(\v2!.openim.sdkws.GroupMemberFullInfoR\x06opUser\x12$\n" +
 	"\roperationTime\x18\x03 \x01(\x03R\roperationTime\"\xef\x02\n" +
 	"\x14GroupMemberMutedTips\x12-\n" +
 	"\x05group\x18\x01 \x01(\v2\x17.openim.sdkws.GroupInfoR\x05group\x129\n" +
@@ -8313,7 +8379,7 @@ func file_sdkws_sdkws_proto_rawDescGZIP() []byte {
 }
 
 var file_sdkws_sdkws_proto_enumTypes = make([]protoimpl.EnumInfo, 1)
-var file_sdkws_sdkws_proto_msgTypes = make([]protoimpl.MessageInfo, 101)
+var file_sdkws_sdkws_proto_msgTypes = make([]protoimpl.MessageInfo, 102)
 var file_sdkws_sdkws_proto_goTypes = []any{
 	(PullOrder)(0),                            // 0: openim.sdkws.PullOrder
 	(*GroupInfo)(nil),                         // 1: openim.sdkws.GroupInfo
@@ -8357,88 +8423,89 @@ var file_sdkws_sdkws_proto_goTypes = []any{
 	(*MemberInvitedTips)(nil),                 // 39: openim.sdkws.MemberInvitedTips
 	(*MemberEnterTips)(nil),                   // 40: openim.sdkws.MemberEnterTips
 	(*GroupDismissedTips)(nil),                // 41: openim.sdkws.GroupDismissedTips
-	(*GroupMemberMutedTips)(nil),              // 42: openim.sdkws.GroupMemberMutedTips
-	(*GroupMemberCancelMutedTips)(nil),        // 43: openim.sdkws.GroupMemberCancelMutedTips
-	(*GroupMutedTips)(nil),                    // 44: openim.sdkws.GroupMutedTips
-	(*GroupCancelMutedTips)(nil),              // 45: openim.sdkws.GroupCancelMutedTips
-	(*GroupMemberInfoSetTips)(nil),            // 46: openim.sdkws.GroupMemberInfoSetTips
-	(*FriendApplication)(nil),                 // 47: openim.sdkws.FriendApplication
-	(*FromToUserID)(nil),                      // 48: openim.sdkws.FromToUserID
-	(*FriendApplicationTips)(nil),             // 49: openim.sdkws.FriendApplicationTips
-	(*FriendApplicationApprovedTips)(nil),     // 50: openim.sdkws.FriendApplicationApprovedTips
-	(*FriendApplicationRejectedTips)(nil),     // 51: openim.sdkws.FriendApplicationRejectedTips
-	(*FriendAddedTips)(nil),                   // 52: openim.sdkws.FriendAddedTips
-	(*FriendDeletedTips)(nil),                 // 53: openim.sdkws.FriendDeletedTips
-	(*BlackAddedTips)(nil),                    // 54: openim.sdkws.BlackAddedTips
-	(*BlackDeletedTips)(nil),                  // 55: openim.sdkws.BlackDeletedTips
-	(*FriendInfoChangedTips)(nil),             // 56: openim.sdkws.FriendInfoChangedTips
-	(*UserInfoUpdatedTips)(nil),               // 57: openim.sdkws.UserInfoUpdatedTips
-	(*UserStatusChangeTips)(nil),              // 58: openim.sdkws.UserStatusChangeTips
-	(*UserCommandAddTips)(nil),                // 59: openim.sdkws.UserCommandAddTips
-	(*UserCommandUpdateTips)(nil),             // 60: openim.sdkws.UserCommandUpdateTips
-	(*UserCommandDeleteTips)(nil),             // 61: openim.sdkws.UserCommandDeleteTips
-	(*ConversationUpdateTips)(nil),            // 62: openim.sdkws.ConversationUpdateTips
-	(*ConversationSetPrivateTips)(nil),        // 63: openim.sdkws.ConversationSetPrivateTips
-	(*ConversationAutoDeleteChangedTips)(nil), // 64: openim.sdkws.ConversationAutoDeleteChangedTips
-	(*ConversationHasReadTips)(nil),           // 65: openim.sdkws.ConversationHasReadTips
-	(*NotificationElem)(nil),                  // 66: openim.sdkws.NotificationElem
-	(*Seqs)(nil),                              // 67: openim.sdkws.seqs
-	(*DeleteMessageTips)(nil),                 // 68: openim.sdkws.DeleteMessageTips
-	(*RevokeMsgTips)(nil),                     // 69: openim.sdkws.RevokeMsgTips
-	(*MessageRevokedContent)(nil),             // 70: openim.sdkws.MessageRevokedContent
-	(*ClearConversationTips)(nil),             // 71: openim.sdkws.ClearConversationTips
-	(*DeleteMsgsTips)(nil),                    // 72: openim.sdkws.DeleteMsgsTips
-	(*MarkAsReadTips)(nil),                    // 73: openim.sdkws.MarkAsReadTips
-	(*SeqReadCount)(nil),                      // 74: openim.sdkws.SeqReadCount
-	(*SetAppBackgroundStatusReq)(nil),         // 75: openim.sdkws.SetAppBackgroundStatusReq
-	(*SetAppBackgroundStatusResp)(nil),        // 76: openim.sdkws.SetAppBackgroundStatusResp
-	(*ProcessUserCommand)(nil),                // 77: openim.sdkws.ProcessUserCommand
-	(*RequestPagination)(nil),                 // 78: openim.sdkws.RequestPagination
-	(*FriendsInfoUpdateTips)(nil),             // 79: openim.sdkws.FriendsInfoUpdateTips
-	(*SubUserOnlineStatusElem)(nil),           // 80: openim.sdkws.SubUserOnlineStatusElem
-	(*SubUserOnlineStatusTips)(nil),           // 81: openim.sdkws.SubUserOnlineStatusTips
-	(*SubUserOnlineStatus)(nil),               // 82: openim.sdkws.SubUserOnlineStatus
-	(*StreamMsgTips)(nil),                     // 83: openim.sdkws.StreamMsgTips
-	(*ModifyMsgTips)(nil),                     // 84: openim.sdkws.ModifyMsgTips
-	(*ConversationDeleteTips)(nil),            // 85: openim.sdkws.ConversationDeleteTips
-	(*AppSettings)(nil),                       // 86: openim.sdkws.AppSettings
-	(*PlatformPresenceSetting)(nil),           // 87: openim.sdkws.PlatformPresenceSetting
-	(*PresenceSettings)(nil),                  // 88: openim.sdkws.PresenceSettings
-	(*AppSettingsChangedTips)(nil),            // 89: openim.sdkws.AppSettingsChangedTips
-	(*ScheduledMsgChangedTips)(nil),           // 90: openim.sdkws.ScheduledMsgChangedTips
-	(*CallHistoryChangedTips)(nil),            // 91: openim.sdkws.CallHistoryChangedTips
-	(*GroupCreationDefaults)(nil),             // 92: openim.sdkws.GroupCreationDefaults
-	(*EditMsgTips)(nil),                       // 93: openim.sdkws.EditMsgTips
-	nil,                                       // 94: openim.sdkws.PullMessageBySeqsResp.MsgsEntry
-	nil,                                       // 95: openim.sdkws.PullMessageBySeqsResp.NotificationMsgsEntry
-	nil,                                       // 96: openim.sdkws.GetMaxSeqResp.MaxSeqsEntry
-	nil,                                       // 97: openim.sdkws.GetMaxSeqResp.MinSeqsEntry
-	nil,                                       // 98: openim.sdkws.MsgData.OptionsEntry
-	nil,                                       // 99: openim.sdkws.PushMessages.MsgsEntry
-	nil,                                       // 100: openim.sdkws.PushMessages.NotificationMsgsEntry
-	nil,                                       // 101: openim.sdkws.PresenceSettings.PlatformSettingsEntry
-	(*wrapperspb.StringValue)(nil),            // 102: openim.protobuf.StringValue
-	(*wrapperspb.Int32Value)(nil),             // 103: openim.protobuf.Int32Value
-	(*wrapperspb.Int64Value)(nil),             // 104: openim.protobuf.Int64Value
+	(*GroupBannedTips)(nil),                   // 42: openim.sdkws.GroupBannedTips
+	(*GroupMemberMutedTips)(nil),              // 43: openim.sdkws.GroupMemberMutedTips
+	(*GroupMemberCancelMutedTips)(nil),        // 44: openim.sdkws.GroupMemberCancelMutedTips
+	(*GroupMutedTips)(nil),                    // 45: openim.sdkws.GroupMutedTips
+	(*GroupCancelMutedTips)(nil),              // 46: openim.sdkws.GroupCancelMutedTips
+	(*GroupMemberInfoSetTips)(nil),            // 47: openim.sdkws.GroupMemberInfoSetTips
+	(*FriendApplication)(nil),                 // 48: openim.sdkws.FriendApplication
+	(*FromToUserID)(nil),                      // 49: openim.sdkws.FromToUserID
+	(*FriendApplicationTips)(nil),             // 50: openim.sdkws.FriendApplicationTips
+	(*FriendApplicationApprovedTips)(nil),     // 51: openim.sdkws.FriendApplicationApprovedTips
+	(*FriendApplicationRejectedTips)(nil),     // 52: openim.sdkws.FriendApplicationRejectedTips
+	(*FriendAddedTips)(nil),                   // 53: openim.sdkws.FriendAddedTips
+	(*FriendDeletedTips)(nil),                 // 54: openim.sdkws.FriendDeletedTips
+	(*BlackAddedTips)(nil),                    // 55: openim.sdkws.BlackAddedTips
+	(*BlackDeletedTips)(nil),                  // 56: openim.sdkws.BlackDeletedTips
+	(*FriendInfoChangedTips)(nil),             // 57: openim.sdkws.FriendInfoChangedTips
+	(*UserInfoUpdatedTips)(nil),               // 58: openim.sdkws.UserInfoUpdatedTips
+	(*UserStatusChangeTips)(nil),              // 59: openim.sdkws.UserStatusChangeTips
+	(*UserCommandAddTips)(nil),                // 60: openim.sdkws.UserCommandAddTips
+	(*UserCommandUpdateTips)(nil),             // 61: openim.sdkws.UserCommandUpdateTips
+	(*UserCommandDeleteTips)(nil),             // 62: openim.sdkws.UserCommandDeleteTips
+	(*ConversationUpdateTips)(nil),            // 63: openim.sdkws.ConversationUpdateTips
+	(*ConversationSetPrivateTips)(nil),        // 64: openim.sdkws.ConversationSetPrivateTips
+	(*ConversationAutoDeleteChangedTips)(nil), // 65: openim.sdkws.ConversationAutoDeleteChangedTips
+	(*ConversationHasReadTips)(nil),           // 66: openim.sdkws.ConversationHasReadTips
+	(*NotificationElem)(nil),                  // 67: openim.sdkws.NotificationElem
+	(*Seqs)(nil),                              // 68: openim.sdkws.seqs
+	(*DeleteMessageTips)(nil),                 // 69: openim.sdkws.DeleteMessageTips
+	(*RevokeMsgTips)(nil),                     // 70: openim.sdkws.RevokeMsgTips
+	(*MessageRevokedContent)(nil),             // 71: openim.sdkws.MessageRevokedContent
+	(*ClearConversationTips)(nil),             // 72: openim.sdkws.ClearConversationTips
+	(*DeleteMsgsTips)(nil),                    // 73: openim.sdkws.DeleteMsgsTips
+	(*MarkAsReadTips)(nil),                    // 74: openim.sdkws.MarkAsReadTips
+	(*SeqReadCount)(nil),                      // 75: openim.sdkws.SeqReadCount
+	(*SetAppBackgroundStatusReq)(nil),         // 76: openim.sdkws.SetAppBackgroundStatusReq
+	(*SetAppBackgroundStatusResp)(nil),        // 77: openim.sdkws.SetAppBackgroundStatusResp
+	(*ProcessUserCommand)(nil),                // 78: openim.sdkws.ProcessUserCommand
+	(*RequestPagination)(nil),                 // 79: openim.sdkws.RequestPagination
+	(*FriendsInfoUpdateTips)(nil),             // 80: openim.sdkws.FriendsInfoUpdateTips
+	(*SubUserOnlineStatusElem)(nil),           // 81: openim.sdkws.SubUserOnlineStatusElem
+	(*SubUserOnlineStatusTips)(nil),           // 82: openim.sdkws.SubUserOnlineStatusTips
+	(*SubUserOnlineStatus)(nil),               // 83: openim.sdkws.SubUserOnlineStatus
+	(*StreamMsgTips)(nil),                     // 84: openim.sdkws.StreamMsgTips
+	(*ModifyMsgTips)(nil),                     // 85: openim.sdkws.ModifyMsgTips
+	(*ConversationDeleteTips)(nil),            // 86: openim.sdkws.ConversationDeleteTips
+	(*AppSettings)(nil),                       // 87: openim.sdkws.AppSettings
+	(*PlatformPresenceSetting)(nil),           // 88: openim.sdkws.PlatformPresenceSetting
+	(*PresenceSettings)(nil),                  // 89: openim.sdkws.PresenceSettings
+	(*AppSettingsChangedTips)(nil),            // 90: openim.sdkws.AppSettingsChangedTips
+	(*ScheduledMsgChangedTips)(nil),           // 91: openim.sdkws.ScheduledMsgChangedTips
+	(*CallHistoryChangedTips)(nil),            // 92: openim.sdkws.CallHistoryChangedTips
+	(*GroupCreationDefaults)(nil),             // 93: openim.sdkws.GroupCreationDefaults
+	(*EditMsgTips)(nil),                       // 94: openim.sdkws.EditMsgTips
+	nil,                                       // 95: openim.sdkws.PullMessageBySeqsResp.MsgsEntry
+	nil,                                       // 96: openim.sdkws.PullMessageBySeqsResp.NotificationMsgsEntry
+	nil,                                       // 97: openim.sdkws.GetMaxSeqResp.MaxSeqsEntry
+	nil,                                       // 98: openim.sdkws.GetMaxSeqResp.MinSeqsEntry
+	nil,                                       // 99: openim.sdkws.MsgData.OptionsEntry
+	nil,                                       // 100: openim.sdkws.PushMessages.MsgsEntry
+	nil,                                       // 101: openim.sdkws.PushMessages.NotificationMsgsEntry
+	nil,                                       // 102: openim.sdkws.PresenceSettings.PlatformSettingsEntry
+	(*wrapperspb.StringValue)(nil),            // 103: openim.protobuf.StringValue
+	(*wrapperspb.Int32Value)(nil),             // 104: openim.protobuf.Int32Value
+	(*wrapperspb.Int64Value)(nil),             // 105: openim.protobuf.Int64Value
 }
 var file_sdkws_sdkws_proto_depIdxs = []int32{
 	5,   // 0: openim.sdkws.MessageReactionChange.reactions:type_name -> openim.sdkws.ReactionCount
 	6,   // 1: openim.sdkws.MessageReactionsChangedTips.changes:type_name -> openim.sdkws.MessageReactionChange
-	102, // 2: openim.sdkws.GroupInfoForSet.ex:type_name -> openim.protobuf.StringValue
-	103, // 3: openim.sdkws.GroupInfoForSet.needVerification:type_name -> openim.protobuf.Int32Value
-	103, // 4: openim.sdkws.GroupInfoForSet.lookMemberInfo:type_name -> openim.protobuf.Int32Value
-	103, // 5: openim.sdkws.GroupInfoForSet.applyMemberFriend:type_name -> openim.protobuf.Int32Value
-	103, // 6: openim.sdkws.GroupInfoForSet.deleteConversationOnKick:type_name -> openim.protobuf.Int32Value
-	103, // 7: openim.sdkws.GroupInfoForSet.historyForNewMembers:type_name -> openim.protobuf.Int32Value
-	103, // 8: openim.sdkws.GroupInfoForSet.readReceipts:type_name -> openim.protobuf.Int32Value
-	103, // 9: openim.sdkws.GroupInfoForSet.memberPin:type_name -> openim.protobuf.Int32Value
-	104, // 10: openim.sdkws.GroupInfoForSet.msgAutoDelete:type_name -> openim.protobuf.Int64Value
-	103, // 11: openim.sdkws.GroupInfoForSet.memberPoll:type_name -> openim.protobuf.Int32Value
-	103, // 12: openim.sdkws.GroupInfoForSet.memberCall:type_name -> openim.protobuf.Int32Value
-	102, // 13: openim.sdkws.UserInfoWithEx.nickname:type_name -> openim.protobuf.StringValue
-	102, // 14: openim.sdkws.UserInfoWithEx.faceURL:type_name -> openim.protobuf.StringValue
-	102, // 15: openim.sdkws.UserInfoWithEx.ex:type_name -> openim.protobuf.StringValue
-	103, // 16: openim.sdkws.UserInfoWithEx.globalRecvMsgOpt:type_name -> openim.protobuf.Int32Value
+	103, // 2: openim.sdkws.GroupInfoForSet.ex:type_name -> openim.protobuf.StringValue
+	104, // 3: openim.sdkws.GroupInfoForSet.needVerification:type_name -> openim.protobuf.Int32Value
+	104, // 4: openim.sdkws.GroupInfoForSet.lookMemberInfo:type_name -> openim.protobuf.Int32Value
+	104, // 5: openim.sdkws.GroupInfoForSet.applyMemberFriend:type_name -> openim.protobuf.Int32Value
+	104, // 6: openim.sdkws.GroupInfoForSet.deleteConversationOnKick:type_name -> openim.protobuf.Int32Value
+	104, // 7: openim.sdkws.GroupInfoForSet.historyForNewMembers:type_name -> openim.protobuf.Int32Value
+	104, // 8: openim.sdkws.GroupInfoForSet.readReceipts:type_name -> openim.protobuf.Int32Value
+	104, // 9: openim.sdkws.GroupInfoForSet.memberPin:type_name -> openim.protobuf.Int32Value
+	105, // 10: openim.sdkws.GroupInfoForSet.msgAutoDelete:type_name -> openim.protobuf.Int64Value
+	104, // 11: openim.sdkws.GroupInfoForSet.memberPoll:type_name -> openim.protobuf.Int32Value
+	104, // 12: openim.sdkws.GroupInfoForSet.memberCall:type_name -> openim.protobuf.Int32Value
+	103, // 13: openim.sdkws.UserInfoWithEx.nickname:type_name -> openim.protobuf.StringValue
+	103, // 14: openim.sdkws.UserInfoWithEx.faceURL:type_name -> openim.protobuf.StringValue
+	103, // 15: openim.sdkws.UserInfoWithEx.ex:type_name -> openim.protobuf.StringValue
+	104, // 16: openim.sdkws.UserInfoWithEx.globalRecvMsgOpt:type_name -> openim.protobuf.Int32Value
 	12,  // 17: openim.sdkws.FriendInfo.friendUser:type_name -> openim.sdkws.UserInfo
 	11,  // 18: openim.sdkws.BlackInfo.blackUserInfo:type_name -> openim.sdkws.PublicUserInfo
 	11,  // 19: openim.sdkws.GroupRequest.userInfo:type_name -> openim.sdkws.PublicUserInfo
@@ -8446,14 +8513,14 @@ var file_sdkws_sdkws_proto_depIdxs = []int32{
 	19,  // 21: openim.sdkws.PullMessageBySeqsReq.seqRanges:type_name -> openim.sdkws.SeqRange
 	0,   // 22: openim.sdkws.PullMessageBySeqsReq.order:type_name -> openim.sdkws.PullOrder
 	25,  // 23: openim.sdkws.PullMsgs.Msgs:type_name -> openim.sdkws.MsgData
-	94,  // 24: openim.sdkws.PullMessageBySeqsResp.msgs:type_name -> openim.sdkws.PullMessageBySeqsResp.MsgsEntry
-	95,  // 25: openim.sdkws.PullMessageBySeqsResp.notificationMsgs:type_name -> openim.sdkws.PullMessageBySeqsResp.NotificationMsgsEntry
-	96,  // 26: openim.sdkws.GetMaxSeqResp.maxSeqs:type_name -> openim.sdkws.GetMaxSeqResp.MaxSeqsEntry
-	97,  // 27: openim.sdkws.GetMaxSeqResp.minSeqs:type_name -> openim.sdkws.GetMaxSeqResp.MinSeqsEntry
-	98,  // 28: openim.sdkws.MsgData.options:type_name -> openim.sdkws.MsgData.OptionsEntry
+	95,  // 24: openim.sdkws.PullMessageBySeqsResp.msgs:type_name -> openim.sdkws.PullMessageBySeqsResp.MsgsEntry
+	96,  // 25: openim.sdkws.PullMessageBySeqsResp.notificationMsgs:type_name -> openim.sdkws.PullMessageBySeqsResp.NotificationMsgsEntry
+	97,  // 26: openim.sdkws.GetMaxSeqResp.maxSeqs:type_name -> openim.sdkws.GetMaxSeqResp.MaxSeqsEntry
+	98,  // 27: openim.sdkws.GetMaxSeqResp.minSeqs:type_name -> openim.sdkws.GetMaxSeqResp.MinSeqsEntry
+	99,  // 28: openim.sdkws.MsgData.options:type_name -> openim.sdkws.MsgData.OptionsEntry
 	27,  // 29: openim.sdkws.MsgData.offlinePushInfo:type_name -> openim.sdkws.OfflinePushInfo
-	99,  // 30: openim.sdkws.PushMessages.msgs:type_name -> openim.sdkws.PushMessages.MsgsEntry
-	100, // 31: openim.sdkws.PushMessages.notificationMsgs:type_name -> openim.sdkws.PushMessages.NotificationMsgsEntry
+	100, // 30: openim.sdkws.PushMessages.msgs:type_name -> openim.sdkws.PushMessages.MsgsEntry
+	101, // 31: openim.sdkws.PushMessages.notificationMsgs:type_name -> openim.sdkws.PushMessages.NotificationMsgsEntry
 	1,   // 32: openim.sdkws.GroupCreatedTips.group:type_name -> openim.sdkws.GroupInfo
 	10,  // 33: openim.sdkws.GroupCreatedTips.opUser:type_name -> openim.sdkws.GroupMemberFullInfo
 	10,  // 34: openim.sdkws.GroupCreatedTips.memberList:type_name -> openim.sdkws.GroupMemberFullInfo
@@ -8490,46 +8557,48 @@ var file_sdkws_sdkws_proto_depIdxs = []int32{
 	10,  // 65: openim.sdkws.MemberEnterTips.entrantUser:type_name -> openim.sdkws.GroupMemberFullInfo
 	1,   // 66: openim.sdkws.GroupDismissedTips.group:type_name -> openim.sdkws.GroupInfo
 	10,  // 67: openim.sdkws.GroupDismissedTips.opUser:type_name -> openim.sdkws.GroupMemberFullInfo
-	1,   // 68: openim.sdkws.GroupMemberMutedTips.group:type_name -> openim.sdkws.GroupInfo
-	10,  // 69: openim.sdkws.GroupMemberMutedTips.opUser:type_name -> openim.sdkws.GroupMemberFullInfo
-	10,  // 70: openim.sdkws.GroupMemberMutedTips.mutedUser:type_name -> openim.sdkws.GroupMemberFullInfo
-	1,   // 71: openim.sdkws.GroupMemberCancelMutedTips.group:type_name -> openim.sdkws.GroupInfo
-	10,  // 72: openim.sdkws.GroupMemberCancelMutedTips.opUser:type_name -> openim.sdkws.GroupMemberFullInfo
-	10,  // 73: openim.sdkws.GroupMemberCancelMutedTips.mutedUser:type_name -> openim.sdkws.GroupMemberFullInfo
-	1,   // 74: openim.sdkws.GroupMutedTips.group:type_name -> openim.sdkws.GroupInfo
-	10,  // 75: openim.sdkws.GroupMutedTips.opUser:type_name -> openim.sdkws.GroupMemberFullInfo
-	1,   // 76: openim.sdkws.GroupCancelMutedTips.group:type_name -> openim.sdkws.GroupInfo
-	10,  // 77: openim.sdkws.GroupCancelMutedTips.opUser:type_name -> openim.sdkws.GroupMemberFullInfo
-	1,   // 78: openim.sdkws.GroupMemberInfoSetTips.group:type_name -> openim.sdkws.GroupInfo
-	10,  // 79: openim.sdkws.GroupMemberInfoSetTips.opUser:type_name -> openim.sdkws.GroupMemberFullInfo
-	10,  // 80: openim.sdkws.GroupMemberInfoSetTips.changedUser:type_name -> openim.sdkws.GroupMemberFullInfo
-	48,  // 81: openim.sdkws.FriendApplicationTips.fromToUserID:type_name -> openim.sdkws.FromToUserID
-	17,  // 82: openim.sdkws.FriendApplicationTips.request:type_name -> openim.sdkws.FriendRequest
-	48,  // 83: openim.sdkws.FriendApplicationApprovedTips.fromToUserID:type_name -> openim.sdkws.FromToUserID
-	17,  // 84: openim.sdkws.FriendApplicationApprovedTips.request:type_name -> openim.sdkws.FriendRequest
-	48,  // 85: openim.sdkws.FriendApplicationRejectedTips.fromToUserID:type_name -> openim.sdkws.FromToUserID
-	17,  // 86: openim.sdkws.FriendApplicationRejectedTips.request:type_name -> openim.sdkws.FriendRequest
-	14,  // 87: openim.sdkws.FriendAddedTips.friend:type_name -> openim.sdkws.FriendInfo
-	11,  // 88: openim.sdkws.FriendAddedTips.opUser:type_name -> openim.sdkws.PublicUserInfo
-	48,  // 89: openim.sdkws.FriendDeletedTips.fromToUserID:type_name -> openim.sdkws.FromToUserID
-	48,  // 90: openim.sdkws.BlackAddedTips.fromToUserID:type_name -> openim.sdkws.FromToUserID
-	48,  // 91: openim.sdkws.BlackDeletedTips.fromToUserID:type_name -> openim.sdkws.FromToUserID
-	48,  // 92: openim.sdkws.FriendInfoChangedTips.fromToUserID:type_name -> openim.sdkws.FromToUserID
-	74,  // 93: openim.sdkws.MarkAsReadTips.seqReadCounts:type_name -> openim.sdkws.SeqReadCount
-	48,  // 94: openim.sdkws.FriendsInfoUpdateTips.fromToUserID:type_name -> openim.sdkws.FromToUserID
-	80,  // 95: openim.sdkws.SubUserOnlineStatusTips.subscribers:type_name -> openim.sdkws.SubUserOnlineStatusElem
-	101, // 96: openim.sdkws.PresenceSettings.platformSettings:type_name -> openim.sdkws.PresenceSettings.PlatformSettingsEntry
-	86,  // 97: openim.sdkws.AppSettingsChangedTips.settings:type_name -> openim.sdkws.AppSettings
-	20,  // 98: openim.sdkws.PullMessageBySeqsResp.MsgsEntry.value:type_name -> openim.sdkws.PullMsgs
-	20,  // 99: openim.sdkws.PullMessageBySeqsResp.NotificationMsgsEntry.value:type_name -> openim.sdkws.PullMsgs
-	20,  // 100: openim.sdkws.PushMessages.MsgsEntry.value:type_name -> openim.sdkws.PullMsgs
-	20,  // 101: openim.sdkws.PushMessages.NotificationMsgsEntry.value:type_name -> openim.sdkws.PullMsgs
-	87,  // 102: openim.sdkws.PresenceSettings.PlatformSettingsEntry.value:type_name -> openim.sdkws.PlatformPresenceSetting
-	103, // [103:103] is the sub-list for method output_type
-	103, // [103:103] is the sub-list for method input_type
-	103, // [103:103] is the sub-list for extension type_name
-	103, // [103:103] is the sub-list for extension extendee
-	0,   // [0:103] is the sub-list for field type_name
+	1,   // 68: openim.sdkws.GroupBannedTips.group:type_name -> openim.sdkws.GroupInfo
+	10,  // 69: openim.sdkws.GroupBannedTips.opUser:type_name -> openim.sdkws.GroupMemberFullInfo
+	1,   // 70: openim.sdkws.GroupMemberMutedTips.group:type_name -> openim.sdkws.GroupInfo
+	10,  // 71: openim.sdkws.GroupMemberMutedTips.opUser:type_name -> openim.sdkws.GroupMemberFullInfo
+	10,  // 72: openim.sdkws.GroupMemberMutedTips.mutedUser:type_name -> openim.sdkws.GroupMemberFullInfo
+	1,   // 73: openim.sdkws.GroupMemberCancelMutedTips.group:type_name -> openim.sdkws.GroupInfo
+	10,  // 74: openim.sdkws.GroupMemberCancelMutedTips.opUser:type_name -> openim.sdkws.GroupMemberFullInfo
+	10,  // 75: openim.sdkws.GroupMemberCancelMutedTips.mutedUser:type_name -> openim.sdkws.GroupMemberFullInfo
+	1,   // 76: openim.sdkws.GroupMutedTips.group:type_name -> openim.sdkws.GroupInfo
+	10,  // 77: openim.sdkws.GroupMutedTips.opUser:type_name -> openim.sdkws.GroupMemberFullInfo
+	1,   // 78: openim.sdkws.GroupCancelMutedTips.group:type_name -> openim.sdkws.GroupInfo
+	10,  // 79: openim.sdkws.GroupCancelMutedTips.opUser:type_name -> openim.sdkws.GroupMemberFullInfo
+	1,   // 80: openim.sdkws.GroupMemberInfoSetTips.group:type_name -> openim.sdkws.GroupInfo
+	10,  // 81: openim.sdkws.GroupMemberInfoSetTips.opUser:type_name -> openim.sdkws.GroupMemberFullInfo
+	10,  // 82: openim.sdkws.GroupMemberInfoSetTips.changedUser:type_name -> openim.sdkws.GroupMemberFullInfo
+	49,  // 83: openim.sdkws.FriendApplicationTips.fromToUserID:type_name -> openim.sdkws.FromToUserID
+	17,  // 84: openim.sdkws.FriendApplicationTips.request:type_name -> openim.sdkws.FriendRequest
+	49,  // 85: openim.sdkws.FriendApplicationApprovedTips.fromToUserID:type_name -> openim.sdkws.FromToUserID
+	17,  // 86: openim.sdkws.FriendApplicationApprovedTips.request:type_name -> openim.sdkws.FriendRequest
+	49,  // 87: openim.sdkws.FriendApplicationRejectedTips.fromToUserID:type_name -> openim.sdkws.FromToUserID
+	17,  // 88: openim.sdkws.FriendApplicationRejectedTips.request:type_name -> openim.sdkws.FriendRequest
+	14,  // 89: openim.sdkws.FriendAddedTips.friend:type_name -> openim.sdkws.FriendInfo
+	11,  // 90: openim.sdkws.FriendAddedTips.opUser:type_name -> openim.sdkws.PublicUserInfo
+	49,  // 91: openim.sdkws.FriendDeletedTips.fromToUserID:type_name -> openim.sdkws.FromToUserID
+	49,  // 92: openim.sdkws.BlackAddedTips.fromToUserID:type_name -> openim.sdkws.FromToUserID
+	49,  // 93: openim.sdkws.BlackDeletedTips.fromToUserID:type_name -> openim.sdkws.FromToUserID
+	49,  // 94: openim.sdkws.FriendInfoChangedTips.fromToUserID:type_name -> openim.sdkws.FromToUserID
+	75,  // 95: openim.sdkws.MarkAsReadTips.seqReadCounts:type_name -> openim.sdkws.SeqReadCount
+	49,  // 96: openim.sdkws.FriendsInfoUpdateTips.fromToUserID:type_name -> openim.sdkws.FromToUserID
+	81,  // 97: openim.sdkws.SubUserOnlineStatusTips.subscribers:type_name -> openim.sdkws.SubUserOnlineStatusElem
+	102, // 98: openim.sdkws.PresenceSettings.platformSettings:type_name -> openim.sdkws.PresenceSettings.PlatformSettingsEntry
+	87,  // 99: openim.sdkws.AppSettingsChangedTips.settings:type_name -> openim.sdkws.AppSettings
+	20,  // 100: openim.sdkws.PullMessageBySeqsResp.MsgsEntry.value:type_name -> openim.sdkws.PullMsgs
+	20,  // 101: openim.sdkws.PullMessageBySeqsResp.NotificationMsgsEntry.value:type_name -> openim.sdkws.PullMsgs
+	20,  // 102: openim.sdkws.PushMessages.MsgsEntry.value:type_name -> openim.sdkws.PullMsgs
+	20,  // 103: openim.sdkws.PushMessages.NotificationMsgsEntry.value:type_name -> openim.sdkws.PullMsgs
+	88,  // 104: openim.sdkws.PresenceSettings.PlatformSettingsEntry.value:type_name -> openim.sdkws.PlatformPresenceSetting
+	105, // [105:105] is the sub-list for method output_type
+	105, // [105:105] is the sub-list for method input_type
+	105, // [105:105] is the sub-list for extension type_name
+	105, // [105:105] is the sub-list for extension extendee
+	0,   // [0:105] is the sub-list for field type_name
 }
 
 func init() { file_sdkws_sdkws_proto_init() }
@@ -8538,16 +8607,16 @@ func file_sdkws_sdkws_proto_init() {
 		return
 	}
 	file_sdkws_sdkws_proto_msgTypes[24].OneofWrappers = []any{}
-	file_sdkws_sdkws_proto_msgTypes[85].OneofWrappers = []any{}
-	file_sdkws_sdkws_proto_msgTypes[87].OneofWrappers = []any{}
-	file_sdkws_sdkws_proto_msgTypes[91].OneofWrappers = []any{}
+	file_sdkws_sdkws_proto_msgTypes[86].OneofWrappers = []any{}
+	file_sdkws_sdkws_proto_msgTypes[88].OneofWrappers = []any{}
+	file_sdkws_sdkws_proto_msgTypes[92].OneofWrappers = []any{}
 	type x struct{}
 	out := protoimpl.TypeBuilder{
 		File: protoimpl.DescBuilder{
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_sdkws_sdkws_proto_rawDesc), len(file_sdkws_sdkws_proto_rawDesc)),
 			NumEnums:      1,
-			NumMessages:   101,
+			NumMessages:   102,
 			NumExtensions: 0,
 			NumServices:   0,
 		},

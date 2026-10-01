@@ -340,6 +340,19 @@ message CancelMuteGroupMemberReq {
 
 message CancelMuteGroupMemberResp {}
 
+// A platform operator bans a group: nobody, its owner included, may send,
+// change its settings or bring anyone in until the ban is lifted. IM
+// admins only.
+message BanGroupReq {
+  string groupID = 1;
+}
+message BanGroupResp {}
+
+message UnbanGroupReq {
+  string groupID = 1;
+}
+message UnbanGroupResp {}
+
 message MuteGroupReq {
   string groupID = 1;
 }
@@ -597,6 +610,8 @@ service group {
   rpc cancelMuteGroupMember(CancelMuteGroupMemberReq) returns (CancelMuteGroupMemberResp);
   // Mute a group
   rpc muteGroup(MuteGroupReq) returns (MuteGroupResp);
+  rpc banGroup(BanGroupReq) returns (BanGroupResp);
+  rpc unbanGroup(UnbanGroupReq) returns (UnbanGroupResp);
   // Unmute a group
   rpc cancelMuteGroup(CancelMuteGroupReq) returns (CancelMuteGroupResp);
 

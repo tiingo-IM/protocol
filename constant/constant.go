@@ -93,6 +93,9 @@ const (
 	GroupMemberSetToOrdinaryUserNotification = 1518
 	GroupInfoSetAnnouncementNotification     = 1519
 	GroupInfoSetNameNotification             = 1520
+	// A platform operator froze the group (Ban), or let it go again.
+	GroupBannedNotification   = 1521
+	GroupUnbannedNotification = 1522
 
 	//SignalingNotificationBegin = 1600
 	//SignalingNotification      = 1601
