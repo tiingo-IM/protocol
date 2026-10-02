@@ -149,9 +149,9 @@ func (x *RevokeMsgReq) Check() error {
 	if x.Seq < 1 {
 		return errors.New("seq is invalid")
 	}
-	if x.UserID == "" {
-		return errors.New("userID is empty")
-	}
+	// userID may be empty here: a platform operator recalls as the IM
+	// admin their token is, and the RPC fills it in from there. It still
+	// refuses an empty userID from anyone else.
 	return nil
 }
 
