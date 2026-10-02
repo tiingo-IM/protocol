@@ -1128,7 +1128,7 @@ message GroupCreationDefaults {
   // needVerification — constant.AllNeedVerification, or
   // ApplyNeedVerificationInviteDirectly when off.
   optional int32 needVerification = 2;
-  // Members can't add each other as friends from this group. Becomes
+  // Members can add each other as friends from this group. Becomes
   // applyMemberFriend, which is 1 allowed / 0 prohibited.
   optional int32 applyMemberFriend = 3;
   // The four below map straight onto their GroupInfo fields, which
