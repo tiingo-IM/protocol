@@ -103,6 +103,8 @@ const (
 	Msg_SendScheduledMsgNow_FullMethodName              = "/openim.msg.msg/SendScheduledMsgNow"
 	Msg_GetScheduledMsgs_FullMethodName                 = "/openim.msg.msg/GetScheduledMsgs"
 	Msg_CancelUserScheduledMsgs_FullMethodName          = "/openim.msg.msg/CancelUserScheduledMsgs"
+	Msg_OperatorSearchMessages_FullMethodName           = "/openim.msg.msg/OperatorSearchMessages"
+	Msg_GetConversationTimeline_FullMethodName          = "/openim.msg.msg/GetConversationTimeline"
 )
 
 // MsgClient is the client API for Msg service.
@@ -259,6 +261,10 @@ type MsgClient interface {
 	SendScheduledMsgNow(ctx context.Context, in *SendScheduledMsgNowReq, opts ...grpc.CallOption) (*SendScheduledMsgNowResp, error)
 	GetScheduledMsgs(ctx context.Context, in *GetScheduledMsgsReq, opts ...grpc.CallOption) (*GetScheduledMsgsResp, error)
 	CancelUserScheduledMsgs(ctx context.Context, in *CancelUserScheduledMsgsReq, opts ...grpc.CallOption) (*CancelUserScheduledMsgsResp, error)
+	// Message Audit, IM admins only: search every message, and read a
+	// conversation as it happened.
+	OperatorSearchMessages(ctx context.Context, in *OperatorSearchMessagesReq, opts ...grpc.CallOption) (*OperatorSearchMessagesResp, error)
+	GetConversationTimeline(ctx context.Context, in *GetConversationTimelineReq, opts ...grpc.CallOption) (*GetConversationTimelineResp, error)
 }
 
 type msgClient struct {
@@ -1099,6 +1105,26 @@ func (c *msgClient) CancelUserScheduledMsgs(ctx context.Context, in *CancelUserS
 	return out, nil
 }
 
+func (c *msgClient) OperatorSearchMessages(ctx context.Context, in *OperatorSearchMessagesReq, opts ...grpc.CallOption) (*OperatorSearchMessagesResp, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(OperatorSearchMessagesResp)
+	err := c.cc.Invoke(ctx, Msg_OperatorSearchMessages_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *msgClient) GetConversationTimeline(ctx context.Context, in *GetConversationTimelineReq, opts ...grpc.CallOption) (*GetConversationTimelineResp, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(GetConversationTimelineResp)
+	err := c.cc.Invoke(ctx, Msg_GetConversationTimeline_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // MsgServer is the server API for Msg service.
 // All implementations must embed UnimplementedMsgServer
 // for forward compatibility.
@@ -1253,6 +1279,10 @@ type MsgServer interface {
 	SendScheduledMsgNow(context.Context, *SendScheduledMsgNowReq) (*SendScheduledMsgNowResp, error)
 	GetScheduledMsgs(context.Context, *GetScheduledMsgsReq) (*GetScheduledMsgsResp, error)
 	CancelUserScheduledMsgs(context.Context, *CancelUserScheduledMsgsReq) (*CancelUserScheduledMsgsResp, error)
+	// Message Audit, IM admins only: search every message, and read a
+	// conversation as it happened.
+	OperatorSearchMessages(context.Context, *OperatorSearchMessagesReq) (*OperatorSearchMessagesResp, error)
+	GetConversationTimeline(context.Context, *GetConversationTimelineReq) (*GetConversationTimelineResp, error)
 	mustEmbedUnimplementedMsgServer()
 }
 
@@ -1511,6 +1541,12 @@ func (UnimplementedMsgServer) GetScheduledMsgs(context.Context, *GetScheduledMsg
 }
 func (UnimplementedMsgServer) CancelUserScheduledMsgs(context.Context, *CancelUserScheduledMsgsReq) (*CancelUserScheduledMsgsResp, error) {
 	return nil, status.Error(codes.Unimplemented, "method CancelUserScheduledMsgs not implemented")
+}
+func (UnimplementedMsgServer) OperatorSearchMessages(context.Context, *OperatorSearchMessagesReq) (*OperatorSearchMessagesResp, error) {
+	return nil, status.Error(codes.Unimplemented, "method OperatorSearchMessages not implemented")
+}
+func (UnimplementedMsgServer) GetConversationTimeline(context.Context, *GetConversationTimelineReq) (*GetConversationTimelineResp, error) {
+	return nil, status.Error(codes.Unimplemented, "method GetConversationTimeline not implemented")
 }
 func (UnimplementedMsgServer) mustEmbedUnimplementedMsgServer() {}
 func (UnimplementedMsgServer) testEmbeddedByValue()             {}
@@ -3027,6 +3063,42 @@ func _Msg_CancelUserScheduledMsgs_Handler(srv interface{}, ctx context.Context, 
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Msg_OperatorSearchMessages_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(OperatorSearchMessagesReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(MsgServer).OperatorSearchMessages(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Msg_OperatorSearchMessages_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(MsgServer).OperatorSearchMessages(ctx, req.(*OperatorSearchMessagesReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Msg_GetConversationTimeline_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetConversationTimelineReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(MsgServer).GetConversationTimeline(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Msg_GetConversationTimeline_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(MsgServer).GetConversationTimeline(ctx, req.(*GetConversationTimelineReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // Msg_ServiceDesc is the grpc.ServiceDesc for Msg service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -3365,6 +3437,14 @@ var Msg_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "CancelUserScheduledMsgs",
 			Handler:    _Msg_CancelUserScheduledMsgs_Handler,
+		},
+		{
+			MethodName: "OperatorSearchMessages",
+			Handler:    _Msg_OperatorSearchMessages_Handler,
+		},
+		{
+			MethodName: "GetConversationTimeline",
+			Handler:    _Msg_GetConversationTimeline_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

@@ -1369,6 +1369,84 @@ message CallWebhookReq {
 }
 message CallWebhookResp {}
 
+// ---- Message Audit (chat's admin console), IM admins only ----
+
+// Where a page of operator search results ends: results are ordered by
+// (sendTime, id) newest first, id being the index row's key, so the next
+// page starts strictly after this pair and neither skips nor repeats
+// messages sent in the same millisecond.
+message OperatorSearchCursor {
+  int64 sendTime = 1;
+  int64 id = 2;
+}
+
+// OperatorSearchMessagesReq searches every message on the platform.
+// Keywords are optional. A query must name a sender, a receiver, a group
+// or a conversation, or else span at most 30 days (startTime..endTime);
+// anything wider is refused.
+message OperatorSearchMessagesReq {
+  repeated string keywords = 1;
+  string sendID = 2;
+  // The user a one-to-one message was sent to.
+  string recvID = 3;
+  string groupID = 4;
+  string conversationID = 5;
+  // 0 any, else constant.SingleChatType / ReadGroupChatType.
+  int32 sessionType = 6;
+  repeated int32 contentTypes = 7;
+  // Milliseconds, inclusive. 0 is unbounded on that side.
+  int64 startTime = 8;
+  int64 endTime = 9;
+  // Unset for the first page.
+  OperatorSearchCursor cursor = 10;
+  // 20 to 50; anything outside is brought within.
+  int32 limit = 11;
+}
+
+// OperatorMessage is a message as it is stored, for an operator: no
+// reader's floor, deletions or recall applied. A recalled message keeps
+// its content and says who recalled it; a seq deleted from storage is a
+// placeholder with deleted set and no msg content.
+message OperatorMessage {
+  string conversationID = 1;
+  int64 seq = 2;
+  sdkws.MsgData msg = 3;
+  bool revoked = 4;
+  string revokerUserID = 5;
+  int32 revokerRole = 6;
+  int64 revokeTime = 7;
+  bool deleted = 8;
+}
+
+message OperatorSearchMessagesResp {
+  repeated OperatorMessage messages = 1;
+  // Where the next page starts; unset with isEnd.
+  OperatorSearchCursor next = 2;
+  bool isEnd = 3;
+}
+
+// GetConversationTimelineReq reads a window of one conversation as it
+// happened. With aroundSeq the window is centred on it; with afterSeq it
+// is the count seqs after it (newer), with beforeSeq the count before it
+// (older). Exactly one of the three.
+message GetConversationTimelineReq {
+  string conversationID = 1;
+  int64 aroundSeq = 2;
+  int64 afterSeq = 3;
+  int64 beforeSeq = 4;
+  // At most 100; 0 means 40.
+  int32 count = 5;
+}
+
+message GetConversationTimelineResp {
+  // Oldest first.
+  repeated OperatorMessage messages = 1;
+  // The conversation's lowest stored seq (below it retention removed
+  // everything) and its newest.
+  int64 minSeq = 2;
+  int64 maxSeq = 3;
+}
+
 service msg {
   // Get min and max seq (including the user and specified groups)
   rpc GetMaxSeq(sdkws.GetMaxSeqReq) returns (sdkws.GetMaxSeqResp);
@@ -1534,4 +1612,9 @@ service msg {
   rpc SendScheduledMsgNow(SendScheduledMsgNowReq) returns (SendScheduledMsgNowResp);
   rpc GetScheduledMsgs(GetScheduledMsgsReq) returns (GetScheduledMsgsResp);
   rpc CancelUserScheduledMsgs(CancelUserScheduledMsgsReq) returns (CancelUserScheduledMsgsResp);
+
+  // Message Audit, IM admins only: search every message, and read a
+  // conversation as it happened.
+  rpc OperatorSearchMessages(OperatorSearchMessagesReq) returns (OperatorSearchMessagesResp);
+  rpc GetConversationTimeline(GetConversationTimelineReq) returns (GetConversationTimelineResp);
 }
