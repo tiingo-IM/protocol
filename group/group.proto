@@ -282,12 +282,30 @@ message CMSGroup {
   openim.sdkws.GroupInfo groupInfo = 1;
   string groupOwnerUserName = 2;
   string groupOwnerUserID = 3;
+  // When the group was banned, in ms; 0 when it is not banned.
+  int64 bannedAt = 4;
+  // When and by whom it was dismissed; 0 and "" when it is not.
+  int64 dismissedAt = 5;
+  string dismissedBy = 6;
+  // Dismissed by a platform operator, members kept: only such a group can
+  // be restored.
+  bool dismissedByOperator = 7;
+  // When and by whom it was deleted; 0 and "" when it is not.
+  int64 deletedAt = 8;
+  string deletedBy = 9;
 }
 
 message GetGroupsReq {
   openim.sdkws.RequestPagination pagination = 1;
+  // Group names containing this, matched literally.
   string groupName = 2;
+  // One group, whatever its status; the other filters are then ignored.
   string groupID = 3;
+  // Only the groups this user owns.
+  string ownerUserID = 4;
+  // Only groups with these stored statuses (constant.GroupOk, ...);
+  // empty is every group but the dismissed ones.
+  repeated int32 statuses = 5;
 }
 
 message GetGroupsResp {
@@ -314,6 +332,10 @@ message DismissGroupReq {
   string groupID = 1;
   bool deleteMember = 2;
   optional bool sendMessage = 3;
+  // A platform operator's dismissal (IM admins only): the members stay
+  // and are told in the group's chat, and the group can be restored.
+  // deleteMember and sendMessage are ignored.
+  bool keepMembers = 4;
 }
 
 message DismissGroupResp {}
@@ -332,6 +354,34 @@ message CancelMuteGroupMemberReq {
 }
 
 message CancelMuteGroupMemberResp {}
+
+// A platform operator bans a group: nobody, its owner included, may send,
+// change its settings or bring anyone in until the ban is lifted. IM
+// admins only.
+message BanGroupReq {
+  string groupID = 1;
+}
+message BanGroupResp {}
+
+message UnbanGroupReq {
+  string groupID = 1;
+}
+message UnbanGroupResp {}
+
+// Restores a group a platform operator dismissed, to the status it had
+// before (running or banned); its members get it back. IM admins only.
+message RestoreGroupReq {
+  string groupID = 1;
+}
+message RestoreGroupResp {}
+
+// Deletes a group for the platform (soft): it leaves every list and
+// refuses everything, its members' apps drop it, and its data stays
+// until retention removes it. IM admins only.
+message DeleteGroupReq {
+  string groupID = 1;
+}
+message DeleteGroupResp {}
 
 message MuteGroupReq {
   string groupID = 1;
@@ -595,6 +645,10 @@ service group {
   rpc cancelMuteGroupMember(CancelMuteGroupMemberReq) returns (CancelMuteGroupMemberResp);
   // Mute a group
   rpc muteGroup(MuteGroupReq) returns (MuteGroupResp);
+  rpc banGroup(BanGroupReq) returns (BanGroupResp);
+  rpc unbanGroup(UnbanGroupReq) returns (UnbanGroupResp);
+  rpc restoreGroup(RestoreGroupReq) returns (RestoreGroupResp);
+  rpc deleteGroup(DeleteGroupReq) returns (DeleteGroupResp);
   // Unmute a group
   rpc cancelMuteGroup(CancelMuteGroupReq) returns (CancelMuteGroupResp);
 

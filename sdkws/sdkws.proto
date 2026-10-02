@@ -603,6 +603,30 @@ message GroupDismissedTips {
   int64 operationTime = 3;
 }
 
+// A platform operator banned the group (GroupBannedNotification) or lifted
+// the ban (GroupUnbannedNotification). group carries the status after it.
+message GroupBannedTips {
+  GroupInfo group = 1;
+  GroupMemberFullInfo opUser = 2;
+  int64 operationTime = 3;
+}
+
+// A platform operator restored a group it had dismissed
+// (GroupRestoredNotification). group carries the status after it.
+message GroupRestoredTips {
+  GroupInfo group = 1;
+  GroupMemberFullInfo opUser = 2;
+  int64 operationTime = 3;
+}
+
+// A platform operator deleted the group (GroupDeletedNotification):
+// clients drop it and its conversation.
+message GroupDeletedTips {
+  GroupInfo group = 1;
+  GroupMemberFullInfo opUser = 2;
+  int64 operationTime = 3;
+}
+
 message GroupMemberMutedTips {
   GroupInfo group = 1;
   GroupMemberFullInfo opUser = 2;
