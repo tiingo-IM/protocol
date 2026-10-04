@@ -28,6 +28,9 @@ const (
 	Third_InitiateFormData_FullMethodName        = "/openim.third.third/InitiateFormData"
 	Third_CompleteFormData_FullMethodName        = "/openim.third.third/CompleteFormData"
 	Third_DeleteOutdatedData_FullMethodName      = "/openim.third.third/DeleteOutdatedData"
+	Third_SealObjects_FullMethodName             = "/openim.third.third/SealObjects"
+	Third_SealedObjectURL_FullMethodName         = "/openim.third.third/SealedObjectURL"
+	Third_DeleteSealedObjects_FullMethodName     = "/openim.third.third/DeleteSealedObjects"
 	Third_FcmUpdateToken_FullMethodName          = "/openim.third.third/FcmUpdateToken"
 	Third_UpdatePushToken_FullMethodName         = "/openim.third.third/UpdatePushToken"
 	Third_SetAppBadge_FullMethodName             = "/openim.third.third/SetAppBadge"
@@ -49,6 +52,10 @@ type ThirdClient interface {
 	InitiateFormData(ctx context.Context, in *InitiateFormDataReq, opts ...grpc.CallOption) (*InitiateFormDataResp, error)
 	CompleteFormData(ctx context.Context, in *CompleteFormDataReq, opts ...grpc.CallOption) (*CompleteFormDataResp, error)
 	DeleteOutdatedData(ctx context.Context, in *DeleteOutdatedDataReq, opts ...grpc.CallOption) (*DeleteOutdatedDataResp, error)
+	// Sealed objects — see SealObjectsReq.
+	SealObjects(ctx context.Context, in *SealObjectsReq, opts ...grpc.CallOption) (*SealObjectsResp, error)
+	SealedObjectURL(ctx context.Context, in *SealedObjectURLReq, opts ...grpc.CallOption) (*SealedObjectURLResp, error)
+	DeleteSealedObjects(ctx context.Context, in *DeleteSealedObjectsReq, opts ...grpc.CallOption) (*DeleteSealedObjectsResp, error)
 	FcmUpdateToken(ctx context.Context, in *FcmUpdateTokenReq, opts ...grpc.CallOption) (*FcmUpdateTokenResp, error)
 	UpdatePushToken(ctx context.Context, in *UpdatePushTokenReq, opts ...grpc.CallOption) (*UpdatePushTokenResp, error)
 	SetAppBadge(ctx context.Context, in *SetAppBadgeReq, opts ...grpc.CallOption) (*SetAppBadgeResp, error)
@@ -156,6 +163,36 @@ func (c *thirdClient) DeleteOutdatedData(ctx context.Context, in *DeleteOutdated
 	return out, nil
 }
 
+func (c *thirdClient) SealObjects(ctx context.Context, in *SealObjectsReq, opts ...grpc.CallOption) (*SealObjectsResp, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(SealObjectsResp)
+	err := c.cc.Invoke(ctx, Third_SealObjects_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *thirdClient) SealedObjectURL(ctx context.Context, in *SealedObjectURLReq, opts ...grpc.CallOption) (*SealedObjectURLResp, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(SealedObjectURLResp)
+	err := c.cc.Invoke(ctx, Third_SealedObjectURL_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *thirdClient) DeleteSealedObjects(ctx context.Context, in *DeleteSealedObjectsReq, opts ...grpc.CallOption) (*DeleteSealedObjectsResp, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(DeleteSealedObjectsResp)
+	err := c.cc.Invoke(ctx, Third_DeleteSealedObjects_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 func (c *thirdClient) FcmUpdateToken(ctx context.Context, in *FcmUpdateTokenReq, opts ...grpc.CallOption) (*FcmUpdateTokenResp, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(FcmUpdateTokenResp)
@@ -229,6 +266,10 @@ type ThirdServer interface {
 	InitiateFormData(context.Context, *InitiateFormDataReq) (*InitiateFormDataResp, error)
 	CompleteFormData(context.Context, *CompleteFormDataReq) (*CompleteFormDataResp, error)
 	DeleteOutdatedData(context.Context, *DeleteOutdatedDataReq) (*DeleteOutdatedDataResp, error)
+	// Sealed objects — see SealObjectsReq.
+	SealObjects(context.Context, *SealObjectsReq) (*SealObjectsResp, error)
+	SealedObjectURL(context.Context, *SealedObjectURLReq) (*SealedObjectURLResp, error)
+	DeleteSealedObjects(context.Context, *DeleteSealedObjectsReq) (*DeleteSealedObjectsResp, error)
 	FcmUpdateToken(context.Context, *FcmUpdateTokenReq) (*FcmUpdateTokenResp, error)
 	UpdatePushToken(context.Context, *UpdatePushTokenReq) (*UpdatePushTokenResp, error)
 	SetAppBadge(context.Context, *SetAppBadgeReq) (*SetAppBadgeResp, error)
@@ -272,6 +313,15 @@ func (UnimplementedThirdServer) CompleteFormData(context.Context, *CompleteFormD
 }
 func (UnimplementedThirdServer) DeleteOutdatedData(context.Context, *DeleteOutdatedDataReq) (*DeleteOutdatedDataResp, error) {
 	return nil, status.Error(codes.Unimplemented, "method DeleteOutdatedData not implemented")
+}
+func (UnimplementedThirdServer) SealObjects(context.Context, *SealObjectsReq) (*SealObjectsResp, error) {
+	return nil, status.Error(codes.Unimplemented, "method SealObjects not implemented")
+}
+func (UnimplementedThirdServer) SealedObjectURL(context.Context, *SealedObjectURLReq) (*SealedObjectURLResp, error) {
+	return nil, status.Error(codes.Unimplemented, "method SealedObjectURL not implemented")
+}
+func (UnimplementedThirdServer) DeleteSealedObjects(context.Context, *DeleteSealedObjectsReq) (*DeleteSealedObjectsResp, error) {
+	return nil, status.Error(codes.Unimplemented, "method DeleteSealedObjects not implemented")
 }
 func (UnimplementedThirdServer) FcmUpdateToken(context.Context, *FcmUpdateTokenReq) (*FcmUpdateTokenResp, error) {
 	return nil, status.Error(codes.Unimplemented, "method FcmUpdateToken not implemented")
@@ -474,6 +524,60 @@ func _Third_DeleteOutdatedData_Handler(srv interface{}, ctx context.Context, dec
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Third_SealObjects_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(SealObjectsReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ThirdServer).SealObjects(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Third_SealObjects_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ThirdServer).SealObjects(ctx, req.(*SealObjectsReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Third_SealedObjectURL_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(SealedObjectURLReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ThirdServer).SealedObjectURL(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Third_SealedObjectURL_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ThirdServer).SealedObjectURL(ctx, req.(*SealedObjectURLReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Third_DeleteSealedObjects_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(DeleteSealedObjectsReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ThirdServer).DeleteSealedObjects(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Third_DeleteSealedObjects_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ThirdServer).DeleteSealedObjects(ctx, req.(*DeleteSealedObjectsReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 func _Third_FcmUpdateToken_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(FcmUpdateTokenReq)
 	if err := dec(in); err != nil {
@@ -624,6 +728,18 @@ var Third_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "DeleteOutdatedData",
 			Handler:    _Third_DeleteOutdatedData_Handler,
+		},
+		{
+			MethodName: "SealObjects",
+			Handler:    _Third_SealObjects_Handler,
+		},
+		{
+			MethodName: "SealedObjectURL",
+			Handler:    _Third_SealedObjectURL_Handler,
+		},
+		{
+			MethodName: "DeleteSealedObjects",
+			Handler:    _Third_DeleteSealedObjects_Handler,
 		},
 		{
 			MethodName: "FcmUpdateToken",

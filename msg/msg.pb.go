@@ -8875,6 +8875,251 @@ func (x *EditMsgResp) GetContentType() int32 {
 	return 0
 }
 
+// OpenViewOnceReq opens a View once ("Xem một lần") message: a picture,
+// video or voice message its recipient may open only once (ADR 0006).
+// Such a message carries no media URL; this is the only way to one.
+//
+// Only the recipient may call it. The first call records when and on
+// which platform it was opened (which also starts a countdown) and tells
+// both sides; a later call from that same platform is answered again only
+// while a countdown is running. Anyone else — the sender, the recipient's
+// other devices, anyone once it is gone — is refused (1441, 1442).
+type OpenViewOnceReq struct {
+	state          protoimpl.MessageState `protogen:"open.v1"`
+	ConversationID string                 `protobuf:"bytes,1,opt,name=conversationID,proto3" json:"conversationID"`
+	Seq            int64                  `protobuf:"varint,2,opt,name=seq,proto3" json:"seq"`
+	unknownFields  protoimpl.UnknownFields
+	sizeCache      protoimpl.SizeCache
+}
+
+func (x *OpenViewOnceReq) Reset() {
+	*x = OpenViewOnceReq{}
+	mi := &file_msg_msg_proto_msgTypes[159]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *OpenViewOnceReq) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*OpenViewOnceReq) ProtoMessage() {}
+
+func (x *OpenViewOnceReq) ProtoReflect() protoreflect.Message {
+	mi := &file_msg_msg_proto_msgTypes[159]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use OpenViewOnceReq.ProtoReflect.Descriptor instead.
+func (*OpenViewOnceReq) Descriptor() ([]byte, []int) {
+	return file_msg_msg_proto_rawDescGZIP(), []int{159}
+}
+
+func (x *OpenViewOnceReq) GetConversationID() string {
+	if x != nil {
+		return x.ConversationID
+	}
+	return ""
+}
+
+func (x *OpenViewOnceReq) GetSeq() int64 {
+	if x != nil {
+		return x.Seq
+	}
+	return 0
+}
+
+type OpenViewOnceResp struct {
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// The media, signed for about a minute rather than storage's usual
+	// seven days.
+	Url string `protobuf:"bytes,1,opt,name=url,proto3" json:"url"`
+	// A video's cover image, signed the same way; "" for anything else.
+	CoverURL string `protobuf:"bytes,2,opt,name=coverURL,proto3" json:"coverURL"`
+	// Unix ms after which url and coverURL stop working.
+	UrlExpireTime int64 `protobuf:"varint,3,opt,name=urlExpireTime,proto3" json:"urlExpireTime"`
+	// 0: gone when closed. Otherwise the countdown, in seconds.
+	Mode int32 `protobuf:"varint,4,opt,name=mode,proto3" json:"mode"`
+	// Unix ms by which it is gone whatever the client does: the end of the
+	// countdown, or for mode 0 the longest it may stay open.
+	Deadline int64 `protobuf:"varint,5,opt,name=deadline,proto3" json:"deadline"`
+	// The server's clock when it answered, Unix ms. A client counts down
+	// from deadline - serverTime, never from its own clock.
+	ServerTime    int64 `protobuf:"varint,6,opt,name=serverTime,proto3" json:"serverTime"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *OpenViewOnceResp) Reset() {
+	*x = OpenViewOnceResp{}
+	mi := &file_msg_msg_proto_msgTypes[160]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *OpenViewOnceResp) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*OpenViewOnceResp) ProtoMessage() {}
+
+func (x *OpenViewOnceResp) ProtoReflect() protoreflect.Message {
+	mi := &file_msg_msg_proto_msgTypes[160]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use OpenViewOnceResp.ProtoReflect.Descriptor instead.
+func (*OpenViewOnceResp) Descriptor() ([]byte, []int) {
+	return file_msg_msg_proto_rawDescGZIP(), []int{160}
+}
+
+func (x *OpenViewOnceResp) GetUrl() string {
+	if x != nil {
+		return x.Url
+	}
+	return ""
+}
+
+func (x *OpenViewOnceResp) GetCoverURL() string {
+	if x != nil {
+		return x.CoverURL
+	}
+	return ""
+}
+
+func (x *OpenViewOnceResp) GetUrlExpireTime() int64 {
+	if x != nil {
+		return x.UrlExpireTime
+	}
+	return 0
+}
+
+func (x *OpenViewOnceResp) GetMode() int32 {
+	if x != nil {
+		return x.Mode
+	}
+	return 0
+}
+
+func (x *OpenViewOnceResp) GetDeadline() int64 {
+	if x != nil {
+		return x.Deadline
+	}
+	return 0
+}
+
+func (x *OpenViewOnceResp) GetServerTime() int64 {
+	if x != nil {
+		return x.ServerTime
+	}
+	return 0
+}
+
+// CloseViewOnceReq tells the server the recipient closed a View once
+// message on the device that opened it. In mode 0 that is the end of it,
+// for both sides; during a countdown it changes nothing.
+type CloseViewOnceReq struct {
+	state          protoimpl.MessageState `protogen:"open.v1"`
+	ConversationID string                 `protobuf:"bytes,1,opt,name=conversationID,proto3" json:"conversationID"`
+	Seq            int64                  `protobuf:"varint,2,opt,name=seq,proto3" json:"seq"`
+	unknownFields  protoimpl.UnknownFields
+	sizeCache      protoimpl.SizeCache
+}
+
+func (x *CloseViewOnceReq) Reset() {
+	*x = CloseViewOnceReq{}
+	mi := &file_msg_msg_proto_msgTypes[161]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *CloseViewOnceReq) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*CloseViewOnceReq) ProtoMessage() {}
+
+func (x *CloseViewOnceReq) ProtoReflect() protoreflect.Message {
+	mi := &file_msg_msg_proto_msgTypes[161]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use CloseViewOnceReq.ProtoReflect.Descriptor instead.
+func (*CloseViewOnceReq) Descriptor() ([]byte, []int) {
+	return file_msg_msg_proto_rawDescGZIP(), []int{161}
+}
+
+func (x *CloseViewOnceReq) GetConversationID() string {
+	if x != nil {
+		return x.ConversationID
+	}
+	return ""
+}
+
+func (x *CloseViewOnceReq) GetSeq() int64 {
+	if x != nil {
+		return x.Seq
+	}
+	return 0
+}
+
+type CloseViewOnceResp struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *CloseViewOnceResp) Reset() {
+	*x = CloseViewOnceResp{}
+	mi := &file_msg_msg_proto_msgTypes[162]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *CloseViewOnceResp) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*CloseViewOnceResp) ProtoMessage() {}
+
+func (x *CloseViewOnceResp) ProtoReflect() protoreflect.Message {
+	mi := &file_msg_msg_proto_msgTypes[162]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use CloseViewOnceResp.ProtoReflect.Descriptor instead.
+func (*CloseViewOnceResp) Descriptor() ([]byte, []int) {
+	return file_msg_msg_proto_rawDescGZIP(), []int{162}
+}
+
 // GetMsgExtraVersionReq asks whether anything in a conversation's message
 // history has been changed in place since the caller last checked.
 //
@@ -8911,7 +9156,7 @@ type GetMsgExtraVersionReq struct {
 
 func (x *GetMsgExtraVersionReq) Reset() {
 	*x = GetMsgExtraVersionReq{}
-	mi := &file_msg_msg_proto_msgTypes[159]
+	mi := &file_msg_msg_proto_msgTypes[163]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -8923,7 +9168,7 @@ func (x *GetMsgExtraVersionReq) String() string {
 func (*GetMsgExtraVersionReq) ProtoMessage() {}
 
 func (x *GetMsgExtraVersionReq) ProtoReflect() protoreflect.Message {
-	mi := &file_msg_msg_proto_msgTypes[159]
+	mi := &file_msg_msg_proto_msgTypes[163]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -8936,7 +9181,7 @@ func (x *GetMsgExtraVersionReq) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetMsgExtraVersionReq.ProtoReflect.Descriptor instead.
 func (*GetMsgExtraVersionReq) Descriptor() ([]byte, []int) {
-	return file_msg_msg_proto_rawDescGZIP(), []int{159}
+	return file_msg_msg_proto_rawDescGZIP(), []int{163}
 }
 
 func (x *GetMsgExtraVersionReq) GetUserID() string {
@@ -8965,7 +9210,7 @@ type GetMsgExtraVersionResp struct {
 
 func (x *GetMsgExtraVersionResp) Reset() {
 	*x = GetMsgExtraVersionResp{}
-	mi := &file_msg_msg_proto_msgTypes[160]
+	mi := &file_msg_msg_proto_msgTypes[164]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -8977,7 +9222,7 @@ func (x *GetMsgExtraVersionResp) String() string {
 func (*GetMsgExtraVersionResp) ProtoMessage() {}
 
 func (x *GetMsgExtraVersionResp) ProtoReflect() protoreflect.Message {
-	mi := &file_msg_msg_proto_msgTypes[160]
+	mi := &file_msg_msg_proto_msgTypes[164]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -8990,7 +9235,7 @@ func (x *GetMsgExtraVersionResp) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetMsgExtraVersionResp.ProtoReflect.Descriptor instead.
 func (*GetMsgExtraVersionResp) Descriptor() ([]byte, []int) {
-	return file_msg_msg_proto_rawDescGZIP(), []int{160}
+	return file_msg_msg_proto_rawDescGZIP(), []int{164}
 }
 
 func (x *GetMsgExtraVersionResp) GetVersion() int64 {
@@ -9016,7 +9261,7 @@ type GetMsgExtraVersionsReq struct {
 
 func (x *GetMsgExtraVersionsReq) Reset() {
 	*x = GetMsgExtraVersionsReq{}
-	mi := &file_msg_msg_proto_msgTypes[161]
+	mi := &file_msg_msg_proto_msgTypes[165]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -9028,7 +9273,7 @@ func (x *GetMsgExtraVersionsReq) String() string {
 func (*GetMsgExtraVersionsReq) ProtoMessage() {}
 
 func (x *GetMsgExtraVersionsReq) ProtoReflect() protoreflect.Message {
-	mi := &file_msg_msg_proto_msgTypes[161]
+	mi := &file_msg_msg_proto_msgTypes[165]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -9041,7 +9286,7 @@ func (x *GetMsgExtraVersionsReq) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetMsgExtraVersionsReq.ProtoReflect.Descriptor instead.
 func (*GetMsgExtraVersionsReq) Descriptor() ([]byte, []int) {
-	return file_msg_msg_proto_rawDescGZIP(), []int{161}
+	return file_msg_msg_proto_rawDescGZIP(), []int{165}
 }
 
 func (x *GetMsgExtraVersionsReq) GetUserID() string {
@@ -9073,7 +9318,7 @@ type GetMsgExtraVersionsResp struct {
 
 func (x *GetMsgExtraVersionsResp) Reset() {
 	*x = GetMsgExtraVersionsResp{}
-	mi := &file_msg_msg_proto_msgTypes[162]
+	mi := &file_msg_msg_proto_msgTypes[166]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -9085,7 +9330,7 @@ func (x *GetMsgExtraVersionsResp) String() string {
 func (*GetMsgExtraVersionsResp) ProtoMessage() {}
 
 func (x *GetMsgExtraVersionsResp) ProtoReflect() protoreflect.Message {
-	mi := &file_msg_msg_proto_msgTypes[162]
+	mi := &file_msg_msg_proto_msgTypes[166]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -9098,7 +9343,7 @@ func (x *GetMsgExtraVersionsResp) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetMsgExtraVersionsResp.ProtoReflect.Descriptor instead.
 func (*GetMsgExtraVersionsResp) Descriptor() ([]byte, []int) {
-	return file_msg_msg_proto_rawDescGZIP(), []int{162}
+	return file_msg_msg_proto_rawDescGZIP(), []int{166}
 }
 
 func (x *GetMsgExtraVersionsResp) GetVersions() map[string]int64 {
@@ -9133,7 +9378,7 @@ type ScheduledMsgRecurrence struct {
 
 func (x *ScheduledMsgRecurrence) Reset() {
 	*x = ScheduledMsgRecurrence{}
-	mi := &file_msg_msg_proto_msgTypes[163]
+	mi := &file_msg_msg_proto_msgTypes[167]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -9145,7 +9390,7 @@ func (x *ScheduledMsgRecurrence) String() string {
 func (*ScheduledMsgRecurrence) ProtoMessage() {}
 
 func (x *ScheduledMsgRecurrence) ProtoReflect() protoreflect.Message {
-	mi := &file_msg_msg_proto_msgTypes[163]
+	mi := &file_msg_msg_proto_msgTypes[167]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -9158,7 +9403,7 @@ func (x *ScheduledMsgRecurrence) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ScheduledMsgRecurrence.ProtoReflect.Descriptor instead.
 func (*ScheduledMsgRecurrence) Descriptor() ([]byte, []int) {
-	return file_msg_msg_proto_rawDescGZIP(), []int{163}
+	return file_msg_msg_proto_rawDescGZIP(), []int{167}
 }
 
 func (x *ScheduledMsgRecurrence) GetFrequency() int32 {
@@ -9240,7 +9485,7 @@ type ScheduledMsgSchedule struct {
 
 func (x *ScheduledMsgSchedule) Reset() {
 	*x = ScheduledMsgSchedule{}
-	mi := &file_msg_msg_proto_msgTypes[164]
+	mi := &file_msg_msg_proto_msgTypes[168]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -9252,7 +9497,7 @@ func (x *ScheduledMsgSchedule) String() string {
 func (*ScheduledMsgSchedule) ProtoMessage() {}
 
 func (x *ScheduledMsgSchedule) ProtoReflect() protoreflect.Message {
-	mi := &file_msg_msg_proto_msgTypes[164]
+	mi := &file_msg_msg_proto_msgTypes[168]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -9265,7 +9510,7 @@ func (x *ScheduledMsgSchedule) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ScheduledMsgSchedule.ProtoReflect.Descriptor instead.
 func (*ScheduledMsgSchedule) Descriptor() ([]byte, []int) {
-	return file_msg_msg_proto_rawDescGZIP(), []int{164}
+	return file_msg_msg_proto_rawDescGZIP(), []int{168}
 }
 
 func (x *ScheduledMsgSchedule) GetSendAt() int64 {
@@ -9325,7 +9570,7 @@ type ScheduledMsg struct {
 
 func (x *ScheduledMsg) Reset() {
 	*x = ScheduledMsg{}
-	mi := &file_msg_msg_proto_msgTypes[165]
+	mi := &file_msg_msg_proto_msgTypes[169]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -9337,7 +9582,7 @@ func (x *ScheduledMsg) String() string {
 func (*ScheduledMsg) ProtoMessage() {}
 
 func (x *ScheduledMsg) ProtoReflect() protoreflect.Message {
-	mi := &file_msg_msg_proto_msgTypes[165]
+	mi := &file_msg_msg_proto_msgTypes[169]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -9350,7 +9595,7 @@ func (x *ScheduledMsg) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ScheduledMsg.ProtoReflect.Descriptor instead.
 func (*ScheduledMsg) Descriptor() ([]byte, []int) {
-	return file_msg_msg_proto_rawDescGZIP(), []int{165}
+	return file_msg_msg_proto_rawDescGZIP(), []int{169}
 }
 
 func (x *ScheduledMsg) GetScheduleID() string {
@@ -9455,7 +9700,7 @@ type CreateScheduledMsgReq struct {
 
 func (x *CreateScheduledMsgReq) Reset() {
 	*x = CreateScheduledMsgReq{}
-	mi := &file_msg_msg_proto_msgTypes[166]
+	mi := &file_msg_msg_proto_msgTypes[170]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -9467,7 +9712,7 @@ func (x *CreateScheduledMsgReq) String() string {
 func (*CreateScheduledMsgReq) ProtoMessage() {}
 
 func (x *CreateScheduledMsgReq) ProtoReflect() protoreflect.Message {
-	mi := &file_msg_msg_proto_msgTypes[166]
+	mi := &file_msg_msg_proto_msgTypes[170]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -9480,7 +9725,7 @@ func (x *CreateScheduledMsgReq) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use CreateScheduledMsgReq.ProtoReflect.Descriptor instead.
 func (*CreateScheduledMsgReq) Descriptor() ([]byte, []int) {
-	return file_msg_msg_proto_rawDescGZIP(), []int{166}
+	return file_msg_msg_proto_rawDescGZIP(), []int{170}
 }
 
 func (x *CreateScheduledMsgReq) GetMsgData() *sdkws.MsgData {
@@ -9506,7 +9751,7 @@ type CreateScheduledMsgResp struct {
 
 func (x *CreateScheduledMsgResp) Reset() {
 	*x = CreateScheduledMsgResp{}
-	mi := &file_msg_msg_proto_msgTypes[167]
+	mi := &file_msg_msg_proto_msgTypes[171]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -9518,7 +9763,7 @@ func (x *CreateScheduledMsgResp) String() string {
 func (*CreateScheduledMsgResp) ProtoMessage() {}
 
 func (x *CreateScheduledMsgResp) ProtoReflect() protoreflect.Message {
-	mi := &file_msg_msg_proto_msgTypes[167]
+	mi := &file_msg_msg_proto_msgTypes[171]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -9531,7 +9776,7 @@ func (x *CreateScheduledMsgResp) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use CreateScheduledMsgResp.ProtoReflect.Descriptor instead.
 func (*CreateScheduledMsgResp) Descriptor() ([]byte, []int) {
-	return file_msg_msg_proto_rawDescGZIP(), []int{167}
+	return file_msg_msg_proto_rawDescGZIP(), []int{171}
 }
 
 func (x *CreateScheduledMsgResp) GetScheduledMsg() *ScheduledMsg {
@@ -9554,7 +9799,7 @@ type UpdateScheduledMsgReq struct {
 
 func (x *UpdateScheduledMsgReq) Reset() {
 	*x = UpdateScheduledMsgReq{}
-	mi := &file_msg_msg_proto_msgTypes[168]
+	mi := &file_msg_msg_proto_msgTypes[172]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -9566,7 +9811,7 @@ func (x *UpdateScheduledMsgReq) String() string {
 func (*UpdateScheduledMsgReq) ProtoMessage() {}
 
 func (x *UpdateScheduledMsgReq) ProtoReflect() protoreflect.Message {
-	mi := &file_msg_msg_proto_msgTypes[168]
+	mi := &file_msg_msg_proto_msgTypes[172]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -9579,7 +9824,7 @@ func (x *UpdateScheduledMsgReq) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use UpdateScheduledMsgReq.ProtoReflect.Descriptor instead.
 func (*UpdateScheduledMsgReq) Descriptor() ([]byte, []int) {
-	return file_msg_msg_proto_rawDescGZIP(), []int{168}
+	return file_msg_msg_proto_rawDescGZIP(), []int{172}
 }
 
 func (x *UpdateScheduledMsgReq) GetScheduleID() string {
@@ -9612,7 +9857,7 @@ type UpdateScheduledMsgResp struct {
 
 func (x *UpdateScheduledMsgResp) Reset() {
 	*x = UpdateScheduledMsgResp{}
-	mi := &file_msg_msg_proto_msgTypes[169]
+	mi := &file_msg_msg_proto_msgTypes[173]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -9624,7 +9869,7 @@ func (x *UpdateScheduledMsgResp) String() string {
 func (*UpdateScheduledMsgResp) ProtoMessage() {}
 
 func (x *UpdateScheduledMsgResp) ProtoReflect() protoreflect.Message {
-	mi := &file_msg_msg_proto_msgTypes[169]
+	mi := &file_msg_msg_proto_msgTypes[173]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -9637,7 +9882,7 @@ func (x *UpdateScheduledMsgResp) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use UpdateScheduledMsgResp.ProtoReflect.Descriptor instead.
 func (*UpdateScheduledMsgResp) Descriptor() ([]byte, []int) {
-	return file_msg_msg_proto_rawDescGZIP(), []int{169}
+	return file_msg_msg_proto_rawDescGZIP(), []int{173}
 }
 
 func (x *UpdateScheduledMsgResp) GetScheduledMsg() *ScheduledMsg {
@@ -9658,7 +9903,7 @@ type CancelScheduledMsgReq struct {
 
 func (x *CancelScheduledMsgReq) Reset() {
 	*x = CancelScheduledMsgReq{}
-	mi := &file_msg_msg_proto_msgTypes[170]
+	mi := &file_msg_msg_proto_msgTypes[174]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -9670,7 +9915,7 @@ func (x *CancelScheduledMsgReq) String() string {
 func (*CancelScheduledMsgReq) ProtoMessage() {}
 
 func (x *CancelScheduledMsgReq) ProtoReflect() protoreflect.Message {
-	mi := &file_msg_msg_proto_msgTypes[170]
+	mi := &file_msg_msg_proto_msgTypes[174]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -9683,7 +9928,7 @@ func (x *CancelScheduledMsgReq) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use CancelScheduledMsgReq.ProtoReflect.Descriptor instead.
 func (*CancelScheduledMsgReq) Descriptor() ([]byte, []int) {
-	return file_msg_msg_proto_rawDescGZIP(), []int{170}
+	return file_msg_msg_proto_rawDescGZIP(), []int{174}
 }
 
 func (x *CancelScheduledMsgReq) GetScheduleID() string {
@@ -9701,7 +9946,7 @@ type CancelScheduledMsgResp struct {
 
 func (x *CancelScheduledMsgResp) Reset() {
 	*x = CancelScheduledMsgResp{}
-	mi := &file_msg_msg_proto_msgTypes[171]
+	mi := &file_msg_msg_proto_msgTypes[175]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -9713,7 +9958,7 @@ func (x *CancelScheduledMsgResp) String() string {
 func (*CancelScheduledMsgResp) ProtoMessage() {}
 
 func (x *CancelScheduledMsgResp) ProtoReflect() protoreflect.Message {
-	mi := &file_msg_msg_proto_msgTypes[171]
+	mi := &file_msg_msg_proto_msgTypes[175]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -9726,7 +9971,7 @@ func (x *CancelScheduledMsgResp) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use CancelScheduledMsgResp.ProtoReflect.Descriptor instead.
 func (*CancelScheduledMsgResp) Descriptor() ([]byte, []int) {
-	return file_msg_msg_proto_rawDescGZIP(), []int{171}
+	return file_msg_msg_proto_rawDescGZIP(), []int{175}
 }
 
 // Sends now instead of waiting. A one-time message is then done; a
@@ -9740,7 +9985,7 @@ type SendScheduledMsgNowReq struct {
 
 func (x *SendScheduledMsgNowReq) Reset() {
 	*x = SendScheduledMsgNowReq{}
-	mi := &file_msg_msg_proto_msgTypes[172]
+	mi := &file_msg_msg_proto_msgTypes[176]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -9752,7 +9997,7 @@ func (x *SendScheduledMsgNowReq) String() string {
 func (*SendScheduledMsgNowReq) ProtoMessage() {}
 
 func (x *SendScheduledMsgNowReq) ProtoReflect() protoreflect.Message {
-	mi := &file_msg_msg_proto_msgTypes[172]
+	mi := &file_msg_msg_proto_msgTypes[176]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -9765,7 +10010,7 @@ func (x *SendScheduledMsgNowReq) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use SendScheduledMsgNowReq.ProtoReflect.Descriptor instead.
 func (*SendScheduledMsgNowReq) Descriptor() ([]byte, []int) {
-	return file_msg_msg_proto_rawDescGZIP(), []int{172}
+	return file_msg_msg_proto_rawDescGZIP(), []int{176}
 }
 
 func (x *SendScheduledMsgNowReq) GetScheduleID() string {
@@ -9784,7 +10029,7 @@ type SendScheduledMsgNowResp struct {
 
 func (x *SendScheduledMsgNowResp) Reset() {
 	*x = SendScheduledMsgNowResp{}
-	mi := &file_msg_msg_proto_msgTypes[173]
+	mi := &file_msg_msg_proto_msgTypes[177]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -9796,7 +10041,7 @@ func (x *SendScheduledMsgNowResp) String() string {
 func (*SendScheduledMsgNowResp) ProtoMessage() {}
 
 func (x *SendScheduledMsgNowResp) ProtoReflect() protoreflect.Message {
-	mi := &file_msg_msg_proto_msgTypes[173]
+	mi := &file_msg_msg_proto_msgTypes[177]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -9809,7 +10054,7 @@ func (x *SendScheduledMsgNowResp) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use SendScheduledMsgNowResp.ProtoReflect.Descriptor instead.
 func (*SendScheduledMsgNowResp) Descriptor() ([]byte, []int) {
-	return file_msg_msg_proto_rawDescGZIP(), []int{173}
+	return file_msg_msg_proto_rawDescGZIP(), []int{177}
 }
 
 func (x *SendScheduledMsgNowResp) GetScheduledMsg() *ScheduledMsg {
@@ -9831,7 +10076,7 @@ type GetScheduledMsgsReq struct {
 
 func (x *GetScheduledMsgsReq) Reset() {
 	*x = GetScheduledMsgsReq{}
-	mi := &file_msg_msg_proto_msgTypes[174]
+	mi := &file_msg_msg_proto_msgTypes[178]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -9843,7 +10088,7 @@ func (x *GetScheduledMsgsReq) String() string {
 func (*GetScheduledMsgsReq) ProtoMessage() {}
 
 func (x *GetScheduledMsgsReq) ProtoReflect() protoreflect.Message {
-	mi := &file_msg_msg_proto_msgTypes[174]
+	mi := &file_msg_msg_proto_msgTypes[178]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -9856,7 +10101,7 @@ func (x *GetScheduledMsgsReq) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetScheduledMsgsReq.ProtoReflect.Descriptor instead.
 func (*GetScheduledMsgsReq) Descriptor() ([]byte, []int) {
-	return file_msg_msg_proto_rawDescGZIP(), []int{174}
+	return file_msg_msg_proto_rawDescGZIP(), []int{178}
 }
 
 func (x *GetScheduledMsgsReq) GetConversationID() string {
@@ -9883,7 +10128,7 @@ type GetScheduledMsgsResp struct {
 
 func (x *GetScheduledMsgsResp) Reset() {
 	*x = GetScheduledMsgsResp{}
-	mi := &file_msg_msg_proto_msgTypes[175]
+	mi := &file_msg_msg_proto_msgTypes[179]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -9895,7 +10140,7 @@ func (x *GetScheduledMsgsResp) String() string {
 func (*GetScheduledMsgsResp) ProtoMessage() {}
 
 func (x *GetScheduledMsgsResp) ProtoReflect() protoreflect.Message {
-	mi := &file_msg_msg_proto_msgTypes[175]
+	mi := &file_msg_msg_proto_msgTypes[179]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -9908,7 +10153,7 @@ func (x *GetScheduledMsgsResp) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetScheduledMsgsResp.ProtoReflect.Descriptor instead.
 func (*GetScheduledMsgsResp) Descriptor() ([]byte, []int) {
-	return file_msg_msg_proto_rawDescGZIP(), []int{175}
+	return file_msg_msg_proto_rawDescGZIP(), []int{179}
 }
 
 func (x *GetScheduledMsgsResp) GetScheduledMsgs() []*ScheduledMsg {
@@ -9937,7 +10182,7 @@ type CancelUserScheduledMsgsReq struct {
 
 func (x *CancelUserScheduledMsgsReq) Reset() {
 	*x = CancelUserScheduledMsgsReq{}
-	mi := &file_msg_msg_proto_msgTypes[176]
+	mi := &file_msg_msg_proto_msgTypes[180]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -9949,7 +10194,7 @@ func (x *CancelUserScheduledMsgsReq) String() string {
 func (*CancelUserScheduledMsgsReq) ProtoMessage() {}
 
 func (x *CancelUserScheduledMsgsReq) ProtoReflect() protoreflect.Message {
-	mi := &file_msg_msg_proto_msgTypes[176]
+	mi := &file_msg_msg_proto_msgTypes[180]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -9962,7 +10207,7 @@ func (x *CancelUserScheduledMsgsReq) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use CancelUserScheduledMsgsReq.ProtoReflect.Descriptor instead.
 func (*CancelUserScheduledMsgsReq) Descriptor() ([]byte, []int) {
-	return file_msg_msg_proto_rawDescGZIP(), []int{176}
+	return file_msg_msg_proto_rawDescGZIP(), []int{180}
 }
 
 func (x *CancelUserScheduledMsgsReq) GetUserID() string {
@@ -9981,7 +10226,7 @@ type CancelUserScheduledMsgsResp struct {
 
 func (x *CancelUserScheduledMsgsResp) Reset() {
 	*x = CancelUserScheduledMsgsResp{}
-	mi := &file_msg_msg_proto_msgTypes[177]
+	mi := &file_msg_msg_proto_msgTypes[181]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -9993,7 +10238,7 @@ func (x *CancelUserScheduledMsgsResp) String() string {
 func (*CancelUserScheduledMsgsResp) ProtoMessage() {}
 
 func (x *CancelUserScheduledMsgsResp) ProtoReflect() protoreflect.Message {
-	mi := &file_msg_msg_proto_msgTypes[177]
+	mi := &file_msg_msg_proto_msgTypes[181]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -10006,7 +10251,7 @@ func (x *CancelUserScheduledMsgsResp) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use CancelUserScheduledMsgsResp.ProtoReflect.Descriptor instead.
 func (*CancelUserScheduledMsgsResp) Descriptor() ([]byte, []int) {
-	return file_msg_msg_proto_rawDescGZIP(), []int{177}
+	return file_msg_msg_proto_rawDescGZIP(), []int{181}
 }
 
 func (x *CancelUserScheduledMsgsResp) GetCount() int32 {
@@ -10034,7 +10279,7 @@ type CallParticipant struct {
 
 func (x *CallParticipant) Reset() {
 	*x = CallParticipant{}
-	mi := &file_msg_msg_proto_msgTypes[178]
+	mi := &file_msg_msg_proto_msgTypes[182]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -10046,7 +10291,7 @@ func (x *CallParticipant) String() string {
 func (*CallParticipant) ProtoMessage() {}
 
 func (x *CallParticipant) ProtoReflect() protoreflect.Message {
-	mi := &file_msg_msg_proto_msgTypes[178]
+	mi := &file_msg_msg_proto_msgTypes[182]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -10059,7 +10304,7 @@ func (x *CallParticipant) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use CallParticipant.ProtoReflect.Descriptor instead.
 func (*CallParticipant) Descriptor() ([]byte, []int) {
-	return file_msg_msg_proto_rawDescGZIP(), []int{178}
+	return file_msg_msg_proto_rawDescGZIP(), []int{182}
 }
 
 func (x *CallParticipant) GetUserID() string {
@@ -10131,7 +10376,7 @@ type CallSession struct {
 
 func (x *CallSession) Reset() {
 	*x = CallSession{}
-	mi := &file_msg_msg_proto_msgTypes[179]
+	mi := &file_msg_msg_proto_msgTypes[183]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -10143,7 +10388,7 @@ func (x *CallSession) String() string {
 func (*CallSession) ProtoMessage() {}
 
 func (x *CallSession) ProtoReflect() protoreflect.Message {
-	mi := &file_msg_msg_proto_msgTypes[179]
+	mi := &file_msg_msg_proto_msgTypes[183]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -10156,7 +10401,7 @@ func (x *CallSession) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use CallSession.ProtoReflect.Descriptor instead.
 func (*CallSession) Descriptor() ([]byte, []int) {
-	return file_msg_msg_proto_rawDescGZIP(), []int{179}
+	return file_msg_msg_proto_rawDescGZIP(), []int{183}
 }
 
 func (x *CallSession) GetCallID() string {
@@ -10259,7 +10504,7 @@ type CreateCallReq struct {
 
 func (x *CreateCallReq) Reset() {
 	*x = CreateCallReq{}
-	mi := &file_msg_msg_proto_msgTypes[180]
+	mi := &file_msg_msg_proto_msgTypes[184]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -10271,7 +10516,7 @@ func (x *CreateCallReq) String() string {
 func (*CreateCallReq) ProtoMessage() {}
 
 func (x *CreateCallReq) ProtoReflect() protoreflect.Message {
-	mi := &file_msg_msg_proto_msgTypes[180]
+	mi := &file_msg_msg_proto_msgTypes[184]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -10284,7 +10529,7 @@ func (x *CreateCallReq) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use CreateCallReq.ProtoReflect.Descriptor instead.
 func (*CreateCallReq) Descriptor() ([]byte, []int) {
-	return file_msg_msg_proto_rawDescGZIP(), []int{180}
+	return file_msg_msg_proto_rawDescGZIP(), []int{184}
 }
 
 func (x *CreateCallReq) GetConversationID() string {
@@ -10327,7 +10572,7 @@ type CreateCallResp struct {
 
 func (x *CreateCallResp) Reset() {
 	*x = CreateCallResp{}
-	mi := &file_msg_msg_proto_msgTypes[181]
+	mi := &file_msg_msg_proto_msgTypes[185]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -10339,7 +10584,7 @@ func (x *CreateCallResp) String() string {
 func (*CreateCallResp) ProtoMessage() {}
 
 func (x *CreateCallResp) ProtoReflect() protoreflect.Message {
-	mi := &file_msg_msg_proto_msgTypes[181]
+	mi := &file_msg_msg_proto_msgTypes[185]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -10352,7 +10597,7 @@ func (x *CreateCallResp) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use CreateCallResp.ProtoReflect.Descriptor instead.
 func (*CreateCallResp) Descriptor() ([]byte, []int) {
-	return file_msg_msg_proto_rawDescGZIP(), []int{181}
+	return file_msg_msg_proto_rawDescGZIP(), []int{185}
 }
 
 func (x *CreateCallResp) GetSession() *CallSession {
@@ -10386,7 +10631,7 @@ type AcceptCallReq struct {
 
 func (x *AcceptCallReq) Reset() {
 	*x = AcceptCallReq{}
-	mi := &file_msg_msg_proto_msgTypes[182]
+	mi := &file_msg_msg_proto_msgTypes[186]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -10398,7 +10643,7 @@ func (x *AcceptCallReq) String() string {
 func (*AcceptCallReq) ProtoMessage() {}
 
 func (x *AcceptCallReq) ProtoReflect() protoreflect.Message {
-	mi := &file_msg_msg_proto_msgTypes[182]
+	mi := &file_msg_msg_proto_msgTypes[186]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -10411,7 +10656,7 @@ func (x *AcceptCallReq) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use AcceptCallReq.ProtoReflect.Descriptor instead.
 func (*AcceptCallReq) Descriptor() ([]byte, []int) {
-	return file_msg_msg_proto_rawDescGZIP(), []int{182}
+	return file_msg_msg_proto_rawDescGZIP(), []int{186}
 }
 
 func (x *AcceptCallReq) GetCallID() string {
@@ -10439,7 +10684,7 @@ type AcceptCallResp struct {
 
 func (x *AcceptCallResp) Reset() {
 	*x = AcceptCallResp{}
-	mi := &file_msg_msg_proto_msgTypes[183]
+	mi := &file_msg_msg_proto_msgTypes[187]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -10451,7 +10696,7 @@ func (x *AcceptCallResp) String() string {
 func (*AcceptCallResp) ProtoMessage() {}
 
 func (x *AcceptCallResp) ProtoReflect() protoreflect.Message {
-	mi := &file_msg_msg_proto_msgTypes[183]
+	mi := &file_msg_msg_proto_msgTypes[187]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -10464,7 +10709,7 @@ func (x *AcceptCallResp) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use AcceptCallResp.ProtoReflect.Descriptor instead.
 func (*AcceptCallResp) Descriptor() ([]byte, []int) {
-	return file_msg_msg_proto_rawDescGZIP(), []int{183}
+	return file_msg_msg_proto_rawDescGZIP(), []int{187}
 }
 
 func (x *AcceptCallResp) GetSession() *CallSession {
@@ -10498,7 +10743,7 @@ type RejectCallReq struct {
 
 func (x *RejectCallReq) Reset() {
 	*x = RejectCallReq{}
-	mi := &file_msg_msg_proto_msgTypes[184]
+	mi := &file_msg_msg_proto_msgTypes[188]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -10510,7 +10755,7 @@ func (x *RejectCallReq) String() string {
 func (*RejectCallReq) ProtoMessage() {}
 
 func (x *RejectCallReq) ProtoReflect() protoreflect.Message {
-	mi := &file_msg_msg_proto_msgTypes[184]
+	mi := &file_msg_msg_proto_msgTypes[188]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -10523,7 +10768,7 @@ func (x *RejectCallReq) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use RejectCallReq.ProtoReflect.Descriptor instead.
 func (*RejectCallReq) Descriptor() ([]byte, []int) {
-	return file_msg_msg_proto_rawDescGZIP(), []int{184}
+	return file_msg_msg_proto_rawDescGZIP(), []int{188}
 }
 
 func (x *RejectCallReq) GetCallID() string {
@@ -10549,7 +10794,7 @@ type RejectCallResp struct {
 
 func (x *RejectCallResp) Reset() {
 	*x = RejectCallResp{}
-	mi := &file_msg_msg_proto_msgTypes[185]
+	mi := &file_msg_msg_proto_msgTypes[189]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -10561,7 +10806,7 @@ func (x *RejectCallResp) String() string {
 func (*RejectCallResp) ProtoMessage() {}
 
 func (x *RejectCallResp) ProtoReflect() protoreflect.Message {
-	mi := &file_msg_msg_proto_msgTypes[185]
+	mi := &file_msg_msg_proto_msgTypes[189]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -10574,7 +10819,7 @@ func (x *RejectCallResp) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use RejectCallResp.ProtoReflect.Descriptor instead.
 func (*RejectCallResp) Descriptor() ([]byte, []int) {
-	return file_msg_msg_proto_rawDescGZIP(), []int{185}
+	return file_msg_msg_proto_rawDescGZIP(), []int{189}
 }
 
 func (x *RejectCallResp) GetSession() *CallSession {
@@ -10595,7 +10840,7 @@ type CancelCallReq struct {
 
 func (x *CancelCallReq) Reset() {
 	*x = CancelCallReq{}
-	mi := &file_msg_msg_proto_msgTypes[186]
+	mi := &file_msg_msg_proto_msgTypes[190]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -10607,7 +10852,7 @@ func (x *CancelCallReq) String() string {
 func (*CancelCallReq) ProtoMessage() {}
 
 func (x *CancelCallReq) ProtoReflect() protoreflect.Message {
-	mi := &file_msg_msg_proto_msgTypes[186]
+	mi := &file_msg_msg_proto_msgTypes[190]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -10620,7 +10865,7 @@ func (x *CancelCallReq) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use CancelCallReq.ProtoReflect.Descriptor instead.
 func (*CancelCallReq) Descriptor() ([]byte, []int) {
-	return file_msg_msg_proto_rawDescGZIP(), []int{186}
+	return file_msg_msg_proto_rawDescGZIP(), []int{190}
 }
 
 func (x *CancelCallReq) GetCallID() string {
@@ -10646,7 +10891,7 @@ type CancelCallResp struct {
 
 func (x *CancelCallResp) Reset() {
 	*x = CancelCallResp{}
-	mi := &file_msg_msg_proto_msgTypes[187]
+	mi := &file_msg_msg_proto_msgTypes[191]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -10658,7 +10903,7 @@ func (x *CancelCallResp) String() string {
 func (*CancelCallResp) ProtoMessage() {}
 
 func (x *CancelCallResp) ProtoReflect() protoreflect.Message {
-	mi := &file_msg_msg_proto_msgTypes[187]
+	mi := &file_msg_msg_proto_msgTypes[191]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -10671,7 +10916,7 @@ func (x *CancelCallResp) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use CancelCallResp.ProtoReflect.Descriptor instead.
 func (*CancelCallResp) Descriptor() ([]byte, []int) {
-	return file_msg_msg_proto_rawDescGZIP(), []int{187}
+	return file_msg_msg_proto_rawDescGZIP(), []int{191}
 }
 
 func (x *CancelCallResp) GetSession() *CallSession {
@@ -10691,7 +10936,7 @@ type EndCallReq struct {
 
 func (x *EndCallReq) Reset() {
 	*x = EndCallReq{}
-	mi := &file_msg_msg_proto_msgTypes[188]
+	mi := &file_msg_msg_proto_msgTypes[192]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -10703,7 +10948,7 @@ func (x *EndCallReq) String() string {
 func (*EndCallReq) ProtoMessage() {}
 
 func (x *EndCallReq) ProtoReflect() protoreflect.Message {
-	mi := &file_msg_msg_proto_msgTypes[188]
+	mi := &file_msg_msg_proto_msgTypes[192]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -10716,7 +10961,7 @@ func (x *EndCallReq) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use EndCallReq.ProtoReflect.Descriptor instead.
 func (*EndCallReq) Descriptor() ([]byte, []int) {
-	return file_msg_msg_proto_rawDescGZIP(), []int{188}
+	return file_msg_msg_proto_rawDescGZIP(), []int{192}
 }
 
 func (x *EndCallReq) GetCallID() string {
@@ -10742,7 +10987,7 @@ type EndCallResp struct {
 
 func (x *EndCallResp) Reset() {
 	*x = EndCallResp{}
-	mi := &file_msg_msg_proto_msgTypes[189]
+	mi := &file_msg_msg_proto_msgTypes[193]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -10754,7 +10999,7 @@ func (x *EndCallResp) String() string {
 func (*EndCallResp) ProtoMessage() {}
 
 func (x *EndCallResp) ProtoReflect() protoreflect.Message {
-	mi := &file_msg_msg_proto_msgTypes[189]
+	mi := &file_msg_msg_proto_msgTypes[193]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -10767,7 +11012,7 @@ func (x *EndCallResp) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use EndCallResp.ProtoReflect.Descriptor instead.
 func (*EndCallResp) Descriptor() ([]byte, []int) {
-	return file_msg_msg_proto_rawDescGZIP(), []int{189}
+	return file_msg_msg_proto_rawDescGZIP(), []int{193}
 }
 
 func (x *EndCallResp) GetSession() *CallSession {
@@ -10790,7 +11035,7 @@ type JoinCallReq struct {
 
 func (x *JoinCallReq) Reset() {
 	*x = JoinCallReq{}
-	mi := &file_msg_msg_proto_msgTypes[190]
+	mi := &file_msg_msg_proto_msgTypes[194]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -10802,7 +11047,7 @@ func (x *JoinCallReq) String() string {
 func (*JoinCallReq) ProtoMessage() {}
 
 func (x *JoinCallReq) ProtoReflect() protoreflect.Message {
-	mi := &file_msg_msg_proto_msgTypes[190]
+	mi := &file_msg_msg_proto_msgTypes[194]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -10815,7 +11060,7 @@ func (x *JoinCallReq) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use JoinCallReq.ProtoReflect.Descriptor instead.
 func (*JoinCallReq) Descriptor() ([]byte, []int) {
-	return file_msg_msg_proto_rawDescGZIP(), []int{190}
+	return file_msg_msg_proto_rawDescGZIP(), []int{194}
 }
 
 func (x *JoinCallReq) GetCallID() string {
@@ -10843,7 +11088,7 @@ type JoinCallResp struct {
 
 func (x *JoinCallResp) Reset() {
 	*x = JoinCallResp{}
-	mi := &file_msg_msg_proto_msgTypes[191]
+	mi := &file_msg_msg_proto_msgTypes[195]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -10855,7 +11100,7 @@ func (x *JoinCallResp) String() string {
 func (*JoinCallResp) ProtoMessage() {}
 
 func (x *JoinCallResp) ProtoReflect() protoreflect.Message {
-	mi := &file_msg_msg_proto_msgTypes[191]
+	mi := &file_msg_msg_proto_msgTypes[195]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -10868,7 +11113,7 @@ func (x *JoinCallResp) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use JoinCallResp.ProtoReflect.Descriptor instead.
 func (*JoinCallResp) Descriptor() ([]byte, []int) {
-	return file_msg_msg_proto_rawDescGZIP(), []int{191}
+	return file_msg_msg_proto_rawDescGZIP(), []int{195}
 }
 
 func (x *JoinCallResp) GetSession() *CallSession {
@@ -10904,7 +11149,7 @@ type LeaveCallReq struct {
 
 func (x *LeaveCallReq) Reset() {
 	*x = LeaveCallReq{}
-	mi := &file_msg_msg_proto_msgTypes[192]
+	mi := &file_msg_msg_proto_msgTypes[196]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -10916,7 +11161,7 @@ func (x *LeaveCallReq) String() string {
 func (*LeaveCallReq) ProtoMessage() {}
 
 func (x *LeaveCallReq) ProtoReflect() protoreflect.Message {
-	mi := &file_msg_msg_proto_msgTypes[192]
+	mi := &file_msg_msg_proto_msgTypes[196]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -10929,7 +11174,7 @@ func (x *LeaveCallReq) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use LeaveCallReq.ProtoReflect.Descriptor instead.
 func (*LeaveCallReq) Descriptor() ([]byte, []int) {
-	return file_msg_msg_proto_rawDescGZIP(), []int{192}
+	return file_msg_msg_proto_rawDescGZIP(), []int{196}
 }
 
 func (x *LeaveCallReq) GetCallID() string {
@@ -10955,7 +11200,7 @@ type LeaveCallResp struct {
 
 func (x *LeaveCallResp) Reset() {
 	*x = LeaveCallResp{}
-	mi := &file_msg_msg_proto_msgTypes[193]
+	mi := &file_msg_msg_proto_msgTypes[197]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -10967,7 +11212,7 @@ func (x *LeaveCallResp) String() string {
 func (*LeaveCallResp) ProtoMessage() {}
 
 func (x *LeaveCallResp) ProtoReflect() protoreflect.Message {
-	mi := &file_msg_msg_proto_msgTypes[193]
+	mi := &file_msg_msg_proto_msgTypes[197]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -10980,7 +11225,7 @@ func (x *LeaveCallResp) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use LeaveCallResp.ProtoReflect.Descriptor instead.
 func (*LeaveCallResp) Descriptor() ([]byte, []int) {
-	return file_msg_msg_proto_rawDescGZIP(), []int{193}
+	return file_msg_msg_proto_rawDescGZIP(), []int{197}
 }
 
 func (x *LeaveCallResp) GetSession() *CallSession {
@@ -11003,7 +11248,7 @@ type RingCallReq struct {
 
 func (x *RingCallReq) Reset() {
 	*x = RingCallReq{}
-	mi := &file_msg_msg_proto_msgTypes[194]
+	mi := &file_msg_msg_proto_msgTypes[198]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -11015,7 +11260,7 @@ func (x *RingCallReq) String() string {
 func (*RingCallReq) ProtoMessage() {}
 
 func (x *RingCallReq) ProtoReflect() protoreflect.Message {
-	mi := &file_msg_msg_proto_msgTypes[194]
+	mi := &file_msg_msg_proto_msgTypes[198]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -11028,7 +11273,7 @@ func (x *RingCallReq) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use RingCallReq.ProtoReflect.Descriptor instead.
 func (*RingCallReq) Descriptor() ([]byte, []int) {
-	return file_msg_msg_proto_rawDescGZIP(), []int{194}
+	return file_msg_msg_proto_rawDescGZIP(), []int{198}
 }
 
 func (x *RingCallReq) GetCallID() string {
@@ -11061,7 +11306,7 @@ type RingCallResp struct {
 
 func (x *RingCallResp) Reset() {
 	*x = RingCallResp{}
-	mi := &file_msg_msg_proto_msgTypes[195]
+	mi := &file_msg_msg_proto_msgTypes[199]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -11073,7 +11318,7 @@ func (x *RingCallResp) String() string {
 func (*RingCallResp) ProtoMessage() {}
 
 func (x *RingCallResp) ProtoReflect() protoreflect.Message {
-	mi := &file_msg_msg_proto_msgTypes[195]
+	mi := &file_msg_msg_proto_msgTypes[199]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -11086,7 +11331,7 @@ func (x *RingCallResp) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use RingCallResp.ProtoReflect.Descriptor instead.
 func (*RingCallResp) Descriptor() ([]byte, []int) {
-	return file_msg_msg_proto_rawDescGZIP(), []int{195}
+	return file_msg_msg_proto_rawDescGZIP(), []int{199}
 }
 
 func (x *RingCallResp) GetSession() *CallSession {
@@ -11112,7 +11357,7 @@ type MuteCallParticipantReq struct {
 
 func (x *MuteCallParticipantReq) Reset() {
 	*x = MuteCallParticipantReq{}
-	mi := &file_msg_msg_proto_msgTypes[196]
+	mi := &file_msg_msg_proto_msgTypes[200]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -11124,7 +11369,7 @@ func (x *MuteCallParticipantReq) String() string {
 func (*MuteCallParticipantReq) ProtoMessage() {}
 
 func (x *MuteCallParticipantReq) ProtoReflect() protoreflect.Message {
-	mi := &file_msg_msg_proto_msgTypes[196]
+	mi := &file_msg_msg_proto_msgTypes[200]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -11137,7 +11382,7 @@ func (x *MuteCallParticipantReq) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use MuteCallParticipantReq.ProtoReflect.Descriptor instead.
 func (*MuteCallParticipantReq) Descriptor() ([]byte, []int) {
-	return file_msg_msg_proto_rawDescGZIP(), []int{196}
+	return file_msg_msg_proto_rawDescGZIP(), []int{200}
 }
 
 func (x *MuteCallParticipantReq) GetCallID() string {
@@ -11177,7 +11422,7 @@ type MuteCallParticipantResp struct {
 
 func (x *MuteCallParticipantResp) Reset() {
 	*x = MuteCallParticipantResp{}
-	mi := &file_msg_msg_proto_msgTypes[197]
+	mi := &file_msg_msg_proto_msgTypes[201]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -11189,7 +11434,7 @@ func (x *MuteCallParticipantResp) String() string {
 func (*MuteCallParticipantResp) ProtoMessage() {}
 
 func (x *MuteCallParticipantResp) ProtoReflect() protoreflect.Message {
-	mi := &file_msg_msg_proto_msgTypes[197]
+	mi := &file_msg_msg_proto_msgTypes[201]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -11202,7 +11447,7 @@ func (x *MuteCallParticipantResp) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use MuteCallParticipantResp.ProtoReflect.Descriptor instead.
 func (*MuteCallParticipantResp) Descriptor() ([]byte, []int) {
-	return file_msg_msg_proto_rawDescGZIP(), []int{197}
+	return file_msg_msg_proto_rawDescGZIP(), []int{201}
 }
 
 func (x *MuteCallParticipantResp) GetSession() *CallSession {
@@ -11229,7 +11474,7 @@ type GetCallReq struct {
 
 func (x *GetCallReq) Reset() {
 	*x = GetCallReq{}
-	mi := &file_msg_msg_proto_msgTypes[198]
+	mi := &file_msg_msg_proto_msgTypes[202]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -11241,7 +11486,7 @@ func (x *GetCallReq) String() string {
 func (*GetCallReq) ProtoMessage() {}
 
 func (x *GetCallReq) ProtoReflect() protoreflect.Message {
-	mi := &file_msg_msg_proto_msgTypes[198]
+	mi := &file_msg_msg_proto_msgTypes[202]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -11254,7 +11499,7 @@ func (x *GetCallReq) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetCallReq.ProtoReflect.Descriptor instead.
 func (*GetCallReq) Descriptor() ([]byte, []int) {
-	return file_msg_msg_proto_rawDescGZIP(), []int{198}
+	return file_msg_msg_proto_rawDescGZIP(), []int{202}
 }
 
 func (x *GetCallReq) GetCallID() string {
@@ -11288,7 +11533,7 @@ type GetCallResp struct {
 
 func (x *GetCallResp) Reset() {
 	*x = GetCallResp{}
-	mi := &file_msg_msg_proto_msgTypes[199]
+	mi := &file_msg_msg_proto_msgTypes[203]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -11300,7 +11545,7 @@ func (x *GetCallResp) String() string {
 func (*GetCallResp) ProtoMessage() {}
 
 func (x *GetCallResp) ProtoReflect() protoreflect.Message {
-	mi := &file_msg_msg_proto_msgTypes[199]
+	mi := &file_msg_msg_proto_msgTypes[203]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -11313,7 +11558,7 @@ func (x *GetCallResp) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetCallResp.ProtoReflect.Descriptor instead.
 func (*GetCallResp) Descriptor() ([]byte, []int) {
-	return file_msg_msg_proto_rawDescGZIP(), []int{199}
+	return file_msg_msg_proto_rawDescGZIP(), []int{203}
 }
 
 func (x *GetCallResp) GetSession() *CallSession {
@@ -11354,7 +11599,7 @@ type CallHistoryItem struct {
 
 func (x *CallHistoryItem) Reset() {
 	*x = CallHistoryItem{}
-	mi := &file_msg_msg_proto_msgTypes[200]
+	mi := &file_msg_msg_proto_msgTypes[204]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -11366,7 +11611,7 @@ func (x *CallHistoryItem) String() string {
 func (*CallHistoryItem) ProtoMessage() {}
 
 func (x *CallHistoryItem) ProtoReflect() protoreflect.Message {
-	mi := &file_msg_msg_proto_msgTypes[200]
+	mi := &file_msg_msg_proto_msgTypes[204]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -11379,7 +11624,7 @@ func (x *CallHistoryItem) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use CallHistoryItem.ProtoReflect.Descriptor instead.
 func (*CallHistoryItem) Descriptor() ([]byte, []int) {
-	return file_msg_msg_proto_rawDescGZIP(), []int{200}
+	return file_msg_msg_proto_rawDescGZIP(), []int{204}
 }
 
 func (x *CallHistoryItem) GetSession() *CallSession {
@@ -11422,7 +11667,7 @@ type CallHistoryCursor struct {
 
 func (x *CallHistoryCursor) Reset() {
 	*x = CallHistoryCursor{}
-	mi := &file_msg_msg_proto_msgTypes[201]
+	mi := &file_msg_msg_proto_msgTypes[205]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -11434,7 +11679,7 @@ func (x *CallHistoryCursor) String() string {
 func (*CallHistoryCursor) ProtoMessage() {}
 
 func (x *CallHistoryCursor) ProtoReflect() protoreflect.Message {
-	mi := &file_msg_msg_proto_msgTypes[201]
+	mi := &file_msg_msg_proto_msgTypes[205]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -11447,7 +11692,7 @@ func (x *CallHistoryCursor) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use CallHistoryCursor.ProtoReflect.Descriptor instead.
 func (*CallHistoryCursor) Descriptor() ([]byte, []int) {
-	return file_msg_msg_proto_rawDescGZIP(), []int{201}
+	return file_msg_msg_proto_rawDescGZIP(), []int{205}
 }
 
 func (x *CallHistoryCursor) GetCreatedAt() int64 {
@@ -11481,7 +11726,7 @@ type GetCallHistoryReq struct {
 
 func (x *GetCallHistoryReq) Reset() {
 	*x = GetCallHistoryReq{}
-	mi := &file_msg_msg_proto_msgTypes[202]
+	mi := &file_msg_msg_proto_msgTypes[206]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -11493,7 +11738,7 @@ func (x *GetCallHistoryReq) String() string {
 func (*GetCallHistoryReq) ProtoMessage() {}
 
 func (x *GetCallHistoryReq) ProtoReflect() protoreflect.Message {
-	mi := &file_msg_msg_proto_msgTypes[202]
+	mi := &file_msg_msg_proto_msgTypes[206]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -11506,7 +11751,7 @@ func (x *GetCallHistoryReq) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetCallHistoryReq.ProtoReflect.Descriptor instead.
 func (*GetCallHistoryReq) Descriptor() ([]byte, []int) {
-	return file_msg_msg_proto_rawDescGZIP(), []int{202}
+	return file_msg_msg_proto_rawDescGZIP(), []int{206}
 }
 
 func (x *GetCallHistoryReq) GetUserID() string {
@@ -11555,7 +11800,7 @@ type GetCallHistoryResp struct {
 
 func (x *GetCallHistoryResp) Reset() {
 	*x = GetCallHistoryResp{}
-	mi := &file_msg_msg_proto_msgTypes[203]
+	mi := &file_msg_msg_proto_msgTypes[207]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -11567,7 +11812,7 @@ func (x *GetCallHistoryResp) String() string {
 func (*GetCallHistoryResp) ProtoMessage() {}
 
 func (x *GetCallHistoryResp) ProtoReflect() protoreflect.Message {
-	mi := &file_msg_msg_proto_msgTypes[203]
+	mi := &file_msg_msg_proto_msgTypes[207]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -11580,7 +11825,7 @@ func (x *GetCallHistoryResp) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetCallHistoryResp.ProtoReflect.Descriptor instead.
 func (*GetCallHistoryResp) Descriptor() ([]byte, []int) {
-	return file_msg_msg_proto_rawDescGZIP(), []int{203}
+	return file_msg_msg_proto_rawDescGZIP(), []int{207}
 }
 
 func (x *GetCallHistoryResp) GetCalls() []*CallHistoryItem {
@@ -11613,7 +11858,7 @@ type DeleteCallHistoryReq struct {
 
 func (x *DeleteCallHistoryReq) Reset() {
 	*x = DeleteCallHistoryReq{}
-	mi := &file_msg_msg_proto_msgTypes[204]
+	mi := &file_msg_msg_proto_msgTypes[208]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -11625,7 +11870,7 @@ func (x *DeleteCallHistoryReq) String() string {
 func (*DeleteCallHistoryReq) ProtoMessage() {}
 
 func (x *DeleteCallHistoryReq) ProtoReflect() protoreflect.Message {
-	mi := &file_msg_msg_proto_msgTypes[204]
+	mi := &file_msg_msg_proto_msgTypes[208]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -11638,7 +11883,7 @@ func (x *DeleteCallHistoryReq) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use DeleteCallHistoryReq.ProtoReflect.Descriptor instead.
 func (*DeleteCallHistoryReq) Descriptor() ([]byte, []int) {
-	return file_msg_msg_proto_rawDescGZIP(), []int{204}
+	return file_msg_msg_proto_rawDescGZIP(), []int{208}
 }
 
 func (x *DeleteCallHistoryReq) GetUserID() string {
@@ -11670,7 +11915,7 @@ type DeleteCallHistoryResp struct {
 
 func (x *DeleteCallHistoryResp) Reset() {
 	*x = DeleteCallHistoryResp{}
-	mi := &file_msg_msg_proto_msgTypes[205]
+	mi := &file_msg_msg_proto_msgTypes[209]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -11682,7 +11927,7 @@ func (x *DeleteCallHistoryResp) String() string {
 func (*DeleteCallHistoryResp) ProtoMessage() {}
 
 func (x *DeleteCallHistoryResp) ProtoReflect() protoreflect.Message {
-	mi := &file_msg_msg_proto_msgTypes[205]
+	mi := &file_msg_msg_proto_msgTypes[209]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -11695,7 +11940,7 @@ func (x *DeleteCallHistoryResp) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use DeleteCallHistoryResp.ProtoReflect.Descriptor instead.
 func (*DeleteCallHistoryResp) Descriptor() ([]byte, []int) {
-	return file_msg_msg_proto_rawDescGZIP(), []int{205}
+	return file_msg_msg_proto_rawDescGZIP(), []int{209}
 }
 
 // How many calls this user has missed since they last looked at their
@@ -11709,7 +11954,7 @@ type GetMissedCallCountReq struct {
 
 func (x *GetMissedCallCountReq) Reset() {
 	*x = GetMissedCallCountReq{}
-	mi := &file_msg_msg_proto_msgTypes[206]
+	mi := &file_msg_msg_proto_msgTypes[210]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -11721,7 +11966,7 @@ func (x *GetMissedCallCountReq) String() string {
 func (*GetMissedCallCountReq) ProtoMessage() {}
 
 func (x *GetMissedCallCountReq) ProtoReflect() protoreflect.Message {
-	mi := &file_msg_msg_proto_msgTypes[206]
+	mi := &file_msg_msg_proto_msgTypes[210]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -11734,7 +11979,7 @@ func (x *GetMissedCallCountReq) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetMissedCallCountReq.ProtoReflect.Descriptor instead.
 func (*GetMissedCallCountReq) Descriptor() ([]byte, []int) {
-	return file_msg_msg_proto_rawDescGZIP(), []int{206}
+	return file_msg_msg_proto_rawDescGZIP(), []int{210}
 }
 
 func (x *GetMissedCallCountReq) GetUserID() string {
@@ -11755,7 +12000,7 @@ type GetMissedCallCountResp struct {
 
 func (x *GetMissedCallCountResp) Reset() {
 	*x = GetMissedCallCountResp{}
-	mi := &file_msg_msg_proto_msgTypes[207]
+	mi := &file_msg_msg_proto_msgTypes[211]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -11767,7 +12012,7 @@ func (x *GetMissedCallCountResp) String() string {
 func (*GetMissedCallCountResp) ProtoMessage() {}
 
 func (x *GetMissedCallCountResp) ProtoReflect() protoreflect.Message {
-	mi := &file_msg_msg_proto_msgTypes[207]
+	mi := &file_msg_msg_proto_msgTypes[211]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -11780,7 +12025,7 @@ func (x *GetMissedCallCountResp) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetMissedCallCountResp.ProtoReflect.Descriptor instead.
 func (*GetMissedCallCountResp) Descriptor() ([]byte, []int) {
-	return file_msg_msg_proto_rawDescGZIP(), []int{207}
+	return file_msg_msg_proto_rawDescGZIP(), []int{211}
 }
 
 func (x *GetMissedCallCountResp) GetCount() int32 {
@@ -11806,7 +12051,7 @@ type MarkCallHistorySeenReq struct {
 
 func (x *MarkCallHistorySeenReq) Reset() {
 	*x = MarkCallHistorySeenReq{}
-	mi := &file_msg_msg_proto_msgTypes[208]
+	mi := &file_msg_msg_proto_msgTypes[212]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -11818,7 +12063,7 @@ func (x *MarkCallHistorySeenReq) String() string {
 func (*MarkCallHistorySeenReq) ProtoMessage() {}
 
 func (x *MarkCallHistorySeenReq) ProtoReflect() protoreflect.Message {
-	mi := &file_msg_msg_proto_msgTypes[208]
+	mi := &file_msg_msg_proto_msgTypes[212]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -11831,7 +12076,7 @@ func (x *MarkCallHistorySeenReq) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use MarkCallHistorySeenReq.ProtoReflect.Descriptor instead.
 func (*MarkCallHistorySeenReq) Descriptor() ([]byte, []int) {
-	return file_msg_msg_proto_rawDescGZIP(), []int{208}
+	return file_msg_msg_proto_rawDescGZIP(), []int{212}
 }
 
 func (x *MarkCallHistorySeenReq) GetUserID() string {
@@ -11850,7 +12095,7 @@ type MarkCallHistorySeenResp struct {
 
 func (x *MarkCallHistorySeenResp) Reset() {
 	*x = MarkCallHistorySeenResp{}
-	mi := &file_msg_msg_proto_msgTypes[209]
+	mi := &file_msg_msg_proto_msgTypes[213]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -11862,7 +12107,7 @@ func (x *MarkCallHistorySeenResp) String() string {
 func (*MarkCallHistorySeenResp) ProtoMessage() {}
 
 func (x *MarkCallHistorySeenResp) ProtoReflect() protoreflect.Message {
-	mi := &file_msg_msg_proto_msgTypes[209]
+	mi := &file_msg_msg_proto_msgTypes[213]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -11875,7 +12120,7 @@ func (x *MarkCallHistorySeenResp) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use MarkCallHistorySeenResp.ProtoReflect.Descriptor instead.
 func (*MarkCallHistorySeenResp) Descriptor() ([]byte, []int) {
-	return file_msg_msg_proto_rawDescGZIP(), []int{209}
+	return file_msg_msg_proto_rawDescGZIP(), []int{213}
 }
 
 func (x *MarkCallHistorySeenResp) GetSeenAt() int64 {
@@ -11902,7 +12147,7 @@ type CallWebhookReq struct {
 
 func (x *CallWebhookReq) Reset() {
 	*x = CallWebhookReq{}
-	mi := &file_msg_msg_proto_msgTypes[210]
+	mi := &file_msg_msg_proto_msgTypes[214]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -11914,7 +12159,7 @@ func (x *CallWebhookReq) String() string {
 func (*CallWebhookReq) ProtoMessage() {}
 
 func (x *CallWebhookReq) ProtoReflect() protoreflect.Message {
-	mi := &file_msg_msg_proto_msgTypes[210]
+	mi := &file_msg_msg_proto_msgTypes[214]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -11927,7 +12172,7 @@ func (x *CallWebhookReq) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use CallWebhookReq.ProtoReflect.Descriptor instead.
 func (*CallWebhookReq) Descriptor() ([]byte, []int) {
-	return file_msg_msg_proto_rawDescGZIP(), []int{210}
+	return file_msg_msg_proto_rawDescGZIP(), []int{214}
 }
 
 func (x *CallWebhookReq) GetBody() string {
@@ -11952,7 +12197,7 @@ type CallWebhookResp struct {
 
 func (x *CallWebhookResp) Reset() {
 	*x = CallWebhookResp{}
-	mi := &file_msg_msg_proto_msgTypes[211]
+	mi := &file_msg_msg_proto_msgTypes[215]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -11964,7 +12209,7 @@ func (x *CallWebhookResp) String() string {
 func (*CallWebhookResp) ProtoMessage() {}
 
 func (x *CallWebhookResp) ProtoReflect() protoreflect.Message {
-	mi := &file_msg_msg_proto_msgTypes[211]
+	mi := &file_msg_msg_proto_msgTypes[215]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -11977,7 +12222,7 @@ func (x *CallWebhookResp) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use CallWebhookResp.ProtoReflect.Descriptor instead.
 func (*CallWebhookResp) Descriptor() ([]byte, []int) {
-	return file_msg_msg_proto_rawDescGZIP(), []int{211}
+	return file_msg_msg_proto_rawDescGZIP(), []int{215}
 }
 
 // Where a page of operator search results ends: results are ordered by
@@ -11994,7 +12239,7 @@ type OperatorSearchCursor struct {
 
 func (x *OperatorSearchCursor) Reset() {
 	*x = OperatorSearchCursor{}
-	mi := &file_msg_msg_proto_msgTypes[212]
+	mi := &file_msg_msg_proto_msgTypes[216]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -12006,7 +12251,7 @@ func (x *OperatorSearchCursor) String() string {
 func (*OperatorSearchCursor) ProtoMessage() {}
 
 func (x *OperatorSearchCursor) ProtoReflect() protoreflect.Message {
-	mi := &file_msg_msg_proto_msgTypes[212]
+	mi := &file_msg_msg_proto_msgTypes[216]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -12019,7 +12264,7 @@ func (x *OperatorSearchCursor) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use OperatorSearchCursor.ProtoReflect.Descriptor instead.
 func (*OperatorSearchCursor) Descriptor() ([]byte, []int) {
-	return file_msg_msg_proto_rawDescGZIP(), []int{212}
+	return file_msg_msg_proto_rawDescGZIP(), []int{216}
 }
 
 func (x *OperatorSearchCursor) GetSendTime() int64 {
@@ -12064,7 +12309,7 @@ type OperatorSearchMessagesReq struct {
 
 func (x *OperatorSearchMessagesReq) Reset() {
 	*x = OperatorSearchMessagesReq{}
-	mi := &file_msg_msg_proto_msgTypes[213]
+	mi := &file_msg_msg_proto_msgTypes[217]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -12076,7 +12321,7 @@ func (x *OperatorSearchMessagesReq) String() string {
 func (*OperatorSearchMessagesReq) ProtoMessage() {}
 
 func (x *OperatorSearchMessagesReq) ProtoReflect() protoreflect.Message {
-	mi := &file_msg_msg_proto_msgTypes[213]
+	mi := &file_msg_msg_proto_msgTypes[217]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -12089,7 +12334,7 @@ func (x *OperatorSearchMessagesReq) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use OperatorSearchMessagesReq.ProtoReflect.Descriptor instead.
 func (*OperatorSearchMessagesReq) Descriptor() ([]byte, []int) {
-	return file_msg_msg_proto_rawDescGZIP(), []int{213}
+	return file_msg_msg_proto_rawDescGZIP(), []int{217}
 }
 
 func (x *OperatorSearchMessagesReq) GetKeywords() []string {
@@ -12189,7 +12434,7 @@ type OperatorMessage struct {
 
 func (x *OperatorMessage) Reset() {
 	*x = OperatorMessage{}
-	mi := &file_msg_msg_proto_msgTypes[214]
+	mi := &file_msg_msg_proto_msgTypes[218]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -12201,7 +12446,7 @@ func (x *OperatorMessage) String() string {
 func (*OperatorMessage) ProtoMessage() {}
 
 func (x *OperatorMessage) ProtoReflect() protoreflect.Message {
-	mi := &file_msg_msg_proto_msgTypes[214]
+	mi := &file_msg_msg_proto_msgTypes[218]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -12214,7 +12459,7 @@ func (x *OperatorMessage) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use OperatorMessage.ProtoReflect.Descriptor instead.
 func (*OperatorMessage) Descriptor() ([]byte, []int) {
-	return file_msg_msg_proto_rawDescGZIP(), []int{214}
+	return file_msg_msg_proto_rawDescGZIP(), []int{218}
 }
 
 func (x *OperatorMessage) GetConversationID() string {
@@ -12285,7 +12530,7 @@ type OperatorSearchMessagesResp struct {
 
 func (x *OperatorSearchMessagesResp) Reset() {
 	*x = OperatorSearchMessagesResp{}
-	mi := &file_msg_msg_proto_msgTypes[215]
+	mi := &file_msg_msg_proto_msgTypes[219]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -12297,7 +12542,7 @@ func (x *OperatorSearchMessagesResp) String() string {
 func (*OperatorSearchMessagesResp) ProtoMessage() {}
 
 func (x *OperatorSearchMessagesResp) ProtoReflect() protoreflect.Message {
-	mi := &file_msg_msg_proto_msgTypes[215]
+	mi := &file_msg_msg_proto_msgTypes[219]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -12310,7 +12555,7 @@ func (x *OperatorSearchMessagesResp) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use OperatorSearchMessagesResp.ProtoReflect.Descriptor instead.
 func (*OperatorSearchMessagesResp) Descriptor() ([]byte, []int) {
-	return file_msg_msg_proto_rawDescGZIP(), []int{215}
+	return file_msg_msg_proto_rawDescGZIP(), []int{219}
 }
 
 func (x *OperatorSearchMessagesResp) GetMessages() []*OperatorMessage {
@@ -12352,7 +12597,7 @@ type GetConversationTimelineReq struct {
 
 func (x *GetConversationTimelineReq) Reset() {
 	*x = GetConversationTimelineReq{}
-	mi := &file_msg_msg_proto_msgTypes[216]
+	mi := &file_msg_msg_proto_msgTypes[220]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -12364,7 +12609,7 @@ func (x *GetConversationTimelineReq) String() string {
 func (*GetConversationTimelineReq) ProtoMessage() {}
 
 func (x *GetConversationTimelineReq) ProtoReflect() protoreflect.Message {
-	mi := &file_msg_msg_proto_msgTypes[216]
+	mi := &file_msg_msg_proto_msgTypes[220]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -12377,7 +12622,7 @@ func (x *GetConversationTimelineReq) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetConversationTimelineReq.ProtoReflect.Descriptor instead.
 func (*GetConversationTimelineReq) Descriptor() ([]byte, []int) {
-	return file_msg_msg_proto_rawDescGZIP(), []int{216}
+	return file_msg_msg_proto_rawDescGZIP(), []int{220}
 }
 
 func (x *GetConversationTimelineReq) GetConversationID() string {
@@ -12429,7 +12674,7 @@ type GetConversationTimelineResp struct {
 
 func (x *GetConversationTimelineResp) Reset() {
 	*x = GetConversationTimelineResp{}
-	mi := &file_msg_msg_proto_msgTypes[217]
+	mi := &file_msg_msg_proto_msgTypes[221]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -12441,7 +12686,7 @@ func (x *GetConversationTimelineResp) String() string {
 func (*GetConversationTimelineResp) ProtoMessage() {}
 
 func (x *GetConversationTimelineResp) ProtoReflect() protoreflect.Message {
-	mi := &file_msg_msg_proto_msgTypes[217]
+	mi := &file_msg_msg_proto_msgTypes[221]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -12454,7 +12699,7 @@ func (x *GetConversationTimelineResp) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetConversationTimelineResp.ProtoReflect.Descriptor instead.
 func (*GetConversationTimelineResp) Descriptor() ([]byte, []int) {
-	return file_msg_msg_proto_rawDescGZIP(), []int{217}
+	return file_msg_msg_proto_rawDescGZIP(), []int{221}
 }
 
 func (x *GetConversationTimelineResp) GetMessages() []*OperatorMessage {
@@ -13100,7 +13345,23 @@ const file_msg_msg_proto_rawDesc = "" +
 	"\vEditMsgResp\x12\x1a\n" +
 	"\beditTime\x18\x01 \x01(\x03R\beditTime\x12\x18\n" +
 	"\acontent\x18\x02 \x01(\tR\acontent\x12 \n" +
-	"\vcontentType\x18\x03 \x01(\x05R\vcontentType\"W\n" +
+	"\vcontentType\x18\x03 \x01(\x05R\vcontentType\"K\n" +
+	"\x0fOpenViewOnceReq\x12&\n" +
+	"\x0econversationID\x18\x01 \x01(\tR\x0econversationID\x12\x10\n" +
+	"\x03seq\x18\x02 \x01(\x03R\x03seq\"\xb6\x01\n" +
+	"\x10OpenViewOnceResp\x12\x10\n" +
+	"\x03url\x18\x01 \x01(\tR\x03url\x12\x1a\n" +
+	"\bcoverURL\x18\x02 \x01(\tR\bcoverURL\x12$\n" +
+	"\rurlExpireTime\x18\x03 \x01(\x03R\rurlExpireTime\x12\x12\n" +
+	"\x04mode\x18\x04 \x01(\x05R\x04mode\x12\x1a\n" +
+	"\bdeadline\x18\x05 \x01(\x03R\bdeadline\x12\x1e\n" +
+	"\n" +
+	"serverTime\x18\x06 \x01(\x03R\n" +
+	"serverTime\"L\n" +
+	"\x10CloseViewOnceReq\x12&\n" +
+	"\x0econversationID\x18\x01 \x01(\tR\x0econversationID\x12\x10\n" +
+	"\x03seq\x18\x02 \x01(\x03R\x03seq\"\x13\n" +
+	"\x11CloseViewOnceResp\"W\n" +
 	"\x15GetMsgExtraVersionReq\x12\x16\n" +
 	"\x06userID\x18\x01 \x01(\tR\x06userID\x12&\n" +
 	"\x0econversationID\x18\x02 \x01(\tR\x0econversationID\"2\n" +
@@ -13356,7 +13617,7 @@ const file_msg_msg_proto_rawDesc = "" +
 	"\x1bGetConversationTimelineResp\x127\n" +
 	"\bmessages\x18\x01 \x03(\v2\x1b.openim.msg.OperatorMessageR\bmessages\x12\x16\n" +
 	"\x06minSeq\x18\x02 \x01(\x03R\x06minSeq\x12\x16\n" +
-	"\x06maxSeq\x18\x03 \x01(\x03R\x06maxSeq2\x89<\n" +
+	"\x06maxSeq\x18\x03 \x01(\x03R\x06maxSeq2\xa2=\n" +
 	"\x03msg\x12D\n" +
 	"\tGetMaxSeq\x12\x1a.openim.sdkws.GetMaxSeqReq\x1a\x1b.openim.sdkws.GetMaxSeqResp\x12A\n" +
 	"\n" +
@@ -13443,7 +13704,9 @@ const file_msg_msg_proto_rawDesc = "" +
 	"\x10UpdateBannedWord\x12\x1f.openim.msg.UpdateBannedWordReq\x1a .openim.msg.UpdateBannedWordResp\x12O\n" +
 	"\x0eDelBannedWords\x12\x1d.openim.msg.DelBannedWordsReq\x1a\x1e.openim.msg.DelBannedWordsResp\x12R\n" +
 	"\x0fTestBannedWords\x12\x1e.openim.msg.TestBannedWordsReq\x1a\x1f.openim.msg.TestBannedWordsResp\x12:\n" +
-	"\aEditMsg\x12\x16.openim.msg.EditMsgReq\x1a\x17.openim.msg.EditMsgResp\x12[\n" +
+	"\aEditMsg\x12\x16.openim.msg.EditMsgReq\x1a\x17.openim.msg.EditMsgResp\x12I\n" +
+	"\fOpenViewOnce\x12\x1b.openim.msg.OpenViewOnceReq\x1a\x1c.openim.msg.OpenViewOnceResp\x12L\n" +
+	"\rCloseViewOnce\x12\x1c.openim.msg.CloseViewOnceReq\x1a\x1d.openim.msg.CloseViewOnceResp\x12[\n" +
 	"\x12GetMsgExtraVersion\x12!.openim.msg.GetMsgExtraVersionReq\x1a\".openim.msg.GetMsgExtraVersionResp\x12^\n" +
 	"\x13GetMsgExtraVersions\x12\".openim.msg.GetMsgExtraVersionsReq\x1a#.openim.msg.GetMsgExtraVersionsResp\x12[\n" +
 	"\x12CreateScheduledMsg\x12!.openim.msg.CreateScheduledMsgReq\x1a\".openim.msg.CreateScheduledMsgResp\x12[\n" +
@@ -13467,7 +13730,7 @@ func file_msg_msg_proto_rawDescGZIP() []byte {
 	return file_msg_msg_proto_rawDescData
 }
 
-var file_msg_msg_proto_msgTypes = make([]protoimpl.MessageInfo, 230)
+var file_msg_msg_proto_msgTypes = make([]protoimpl.MessageInfo, 234)
 var file_msg_msg_proto_goTypes = []any{
 	(*MsgDataToMQ)(nil),                          // 0: openim.msg.MsgDataToMQ
 	(*MsgDataToDB)(nil),                          // 1: openim.msg.MsgDataToDB
@@ -13628,207 +13891,211 @@ var file_msg_msg_proto_goTypes = []any{
 	(*TestBannedWordsResp)(nil),                  // 156: openim.msg.TestBannedWordsResp
 	(*EditMsgReq)(nil),                           // 157: openim.msg.EditMsgReq
 	(*EditMsgResp)(nil),                          // 158: openim.msg.EditMsgResp
-	(*GetMsgExtraVersionReq)(nil),                // 159: openim.msg.GetMsgExtraVersionReq
-	(*GetMsgExtraVersionResp)(nil),               // 160: openim.msg.GetMsgExtraVersionResp
-	(*GetMsgExtraVersionsReq)(nil),               // 161: openim.msg.GetMsgExtraVersionsReq
-	(*GetMsgExtraVersionsResp)(nil),              // 162: openim.msg.GetMsgExtraVersionsResp
-	(*ScheduledMsgRecurrence)(nil),               // 163: openim.msg.ScheduledMsgRecurrence
-	(*ScheduledMsgSchedule)(nil),                 // 164: openim.msg.ScheduledMsgSchedule
-	(*ScheduledMsg)(nil),                         // 165: openim.msg.ScheduledMsg
-	(*CreateScheduledMsgReq)(nil),                // 166: openim.msg.CreateScheduledMsgReq
-	(*CreateScheduledMsgResp)(nil),               // 167: openim.msg.CreateScheduledMsgResp
-	(*UpdateScheduledMsgReq)(nil),                // 168: openim.msg.UpdateScheduledMsgReq
-	(*UpdateScheduledMsgResp)(nil),               // 169: openim.msg.UpdateScheduledMsgResp
-	(*CancelScheduledMsgReq)(nil),                // 170: openim.msg.CancelScheduledMsgReq
-	(*CancelScheduledMsgResp)(nil),               // 171: openim.msg.CancelScheduledMsgResp
-	(*SendScheduledMsgNowReq)(nil),               // 172: openim.msg.SendScheduledMsgNowReq
-	(*SendScheduledMsgNowResp)(nil),              // 173: openim.msg.SendScheduledMsgNowResp
-	(*GetScheduledMsgsReq)(nil),                  // 174: openim.msg.GetScheduledMsgsReq
-	(*GetScheduledMsgsResp)(nil),                 // 175: openim.msg.GetScheduledMsgsResp
-	(*CancelUserScheduledMsgsReq)(nil),           // 176: openim.msg.CancelUserScheduledMsgsReq
-	(*CancelUserScheduledMsgsResp)(nil),          // 177: openim.msg.CancelUserScheduledMsgsResp
-	(*CallParticipant)(nil),                      // 178: openim.msg.CallParticipant
-	(*CallSession)(nil),                          // 179: openim.msg.CallSession
-	(*CreateCallReq)(nil),                        // 180: openim.msg.CreateCallReq
-	(*CreateCallResp)(nil),                       // 181: openim.msg.CreateCallResp
-	(*AcceptCallReq)(nil),                        // 182: openim.msg.AcceptCallReq
-	(*AcceptCallResp)(nil),                       // 183: openim.msg.AcceptCallResp
-	(*RejectCallReq)(nil),                        // 184: openim.msg.RejectCallReq
-	(*RejectCallResp)(nil),                       // 185: openim.msg.RejectCallResp
-	(*CancelCallReq)(nil),                        // 186: openim.msg.CancelCallReq
-	(*CancelCallResp)(nil),                       // 187: openim.msg.CancelCallResp
-	(*EndCallReq)(nil),                           // 188: openim.msg.EndCallReq
-	(*EndCallResp)(nil),                          // 189: openim.msg.EndCallResp
-	(*JoinCallReq)(nil),                          // 190: openim.msg.JoinCallReq
-	(*JoinCallResp)(nil),                         // 191: openim.msg.JoinCallResp
-	(*LeaveCallReq)(nil),                         // 192: openim.msg.LeaveCallReq
-	(*LeaveCallResp)(nil),                        // 193: openim.msg.LeaveCallResp
-	(*RingCallReq)(nil),                          // 194: openim.msg.RingCallReq
-	(*RingCallResp)(nil),                         // 195: openim.msg.RingCallResp
-	(*MuteCallParticipantReq)(nil),               // 196: openim.msg.MuteCallParticipantReq
-	(*MuteCallParticipantResp)(nil),              // 197: openim.msg.MuteCallParticipantResp
-	(*GetCallReq)(nil),                           // 198: openim.msg.GetCallReq
-	(*GetCallResp)(nil),                          // 199: openim.msg.GetCallResp
-	(*CallHistoryItem)(nil),                      // 200: openim.msg.CallHistoryItem
-	(*CallHistoryCursor)(nil),                    // 201: openim.msg.CallHistoryCursor
-	(*GetCallHistoryReq)(nil),                    // 202: openim.msg.GetCallHistoryReq
-	(*GetCallHistoryResp)(nil),                   // 203: openim.msg.GetCallHistoryResp
-	(*DeleteCallHistoryReq)(nil),                 // 204: openim.msg.DeleteCallHistoryReq
-	(*DeleteCallHistoryResp)(nil),                // 205: openim.msg.DeleteCallHistoryResp
-	(*GetMissedCallCountReq)(nil),                // 206: openim.msg.GetMissedCallCountReq
-	(*GetMissedCallCountResp)(nil),               // 207: openim.msg.GetMissedCallCountResp
-	(*MarkCallHistorySeenReq)(nil),               // 208: openim.msg.MarkCallHistorySeenReq
-	(*MarkCallHistorySeenResp)(nil),              // 209: openim.msg.MarkCallHistorySeenResp
-	(*CallWebhookReq)(nil),                       // 210: openim.msg.CallWebhookReq
-	(*CallWebhookResp)(nil),                      // 211: openim.msg.CallWebhookResp
-	(*OperatorSearchCursor)(nil),                 // 212: openim.msg.OperatorSearchCursor
-	(*OperatorSearchMessagesReq)(nil),            // 213: openim.msg.OperatorSearchMessagesReq
-	(*OperatorMessage)(nil),                      // 214: openim.msg.OperatorMessage
-	(*OperatorSearchMessagesResp)(nil),           // 215: openim.msg.OperatorSearchMessagesResp
-	(*GetConversationTimelineReq)(nil),           // 216: openim.msg.GetConversationTimelineReq
-	(*GetConversationTimelineResp)(nil),          // 217: openim.msg.GetConversationTimelineResp
-	nil,                                          // 218: openim.msg.GetMessagesReadCountResp.ReadCountsEntry
-	nil,                                          // 219: openim.msg.SeqsInfoResp.MaxSeqsEntry
-	nil,                                          // 220: openim.msg.GetMsgByConversationIDsReq.MaxSeqsEntry
-	nil,                                          // 221: openim.msg.GetMsgByConversationIDsReq.MinSeqsEntry
-	nil,                                          // 222: openim.msg.GetMsgByConversationIDsResp.MsgDatasEntry
-	nil,                                          // 223: openim.msg.GetConversationsHasReadAndMaxSeqResp.SeqsEntry
-	nil,                                          // 224: openim.msg.GetActiveUserResp.DateCountEntry
-	nil,                                          // 225: openim.msg.GetActiveGroupResp.DateCountEntry
-	nil,                                          // 226: openim.msg.GetSeqMessageResp.MsgsEntry
-	nil,                                          // 227: openim.msg.GetSeqMessageResp.NotificationMsgsEntry
-	nil,                                          // 228: openim.msg.GetLastMessageResp.MsgsEntry
-	nil,                                          // 229: openim.msg.GetMsgExtraVersionsResp.VersionsEntry
-	(*sdkws.MsgData)(nil),                        // 230: openim.sdkws.MsgData
-	(*sdkws.RequestPagination)(nil),              // 231: openim.sdkws.RequestPagination
-	(*sdkws.UserInfo)(nil),                       // 232: openim.sdkws.UserInfo
-	(*sdkws.GroupInfo)(nil),                      // 233: openim.sdkws.GroupInfo
-	(*conversation.Conversation)(nil),            // 234: openim.conversation.Conversation
-	(sdkws.PullOrder)(0),                         // 235: openim.sdkws.PullOrder
-	(*sdkws.AppSettings)(nil),                    // 236: openim.sdkws.AppSettings
-	(*sdkws.PullMsgs)(nil),                       // 237: openim.sdkws.PullMsgs
-	(*sdkws.GetMaxSeqReq)(nil),                   // 238: openim.sdkws.GetMaxSeqReq
-	(*sdkws.PullMessageBySeqsReq)(nil),           // 239: openim.sdkws.PullMessageBySeqsReq
-	(*sdkws.GetMaxSeqResp)(nil),                  // 240: openim.sdkws.GetMaxSeqResp
-	(*sdkws.PullMessageBySeqsResp)(nil),          // 241: openim.sdkws.PullMessageBySeqsResp
+	(*OpenViewOnceReq)(nil),                      // 159: openim.msg.OpenViewOnceReq
+	(*OpenViewOnceResp)(nil),                     // 160: openim.msg.OpenViewOnceResp
+	(*CloseViewOnceReq)(nil),                     // 161: openim.msg.CloseViewOnceReq
+	(*CloseViewOnceResp)(nil),                    // 162: openim.msg.CloseViewOnceResp
+	(*GetMsgExtraVersionReq)(nil),                // 163: openim.msg.GetMsgExtraVersionReq
+	(*GetMsgExtraVersionResp)(nil),               // 164: openim.msg.GetMsgExtraVersionResp
+	(*GetMsgExtraVersionsReq)(nil),               // 165: openim.msg.GetMsgExtraVersionsReq
+	(*GetMsgExtraVersionsResp)(nil),              // 166: openim.msg.GetMsgExtraVersionsResp
+	(*ScheduledMsgRecurrence)(nil),               // 167: openim.msg.ScheduledMsgRecurrence
+	(*ScheduledMsgSchedule)(nil),                 // 168: openim.msg.ScheduledMsgSchedule
+	(*ScheduledMsg)(nil),                         // 169: openim.msg.ScheduledMsg
+	(*CreateScheduledMsgReq)(nil),                // 170: openim.msg.CreateScheduledMsgReq
+	(*CreateScheduledMsgResp)(nil),               // 171: openim.msg.CreateScheduledMsgResp
+	(*UpdateScheduledMsgReq)(nil),                // 172: openim.msg.UpdateScheduledMsgReq
+	(*UpdateScheduledMsgResp)(nil),               // 173: openim.msg.UpdateScheduledMsgResp
+	(*CancelScheduledMsgReq)(nil),                // 174: openim.msg.CancelScheduledMsgReq
+	(*CancelScheduledMsgResp)(nil),               // 175: openim.msg.CancelScheduledMsgResp
+	(*SendScheduledMsgNowReq)(nil),               // 176: openim.msg.SendScheduledMsgNowReq
+	(*SendScheduledMsgNowResp)(nil),              // 177: openim.msg.SendScheduledMsgNowResp
+	(*GetScheduledMsgsReq)(nil),                  // 178: openim.msg.GetScheduledMsgsReq
+	(*GetScheduledMsgsResp)(nil),                 // 179: openim.msg.GetScheduledMsgsResp
+	(*CancelUserScheduledMsgsReq)(nil),           // 180: openim.msg.CancelUserScheduledMsgsReq
+	(*CancelUserScheduledMsgsResp)(nil),          // 181: openim.msg.CancelUserScheduledMsgsResp
+	(*CallParticipant)(nil),                      // 182: openim.msg.CallParticipant
+	(*CallSession)(nil),                          // 183: openim.msg.CallSession
+	(*CreateCallReq)(nil),                        // 184: openim.msg.CreateCallReq
+	(*CreateCallResp)(nil),                       // 185: openim.msg.CreateCallResp
+	(*AcceptCallReq)(nil),                        // 186: openim.msg.AcceptCallReq
+	(*AcceptCallResp)(nil),                       // 187: openim.msg.AcceptCallResp
+	(*RejectCallReq)(nil),                        // 188: openim.msg.RejectCallReq
+	(*RejectCallResp)(nil),                       // 189: openim.msg.RejectCallResp
+	(*CancelCallReq)(nil),                        // 190: openim.msg.CancelCallReq
+	(*CancelCallResp)(nil),                       // 191: openim.msg.CancelCallResp
+	(*EndCallReq)(nil),                           // 192: openim.msg.EndCallReq
+	(*EndCallResp)(nil),                          // 193: openim.msg.EndCallResp
+	(*JoinCallReq)(nil),                          // 194: openim.msg.JoinCallReq
+	(*JoinCallResp)(nil),                         // 195: openim.msg.JoinCallResp
+	(*LeaveCallReq)(nil),                         // 196: openim.msg.LeaveCallReq
+	(*LeaveCallResp)(nil),                        // 197: openim.msg.LeaveCallResp
+	(*RingCallReq)(nil),                          // 198: openim.msg.RingCallReq
+	(*RingCallResp)(nil),                         // 199: openim.msg.RingCallResp
+	(*MuteCallParticipantReq)(nil),               // 200: openim.msg.MuteCallParticipantReq
+	(*MuteCallParticipantResp)(nil),              // 201: openim.msg.MuteCallParticipantResp
+	(*GetCallReq)(nil),                           // 202: openim.msg.GetCallReq
+	(*GetCallResp)(nil),                          // 203: openim.msg.GetCallResp
+	(*CallHistoryItem)(nil),                      // 204: openim.msg.CallHistoryItem
+	(*CallHistoryCursor)(nil),                    // 205: openim.msg.CallHistoryCursor
+	(*GetCallHistoryReq)(nil),                    // 206: openim.msg.GetCallHistoryReq
+	(*GetCallHistoryResp)(nil),                   // 207: openim.msg.GetCallHistoryResp
+	(*DeleteCallHistoryReq)(nil),                 // 208: openim.msg.DeleteCallHistoryReq
+	(*DeleteCallHistoryResp)(nil),                // 209: openim.msg.DeleteCallHistoryResp
+	(*GetMissedCallCountReq)(nil),                // 210: openim.msg.GetMissedCallCountReq
+	(*GetMissedCallCountResp)(nil),               // 211: openim.msg.GetMissedCallCountResp
+	(*MarkCallHistorySeenReq)(nil),               // 212: openim.msg.MarkCallHistorySeenReq
+	(*MarkCallHistorySeenResp)(nil),              // 213: openim.msg.MarkCallHistorySeenResp
+	(*CallWebhookReq)(nil),                       // 214: openim.msg.CallWebhookReq
+	(*CallWebhookResp)(nil),                      // 215: openim.msg.CallWebhookResp
+	(*OperatorSearchCursor)(nil),                 // 216: openim.msg.OperatorSearchCursor
+	(*OperatorSearchMessagesReq)(nil),            // 217: openim.msg.OperatorSearchMessagesReq
+	(*OperatorMessage)(nil),                      // 218: openim.msg.OperatorMessage
+	(*OperatorSearchMessagesResp)(nil),           // 219: openim.msg.OperatorSearchMessagesResp
+	(*GetConversationTimelineReq)(nil),           // 220: openim.msg.GetConversationTimelineReq
+	(*GetConversationTimelineResp)(nil),          // 221: openim.msg.GetConversationTimelineResp
+	nil,                                          // 222: openim.msg.GetMessagesReadCountResp.ReadCountsEntry
+	nil,                                          // 223: openim.msg.SeqsInfoResp.MaxSeqsEntry
+	nil,                                          // 224: openim.msg.GetMsgByConversationIDsReq.MaxSeqsEntry
+	nil,                                          // 225: openim.msg.GetMsgByConversationIDsReq.MinSeqsEntry
+	nil,                                          // 226: openim.msg.GetMsgByConversationIDsResp.MsgDatasEntry
+	nil,                                          // 227: openim.msg.GetConversationsHasReadAndMaxSeqResp.SeqsEntry
+	nil,                                          // 228: openim.msg.GetActiveUserResp.DateCountEntry
+	nil,                                          // 229: openim.msg.GetActiveGroupResp.DateCountEntry
+	nil,                                          // 230: openim.msg.GetSeqMessageResp.MsgsEntry
+	nil,                                          // 231: openim.msg.GetSeqMessageResp.NotificationMsgsEntry
+	nil,                                          // 232: openim.msg.GetLastMessageResp.MsgsEntry
+	nil,                                          // 233: openim.msg.GetMsgExtraVersionsResp.VersionsEntry
+	(*sdkws.MsgData)(nil),                        // 234: openim.sdkws.MsgData
+	(*sdkws.RequestPagination)(nil),              // 235: openim.sdkws.RequestPagination
+	(*sdkws.UserInfo)(nil),                       // 236: openim.sdkws.UserInfo
+	(*sdkws.GroupInfo)(nil),                      // 237: openim.sdkws.GroupInfo
+	(*conversation.Conversation)(nil),            // 238: openim.conversation.Conversation
+	(sdkws.PullOrder)(0),                         // 239: openim.sdkws.PullOrder
+	(*sdkws.AppSettings)(nil),                    // 240: openim.sdkws.AppSettings
+	(*sdkws.PullMsgs)(nil),                       // 241: openim.sdkws.PullMsgs
+	(*sdkws.GetMaxSeqReq)(nil),                   // 242: openim.sdkws.GetMaxSeqReq
+	(*sdkws.PullMessageBySeqsReq)(nil),           // 243: openim.sdkws.PullMessageBySeqsReq
+	(*sdkws.GetMaxSeqResp)(nil),                  // 244: openim.sdkws.GetMaxSeqResp
+	(*sdkws.PullMessageBySeqsResp)(nil),          // 245: openim.sdkws.PullMessageBySeqsResp
 }
 var file_msg_msg_proto_depIdxs = []int32{
-	230, // 0: openim.msg.MsgDataToMQ.msgData:type_name -> openim.sdkws.MsgData
-	230, // 1: openim.msg.MsgDataToDB.msgData:type_name -> openim.sdkws.MsgData
-	230, // 2: openim.msg.PushMsgDataToMQ.msgData:type_name -> openim.sdkws.MsgData
-	230, // 3: openim.msg.MsgDataToMongoByMQ.msgData:type_name -> openim.sdkws.MsgData
-	230, // 4: openim.msg.SendMsgReq.msgData:type_name -> openim.sdkws.MsgData
-	230, // 5: openim.msg.SendMsgResp.modify:type_name -> openim.sdkws.MsgData
-	230, // 6: openim.msg.SendSimpleMsgReq.msgData:type_name -> openim.sdkws.MsgData
-	230, // 7: openim.msg.SendSimpleMsgResp.modify:type_name -> openim.sdkws.MsgData
-	230, // 8: openim.msg.MsgDataToModifyByMQ.messages:type_name -> openim.sdkws.MsgData
-	230, // 9: openim.msg.PinnedMessage.message:type_name -> openim.sdkws.MsgData
+	234, // 0: openim.msg.MsgDataToMQ.msgData:type_name -> openim.sdkws.MsgData
+	234, // 1: openim.msg.MsgDataToDB.msgData:type_name -> openim.sdkws.MsgData
+	234, // 2: openim.msg.PushMsgDataToMQ.msgData:type_name -> openim.sdkws.MsgData
+	234, // 3: openim.msg.MsgDataToMongoByMQ.msgData:type_name -> openim.sdkws.MsgData
+	234, // 4: openim.msg.SendMsgReq.msgData:type_name -> openim.sdkws.MsgData
+	234, // 5: openim.msg.SendMsgResp.modify:type_name -> openim.sdkws.MsgData
+	234, // 6: openim.msg.SendSimpleMsgReq.msgData:type_name -> openim.sdkws.MsgData
+	234, // 7: openim.msg.SendSimpleMsgResp.modify:type_name -> openim.sdkws.MsgData
+	234, // 8: openim.msg.MsgDataToModifyByMQ.messages:type_name -> openim.sdkws.MsgData
+	234, // 9: openim.msg.PinnedMessage.message:type_name -> openim.sdkws.MsgData
 	25,  // 10: openim.msg.GetPinnedMessagesResp.messages:type_name -> openim.msg.PinnedMessage
 	32,  // 11: openim.msg.VotePollResp.state:type_name -> openim.msg.PollState
 	32,  // 12: openim.msg.ClosePollResp.state:type_name -> openim.msg.PollState
 	37,  // 13: openim.msg.GetPollStatesReq.polls:type_name -> openim.msg.PollStateQuery
 	32,  // 14: openim.msg.GetPollStatesResp.states:type_name -> openim.msg.PollState
-	231, // 15: openim.msg.GetPollVotersReq.pagination:type_name -> openim.sdkws.RequestPagination
+	235, // 15: openim.msg.GetPollVotersReq.pagination:type_name -> openim.sdkws.RequestPagination
 	40,  // 16: openim.msg.GetPollVotersResp.voters:type_name -> openim.msg.PollVoter
 	43,  // 17: openim.msg.MessageReactionState.reactions:type_name -> openim.msg.ReactionSummary
 	44,  // 18: openim.msg.ReactMessageResp.state:type_name -> openim.msg.MessageReactionState
 	47,  // 19: openim.msg.GetMessageReactionsReq.messages:type_name -> openim.msg.MessageReactionQuery
 	44,  // 20: openim.msg.GetMessageReactionsResp.states:type_name -> openim.msg.MessageReactionState
-	231, // 21: openim.msg.GetMessageReactionUsersReq.pagination:type_name -> openim.sdkws.RequestPagination
+	235, // 21: openim.msg.GetMessageReactionUsersReq.pagination:type_name -> openim.sdkws.RequestPagination
 	50,  // 22: openim.msg.GetMessageReactionUsersResp.users:type_name -> openim.msg.MessageReactionUser
-	218, // 23: openim.msg.GetMessagesReadCountResp.readCounts:type_name -> openim.msg.GetMessagesReadCountResp.ReadCountsEntry
+	222, // 23: openim.msg.GetMessagesReadCountResp.readCounts:type_name -> openim.msg.GetMessagesReadCountResp.ReadCountsEntry
 	56,  // 24: openim.msg.GetMessageReadersResp.readers:type_name -> openim.msg.MessageReader
 	58,  // 25: openim.msg.ClearConversationsMsgReq.deleteSyncOpt:type_name -> openim.msg.DeleteSyncOpt
 	58,  // 26: openim.msg.UserClearAllMsgReq.deleteSyncOpt:type_name -> openim.msg.DeleteSyncOpt
 	58,  // 27: openim.msg.DeleteMsgsReq.deleteSyncOpt:type_name -> openim.msg.DeleteSyncOpt
-	219, // 28: openim.msg.SeqsInfoResp.maxSeqs:type_name -> openim.msg.SeqsInfoResp.MaxSeqsEntry
-	220, // 29: openim.msg.GetMsgByConversationIDsReq.maxSeqs:type_name -> openim.msg.GetMsgByConversationIDsReq.MaxSeqsEntry
-	221, // 30: openim.msg.GetMsgByConversationIDsReq.minSeqs:type_name -> openim.msg.GetMsgByConversationIDsReq.MinSeqsEntry
-	222, // 31: openim.msg.GetMsgByConversationIDsResp.msgDatas:type_name -> openim.msg.GetMsgByConversationIDsResp.MsgDatasEntry
-	223, // 32: openim.msg.GetConversationsHasReadAndMaxSeqResp.seqs:type_name -> openim.msg.GetConversationsHasReadAndMaxSeqResp.SeqsEntry
-	231, // 33: openim.msg.GetActiveUserReq.pagination:type_name -> openim.sdkws.RequestPagination
-	232, // 34: openim.msg.ActiveUser.user:type_name -> openim.sdkws.UserInfo
-	224, // 35: openim.msg.GetActiveUserResp.dateCount:type_name -> openim.msg.GetActiveUserResp.DateCountEntry
+	223, // 28: openim.msg.SeqsInfoResp.maxSeqs:type_name -> openim.msg.SeqsInfoResp.MaxSeqsEntry
+	224, // 29: openim.msg.GetMsgByConversationIDsReq.maxSeqs:type_name -> openim.msg.GetMsgByConversationIDsReq.MaxSeqsEntry
+	225, // 30: openim.msg.GetMsgByConversationIDsReq.minSeqs:type_name -> openim.msg.GetMsgByConversationIDsReq.MinSeqsEntry
+	226, // 31: openim.msg.GetMsgByConversationIDsResp.msgDatas:type_name -> openim.msg.GetMsgByConversationIDsResp.MsgDatasEntry
+	227, // 32: openim.msg.GetConversationsHasReadAndMaxSeqResp.seqs:type_name -> openim.msg.GetConversationsHasReadAndMaxSeqResp.SeqsEntry
+	235, // 33: openim.msg.GetActiveUserReq.pagination:type_name -> openim.sdkws.RequestPagination
+	236, // 34: openim.msg.ActiveUser.user:type_name -> openim.sdkws.UserInfo
+	228, // 35: openim.msg.GetActiveUserResp.dateCount:type_name -> openim.msg.GetActiveUserResp.DateCountEntry
 	80,  // 36: openim.msg.GetActiveUserResp.users:type_name -> openim.msg.ActiveUser
-	231, // 37: openim.msg.GetActiveGroupReq.pagination:type_name -> openim.sdkws.RequestPagination
-	233, // 38: openim.msg.ActiveGroup.group:type_name -> openim.sdkws.GroupInfo
-	225, // 39: openim.msg.GetActiveGroupResp.dateCount:type_name -> openim.msg.GetActiveGroupResp.DateCountEntry
+	235, // 37: openim.msg.GetActiveGroupReq.pagination:type_name -> openim.sdkws.RequestPagination
+	237, // 38: openim.msg.ActiveGroup.group:type_name -> openim.sdkws.GroupInfo
+	229, // 39: openim.msg.GetActiveGroupResp.dateCount:type_name -> openim.msg.GetActiveGroupResp.DateCountEntry
 	83,  // 40: openim.msg.GetActiveGroupResp.groups:type_name -> openim.msg.ActiveGroup
-	231, // 41: openim.msg.SearchMessageReq.pagination:type_name -> openim.sdkws.RequestPagination
+	235, // 41: openim.msg.SearchMessageReq.pagination:type_name -> openim.sdkws.RequestPagination
 	91,  // 42: openim.msg.SearchChatLog.chatLog:type_name -> openim.msg.ChatLog
-	230, // 43: openim.msg.SearchedMsgData.msgData:type_name -> openim.sdkws.MsgData
+	234, // 43: openim.msg.SearchedMsgData.msgData:type_name -> openim.sdkws.MsgData
 	86,  // 44: openim.msg.SearchMessageResp.chatLogs:type_name -> openim.msg.SearchChatLog
-	230, // 45: openim.msg.SearchMessagesResp.msgs:type_name -> openim.sdkws.MsgData
-	230, // 46: openim.msg.batchSendMessageReq.msgData:type_name -> openim.sdkws.MsgData
-	234, // 47: openim.msg.ClearMsgReq.conversations:type_name -> openim.conversation.Conversation
+	234, // 45: openim.msg.SearchMessagesResp.msgs:type_name -> openim.sdkws.MsgData
+	234, // 46: openim.msg.batchSendMessageReq.msgData:type_name -> openim.sdkws.MsgData
+	238, // 47: openim.msg.ClearMsgReq.conversations:type_name -> openim.conversation.Conversation
 	102, // 48: openim.msg.GetSeqMessageReq.conversations:type_name -> openim.msg.ConversationSeqs
-	235, // 49: openim.msg.GetSeqMessageReq.order:type_name -> openim.sdkws.PullOrder
-	226, // 50: openim.msg.GetSeqMessageResp.msgs:type_name -> openim.msg.GetSeqMessageResp.MsgsEntry
-	227, // 51: openim.msg.GetSeqMessageResp.notificationMsgs:type_name -> openim.msg.GetSeqMessageResp.NotificationMsgsEntry
+	239, // 49: openim.msg.GetSeqMessageReq.order:type_name -> openim.sdkws.PullOrder
+	230, // 50: openim.msg.GetSeqMessageResp.msgs:type_name -> openim.msg.GetSeqMessageResp.MsgsEntry
+	231, // 51: openim.msg.GetSeqMessageResp.notificationMsgs:type_name -> openim.msg.GetSeqMessageResp.NotificationMsgsEntry
 	106, // 52: openim.msg.GetActiveConversationResp.conversations:type_name -> openim.msg.ActiveConversation
-	228, // 53: openim.msg.GetLastMessageResp.msgs:type_name -> openim.msg.GetLastMessageResp.MsgsEntry
+	232, // 53: openim.msg.GetLastMessageResp.msgs:type_name -> openim.msg.GetLastMessageResp.MsgsEntry
 	122, // 54: openim.msg.SetSystemMsgVisibilityReq.entries:type_name -> openim.msg.SystemMsgVisibilityEntry
 	122, // 55: openim.msg.DelSystemMsgVisibilityReq.entries:type_name -> openim.msg.SystemMsgVisibilityEntry
 	122, // 56: openim.msg.GetSystemMsgVisibilityListResp.entries:type_name -> openim.msg.SystemMsgVisibilityEntry
-	236, // 57: openim.msg.GetAppSettingsResp.settings:type_name -> openim.sdkws.AppSettings
-	236, // 58: openim.msg.SetAppSettingsReq.settings:type_name -> openim.sdkws.AppSettings
-	236, // 59: openim.msg.SetAppSettingsResp.settings:type_name -> openim.sdkws.AppSettings
+	240, // 57: openim.msg.GetAppSettingsResp.settings:type_name -> openim.sdkws.AppSettings
+	240, // 58: openim.msg.SetAppSettingsReq.settings:type_name -> openim.sdkws.AppSettings
+	240, // 59: openim.msg.SetAppSettingsResp.settings:type_name -> openim.sdkws.AppSettings
 	133, // 60: openim.msg.PlatformMuteWindow.forbid:type_name -> openim.msg.PlatformMuteForbid
 	134, // 61: openim.msg.GetPlatformMuteResp.windows:type_name -> openim.msg.PlatformMuteWindow
 	134, // 62: openim.msg.SetPlatformMuteReq.windows:type_name -> openim.msg.PlatformMuteWindow
 	134, // 63: openim.msg.SetPlatformMuteResp.windows:type_name -> openim.msg.PlatformMuteWindow
 	133, // 64: openim.msg.PlatformMutePeriod.forbid:type_name -> openim.msg.PlatformMuteForbid
 	141, // 65: openim.msg.GetPlatformMuteStatusResp.periods:type_name -> openim.msg.PlatformMutePeriod
-	231, // 66: openim.msg.GetBannedWordsReq.pagination:type_name -> openim.sdkws.RequestPagination
+	235, // 66: openim.msg.GetBannedWordsReq.pagination:type_name -> openim.sdkws.RequestPagination
 	144, // 67: openim.msg.GetBannedWordsResp.words:type_name -> openim.msg.BannedWord
 	147, // 68: openim.msg.AddBannedWordsReq.words:type_name -> openim.msg.BannedWordInput
 	144, // 69: openim.msg.AddBannedWordsResp.added:type_name -> openim.msg.BannedWord
 	149, // 70: openim.msg.AddBannedWordsResp.rejected:type_name -> openim.msg.RejectedBannedWord
 	144, // 71: openim.msg.UpdateBannedWordResp.word:type_name -> openim.msg.BannedWord
-	229, // 72: openim.msg.GetMsgExtraVersionsResp.versions:type_name -> openim.msg.GetMsgExtraVersionsResp.VersionsEntry
-	163, // 73: openim.msg.ScheduledMsgSchedule.recurrence:type_name -> openim.msg.ScheduledMsgRecurrence
-	230, // 74: openim.msg.ScheduledMsg.msgData:type_name -> openim.sdkws.MsgData
-	164, // 75: openim.msg.ScheduledMsg.schedule:type_name -> openim.msg.ScheduledMsgSchedule
-	230, // 76: openim.msg.CreateScheduledMsgReq.msgData:type_name -> openim.sdkws.MsgData
-	164, // 77: openim.msg.CreateScheduledMsgReq.schedule:type_name -> openim.msg.ScheduledMsgSchedule
-	165, // 78: openim.msg.CreateScheduledMsgResp.scheduledMsg:type_name -> openim.msg.ScheduledMsg
-	230, // 79: openim.msg.UpdateScheduledMsgReq.msgData:type_name -> openim.sdkws.MsgData
-	164, // 80: openim.msg.UpdateScheduledMsgReq.schedule:type_name -> openim.msg.ScheduledMsgSchedule
-	165, // 81: openim.msg.UpdateScheduledMsgResp.scheduledMsg:type_name -> openim.msg.ScheduledMsg
-	165, // 82: openim.msg.SendScheduledMsgNowResp.scheduledMsg:type_name -> openim.msg.ScheduledMsg
-	231, // 83: openim.msg.GetScheduledMsgsReq.pagination:type_name -> openim.sdkws.RequestPagination
-	165, // 84: openim.msg.GetScheduledMsgsResp.scheduledMsgs:type_name -> openim.msg.ScheduledMsg
-	178, // 85: openim.msg.CallSession.participants:type_name -> openim.msg.CallParticipant
-	179, // 86: openim.msg.CreateCallResp.session:type_name -> openim.msg.CallSession
-	179, // 87: openim.msg.AcceptCallResp.session:type_name -> openim.msg.CallSession
-	179, // 88: openim.msg.RejectCallResp.session:type_name -> openim.msg.CallSession
-	179, // 89: openim.msg.CancelCallResp.session:type_name -> openim.msg.CallSession
-	179, // 90: openim.msg.EndCallResp.session:type_name -> openim.msg.CallSession
-	179, // 91: openim.msg.JoinCallResp.session:type_name -> openim.msg.CallSession
-	179, // 92: openim.msg.LeaveCallResp.session:type_name -> openim.msg.CallSession
-	179, // 93: openim.msg.RingCallResp.session:type_name -> openim.msg.CallSession
-	179, // 94: openim.msg.MuteCallParticipantResp.session:type_name -> openim.msg.CallSession
-	179, // 95: openim.msg.GetCallResp.session:type_name -> openim.msg.CallSession
-	179, // 96: openim.msg.CallHistoryItem.session:type_name -> openim.msg.CallSession
-	201, // 97: openim.msg.GetCallHistoryReq.cursor:type_name -> openim.msg.CallHistoryCursor
-	200, // 98: openim.msg.GetCallHistoryResp.calls:type_name -> openim.msg.CallHistoryItem
-	201, // 99: openim.msg.GetCallHistoryResp.nextCursor:type_name -> openim.msg.CallHistoryCursor
-	212, // 100: openim.msg.OperatorSearchMessagesReq.cursor:type_name -> openim.msg.OperatorSearchCursor
-	230, // 101: openim.msg.OperatorMessage.msg:type_name -> openim.sdkws.MsgData
-	214, // 102: openim.msg.OperatorSearchMessagesResp.messages:type_name -> openim.msg.OperatorMessage
-	212, // 103: openim.msg.OperatorSearchMessagesResp.next:type_name -> openim.msg.OperatorSearchCursor
-	214, // 104: openim.msg.GetConversationTimelineResp.messages:type_name -> openim.msg.OperatorMessage
-	230, // 105: openim.msg.GetMsgByConversationIDsResp.MsgDatasEntry.value:type_name -> openim.sdkws.MsgData
+	233, // 72: openim.msg.GetMsgExtraVersionsResp.versions:type_name -> openim.msg.GetMsgExtraVersionsResp.VersionsEntry
+	167, // 73: openim.msg.ScheduledMsgSchedule.recurrence:type_name -> openim.msg.ScheduledMsgRecurrence
+	234, // 74: openim.msg.ScheduledMsg.msgData:type_name -> openim.sdkws.MsgData
+	168, // 75: openim.msg.ScheduledMsg.schedule:type_name -> openim.msg.ScheduledMsgSchedule
+	234, // 76: openim.msg.CreateScheduledMsgReq.msgData:type_name -> openim.sdkws.MsgData
+	168, // 77: openim.msg.CreateScheduledMsgReq.schedule:type_name -> openim.msg.ScheduledMsgSchedule
+	169, // 78: openim.msg.CreateScheduledMsgResp.scheduledMsg:type_name -> openim.msg.ScheduledMsg
+	234, // 79: openim.msg.UpdateScheduledMsgReq.msgData:type_name -> openim.sdkws.MsgData
+	168, // 80: openim.msg.UpdateScheduledMsgReq.schedule:type_name -> openim.msg.ScheduledMsgSchedule
+	169, // 81: openim.msg.UpdateScheduledMsgResp.scheduledMsg:type_name -> openim.msg.ScheduledMsg
+	169, // 82: openim.msg.SendScheduledMsgNowResp.scheduledMsg:type_name -> openim.msg.ScheduledMsg
+	235, // 83: openim.msg.GetScheduledMsgsReq.pagination:type_name -> openim.sdkws.RequestPagination
+	169, // 84: openim.msg.GetScheduledMsgsResp.scheduledMsgs:type_name -> openim.msg.ScheduledMsg
+	182, // 85: openim.msg.CallSession.participants:type_name -> openim.msg.CallParticipant
+	183, // 86: openim.msg.CreateCallResp.session:type_name -> openim.msg.CallSession
+	183, // 87: openim.msg.AcceptCallResp.session:type_name -> openim.msg.CallSession
+	183, // 88: openim.msg.RejectCallResp.session:type_name -> openim.msg.CallSession
+	183, // 89: openim.msg.CancelCallResp.session:type_name -> openim.msg.CallSession
+	183, // 90: openim.msg.EndCallResp.session:type_name -> openim.msg.CallSession
+	183, // 91: openim.msg.JoinCallResp.session:type_name -> openim.msg.CallSession
+	183, // 92: openim.msg.LeaveCallResp.session:type_name -> openim.msg.CallSession
+	183, // 93: openim.msg.RingCallResp.session:type_name -> openim.msg.CallSession
+	183, // 94: openim.msg.MuteCallParticipantResp.session:type_name -> openim.msg.CallSession
+	183, // 95: openim.msg.GetCallResp.session:type_name -> openim.msg.CallSession
+	183, // 96: openim.msg.CallHistoryItem.session:type_name -> openim.msg.CallSession
+	205, // 97: openim.msg.GetCallHistoryReq.cursor:type_name -> openim.msg.CallHistoryCursor
+	204, // 98: openim.msg.GetCallHistoryResp.calls:type_name -> openim.msg.CallHistoryItem
+	205, // 99: openim.msg.GetCallHistoryResp.nextCursor:type_name -> openim.msg.CallHistoryCursor
+	216, // 100: openim.msg.OperatorSearchMessagesReq.cursor:type_name -> openim.msg.OperatorSearchCursor
+	234, // 101: openim.msg.OperatorMessage.msg:type_name -> openim.sdkws.MsgData
+	218, // 102: openim.msg.OperatorSearchMessagesResp.messages:type_name -> openim.msg.OperatorMessage
+	216, // 103: openim.msg.OperatorSearchMessagesResp.next:type_name -> openim.msg.OperatorSearchCursor
+	218, // 104: openim.msg.GetConversationTimelineResp.messages:type_name -> openim.msg.OperatorMessage
+	234, // 105: openim.msg.GetMsgByConversationIDsResp.MsgDatasEntry.value:type_name -> openim.sdkws.MsgData
 	77,  // 106: openim.msg.GetConversationsHasReadAndMaxSeqResp.SeqsEntry.value:type_name -> openim.msg.Seqs
-	237, // 107: openim.msg.GetSeqMessageResp.MsgsEntry.value:type_name -> openim.sdkws.PullMsgs
-	237, // 108: openim.msg.GetSeqMessageResp.NotificationMsgsEntry.value:type_name -> openim.sdkws.PullMsgs
-	230, // 109: openim.msg.GetLastMessageResp.MsgsEntry.value:type_name -> openim.sdkws.MsgData
-	238, // 110: openim.msg.msg.GetMaxSeq:input_type -> openim.sdkws.GetMaxSeqReq
+	241, // 107: openim.msg.GetSeqMessageResp.MsgsEntry.value:type_name -> openim.sdkws.PullMsgs
+	241, // 108: openim.msg.GetSeqMessageResp.NotificationMsgsEntry.value:type_name -> openim.sdkws.PullMsgs
+	234, // 109: openim.msg.GetLastMessageResp.MsgsEntry.value:type_name -> openim.sdkws.MsgData
+	242, // 110: openim.msg.msg.GetMaxSeq:input_type -> openim.sdkws.GetMaxSeqReq
 	69,  // 111: openim.msg.msg.GetMaxSeqs:input_type -> openim.msg.GetMaxSeqsReq
 	70,  // 112: openim.msg.msg.GetHasReadSeqs:input_type -> openim.msg.GetHasReadSeqsReq
 	72,  // 113: openim.msg.msg.GetMsgByConversationIDs:input_type -> openim.msg.GetMsgByConversationIDsReq
 	74,  // 114: openim.msg.msg.GetConversationMaxSeq:input_type -> openim.msg.GetConversationMaxSeqReq
-	239, // 115: openim.msg.msg.PullMessageBySeqs:input_type -> openim.sdkws.PullMessageBySeqsReq
+	243, // 115: openim.msg.msg.PullMessageBySeqs:input_type -> openim.sdkws.PullMessageBySeqsReq
 	103, // 116: openim.msg.msg.GetSeqMessage:input_type -> openim.msg.GetSeqMessageReq
 	85,  // 117: openim.msg.msg.SearchMessage:input_type -> openim.msg.SearchMessageReq
 	89,  // 118: openim.msg.msg.SearchMessages:input_type -> openim.msg.SearchMessagesReq
@@ -13858,21 +14125,21 @@ var file_msg_msg_proto_depIdxs = []int32{
 	45,  // 142: openim.msg.msg.ReactMessage:input_type -> openim.msg.ReactMessageReq
 	48,  // 143: openim.msg.msg.GetMessageReactions:input_type -> openim.msg.GetMessageReactionsReq
 	51,  // 144: openim.msg.msg.GetMessageReactionUsers:input_type -> openim.msg.GetMessageReactionUsersReq
-	180, // 145: openim.msg.msg.CreateCall:input_type -> openim.msg.CreateCallReq
-	182, // 146: openim.msg.msg.AcceptCall:input_type -> openim.msg.AcceptCallReq
-	184, // 147: openim.msg.msg.RejectCall:input_type -> openim.msg.RejectCallReq
-	186, // 148: openim.msg.msg.CancelCall:input_type -> openim.msg.CancelCallReq
-	188, // 149: openim.msg.msg.EndCall:input_type -> openim.msg.EndCallReq
-	198, // 150: openim.msg.msg.GetCall:input_type -> openim.msg.GetCallReq
-	190, // 151: openim.msg.msg.JoinCall:input_type -> openim.msg.JoinCallReq
-	192, // 152: openim.msg.msg.LeaveCall:input_type -> openim.msg.LeaveCallReq
-	194, // 153: openim.msg.msg.RingCall:input_type -> openim.msg.RingCallReq
-	196, // 154: openim.msg.msg.MuteCallParticipant:input_type -> openim.msg.MuteCallParticipantReq
-	202, // 155: openim.msg.msg.GetCallHistory:input_type -> openim.msg.GetCallHistoryReq
-	204, // 156: openim.msg.msg.DeleteCallHistory:input_type -> openim.msg.DeleteCallHistoryReq
-	206, // 157: openim.msg.msg.GetMissedCallCount:input_type -> openim.msg.GetMissedCallCountReq
-	208, // 158: openim.msg.msg.MarkCallHistorySeen:input_type -> openim.msg.MarkCallHistorySeenReq
-	210, // 159: openim.msg.msg.CallWebhook:input_type -> openim.msg.CallWebhookReq
+	184, // 145: openim.msg.msg.CreateCall:input_type -> openim.msg.CreateCallReq
+	186, // 146: openim.msg.msg.AcceptCall:input_type -> openim.msg.AcceptCallReq
+	188, // 147: openim.msg.msg.RejectCall:input_type -> openim.msg.RejectCallReq
+	190, // 148: openim.msg.msg.CancelCall:input_type -> openim.msg.CancelCallReq
+	192, // 149: openim.msg.msg.EndCall:input_type -> openim.msg.EndCallReq
+	202, // 150: openim.msg.msg.GetCall:input_type -> openim.msg.GetCallReq
+	194, // 151: openim.msg.msg.JoinCall:input_type -> openim.msg.JoinCallReq
+	196, // 152: openim.msg.msg.LeaveCall:input_type -> openim.msg.LeaveCallReq
+	198, // 153: openim.msg.msg.RingCall:input_type -> openim.msg.RingCallReq
+	200, // 154: openim.msg.msg.MuteCallParticipant:input_type -> openim.msg.MuteCallParticipantReq
+	206, // 155: openim.msg.msg.GetCallHistory:input_type -> openim.msg.GetCallHistoryReq
+	208, // 156: openim.msg.msg.DeleteCallHistory:input_type -> openim.msg.DeleteCallHistoryReq
+	210, // 157: openim.msg.msg.GetMissedCallCount:input_type -> openim.msg.GetMissedCallCountReq
+	212, // 158: openim.msg.msg.MarkCallHistorySeen:input_type -> openim.msg.MarkCallHistorySeenReq
+	214, // 159: openim.msg.msg.CallWebhook:input_type -> openim.msg.CallWebhookReq
 	76,  // 160: openim.msg.msg.GetConversationsHasReadAndMaxSeq:input_type -> openim.msg.GetConversationsHasReadAndMaxSeqReq
 	79,  // 161: openim.msg.msg.GetActiveUser:input_type -> openim.msg.GetActiveUserReq
 	82,  // 162: openim.msg.msg.GetActiveGroup:input_type -> openim.msg.GetActiveGroupReq
@@ -13902,107 +14169,111 @@ var file_msg_msg_proto_depIdxs = []int32{
 	153, // 186: openim.msg.msg.DelBannedWords:input_type -> openim.msg.DelBannedWordsReq
 	155, // 187: openim.msg.msg.TestBannedWords:input_type -> openim.msg.TestBannedWordsReq
 	157, // 188: openim.msg.msg.EditMsg:input_type -> openim.msg.EditMsgReq
-	159, // 189: openim.msg.msg.GetMsgExtraVersion:input_type -> openim.msg.GetMsgExtraVersionReq
-	161, // 190: openim.msg.msg.GetMsgExtraVersions:input_type -> openim.msg.GetMsgExtraVersionsReq
-	166, // 191: openim.msg.msg.CreateScheduledMsg:input_type -> openim.msg.CreateScheduledMsgReq
-	168, // 192: openim.msg.msg.UpdateScheduledMsg:input_type -> openim.msg.UpdateScheduledMsgReq
-	170, // 193: openim.msg.msg.CancelScheduledMsg:input_type -> openim.msg.CancelScheduledMsgReq
-	172, // 194: openim.msg.msg.SendScheduledMsgNow:input_type -> openim.msg.SendScheduledMsgNowReq
-	174, // 195: openim.msg.msg.GetScheduledMsgs:input_type -> openim.msg.GetScheduledMsgsReq
-	176, // 196: openim.msg.msg.CancelUserScheduledMsgs:input_type -> openim.msg.CancelUserScheduledMsgsReq
-	213, // 197: openim.msg.msg.OperatorSearchMessages:input_type -> openim.msg.OperatorSearchMessagesReq
-	216, // 198: openim.msg.msg.GetConversationTimeline:input_type -> openim.msg.GetConversationTimelineReq
-	240, // 199: openim.msg.msg.GetMaxSeq:output_type -> openim.sdkws.GetMaxSeqResp
-	71,  // 200: openim.msg.msg.GetMaxSeqs:output_type -> openim.msg.SeqsInfoResp
-	71,  // 201: openim.msg.msg.GetHasReadSeqs:output_type -> openim.msg.SeqsInfoResp
-	73,  // 202: openim.msg.msg.GetMsgByConversationIDs:output_type -> openim.msg.GetMsgByConversationIDsResp
-	75,  // 203: openim.msg.msg.GetConversationMaxSeq:output_type -> openim.msg.GetConversationMaxSeqResp
-	241, // 204: openim.msg.msg.PullMessageBySeqs:output_type -> openim.sdkws.PullMessageBySeqsResp
-	104, // 205: openim.msg.msg.GetSeqMessage:output_type -> openim.msg.GetSeqMessageResp
-	88,  // 206: openim.msg.msg.SearchMessage:output_type -> openim.msg.SearchMessageResp
-	90,  // 207: openim.msg.msg.SearchMessages:output_type -> openim.msg.SearchMessagesResp
-	7,   // 208: openim.msg.msg.SendMsg:output_type -> openim.msg.SendMsgResp
-	9,   // 209: openim.msg.msg.SendSimpleMsg:output_type -> openim.msg.SendSimpleMsgResp
-	101, // 210: openim.msg.msg.SetUserConversationsMinSeq:output_type -> openim.msg.SetUserConversationsMinSeqResp
-	60,  // 211: openim.msg.msg.ClearConversationsMsg:output_type -> openim.msg.ClearConversationsMsgResp
-	62,  // 212: openim.msg.msg.UserClearAllMsg:output_type -> openim.msg.UserClearAllMsgResp
-	64,  // 213: openim.msg.msg.DeleteMsgs:output_type -> openim.msg.DeleteMsgsResp
-	68,  // 214: openim.msg.msg.DeleteMsgPhysicalBySeq:output_type -> openim.msg.DeleteMsgPhysicalBySeqResp
-	66,  // 215: openim.msg.msg.DeleteMsgPhysical:output_type -> openim.msg.DeleteMsgPhysicalResp
-	11,  // 216: openim.msg.msg.SetSendMsgStatus:output_type -> openim.msg.SetSendMsgStatusResp
-	13,  // 217: openim.msg.msg.GetSendMsgStatus:output_type -> openim.msg.GetSendMsgStatusResp
-	18,  // 218: openim.msg.msg.RevokeMsg:output_type -> openim.msg.RevokeMsgResp
-	20,  // 219: openim.msg.msg.MarkMsgsAsRead:output_type -> openim.msg.MarkMsgsAsReadResp
-	22,  // 220: openim.msg.msg.MarkConversationAsRead:output_type -> openim.msg.MarkConversationAsReadResp
-	24,  // 221: openim.msg.msg.SetConversationHasReadSeq:output_type -> openim.msg.SetConversationHasReadSeqResp
-	54,  // 222: openim.msg.msg.GetMessagesReadCount:output_type -> openim.msg.GetMessagesReadCountResp
-	57,  // 223: openim.msg.msg.GetMessageReaders:output_type -> openim.msg.GetMessageReadersResp
-	27,  // 224: openim.msg.msg.PinMessage:output_type -> openim.msg.PinMessageResp
-	29,  // 225: openim.msg.msg.ClearPinnedMessages:output_type -> openim.msg.ClearPinnedMessagesResp
-	31,  // 226: openim.msg.msg.GetPinnedMessages:output_type -> openim.msg.GetPinnedMessagesResp
-	34,  // 227: openim.msg.msg.VotePoll:output_type -> openim.msg.VotePollResp
-	36,  // 228: openim.msg.msg.ClosePoll:output_type -> openim.msg.ClosePollResp
-	39,  // 229: openim.msg.msg.GetPollStates:output_type -> openim.msg.GetPollStatesResp
-	42,  // 230: openim.msg.msg.GetPollVoters:output_type -> openim.msg.GetPollVotersResp
-	46,  // 231: openim.msg.msg.ReactMessage:output_type -> openim.msg.ReactMessageResp
-	49,  // 232: openim.msg.msg.GetMessageReactions:output_type -> openim.msg.GetMessageReactionsResp
-	52,  // 233: openim.msg.msg.GetMessageReactionUsers:output_type -> openim.msg.GetMessageReactionUsersResp
-	181, // 234: openim.msg.msg.CreateCall:output_type -> openim.msg.CreateCallResp
-	183, // 235: openim.msg.msg.AcceptCall:output_type -> openim.msg.AcceptCallResp
-	185, // 236: openim.msg.msg.RejectCall:output_type -> openim.msg.RejectCallResp
-	187, // 237: openim.msg.msg.CancelCall:output_type -> openim.msg.CancelCallResp
-	189, // 238: openim.msg.msg.EndCall:output_type -> openim.msg.EndCallResp
-	199, // 239: openim.msg.msg.GetCall:output_type -> openim.msg.GetCallResp
-	191, // 240: openim.msg.msg.JoinCall:output_type -> openim.msg.JoinCallResp
-	193, // 241: openim.msg.msg.LeaveCall:output_type -> openim.msg.LeaveCallResp
-	195, // 242: openim.msg.msg.RingCall:output_type -> openim.msg.RingCallResp
-	197, // 243: openim.msg.msg.MuteCallParticipant:output_type -> openim.msg.MuteCallParticipantResp
-	203, // 244: openim.msg.msg.GetCallHistory:output_type -> openim.msg.GetCallHistoryResp
-	205, // 245: openim.msg.msg.DeleteCallHistory:output_type -> openim.msg.DeleteCallHistoryResp
-	207, // 246: openim.msg.msg.GetMissedCallCount:output_type -> openim.msg.GetMissedCallCountResp
-	209, // 247: openim.msg.msg.MarkCallHistorySeen:output_type -> openim.msg.MarkCallHistorySeenResp
-	211, // 248: openim.msg.msg.CallWebhook:output_type -> openim.msg.CallWebhookResp
-	78,  // 249: openim.msg.msg.GetConversationsHasReadAndMaxSeq:output_type -> openim.msg.GetConversationsHasReadAndMaxSeqResp
-	81,  // 250: openim.msg.msg.GetActiveUser:output_type -> openim.msg.GetActiveUserResp
-	84,  // 251: openim.msg.msg.GetActiveGroup:output_type -> openim.msg.GetActiveGroupResp
-	95,  // 252: openim.msg.msg.GetServerTime:output_type -> openim.msg.GetServerTimeResp
-	97,  // 253: openim.msg.msg.ClearMsg:output_type -> openim.msg.ClearMsgResp
-	99,  // 254: openim.msg.msg.DestructMsgs:output_type -> openim.msg.DestructMsgsResp
-	107, // 255: openim.msg.msg.GetActiveConversation:output_type -> openim.msg.GetActiveConversationResp
-	109, // 256: openim.msg.msg.SetUserConversationMaxSeq:output_type -> openim.msg.SetUserConversationMaxSeqResp
-	111, // 257: openim.msg.msg.SetUserConversationMinSeq:output_type -> openim.msg.SetUserConversationMinSeqResp
-	113, // 258: openim.msg.msg.GetLastMessageSeqByTime:output_type -> openim.msg.GetLastMessageSeqByTimeResp
-	115, // 259: openim.msg.msg.GetLastMessage:output_type -> openim.msg.GetLastMessageResp
-	117, // 260: openim.msg.msg.AppendStreamMsg:output_type -> openim.msg.AppendStreamMsgResp
-	119, // 261: openim.msg.msg.GetStreamMsg:output_type -> openim.msg.GetStreamMsgResp
-	121, // 262: openim.msg.msg.ModifyMessage:output_type -> openim.msg.ModifyMessageResp
-	124, // 263: openim.msg.msg.SetSystemMsgVisibility:output_type -> openim.msg.SetSystemMsgVisibilityResp
-	126, // 264: openim.msg.msg.DelSystemMsgVisibility:output_type -> openim.msg.DelSystemMsgVisibilityResp
-	128, // 265: openim.msg.msg.GetSystemMsgVisibilityList:output_type -> openim.msg.GetSystemMsgVisibilityListResp
-	130, // 266: openim.msg.msg.GetAppSettings:output_type -> openim.msg.GetAppSettingsResp
-	132, // 267: openim.msg.msg.SetAppSettings:output_type -> openim.msg.SetAppSettingsResp
-	136, // 268: openim.msg.msg.GetPlatformMute:output_type -> openim.msg.GetPlatformMuteResp
-	138, // 269: openim.msg.msg.SetPlatformMute:output_type -> openim.msg.SetPlatformMuteResp
-	140, // 270: openim.msg.msg.CheckPlatformMute:output_type -> openim.msg.CheckPlatformMuteResp
-	143, // 271: openim.msg.msg.GetPlatformMuteStatus:output_type -> openim.msg.GetPlatformMuteStatusResp
-	146, // 272: openim.msg.msg.GetBannedWords:output_type -> openim.msg.GetBannedWordsResp
-	150, // 273: openim.msg.msg.AddBannedWords:output_type -> openim.msg.AddBannedWordsResp
-	152, // 274: openim.msg.msg.UpdateBannedWord:output_type -> openim.msg.UpdateBannedWordResp
-	154, // 275: openim.msg.msg.DelBannedWords:output_type -> openim.msg.DelBannedWordsResp
-	156, // 276: openim.msg.msg.TestBannedWords:output_type -> openim.msg.TestBannedWordsResp
-	158, // 277: openim.msg.msg.EditMsg:output_type -> openim.msg.EditMsgResp
-	160, // 278: openim.msg.msg.GetMsgExtraVersion:output_type -> openim.msg.GetMsgExtraVersionResp
-	162, // 279: openim.msg.msg.GetMsgExtraVersions:output_type -> openim.msg.GetMsgExtraVersionsResp
-	167, // 280: openim.msg.msg.CreateScheduledMsg:output_type -> openim.msg.CreateScheduledMsgResp
-	169, // 281: openim.msg.msg.UpdateScheduledMsg:output_type -> openim.msg.UpdateScheduledMsgResp
-	171, // 282: openim.msg.msg.CancelScheduledMsg:output_type -> openim.msg.CancelScheduledMsgResp
-	173, // 283: openim.msg.msg.SendScheduledMsgNow:output_type -> openim.msg.SendScheduledMsgNowResp
-	175, // 284: openim.msg.msg.GetScheduledMsgs:output_type -> openim.msg.GetScheduledMsgsResp
-	177, // 285: openim.msg.msg.CancelUserScheduledMsgs:output_type -> openim.msg.CancelUserScheduledMsgsResp
-	215, // 286: openim.msg.msg.OperatorSearchMessages:output_type -> openim.msg.OperatorSearchMessagesResp
-	217, // 287: openim.msg.msg.GetConversationTimeline:output_type -> openim.msg.GetConversationTimelineResp
-	199, // [199:288] is the sub-list for method output_type
-	110, // [110:199] is the sub-list for method input_type
+	159, // 189: openim.msg.msg.OpenViewOnce:input_type -> openim.msg.OpenViewOnceReq
+	161, // 190: openim.msg.msg.CloseViewOnce:input_type -> openim.msg.CloseViewOnceReq
+	163, // 191: openim.msg.msg.GetMsgExtraVersion:input_type -> openim.msg.GetMsgExtraVersionReq
+	165, // 192: openim.msg.msg.GetMsgExtraVersions:input_type -> openim.msg.GetMsgExtraVersionsReq
+	170, // 193: openim.msg.msg.CreateScheduledMsg:input_type -> openim.msg.CreateScheduledMsgReq
+	172, // 194: openim.msg.msg.UpdateScheduledMsg:input_type -> openim.msg.UpdateScheduledMsgReq
+	174, // 195: openim.msg.msg.CancelScheduledMsg:input_type -> openim.msg.CancelScheduledMsgReq
+	176, // 196: openim.msg.msg.SendScheduledMsgNow:input_type -> openim.msg.SendScheduledMsgNowReq
+	178, // 197: openim.msg.msg.GetScheduledMsgs:input_type -> openim.msg.GetScheduledMsgsReq
+	180, // 198: openim.msg.msg.CancelUserScheduledMsgs:input_type -> openim.msg.CancelUserScheduledMsgsReq
+	217, // 199: openim.msg.msg.OperatorSearchMessages:input_type -> openim.msg.OperatorSearchMessagesReq
+	220, // 200: openim.msg.msg.GetConversationTimeline:input_type -> openim.msg.GetConversationTimelineReq
+	244, // 201: openim.msg.msg.GetMaxSeq:output_type -> openim.sdkws.GetMaxSeqResp
+	71,  // 202: openim.msg.msg.GetMaxSeqs:output_type -> openim.msg.SeqsInfoResp
+	71,  // 203: openim.msg.msg.GetHasReadSeqs:output_type -> openim.msg.SeqsInfoResp
+	73,  // 204: openim.msg.msg.GetMsgByConversationIDs:output_type -> openim.msg.GetMsgByConversationIDsResp
+	75,  // 205: openim.msg.msg.GetConversationMaxSeq:output_type -> openim.msg.GetConversationMaxSeqResp
+	245, // 206: openim.msg.msg.PullMessageBySeqs:output_type -> openim.sdkws.PullMessageBySeqsResp
+	104, // 207: openim.msg.msg.GetSeqMessage:output_type -> openim.msg.GetSeqMessageResp
+	88,  // 208: openim.msg.msg.SearchMessage:output_type -> openim.msg.SearchMessageResp
+	90,  // 209: openim.msg.msg.SearchMessages:output_type -> openim.msg.SearchMessagesResp
+	7,   // 210: openim.msg.msg.SendMsg:output_type -> openim.msg.SendMsgResp
+	9,   // 211: openim.msg.msg.SendSimpleMsg:output_type -> openim.msg.SendSimpleMsgResp
+	101, // 212: openim.msg.msg.SetUserConversationsMinSeq:output_type -> openim.msg.SetUserConversationsMinSeqResp
+	60,  // 213: openim.msg.msg.ClearConversationsMsg:output_type -> openim.msg.ClearConversationsMsgResp
+	62,  // 214: openim.msg.msg.UserClearAllMsg:output_type -> openim.msg.UserClearAllMsgResp
+	64,  // 215: openim.msg.msg.DeleteMsgs:output_type -> openim.msg.DeleteMsgsResp
+	68,  // 216: openim.msg.msg.DeleteMsgPhysicalBySeq:output_type -> openim.msg.DeleteMsgPhysicalBySeqResp
+	66,  // 217: openim.msg.msg.DeleteMsgPhysical:output_type -> openim.msg.DeleteMsgPhysicalResp
+	11,  // 218: openim.msg.msg.SetSendMsgStatus:output_type -> openim.msg.SetSendMsgStatusResp
+	13,  // 219: openim.msg.msg.GetSendMsgStatus:output_type -> openim.msg.GetSendMsgStatusResp
+	18,  // 220: openim.msg.msg.RevokeMsg:output_type -> openim.msg.RevokeMsgResp
+	20,  // 221: openim.msg.msg.MarkMsgsAsRead:output_type -> openim.msg.MarkMsgsAsReadResp
+	22,  // 222: openim.msg.msg.MarkConversationAsRead:output_type -> openim.msg.MarkConversationAsReadResp
+	24,  // 223: openim.msg.msg.SetConversationHasReadSeq:output_type -> openim.msg.SetConversationHasReadSeqResp
+	54,  // 224: openim.msg.msg.GetMessagesReadCount:output_type -> openim.msg.GetMessagesReadCountResp
+	57,  // 225: openim.msg.msg.GetMessageReaders:output_type -> openim.msg.GetMessageReadersResp
+	27,  // 226: openim.msg.msg.PinMessage:output_type -> openim.msg.PinMessageResp
+	29,  // 227: openim.msg.msg.ClearPinnedMessages:output_type -> openim.msg.ClearPinnedMessagesResp
+	31,  // 228: openim.msg.msg.GetPinnedMessages:output_type -> openim.msg.GetPinnedMessagesResp
+	34,  // 229: openim.msg.msg.VotePoll:output_type -> openim.msg.VotePollResp
+	36,  // 230: openim.msg.msg.ClosePoll:output_type -> openim.msg.ClosePollResp
+	39,  // 231: openim.msg.msg.GetPollStates:output_type -> openim.msg.GetPollStatesResp
+	42,  // 232: openim.msg.msg.GetPollVoters:output_type -> openim.msg.GetPollVotersResp
+	46,  // 233: openim.msg.msg.ReactMessage:output_type -> openim.msg.ReactMessageResp
+	49,  // 234: openim.msg.msg.GetMessageReactions:output_type -> openim.msg.GetMessageReactionsResp
+	52,  // 235: openim.msg.msg.GetMessageReactionUsers:output_type -> openim.msg.GetMessageReactionUsersResp
+	185, // 236: openim.msg.msg.CreateCall:output_type -> openim.msg.CreateCallResp
+	187, // 237: openim.msg.msg.AcceptCall:output_type -> openim.msg.AcceptCallResp
+	189, // 238: openim.msg.msg.RejectCall:output_type -> openim.msg.RejectCallResp
+	191, // 239: openim.msg.msg.CancelCall:output_type -> openim.msg.CancelCallResp
+	193, // 240: openim.msg.msg.EndCall:output_type -> openim.msg.EndCallResp
+	203, // 241: openim.msg.msg.GetCall:output_type -> openim.msg.GetCallResp
+	195, // 242: openim.msg.msg.JoinCall:output_type -> openim.msg.JoinCallResp
+	197, // 243: openim.msg.msg.LeaveCall:output_type -> openim.msg.LeaveCallResp
+	199, // 244: openim.msg.msg.RingCall:output_type -> openim.msg.RingCallResp
+	201, // 245: openim.msg.msg.MuteCallParticipant:output_type -> openim.msg.MuteCallParticipantResp
+	207, // 246: openim.msg.msg.GetCallHistory:output_type -> openim.msg.GetCallHistoryResp
+	209, // 247: openim.msg.msg.DeleteCallHistory:output_type -> openim.msg.DeleteCallHistoryResp
+	211, // 248: openim.msg.msg.GetMissedCallCount:output_type -> openim.msg.GetMissedCallCountResp
+	213, // 249: openim.msg.msg.MarkCallHistorySeen:output_type -> openim.msg.MarkCallHistorySeenResp
+	215, // 250: openim.msg.msg.CallWebhook:output_type -> openim.msg.CallWebhookResp
+	78,  // 251: openim.msg.msg.GetConversationsHasReadAndMaxSeq:output_type -> openim.msg.GetConversationsHasReadAndMaxSeqResp
+	81,  // 252: openim.msg.msg.GetActiveUser:output_type -> openim.msg.GetActiveUserResp
+	84,  // 253: openim.msg.msg.GetActiveGroup:output_type -> openim.msg.GetActiveGroupResp
+	95,  // 254: openim.msg.msg.GetServerTime:output_type -> openim.msg.GetServerTimeResp
+	97,  // 255: openim.msg.msg.ClearMsg:output_type -> openim.msg.ClearMsgResp
+	99,  // 256: openim.msg.msg.DestructMsgs:output_type -> openim.msg.DestructMsgsResp
+	107, // 257: openim.msg.msg.GetActiveConversation:output_type -> openim.msg.GetActiveConversationResp
+	109, // 258: openim.msg.msg.SetUserConversationMaxSeq:output_type -> openim.msg.SetUserConversationMaxSeqResp
+	111, // 259: openim.msg.msg.SetUserConversationMinSeq:output_type -> openim.msg.SetUserConversationMinSeqResp
+	113, // 260: openim.msg.msg.GetLastMessageSeqByTime:output_type -> openim.msg.GetLastMessageSeqByTimeResp
+	115, // 261: openim.msg.msg.GetLastMessage:output_type -> openim.msg.GetLastMessageResp
+	117, // 262: openim.msg.msg.AppendStreamMsg:output_type -> openim.msg.AppendStreamMsgResp
+	119, // 263: openim.msg.msg.GetStreamMsg:output_type -> openim.msg.GetStreamMsgResp
+	121, // 264: openim.msg.msg.ModifyMessage:output_type -> openim.msg.ModifyMessageResp
+	124, // 265: openim.msg.msg.SetSystemMsgVisibility:output_type -> openim.msg.SetSystemMsgVisibilityResp
+	126, // 266: openim.msg.msg.DelSystemMsgVisibility:output_type -> openim.msg.DelSystemMsgVisibilityResp
+	128, // 267: openim.msg.msg.GetSystemMsgVisibilityList:output_type -> openim.msg.GetSystemMsgVisibilityListResp
+	130, // 268: openim.msg.msg.GetAppSettings:output_type -> openim.msg.GetAppSettingsResp
+	132, // 269: openim.msg.msg.SetAppSettings:output_type -> openim.msg.SetAppSettingsResp
+	136, // 270: openim.msg.msg.GetPlatformMute:output_type -> openim.msg.GetPlatformMuteResp
+	138, // 271: openim.msg.msg.SetPlatformMute:output_type -> openim.msg.SetPlatformMuteResp
+	140, // 272: openim.msg.msg.CheckPlatformMute:output_type -> openim.msg.CheckPlatformMuteResp
+	143, // 273: openim.msg.msg.GetPlatformMuteStatus:output_type -> openim.msg.GetPlatformMuteStatusResp
+	146, // 274: openim.msg.msg.GetBannedWords:output_type -> openim.msg.GetBannedWordsResp
+	150, // 275: openim.msg.msg.AddBannedWords:output_type -> openim.msg.AddBannedWordsResp
+	152, // 276: openim.msg.msg.UpdateBannedWord:output_type -> openim.msg.UpdateBannedWordResp
+	154, // 277: openim.msg.msg.DelBannedWords:output_type -> openim.msg.DelBannedWordsResp
+	156, // 278: openim.msg.msg.TestBannedWords:output_type -> openim.msg.TestBannedWordsResp
+	158, // 279: openim.msg.msg.EditMsg:output_type -> openim.msg.EditMsgResp
+	160, // 280: openim.msg.msg.OpenViewOnce:output_type -> openim.msg.OpenViewOnceResp
+	162, // 281: openim.msg.msg.CloseViewOnce:output_type -> openim.msg.CloseViewOnceResp
+	164, // 282: openim.msg.msg.GetMsgExtraVersion:output_type -> openim.msg.GetMsgExtraVersionResp
+	166, // 283: openim.msg.msg.GetMsgExtraVersions:output_type -> openim.msg.GetMsgExtraVersionsResp
+	171, // 284: openim.msg.msg.CreateScheduledMsg:output_type -> openim.msg.CreateScheduledMsgResp
+	173, // 285: openim.msg.msg.UpdateScheduledMsg:output_type -> openim.msg.UpdateScheduledMsgResp
+	175, // 286: openim.msg.msg.CancelScheduledMsg:output_type -> openim.msg.CancelScheduledMsgResp
+	177, // 287: openim.msg.msg.SendScheduledMsgNow:output_type -> openim.msg.SendScheduledMsgNowResp
+	179, // 288: openim.msg.msg.GetScheduledMsgs:output_type -> openim.msg.GetScheduledMsgsResp
+	181, // 289: openim.msg.msg.CancelUserScheduledMsgs:output_type -> openim.msg.CancelUserScheduledMsgsResp
+	219, // 290: openim.msg.msg.OperatorSearchMessages:output_type -> openim.msg.OperatorSearchMessagesResp
+	221, // 291: openim.msg.msg.GetConversationTimeline:output_type -> openim.msg.GetConversationTimelineResp
+	201, // [201:292] is the sub-list for method output_type
+	110, // [110:201] is the sub-list for method input_type
 	110, // [110:110] is the sub-list for extension type_name
 	110, // [110:110] is the sub-list for extension extendee
 	0,   // [0:110] is the sub-list for field type_name
@@ -14019,7 +14290,7 @@ func file_msg_msg_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_msg_msg_proto_rawDesc), len(file_msg_msg_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   230,
+			NumMessages:   234,
 			NumExtensions: 0,
 			NumServices:   1,
 		},

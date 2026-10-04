@@ -141,6 +141,9 @@ const (
 	// deleted, or the history looked at; see sdkws.CallHistoryChangedTips.
 	// Sent only to its owner (sendID == recvID), never stored.
 	CallHistoryChangedNotification = 1710
+	// A View once message was opened, or is gone; see
+	// sdkws.ViewOnceChangedTips. To both people of the one-to-one chat.
+	ViewOnceChangedNotification = 1711
 
 	BusinessNotificationBegin = 2000
 	BusinessNotification      = 2001

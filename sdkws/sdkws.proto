@@ -1189,6 +1189,18 @@ message GroupCreationDefaults {
 // plain text message so that it mentions someone turns it from Text into
 // AtText, and a client that assumed the type had not changed would
 // render the new payload with the old codec.
+// ViewOnceChangedTips (constant.ViewOnceChangedNotification): a View once
+// message was opened, or is gone. ex is the message's ex as now stored;
+// its "viewOnce" key carries the state (openedAt, openedPlatformID,
+// deadline, goneAt), and a client replaces its copy's ex with it.
+message ViewOnceChangedTips {
+  string conversationID = 1;
+  int64 seq = 2;
+  string clientMsgID = 3;
+  int32 sessionType = 4;
+  string ex = 5;
+}
+
 message EditMsgTips {
   string conversationID = 1;
   int64 seq = 2;

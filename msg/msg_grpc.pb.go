@@ -99,6 +99,8 @@ const (
 	Msg_DelBannedWords_FullMethodName                   = "/openim.msg.msg/DelBannedWords"
 	Msg_TestBannedWords_FullMethodName                  = "/openim.msg.msg/TestBannedWords"
 	Msg_EditMsg_FullMethodName                          = "/openim.msg.msg/EditMsg"
+	Msg_OpenViewOnce_FullMethodName                     = "/openim.msg.msg/OpenViewOnce"
+	Msg_CloseViewOnce_FullMethodName                    = "/openim.msg.msg/CloseViewOnce"
 	Msg_GetMsgExtraVersion_FullMethodName               = "/openim.msg.msg/GetMsgExtraVersion"
 	Msg_GetMsgExtraVersions_FullMethodName              = "/openim.msg.msg/GetMsgExtraVersions"
 	Msg_CreateScheduledMsg_FullMethodName               = "/openim.msg.msg/CreateScheduledMsg"
@@ -258,6 +260,9 @@ type MsgClient interface {
 	// Edit a message in place — see EditMsgReq for why this is not the
 	// ModifyMessage stub above.
 	EditMsg(ctx context.Context, in *EditMsgReq, opts ...grpc.CallOption) (*EditMsgResp, error)
+	// View once: see OpenViewOnceReq.
+	OpenViewOnce(ctx context.Context, in *OpenViewOnceReq, opts ...grpc.CallOption) (*OpenViewOnceResp, error)
+	CloseViewOnce(ctx context.Context, in *CloseViewOnceReq, opts ...grpc.CallOption) (*CloseViewOnceResp, error)
 	// Has anything in this conversation been rewritten in place since the
 	// caller last looked? See GetMsgExtraVersionReq.
 	GetMsgExtraVersion(ctx context.Context, in *GetMsgExtraVersionReq, opts ...grpc.CallOption) (*GetMsgExtraVersionResp, error)
@@ -1076,6 +1081,26 @@ func (c *msgClient) EditMsg(ctx context.Context, in *EditMsgReq, opts ...grpc.Ca
 	return out, nil
 }
 
+func (c *msgClient) OpenViewOnce(ctx context.Context, in *OpenViewOnceReq, opts ...grpc.CallOption) (*OpenViewOnceResp, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(OpenViewOnceResp)
+	err := c.cc.Invoke(ctx, Msg_OpenViewOnce_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *msgClient) CloseViewOnce(ctx context.Context, in *CloseViewOnceReq, opts ...grpc.CallOption) (*CloseViewOnceResp, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(CloseViewOnceResp)
+	err := c.cc.Invoke(ctx, Msg_CloseViewOnce_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 func (c *msgClient) GetMsgExtraVersion(ctx context.Context, in *GetMsgExtraVersionReq, opts ...grpc.CallOption) (*GetMsgExtraVersionResp, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(GetMsgExtraVersionResp)
@@ -1323,6 +1348,9 @@ type MsgServer interface {
 	// Edit a message in place — see EditMsgReq for why this is not the
 	// ModifyMessage stub above.
 	EditMsg(context.Context, *EditMsgReq) (*EditMsgResp, error)
+	// View once: see OpenViewOnceReq.
+	OpenViewOnce(context.Context, *OpenViewOnceReq) (*OpenViewOnceResp, error)
+	CloseViewOnce(context.Context, *CloseViewOnceReq) (*CloseViewOnceResp, error)
 	// Has anything in this conversation been rewritten in place since the
 	// caller last looked? See GetMsgExtraVersionReq.
 	GetMsgExtraVersion(context.Context, *GetMsgExtraVersionReq) (*GetMsgExtraVersionResp, error)
@@ -1587,6 +1615,12 @@ func (UnimplementedMsgServer) TestBannedWords(context.Context, *TestBannedWordsR
 }
 func (UnimplementedMsgServer) EditMsg(context.Context, *EditMsgReq) (*EditMsgResp, error) {
 	return nil, status.Error(codes.Unimplemented, "method EditMsg not implemented")
+}
+func (UnimplementedMsgServer) OpenViewOnce(context.Context, *OpenViewOnceReq) (*OpenViewOnceResp, error) {
+	return nil, status.Error(codes.Unimplemented, "method OpenViewOnce not implemented")
+}
+func (UnimplementedMsgServer) CloseViewOnce(context.Context, *CloseViewOnceReq) (*CloseViewOnceResp, error) {
+	return nil, status.Error(codes.Unimplemented, "method CloseViewOnce not implemented")
 }
 func (UnimplementedMsgServer) GetMsgExtraVersion(context.Context, *GetMsgExtraVersionReq) (*GetMsgExtraVersionResp, error) {
 	return nil, status.Error(codes.Unimplemented, "method GetMsgExtraVersion not implemented")
@@ -3061,6 +3095,42 @@ func _Msg_EditMsg_Handler(srv interface{}, ctx context.Context, dec func(interfa
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Msg_OpenViewOnce_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(OpenViewOnceReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(MsgServer).OpenViewOnce(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Msg_OpenViewOnce_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(MsgServer).OpenViewOnce(ctx, req.(*OpenViewOnceReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Msg_CloseViewOnce_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(CloseViewOnceReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(MsgServer).CloseViewOnce(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Msg_CloseViewOnce_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(MsgServer).CloseViewOnce(ctx, req.(*CloseViewOnceReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 func _Msg_GetMsgExtraVersion_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(GetMsgExtraVersionReq)
 	if err := dec(in); err != nil {
@@ -3563,6 +3633,14 @@ var Msg_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "EditMsg",
 			Handler:    _Msg_EditMsg_Handler,
+		},
+		{
+			MethodName: "OpenViewOnce",
+			Handler:    _Msg_OpenViewOnce_Handler,
+		},
+		{
+			MethodName: "CloseViewOnce",
+			Handler:    _Msg_CloseViewOnce_Handler,
 		},
 		{
 			MethodName: "GetMsgExtraVersion",

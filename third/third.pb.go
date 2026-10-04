@@ -2149,6 +2149,295 @@ func (x *SearchLogsResp) GetTotal() uint32 {
 	return 0
 }
 
+// Sealed objects: the media of View once messages (ADR 0006). Sealing
+// moves an uploaded object to a name nobody but the server knows, which
+// the public /object/ redirect and AccessURL refuse; only the server hands
+// out a short-lived URL to one. All three are for the IM admin only —
+// the msg service calls them, never a client.
+type SealObjectsReq struct {
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// Every name must be an object this user uploaded.
+	OwnerUserID   string   `protobuf:"bytes,1,opt,name=ownerUserID,proto3" json:"ownerUserID"`
+	Names         []string `protobuf:"bytes,2,rep,name=names,proto3" json:"names"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *SealObjectsReq) Reset() {
+	*x = SealObjectsReq{}
+	mi := &file_third_third_proto_msgTypes[36]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *SealObjectsReq) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*SealObjectsReq) ProtoMessage() {}
+
+func (x *SealObjectsReq) ProtoReflect() protoreflect.Message {
+	mi := &file_third_third_proto_msgTypes[36]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use SealObjectsReq.ProtoReflect.Descriptor instead.
+func (*SealObjectsReq) Descriptor() ([]byte, []int) {
+	return file_third_third_proto_rawDescGZIP(), []int{36}
+}
+
+func (x *SealObjectsReq) GetOwnerUserID() string {
+	if x != nil {
+		return x.OwnerUserID
+	}
+	return ""
+}
+
+func (x *SealObjectsReq) GetNames() []string {
+	if x != nil {
+		return x.Names
+	}
+	return nil
+}
+
+type SealObjectsResp struct {
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// The sealed names, in the order asked. Sealing the same name again
+	// answers with the same sealed name.
+	Names         []string `protobuf:"bytes,1,rep,name=names,proto3" json:"names"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *SealObjectsResp) Reset() {
+	*x = SealObjectsResp{}
+	mi := &file_third_third_proto_msgTypes[37]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *SealObjectsResp) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*SealObjectsResp) ProtoMessage() {}
+
+func (x *SealObjectsResp) ProtoReflect() protoreflect.Message {
+	mi := &file_third_third_proto_msgTypes[37]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use SealObjectsResp.ProtoReflect.Descriptor instead.
+func (*SealObjectsResp) Descriptor() ([]byte, []int) {
+	return file_third_third_proto_rawDescGZIP(), []int{37}
+}
+
+func (x *SealObjectsResp) GetNames() []string {
+	if x != nil {
+		return x.Names
+	}
+	return nil
+}
+
+type SealedObjectURLReq struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Name          string                 `protobuf:"bytes,1,opt,name=name,proto3" json:"name"`
+	ExpireSeconds int64                  `protobuf:"varint,2,opt,name=expireSeconds,proto3" json:"expireSeconds"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *SealedObjectURLReq) Reset() {
+	*x = SealedObjectURLReq{}
+	mi := &file_third_third_proto_msgTypes[38]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *SealedObjectURLReq) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*SealedObjectURLReq) ProtoMessage() {}
+
+func (x *SealedObjectURLReq) ProtoReflect() protoreflect.Message {
+	mi := &file_third_third_proto_msgTypes[38]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use SealedObjectURLReq.ProtoReflect.Descriptor instead.
+func (*SealedObjectURLReq) Descriptor() ([]byte, []int) {
+	return file_third_third_proto_rawDescGZIP(), []int{38}
+}
+
+func (x *SealedObjectURLReq) GetName() string {
+	if x != nil {
+		return x.Name
+	}
+	return ""
+}
+
+func (x *SealedObjectURLReq) GetExpireSeconds() int64 {
+	if x != nil {
+		return x.ExpireSeconds
+	}
+	return 0
+}
+
+type SealedObjectURLResp struct {
+	state protoimpl.MessageState `protogen:"open.v1"`
+	Url   string                 `protobuf:"bytes,1,opt,name=url,proto3" json:"url"`
+	// Unix ms.
+	ExpireTime    int64 `protobuf:"varint,2,opt,name=expireTime,proto3" json:"expireTime"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *SealedObjectURLResp) Reset() {
+	*x = SealedObjectURLResp{}
+	mi := &file_third_third_proto_msgTypes[39]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *SealedObjectURLResp) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*SealedObjectURLResp) ProtoMessage() {}
+
+func (x *SealedObjectURLResp) ProtoReflect() protoreflect.Message {
+	mi := &file_third_third_proto_msgTypes[39]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use SealedObjectURLResp.ProtoReflect.Descriptor instead.
+func (*SealedObjectURLResp) Descriptor() ([]byte, []int) {
+	return file_third_third_proto_rawDescGZIP(), []int{39}
+}
+
+func (x *SealedObjectURLResp) GetUrl() string {
+	if x != nil {
+		return x.Url
+	}
+	return ""
+}
+
+func (x *SealedObjectURLResp) GetExpireTime() int64 {
+	if x != nil {
+		return x.ExpireTime
+	}
+	return 0
+}
+
+type DeleteSealedObjectsReq struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Names         []string               `protobuf:"bytes,1,rep,name=names,proto3" json:"names"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *DeleteSealedObjectsReq) Reset() {
+	*x = DeleteSealedObjectsReq{}
+	mi := &file_third_third_proto_msgTypes[40]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *DeleteSealedObjectsReq) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*DeleteSealedObjectsReq) ProtoMessage() {}
+
+func (x *DeleteSealedObjectsReq) ProtoReflect() protoreflect.Message {
+	mi := &file_third_third_proto_msgTypes[40]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use DeleteSealedObjectsReq.ProtoReflect.Descriptor instead.
+func (*DeleteSealedObjectsReq) Descriptor() ([]byte, []int) {
+	return file_third_third_proto_rawDescGZIP(), []int{40}
+}
+
+func (x *DeleteSealedObjectsReq) GetNames() []string {
+	if x != nil {
+		return x.Names
+	}
+	return nil
+}
+
+type DeleteSealedObjectsResp struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *DeleteSealedObjectsResp) Reset() {
+	*x = DeleteSealedObjectsResp{}
+	mi := &file_third_third_proto_msgTypes[41]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *DeleteSealedObjectsResp) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*DeleteSealedObjectsResp) ProtoMessage() {}
+
+func (x *DeleteSealedObjectsResp) ProtoReflect() protoreflect.Message {
+	mi := &file_third_third_proto_msgTypes[41]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use DeleteSealedObjectsResp.ProtoReflect.Descriptor instead.
+func (*DeleteSealedObjectsResp) Descriptor() ([]byte, []int) {
+	return file_third_third_proto_rawDescGZIP(), []int{41}
+}
+
 var File_third_third_proto protoreflect.FileDescriptor
 
 const file_third_third_proto_rawDesc = "" +
@@ -2325,7 +2614,23 @@ const file_third_third_proto_rawDesc = "" +
 	" \x01(\tR\aversion\"[\n" +
 	"\x0eSearchLogsResp\x123\n" +
 	"\tlogsInfos\x18\x01 \x03(\v2\x15.openim.third.LogInfoR\tlogsInfos\x12\x14\n" +
-	"\x05total\x18\x02 \x01(\rR\x05total2\xe4\t\n" +
+	"\x05total\x18\x02 \x01(\rR\x05total\"H\n" +
+	"\x0eSealObjectsReq\x12 \n" +
+	"\vownerUserID\x18\x01 \x01(\tR\vownerUserID\x12\x14\n" +
+	"\x05names\x18\x02 \x03(\tR\x05names\"'\n" +
+	"\x0fSealObjectsResp\x12\x14\n" +
+	"\x05names\x18\x01 \x03(\tR\x05names\"N\n" +
+	"\x12SealedObjectURLReq\x12\x12\n" +
+	"\x04name\x18\x01 \x01(\tR\x04name\x12$\n" +
+	"\rexpireSeconds\x18\x02 \x01(\x03R\rexpireSeconds\"G\n" +
+	"\x13SealedObjectURLResp\x12\x10\n" +
+	"\x03url\x18\x01 \x01(\tR\x03url\x12\x1e\n" +
+	"\n" +
+	"expireTime\x18\x02 \x01(\x03R\n" +
+	"expireTime\".\n" +
+	"\x16DeleteSealedObjectsReq\x12\x14\n" +
+	"\x05names\x18\x01 \x03(\tR\x05names\"\x19\n" +
+	"\x17DeleteSealedObjectsResp2\xec\v\n" +
 	"\x05third\x12D\n" +
 	"\tPartLimit\x12\x1a.openim.third.PartLimitReq\x1a\x1b.openim.third.PartLimitResp\x12A\n" +
 	"\bPartSize\x12\x19.openim.third.PartSizeReq\x1a\x1a.openim.third.PartSizeResp\x12n\n" +
@@ -2335,7 +2640,10 @@ const file_third_third_proto_rawDesc = "" +
 	"\tAccessURL\x12\x1a.openim.third.AccessURLReq\x1a\x1b.openim.third.AccessURLResp\x12Y\n" +
 	"\x10InitiateFormData\x12!.openim.third.InitiateFormDataReq\x1a\".openim.third.InitiateFormDataResp\x12Y\n" +
 	"\x10CompleteFormData\x12!.openim.third.CompleteFormDataReq\x1a\".openim.third.CompleteFormDataResp\x12_\n" +
-	"\x12DeleteOutdatedData\x12#.openim.third.DeleteOutdatedDataReq\x1a$.openim.third.DeleteOutdatedDataResp\x12S\n" +
+	"\x12DeleteOutdatedData\x12#.openim.third.DeleteOutdatedDataReq\x1a$.openim.third.DeleteOutdatedDataResp\x12J\n" +
+	"\vSealObjects\x12\x1c.openim.third.SealObjectsReq\x1a\x1d.openim.third.SealObjectsResp\x12V\n" +
+	"\x0fSealedObjectURL\x12 .openim.third.SealedObjectURLReq\x1a!.openim.third.SealedObjectURLResp\x12b\n" +
+	"\x13DeleteSealedObjects\x12$.openim.third.DeleteSealedObjectsReq\x1a%.openim.third.DeleteSealedObjectsResp\x12S\n" +
 	"\x0eFcmUpdateToken\x12\x1f.openim.third.FcmUpdateTokenReq\x1a .openim.third.FcmUpdateTokenResp\x12V\n" +
 	"\x0fUpdatePushToken\x12 .openim.third.UpdatePushTokenReq\x1a!.openim.third.UpdatePushTokenResp\x12J\n" +
 	"\vSetAppBadge\x12\x1c.openim.third.SetAppBadgeReq\x1a\x1d.openim.third.SetAppBadgeResp\x12G\n" +
@@ -2358,7 +2666,7 @@ func file_third_third_proto_rawDescGZIP() []byte {
 	return file_third_third_proto_rawDescData
 }
 
-var file_third_third_proto_msgTypes = make([]protoimpl.MessageInfo, 38)
+var file_third_third_proto_msgTypes = make([]protoimpl.MessageInfo, 44)
 var file_third_third_proto_goTypes = []any{
 	(*KeyValues)(nil),                   // 0: openim.third.KeyValues
 	(*SignPart)(nil),                    // 1: openim.third.SignPart
@@ -2396,9 +2704,15 @@ var file_third_third_proto_goTypes = []any{
 	(*SearchLogsReq)(nil),               // 33: openim.third.SearchLogsReq
 	(*LogInfo)(nil),                     // 34: openim.third.LogInfo
 	(*SearchLogsResp)(nil),              // 35: openim.third.SearchLogsResp
-	nil,                                 // 36: openim.third.AccessURLReq.QueryEntry
-	nil,                                 // 37: openim.third.InitiateFormDataResp.FormDataEntry
-	(*sdkws.RequestPagination)(nil),     // 38: openim.sdkws.RequestPagination
+	(*SealObjectsReq)(nil),              // 36: openim.third.SealObjectsReq
+	(*SealObjectsResp)(nil),             // 37: openim.third.SealObjectsResp
+	(*SealedObjectURLReq)(nil),          // 38: openim.third.SealedObjectURLReq
+	(*SealedObjectURLResp)(nil),         // 39: openim.third.SealedObjectURLResp
+	(*DeleteSealedObjectsReq)(nil),      // 40: openim.third.DeleteSealedObjectsReq
+	(*DeleteSealedObjectsResp)(nil),     // 41: openim.third.DeleteSealedObjectsResp
+	nil,                                 // 42: openim.third.AccessURLReq.QueryEntry
+	nil,                                 // 43: openim.third.InitiateFormDataResp.FormDataEntry
+	(*sdkws.RequestPagination)(nil),     // 44: openim.sdkws.RequestPagination
 }
 var file_third_third_proto_depIdxs = []int32{
 	0,  // 0: openim.third.SignPart.query:type_name -> openim.third.KeyValues
@@ -2411,11 +2725,11 @@ var file_third_third_proto_depIdxs = []int32{
 	0,  // 7: openim.third.AuthSignResp.query:type_name -> openim.third.KeyValues
 	0,  // 8: openim.third.AuthSignResp.header:type_name -> openim.third.KeyValues
 	1,  // 9: openim.third.AuthSignResp.parts:type_name -> openim.third.SignPart
-	36, // 10: openim.third.AccessURLReq.query:type_name -> openim.third.AccessURLReq.QueryEntry
+	42, // 10: openim.third.AccessURLReq.query:type_name -> openim.third.AccessURLReq.QueryEntry
 	0,  // 11: openim.third.InitiateFormDataResp.header:type_name -> openim.third.KeyValues
-	37, // 12: openim.third.InitiateFormDataResp.formData:type_name -> openim.third.InitiateFormDataResp.FormDataEntry
+	43, // 12: openim.third.InitiateFormDataResp.formData:type_name -> openim.third.InitiateFormDataResp.FormDataEntry
 	28, // 13: openim.third.UploadLogsReq.fileURLs:type_name -> openim.third.fileURL
-	38, // 14: openim.third.SearchLogsReq.pagination:type_name -> openim.sdkws.RequestPagination
+	44, // 14: openim.third.SearchLogsReq.pagination:type_name -> openim.sdkws.RequestPagination
 	34, // 15: openim.third.SearchLogsResp.logsInfos:type_name -> openim.third.LogInfo
 	3,  // 16: openim.third.third.PartLimit:input_type -> openim.third.PartLimitReq
 	5,  // 17: openim.third.third.PartSize:input_type -> openim.third.PartSizeReq
@@ -2426,29 +2740,35 @@ var file_third_third_proto_depIdxs = []int32{
 	16, // 22: openim.third.third.InitiateFormData:input_type -> openim.third.InitiateFormDataReq
 	18, // 23: openim.third.third.CompleteFormData:input_type -> openim.third.CompleteFormDataReq
 	20, // 24: openim.third.third.DeleteOutdatedData:input_type -> openim.third.DeleteOutdatedDataReq
-	22, // 25: openim.third.third.FcmUpdateToken:input_type -> openim.third.FcmUpdateTokenReq
-	24, // 26: openim.third.third.UpdatePushToken:input_type -> openim.third.UpdatePushTokenReq
-	26, // 27: openim.third.third.SetAppBadge:input_type -> openim.third.SetAppBadgeReq
-	29, // 28: openim.third.third.UploadLogs:input_type -> openim.third.UploadLogsReq
-	31, // 29: openim.third.third.DeleteLogs:input_type -> openim.third.DeleteLogsReq
-	33, // 30: openim.third.third.SearchLogs:input_type -> openim.third.SearchLogsReq
-	4,  // 31: openim.third.third.PartLimit:output_type -> openim.third.PartLimitResp
-	6,  // 32: openim.third.third.PartSize:output_type -> openim.third.PartSizeResp
-	9,  // 33: openim.third.third.InitiateMultipartUpload:output_type -> openim.third.InitiateMultipartUploadResp
-	11, // 34: openim.third.third.AuthSign:output_type -> openim.third.AuthSignResp
-	13, // 35: openim.third.third.CompleteMultipartUpload:output_type -> openim.third.CompleteMultipartUploadResp
-	15, // 36: openim.third.third.AccessURL:output_type -> openim.third.AccessURLResp
-	17, // 37: openim.third.third.InitiateFormData:output_type -> openim.third.InitiateFormDataResp
-	19, // 38: openim.third.third.CompleteFormData:output_type -> openim.third.CompleteFormDataResp
-	21, // 39: openim.third.third.DeleteOutdatedData:output_type -> openim.third.DeleteOutdatedDataResp
-	23, // 40: openim.third.third.FcmUpdateToken:output_type -> openim.third.FcmUpdateTokenResp
-	25, // 41: openim.third.third.UpdatePushToken:output_type -> openim.third.UpdatePushTokenResp
-	27, // 42: openim.third.third.SetAppBadge:output_type -> openim.third.SetAppBadgeResp
-	30, // 43: openim.third.third.UploadLogs:output_type -> openim.third.UploadLogsResp
-	32, // 44: openim.third.third.DeleteLogs:output_type -> openim.third.DeleteLogsResp
-	35, // 45: openim.third.third.SearchLogs:output_type -> openim.third.SearchLogsResp
-	31, // [31:46] is the sub-list for method output_type
-	16, // [16:31] is the sub-list for method input_type
+	36, // 25: openim.third.third.SealObjects:input_type -> openim.third.SealObjectsReq
+	38, // 26: openim.third.third.SealedObjectURL:input_type -> openim.third.SealedObjectURLReq
+	40, // 27: openim.third.third.DeleteSealedObjects:input_type -> openim.third.DeleteSealedObjectsReq
+	22, // 28: openim.third.third.FcmUpdateToken:input_type -> openim.third.FcmUpdateTokenReq
+	24, // 29: openim.third.third.UpdatePushToken:input_type -> openim.third.UpdatePushTokenReq
+	26, // 30: openim.third.third.SetAppBadge:input_type -> openim.third.SetAppBadgeReq
+	29, // 31: openim.third.third.UploadLogs:input_type -> openim.third.UploadLogsReq
+	31, // 32: openim.third.third.DeleteLogs:input_type -> openim.third.DeleteLogsReq
+	33, // 33: openim.third.third.SearchLogs:input_type -> openim.third.SearchLogsReq
+	4,  // 34: openim.third.third.PartLimit:output_type -> openim.third.PartLimitResp
+	6,  // 35: openim.third.third.PartSize:output_type -> openim.third.PartSizeResp
+	9,  // 36: openim.third.third.InitiateMultipartUpload:output_type -> openim.third.InitiateMultipartUploadResp
+	11, // 37: openim.third.third.AuthSign:output_type -> openim.third.AuthSignResp
+	13, // 38: openim.third.third.CompleteMultipartUpload:output_type -> openim.third.CompleteMultipartUploadResp
+	15, // 39: openim.third.third.AccessURL:output_type -> openim.third.AccessURLResp
+	17, // 40: openim.third.third.InitiateFormData:output_type -> openim.third.InitiateFormDataResp
+	19, // 41: openim.third.third.CompleteFormData:output_type -> openim.third.CompleteFormDataResp
+	21, // 42: openim.third.third.DeleteOutdatedData:output_type -> openim.third.DeleteOutdatedDataResp
+	37, // 43: openim.third.third.SealObjects:output_type -> openim.third.SealObjectsResp
+	39, // 44: openim.third.third.SealedObjectURL:output_type -> openim.third.SealedObjectURLResp
+	41, // 45: openim.third.third.DeleteSealedObjects:output_type -> openim.third.DeleteSealedObjectsResp
+	23, // 46: openim.third.third.FcmUpdateToken:output_type -> openim.third.FcmUpdateTokenResp
+	25, // 47: openim.third.third.UpdatePushToken:output_type -> openim.third.UpdatePushTokenResp
+	27, // 48: openim.third.third.SetAppBadge:output_type -> openim.third.SetAppBadgeResp
+	30, // 49: openim.third.third.UploadLogs:output_type -> openim.third.UploadLogsResp
+	32, // 50: openim.third.third.DeleteLogs:output_type -> openim.third.DeleteLogsResp
+	35, // 51: openim.third.third.SearchLogs:output_type -> openim.third.SearchLogsResp
+	34, // [34:52] is the sub-list for method output_type
+	16, // [16:34] is the sub-list for method input_type
 	16, // [16:16] is the sub-list for extension type_name
 	16, // [16:16] is the sub-list for extension extendee
 	0,  // [0:16] is the sub-list for field type_name
@@ -2465,7 +2785,7 @@ func file_third_third_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_third_third_proto_rawDesc), len(file_third_third_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   38,
+			NumMessages:   44,
 			NumExtensions: 0,
 			NumServices:   1,
 		},

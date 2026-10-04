@@ -1028,6 +1028,48 @@ message EditMsgResp {
   int32 contentType = 3;
 }
 
+// OpenViewOnceReq opens a View once ("Xem một lần") message: a picture,
+// video or voice message its recipient may open only once (ADR 0006).
+// Such a message carries no media URL; this is the only way to one.
+//
+// Only the recipient may call it. The first call records when and on
+// which platform it was opened (which also starts a countdown) and tells
+// both sides; a later call from that same platform is answered again only
+// while a countdown is running. Anyone else — the sender, the recipient's
+// other devices, anyone once it is gone — is refused (1441, 1442).
+message OpenViewOnceReq {
+  string conversationID = 1;
+  int64 seq = 2;
+}
+
+message OpenViewOnceResp {
+  // The media, signed for about a minute rather than storage's usual
+  // seven days.
+  string url = 1;
+  // A video's cover image, signed the same way; "" for anything else.
+  string coverURL = 2;
+  // Unix ms after which url and coverURL stop working.
+  int64 urlExpireTime = 3;
+  // 0: gone when closed. Otherwise the countdown, in seconds.
+  int32 mode = 4;
+  // Unix ms by which it is gone whatever the client does: the end of the
+  // countdown, or for mode 0 the longest it may stay open.
+  int64 deadline = 5;
+  // The server's clock when it answered, Unix ms. A client counts down
+  // from deadline - serverTime, never from its own clock.
+  int64 serverTime = 6;
+}
+
+// CloseViewOnceReq tells the server the recipient closed a View once
+// message on the device that opened it. In mode 0 that is the end of it,
+// for both sides; during a countdown it changes nothing.
+message CloseViewOnceReq {
+  string conversationID = 1;
+  int64 seq = 2;
+}
+
+message CloseViewOnceResp {}
+
 // GetMsgExtraVersionReq asks whether anything in a conversation's message
 // history has been changed in place since the caller last checked.
 //
@@ -1696,6 +1738,10 @@ service msg {
   // Edit a message in place — see EditMsgReq for why this is not the
   // ModifyMessage stub above.
   rpc EditMsg(EditMsgReq) returns (EditMsgResp);
+
+  // View once: see OpenViewOnceReq.
+  rpc OpenViewOnce(OpenViewOnceReq) returns (OpenViewOnceResp);
+  rpc CloseViewOnce(CloseViewOnceReq) returns (CloseViewOnceResp);
 
   // Has anything in this conversation been rewritten in place since the
   // caller last looked? See GetMsgExtraVersionReq.

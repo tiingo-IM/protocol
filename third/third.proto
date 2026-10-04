@@ -217,6 +217,40 @@ message SearchLogsResp {
   uint32 total = 2;
 }
 
+// Sealed objects: the media of View once messages (ADR 0006). Sealing
+// moves an uploaded object to a name nobody but the server knows, which
+// the public /object/ redirect and AccessURL refuse; only the server hands
+// out a short-lived URL to one. All three are for the IM admin only —
+// the msg service calls them, never a client.
+message SealObjectsReq {
+  // Every name must be an object this user uploaded.
+  string ownerUserID = 1;
+  repeated string names = 2;
+}
+
+message SealObjectsResp {
+  // The sealed names, in the order asked. Sealing the same name again
+  // answers with the same sealed name.
+  repeated string names = 1;
+}
+
+message SealedObjectURLReq {
+  string name = 1;
+  int64 expireSeconds = 2;
+}
+
+message SealedObjectURLResp {
+  string url = 1;
+  // Unix ms.
+  int64 expireTime = 2;
+}
+
+message DeleteSealedObjectsReq {
+  repeated string names = 1;
+}
+
+message DeleteSealedObjectsResp {}
+
 service third {
   rpc PartLimit(PartLimitReq) returns (PartLimitResp);
   rpc PartSize(PartSizeReq) returns (PartSizeResp);
@@ -227,6 +261,11 @@ service third {
   rpc InitiateFormData(InitiateFormDataReq) returns (InitiateFormDataResp);
   rpc CompleteFormData(CompleteFormDataReq) returns (CompleteFormDataResp);
   rpc DeleteOutdatedData(DeleteOutdatedDataReq) returns (DeleteOutdatedDataResp);
+
+  // Sealed objects — see SealObjectsReq.
+  rpc SealObjects(SealObjectsReq) returns (SealObjectsResp);
+  rpc SealedObjectURL(SealedObjectURLReq) returns (SealedObjectURLResp);
+  rpc DeleteSealedObjects(DeleteSealedObjectsReq) returns (DeleteSealedObjectsResp);
 
   rpc FcmUpdateToken(FcmUpdateTokenReq) returns (FcmUpdateTokenResp);
   rpc UpdatePushToken(UpdatePushTokenReq) returns (UpdatePushTokenResp);
