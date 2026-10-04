@@ -813,6 +813,98 @@ message SetAppSettingsResp {
   sdkws.AppSettings settings = 1;
 }
 
+// Platform mute ("Tắt chat toàn bộ"): windows during which the users of
+// this deployment may not do what a window forbids. Kept apart from
+// AppSettings, which every client reads whole: a window's exempted users
+// are nobody else's business.
+
+// What a window forbids. A scope is named by its field in the API
+// ("privateMsg", "groupMsg", "friendRequest", "groupAction",
+// "profileEdit").
+message PlatformMuteForbid {
+  // Sending, editing, recalling, starting a call: one-to-one.
+  bool privateMsg = 1;
+  // The same in groups, and voting in polls.
+  bool groupMsg = 2;
+  // Sending a friend request.
+  bool friendRequest = 3;
+  // Creating a group, changing its info or settings, transferring or
+  // dismissing it.
+  bool groupAction = 4;
+  // Changing one's own profile.
+  bool profileEdit = 5;
+}
+
+// One window, in wall-clock time of its time zone. start and end read by
+// repeat:
+//   once:   "2006-01-02T15:04", end after start
+//   daily:  "15:04" every day; end at or before start crosses midnight
+//   weekly: "Mon 15:04" (Mon..Sun) every week; may cross the week
+// A daily window is under 24 hours and a weekly one under 7 days.
+message PlatformMuteWindow {
+  // Given by the server on save when empty, kept otherwise.
+  string id = 1;
+  bool enabled = 2;
+  // An IANA name, e.g. "Asia/Ho_Chi_Minh" or "UTC".
+  string timeZone = 3;
+  // "once", "daily" or "weekly".
+  string repeat = 4;
+  string start = 5;
+  string end = 6;
+  PlatformMuteForbid forbid = 7;
+  // Users the window does not apply to.
+  repeated string exemptUserIDs = 8;
+}
+
+// Admin only.
+message GetPlatformMuteReq {}
+
+message GetPlatformMuteResp {
+  repeated PlatformMuteWindow windows = 1;
+}
+
+// Admin only. Replaces the whole list: the console edits it as one thing.
+message SetPlatformMuteReq {
+  repeated PlatformMuteWindow windows = 1;
+}
+
+message SetPlatformMuteResp {
+  repeated PlatformMuteWindow windows = 1;
+}
+
+// Admin only: for a service that enforces a scope itself (chat, for
+// friend requests and profile edits). Exemptions already applied.
+message CheckPlatformMuteReq {
+  string userID = 1;
+  // One of PlatformMuteForbid's field names.
+  string scope = 2;
+}
+
+message CheckPlatformMuteResp {
+  bool forbidden = 1;
+  // When forbidden: the end of the window, Unix milliseconds.
+  int64 until = 2;
+}
+
+// One occurrence of a window, as the caller sees it.
+message PlatformMutePeriod {
+  // Unix milliseconds; start may be past (it is on now).
+  int64 start = 1;
+  int64 end = 2;
+  PlatformMuteForbid forbid = 3;
+}
+
+// The caller's own view: what is forbidden to them now and over the
+// next seven days, from windows that do not exempt them. Nobody's
+// exemptions are in it. A client switches its buttons at these times
+// itself, and asks again on PlatformMuteChangedNotification.
+message GetPlatformMuteStatusReq {}
+
+message GetPlatformMuteStatusResp {
+  // In order of start.
+  repeated PlatformMutePeriod periods = 1;
+}
+
 // A banned word ("từ cấm"): a word or phrase the admin forbids in what
 // users write in messages. One list for everyone, checked by this service
 // on every send and edit — see internal/rpc/msg/banned_words.go.
@@ -1583,6 +1675,14 @@ service msg {
   // costs no database read per message.
   rpc GetAppSettings(GetAppSettingsReq) returns (GetAppSettingsResp);
   rpc SetAppSettings(SetAppSettingsReq) returns (SetAppSettingsResp);
+
+  // Platform mute. Owned here, like AppSettings, because this service
+  // enforces it on the send path; the group and user services read the
+  // same store.
+  rpc GetPlatformMute(GetPlatformMuteReq) returns (GetPlatformMuteResp);
+  rpc SetPlatformMute(SetPlatformMuteReq) returns (SetPlatformMuteResp);
+  rpc CheckPlatformMute(CheckPlatformMuteReq) returns (CheckPlatformMuteResp);
+  rpc GetPlatformMuteStatus(GetPlatformMuteStatusReq) returns (GetPlatformMuteStatusResp);
 
   // The banned-word list (see BannedWord). Admin only. Owned here
   // because this service enforces it on the send path, which must never

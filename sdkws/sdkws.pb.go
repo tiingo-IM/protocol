@@ -7392,6 +7392,45 @@ func (x *AppSettingsChangedTips) GetSettings() *AppSettings {
 	return nil
 }
 
+// Pushed (constant.PlatformMuteChangedNotification, 2401) to every user
+// online when an admin saves the platform mute. Empty: what a user may do
+// depends on their exemptions, so each asks GetPlatformMuteStatus.
+type PlatformMuteChangedTips struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *PlatformMuteChangedTips) Reset() {
+	*x = PlatformMuteChangedTips{}
+	mi := &file_sdkws_sdkws_proto_msgTypes[92]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *PlatformMuteChangedTips) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*PlatformMuteChangedTips) ProtoMessage() {}
+
+func (x *PlatformMuteChangedTips) ProtoReflect() protoreflect.Message {
+	mi := &file_sdkws_sdkws_proto_msgTypes[92]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use PlatformMuteChangedTips.ProtoReflect.Descriptor instead.
+func (*PlatformMuteChangedTips) Descriptor() ([]byte, []int) {
+	return file_sdkws_sdkws_proto_rawDescGZIP(), []int{92}
+}
+
 // Pushed (constant.ScheduledMsgChangedNotification, 1706) to the owner of
 // a scheduled message, on their own devices only. A marker rather than
 // the message: the receiving device refetches that conversation's list,
@@ -7408,7 +7447,7 @@ type ScheduledMsgChangedTips struct {
 
 func (x *ScheduledMsgChangedTips) Reset() {
 	*x = ScheduledMsgChangedTips{}
-	mi := &file_sdkws_sdkws_proto_msgTypes[92]
+	mi := &file_sdkws_sdkws_proto_msgTypes[93]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -7420,7 +7459,7 @@ func (x *ScheduledMsgChangedTips) String() string {
 func (*ScheduledMsgChangedTips) ProtoMessage() {}
 
 func (x *ScheduledMsgChangedTips) ProtoReflect() protoreflect.Message {
-	mi := &file_sdkws_sdkws_proto_msgTypes[92]
+	mi := &file_sdkws_sdkws_proto_msgTypes[93]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -7433,7 +7472,7 @@ func (x *ScheduledMsgChangedTips) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ScheduledMsgChangedTips.ProtoReflect.Descriptor instead.
 func (*ScheduledMsgChangedTips) Descriptor() ([]byte, []int) {
-	return file_sdkws_sdkws_proto_rawDescGZIP(), []int{92}
+	return file_sdkws_sdkws_proto_rawDescGZIP(), []int{93}
 }
 
 func (x *ScheduledMsgChangedTips) GetConversationID() string {
@@ -7478,7 +7517,7 @@ type CallHistoryChangedTips struct {
 
 func (x *CallHistoryChangedTips) Reset() {
 	*x = CallHistoryChangedTips{}
-	mi := &file_sdkws_sdkws_proto_msgTypes[93]
+	mi := &file_sdkws_sdkws_proto_msgTypes[94]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -7490,7 +7529,7 @@ func (x *CallHistoryChangedTips) String() string {
 func (*CallHistoryChangedTips) ProtoMessage() {}
 
 func (x *CallHistoryChangedTips) ProtoReflect() protoreflect.Message {
-	mi := &file_sdkws_sdkws_proto_msgTypes[93]
+	mi := &file_sdkws_sdkws_proto_msgTypes[94]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -7503,7 +7542,7 @@ func (x *CallHistoryChangedTips) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use CallHistoryChangedTips.ProtoReflect.Descriptor instead.
 func (*CallHistoryChangedTips) Descriptor() ([]byte, []int) {
-	return file_sdkws_sdkws_proto_rawDescGZIP(), []int{93}
+	return file_sdkws_sdkws_proto_rawDescGZIP(), []int{94}
 }
 
 func (x *CallHistoryChangedTips) GetChange() string {
@@ -7580,7 +7619,7 @@ type GroupCreationDefaults struct {
 
 func (x *GroupCreationDefaults) Reset() {
 	*x = GroupCreationDefaults{}
-	mi := &file_sdkws_sdkws_proto_msgTypes[94]
+	mi := &file_sdkws_sdkws_proto_msgTypes[95]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -7592,7 +7631,7 @@ func (x *GroupCreationDefaults) String() string {
 func (*GroupCreationDefaults) ProtoMessage() {}
 
 func (x *GroupCreationDefaults) ProtoReflect() protoreflect.Message {
-	mi := &file_sdkws_sdkws_proto_msgTypes[94]
+	mi := &file_sdkws_sdkws_proto_msgTypes[95]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -7605,7 +7644,7 @@ func (x *GroupCreationDefaults) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GroupCreationDefaults.ProtoReflect.Descriptor instead.
 func (*GroupCreationDefaults) Descriptor() ([]byte, []int) {
-	return file_sdkws_sdkws_proto_rawDescGZIP(), []int{94}
+	return file_sdkws_sdkws_proto_rawDescGZIP(), []int{95}
 }
 
 func (x *GroupCreationDefaults) GetMuteAll() int32 {
@@ -7697,7 +7736,7 @@ type EditMsgTips struct {
 
 func (x *EditMsgTips) Reset() {
 	*x = EditMsgTips{}
-	mi := &file_sdkws_sdkws_proto_msgTypes[95]
+	mi := &file_sdkws_sdkws_proto_msgTypes[96]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -7709,7 +7748,7 @@ func (x *EditMsgTips) String() string {
 func (*EditMsgTips) ProtoMessage() {}
 
 func (x *EditMsgTips) ProtoReflect() protoreflect.Message {
-	mi := &file_sdkws_sdkws_proto_msgTypes[95]
+	mi := &file_sdkws_sdkws_proto_msgTypes[96]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -7722,7 +7761,7 @@ func (x *EditMsgTips) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use EditMsgTips.ProtoReflect.Descriptor instead.
 func (*EditMsgTips) Descriptor() ([]byte, []int) {
-	return file_sdkws_sdkws_proto_rawDescGZIP(), []int{95}
+	return file_sdkws_sdkws_proto_rawDescGZIP(), []int{96}
 }
 
 func (x *EditMsgTips) GetConversationID() string {
@@ -8463,7 +8502,8 @@ const file_sdkws_sdkws_proto_rawDesc = "" +
 	"\x0f_enablePresenceB\x1c\n" +
 	"\x1a_allowUserHideOnlineStatus\"O\n" +
 	"\x16AppSettingsChangedTips\x125\n" +
-	"\bsettings\x18\x01 \x01(\v2\x19.openim.sdkws.AppSettingsR\bsettings\"y\n" +
+	"\bsettings\x18\x01 \x01(\v2\x19.openim.sdkws.AppSettingsR\bsettings\"\x19\n" +
+	"\x17PlatformMuteChangedTips\"y\n" +
 	"\x17ScheduledMsgChangedTips\x12&\n" +
 	"\x0econversationID\x18\x01 \x01(\tR\x0econversationID\x12\x1e\n" +
 	"\n" +
@@ -8526,7 +8566,7 @@ func file_sdkws_sdkws_proto_rawDescGZIP() []byte {
 }
 
 var file_sdkws_sdkws_proto_enumTypes = make([]protoimpl.EnumInfo, 1)
-var file_sdkws_sdkws_proto_msgTypes = make([]protoimpl.MessageInfo, 104)
+var file_sdkws_sdkws_proto_msgTypes = make([]protoimpl.MessageInfo, 105)
 var file_sdkws_sdkws_proto_goTypes = []any{
 	(PullOrder)(0),                            // 0: openim.sdkws.PullOrder
 	(*GroupInfo)(nil),                         // 1: openim.sdkws.GroupInfo
@@ -8621,40 +8661,41 @@ var file_sdkws_sdkws_proto_goTypes = []any{
 	(*PlatformPresenceSetting)(nil),           // 90: openim.sdkws.PlatformPresenceSetting
 	(*PresenceSettings)(nil),                  // 91: openim.sdkws.PresenceSettings
 	(*AppSettingsChangedTips)(nil),            // 92: openim.sdkws.AppSettingsChangedTips
-	(*ScheduledMsgChangedTips)(nil),           // 93: openim.sdkws.ScheduledMsgChangedTips
-	(*CallHistoryChangedTips)(nil),            // 94: openim.sdkws.CallHistoryChangedTips
-	(*GroupCreationDefaults)(nil),             // 95: openim.sdkws.GroupCreationDefaults
-	(*EditMsgTips)(nil),                       // 96: openim.sdkws.EditMsgTips
-	nil,                                       // 97: openim.sdkws.PullMessageBySeqsResp.MsgsEntry
-	nil,                                       // 98: openim.sdkws.PullMessageBySeqsResp.NotificationMsgsEntry
-	nil,                                       // 99: openim.sdkws.GetMaxSeqResp.MaxSeqsEntry
-	nil,                                       // 100: openim.sdkws.GetMaxSeqResp.MinSeqsEntry
-	nil,                                       // 101: openim.sdkws.MsgData.OptionsEntry
-	nil,                                       // 102: openim.sdkws.PushMessages.MsgsEntry
-	nil,                                       // 103: openim.sdkws.PushMessages.NotificationMsgsEntry
-	nil,                                       // 104: openim.sdkws.PresenceSettings.PlatformSettingsEntry
-	(*wrapperspb.StringValue)(nil),            // 105: openim.protobuf.StringValue
-	(*wrapperspb.Int32Value)(nil),             // 106: openim.protobuf.Int32Value
-	(*wrapperspb.Int64Value)(nil),             // 107: openim.protobuf.Int64Value
+	(*PlatformMuteChangedTips)(nil),           // 93: openim.sdkws.PlatformMuteChangedTips
+	(*ScheduledMsgChangedTips)(nil),           // 94: openim.sdkws.ScheduledMsgChangedTips
+	(*CallHistoryChangedTips)(nil),            // 95: openim.sdkws.CallHistoryChangedTips
+	(*GroupCreationDefaults)(nil),             // 96: openim.sdkws.GroupCreationDefaults
+	(*EditMsgTips)(nil),                       // 97: openim.sdkws.EditMsgTips
+	nil,                                       // 98: openim.sdkws.PullMessageBySeqsResp.MsgsEntry
+	nil,                                       // 99: openim.sdkws.PullMessageBySeqsResp.NotificationMsgsEntry
+	nil,                                       // 100: openim.sdkws.GetMaxSeqResp.MaxSeqsEntry
+	nil,                                       // 101: openim.sdkws.GetMaxSeqResp.MinSeqsEntry
+	nil,                                       // 102: openim.sdkws.MsgData.OptionsEntry
+	nil,                                       // 103: openim.sdkws.PushMessages.MsgsEntry
+	nil,                                       // 104: openim.sdkws.PushMessages.NotificationMsgsEntry
+	nil,                                       // 105: openim.sdkws.PresenceSettings.PlatformSettingsEntry
+	(*wrapperspb.StringValue)(nil),            // 106: openim.protobuf.StringValue
+	(*wrapperspb.Int32Value)(nil),             // 107: openim.protobuf.Int32Value
+	(*wrapperspb.Int64Value)(nil),             // 108: openim.protobuf.Int64Value
 }
 var file_sdkws_sdkws_proto_depIdxs = []int32{
 	5,   // 0: openim.sdkws.MessageReactionChange.reactions:type_name -> openim.sdkws.ReactionCount
 	6,   // 1: openim.sdkws.MessageReactionsChangedTips.changes:type_name -> openim.sdkws.MessageReactionChange
-	105, // 2: openim.sdkws.GroupInfoForSet.ex:type_name -> openim.protobuf.StringValue
-	106, // 3: openim.sdkws.GroupInfoForSet.needVerification:type_name -> openim.protobuf.Int32Value
-	106, // 4: openim.sdkws.GroupInfoForSet.lookMemberInfo:type_name -> openim.protobuf.Int32Value
-	106, // 5: openim.sdkws.GroupInfoForSet.applyMemberFriend:type_name -> openim.protobuf.Int32Value
-	106, // 6: openim.sdkws.GroupInfoForSet.deleteConversationOnKick:type_name -> openim.protobuf.Int32Value
-	106, // 7: openim.sdkws.GroupInfoForSet.historyForNewMembers:type_name -> openim.protobuf.Int32Value
-	106, // 8: openim.sdkws.GroupInfoForSet.readReceipts:type_name -> openim.protobuf.Int32Value
-	106, // 9: openim.sdkws.GroupInfoForSet.memberPin:type_name -> openim.protobuf.Int32Value
-	107, // 10: openim.sdkws.GroupInfoForSet.msgAutoDelete:type_name -> openim.protobuf.Int64Value
-	106, // 11: openim.sdkws.GroupInfoForSet.memberPoll:type_name -> openim.protobuf.Int32Value
-	106, // 12: openim.sdkws.GroupInfoForSet.memberCall:type_name -> openim.protobuf.Int32Value
-	105, // 13: openim.sdkws.UserInfoWithEx.nickname:type_name -> openim.protobuf.StringValue
-	105, // 14: openim.sdkws.UserInfoWithEx.faceURL:type_name -> openim.protobuf.StringValue
-	105, // 15: openim.sdkws.UserInfoWithEx.ex:type_name -> openim.protobuf.StringValue
-	106, // 16: openim.sdkws.UserInfoWithEx.globalRecvMsgOpt:type_name -> openim.protobuf.Int32Value
+	106, // 2: openim.sdkws.GroupInfoForSet.ex:type_name -> openim.protobuf.StringValue
+	107, // 3: openim.sdkws.GroupInfoForSet.needVerification:type_name -> openim.protobuf.Int32Value
+	107, // 4: openim.sdkws.GroupInfoForSet.lookMemberInfo:type_name -> openim.protobuf.Int32Value
+	107, // 5: openim.sdkws.GroupInfoForSet.applyMemberFriend:type_name -> openim.protobuf.Int32Value
+	107, // 6: openim.sdkws.GroupInfoForSet.deleteConversationOnKick:type_name -> openim.protobuf.Int32Value
+	107, // 7: openim.sdkws.GroupInfoForSet.historyForNewMembers:type_name -> openim.protobuf.Int32Value
+	107, // 8: openim.sdkws.GroupInfoForSet.readReceipts:type_name -> openim.protobuf.Int32Value
+	107, // 9: openim.sdkws.GroupInfoForSet.memberPin:type_name -> openim.protobuf.Int32Value
+	108, // 10: openim.sdkws.GroupInfoForSet.msgAutoDelete:type_name -> openim.protobuf.Int64Value
+	107, // 11: openim.sdkws.GroupInfoForSet.memberPoll:type_name -> openim.protobuf.Int32Value
+	107, // 12: openim.sdkws.GroupInfoForSet.memberCall:type_name -> openim.protobuf.Int32Value
+	106, // 13: openim.sdkws.UserInfoWithEx.nickname:type_name -> openim.protobuf.StringValue
+	106, // 14: openim.sdkws.UserInfoWithEx.faceURL:type_name -> openim.protobuf.StringValue
+	106, // 15: openim.sdkws.UserInfoWithEx.ex:type_name -> openim.protobuf.StringValue
+	107, // 16: openim.sdkws.UserInfoWithEx.globalRecvMsgOpt:type_name -> openim.protobuf.Int32Value
 	12,  // 17: openim.sdkws.FriendInfo.friendUser:type_name -> openim.sdkws.UserInfo
 	11,  // 18: openim.sdkws.BlackInfo.blackUserInfo:type_name -> openim.sdkws.PublicUserInfo
 	11,  // 19: openim.sdkws.GroupRequest.userInfo:type_name -> openim.sdkws.PublicUserInfo
@@ -8662,14 +8703,14 @@ var file_sdkws_sdkws_proto_depIdxs = []int32{
 	19,  // 21: openim.sdkws.PullMessageBySeqsReq.seqRanges:type_name -> openim.sdkws.SeqRange
 	0,   // 22: openim.sdkws.PullMessageBySeqsReq.order:type_name -> openim.sdkws.PullOrder
 	25,  // 23: openim.sdkws.PullMsgs.Msgs:type_name -> openim.sdkws.MsgData
-	97,  // 24: openim.sdkws.PullMessageBySeqsResp.msgs:type_name -> openim.sdkws.PullMessageBySeqsResp.MsgsEntry
-	98,  // 25: openim.sdkws.PullMessageBySeqsResp.notificationMsgs:type_name -> openim.sdkws.PullMessageBySeqsResp.NotificationMsgsEntry
-	99,  // 26: openim.sdkws.GetMaxSeqResp.maxSeqs:type_name -> openim.sdkws.GetMaxSeqResp.MaxSeqsEntry
-	100, // 27: openim.sdkws.GetMaxSeqResp.minSeqs:type_name -> openim.sdkws.GetMaxSeqResp.MinSeqsEntry
-	101, // 28: openim.sdkws.MsgData.options:type_name -> openim.sdkws.MsgData.OptionsEntry
+	98,  // 24: openim.sdkws.PullMessageBySeqsResp.msgs:type_name -> openim.sdkws.PullMessageBySeqsResp.MsgsEntry
+	99,  // 25: openim.sdkws.PullMessageBySeqsResp.notificationMsgs:type_name -> openim.sdkws.PullMessageBySeqsResp.NotificationMsgsEntry
+	100, // 26: openim.sdkws.GetMaxSeqResp.maxSeqs:type_name -> openim.sdkws.GetMaxSeqResp.MaxSeqsEntry
+	101, // 27: openim.sdkws.GetMaxSeqResp.minSeqs:type_name -> openim.sdkws.GetMaxSeqResp.MinSeqsEntry
+	102, // 28: openim.sdkws.MsgData.options:type_name -> openim.sdkws.MsgData.OptionsEntry
 	27,  // 29: openim.sdkws.MsgData.offlinePushInfo:type_name -> openim.sdkws.OfflinePushInfo
-	102, // 30: openim.sdkws.PushMessages.msgs:type_name -> openim.sdkws.PushMessages.MsgsEntry
-	103, // 31: openim.sdkws.PushMessages.notificationMsgs:type_name -> openim.sdkws.PushMessages.NotificationMsgsEntry
+	103, // 30: openim.sdkws.PushMessages.msgs:type_name -> openim.sdkws.PushMessages.MsgsEntry
+	104, // 31: openim.sdkws.PushMessages.notificationMsgs:type_name -> openim.sdkws.PushMessages.NotificationMsgsEntry
 	1,   // 32: openim.sdkws.GroupCreatedTips.group:type_name -> openim.sdkws.GroupInfo
 	10,  // 33: openim.sdkws.GroupCreatedTips.opUser:type_name -> openim.sdkws.GroupMemberFullInfo
 	10,  // 34: openim.sdkws.GroupCreatedTips.memberList:type_name -> openim.sdkws.GroupMemberFullInfo
@@ -8740,7 +8781,7 @@ var file_sdkws_sdkws_proto_depIdxs = []int32{
 	77,  // 99: openim.sdkws.MarkAsReadTips.seqReadCounts:type_name -> openim.sdkws.SeqReadCount
 	51,  // 100: openim.sdkws.FriendsInfoUpdateTips.fromToUserID:type_name -> openim.sdkws.FromToUserID
 	83,  // 101: openim.sdkws.SubUserOnlineStatusTips.subscribers:type_name -> openim.sdkws.SubUserOnlineStatusElem
-	104, // 102: openim.sdkws.PresenceSettings.platformSettings:type_name -> openim.sdkws.PresenceSettings.PlatformSettingsEntry
+	105, // 102: openim.sdkws.PresenceSettings.platformSettings:type_name -> openim.sdkws.PresenceSettings.PlatformSettingsEntry
 	89,  // 103: openim.sdkws.AppSettingsChangedTips.settings:type_name -> openim.sdkws.AppSettings
 	20,  // 104: openim.sdkws.PullMessageBySeqsResp.MsgsEntry.value:type_name -> openim.sdkws.PullMsgs
 	20,  // 105: openim.sdkws.PullMessageBySeqsResp.NotificationMsgsEntry.value:type_name -> openim.sdkws.PullMsgs
@@ -8762,14 +8803,14 @@ func file_sdkws_sdkws_proto_init() {
 	file_sdkws_sdkws_proto_msgTypes[24].OneofWrappers = []any{}
 	file_sdkws_sdkws_proto_msgTypes[88].OneofWrappers = []any{}
 	file_sdkws_sdkws_proto_msgTypes[90].OneofWrappers = []any{}
-	file_sdkws_sdkws_proto_msgTypes[94].OneofWrappers = []any{}
+	file_sdkws_sdkws_proto_msgTypes[95].OneofWrappers = []any{}
 	type x struct{}
 	out := protoimpl.TypeBuilder{
 		File: protoimpl.DescBuilder{
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_sdkws_sdkws_proto_rawDesc), len(file_sdkws_sdkws_proto_rawDesc)),
 			NumEnums:      1,
-			NumMessages:   104,
+			NumMessages:   105,
 			NumExtensions: 0,
 			NumServices:   0,
 		},

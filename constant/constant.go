@@ -175,6 +175,10 @@ const (
 	// only place that says so.
 	AppSettingsChangedNotification = 2400
 
+	// PlatformMuteChangedNotification: an admin saved the platform mute;
+	// ask GetPlatformMuteStatus again. Unreliable like the one above.
+	PlatformMuteChangedNotification = 2401
+
 	StreamMsgNotification = 2500
 
 	NotificationEnd = 5000
@@ -452,14 +456,15 @@ const (
 // (msg.ScheduledMsg.lastResult). Skips keep the series; see
 // ScheduledMsgFailed for the ones that end it.
 const (
-	ScheduledMsgResultSent            = 1
-	ScheduledMsgResultSkippedDisabled = 2 // an admin had turned the feature (or recurring) off
-	ScheduledMsgResultSkippedRole     = 3 // the owner's role was no longer allowed to schedule
-	ScheduledMsgResultSkippedMuted    = 4
-	ScheduledMsgResultSkippedExpired  = 5 // came due too long ago to still be worth sending
-	ScheduledMsgResultSkippedRejected = 6 // refused for some other lasting reason (a webhook, the peer's receive setting)
-	ScheduledMsgResultFailedTransient = 7 // kept failing on a temporary error
-	ScheduledMsgResultUnknown         = 8 // the sender stopped mid-send; it may or may not have gone out
+	ScheduledMsgResultSent                 = 1
+	ScheduledMsgResultSkippedDisabled      = 2 // an admin had turned the feature (or recurring) off
+	ScheduledMsgResultSkippedRole          = 3 // the owner's role was no longer allowed to schedule
+	ScheduledMsgResultSkippedMuted         = 4
+	ScheduledMsgResultSkippedExpired       = 5 // came due too long ago to still be worth sending
+	ScheduledMsgResultSkippedRejected      = 6 // refused for some other lasting reason (a webhook, the peer's receive setting)
+	ScheduledMsgResultFailedTransient      = 7 // kept failing on a temporary error
+	ScheduledMsgResultUnknown              = 8 // the sender stopped mid-send; it may or may not have gone out
+	ScheduledMsgResultSkippedPlatformMuted = 9 // came due while the platform mute forbade it; never sent late
 )
 
 const (

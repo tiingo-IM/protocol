@@ -285,3 +285,13 @@ func (x *DestructMsgsReq) Check() error {
 	}
 	return nil
 }
+
+func (x *CheckPlatformMuteReq) Check() error {
+	if x.UserID == "" {
+		return errors.New("userID is empty")
+	}
+	if x.Scope == "" {
+		return errors.New("scope is empty")
+	}
+	return nil
+}

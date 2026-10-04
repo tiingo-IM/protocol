@@ -89,6 +89,10 @@ const (
 	Msg_GetSystemMsgVisibilityList_FullMethodName       = "/openim.msg.msg/GetSystemMsgVisibilityList"
 	Msg_GetAppSettings_FullMethodName                   = "/openim.msg.msg/GetAppSettings"
 	Msg_SetAppSettings_FullMethodName                   = "/openim.msg.msg/SetAppSettings"
+	Msg_GetPlatformMute_FullMethodName                  = "/openim.msg.msg/GetPlatformMute"
+	Msg_SetPlatformMute_FullMethodName                  = "/openim.msg.msg/SetPlatformMute"
+	Msg_CheckPlatformMute_FullMethodName                = "/openim.msg.msg/CheckPlatformMute"
+	Msg_GetPlatformMuteStatus_FullMethodName            = "/openim.msg.msg/GetPlatformMuteStatus"
 	Msg_GetBannedWords_FullMethodName                   = "/openim.msg.msg/GetBannedWords"
 	Msg_AddBannedWords_FullMethodName                   = "/openim.msg.msg/AddBannedWords"
 	Msg_UpdateBannedWord_FullMethodName                 = "/openim.msg.msg/UpdateBannedWord"
@@ -236,6 +240,13 @@ type MsgClient interface {
 	// costs no database read per message.
 	GetAppSettings(ctx context.Context, in *GetAppSettingsReq, opts ...grpc.CallOption) (*GetAppSettingsResp, error)
 	SetAppSettings(ctx context.Context, in *SetAppSettingsReq, opts ...grpc.CallOption) (*SetAppSettingsResp, error)
+	// Platform mute. Owned here, like AppSettings, because this service
+	// enforces it on the send path; the group and user services read the
+	// same store.
+	GetPlatformMute(ctx context.Context, in *GetPlatformMuteReq, opts ...grpc.CallOption) (*GetPlatformMuteResp, error)
+	SetPlatformMute(ctx context.Context, in *SetPlatformMuteReq, opts ...grpc.CallOption) (*SetPlatformMuteResp, error)
+	CheckPlatformMute(ctx context.Context, in *CheckPlatformMuteReq, opts ...grpc.CallOption) (*CheckPlatformMuteResp, error)
+	GetPlatformMuteStatus(ctx context.Context, in *GetPlatformMuteStatusReq, opts ...grpc.CallOption) (*GetPlatformMuteStatusResp, error)
 	// The banned-word list (see BannedWord). Admin only. Owned here
 	// because this service enforces it on the send path, which must never
 	// wait on another service.
@@ -965,6 +976,46 @@ func (c *msgClient) SetAppSettings(ctx context.Context, in *SetAppSettingsReq, o
 	return out, nil
 }
 
+func (c *msgClient) GetPlatformMute(ctx context.Context, in *GetPlatformMuteReq, opts ...grpc.CallOption) (*GetPlatformMuteResp, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(GetPlatformMuteResp)
+	err := c.cc.Invoke(ctx, Msg_GetPlatformMute_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *msgClient) SetPlatformMute(ctx context.Context, in *SetPlatformMuteReq, opts ...grpc.CallOption) (*SetPlatformMuteResp, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(SetPlatformMuteResp)
+	err := c.cc.Invoke(ctx, Msg_SetPlatformMute_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *msgClient) CheckPlatformMute(ctx context.Context, in *CheckPlatformMuteReq, opts ...grpc.CallOption) (*CheckPlatformMuteResp, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(CheckPlatformMuteResp)
+	err := c.cc.Invoke(ctx, Msg_CheckPlatformMute_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *msgClient) GetPlatformMuteStatus(ctx context.Context, in *GetPlatformMuteStatusReq, opts ...grpc.CallOption) (*GetPlatformMuteStatusResp, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(GetPlatformMuteStatusResp)
+	err := c.cc.Invoke(ctx, Msg_GetPlatformMuteStatus_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 func (c *msgClient) GetBannedWords(ctx context.Context, in *GetBannedWordsReq, opts ...grpc.CallOption) (*GetBannedWordsResp, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(GetBannedWordsResp)
@@ -1254,6 +1305,13 @@ type MsgServer interface {
 	// costs no database read per message.
 	GetAppSettings(context.Context, *GetAppSettingsReq) (*GetAppSettingsResp, error)
 	SetAppSettings(context.Context, *SetAppSettingsReq) (*SetAppSettingsResp, error)
+	// Platform mute. Owned here, like AppSettings, because this service
+	// enforces it on the send path; the group and user services read the
+	// same store.
+	GetPlatformMute(context.Context, *GetPlatformMuteReq) (*GetPlatformMuteResp, error)
+	SetPlatformMute(context.Context, *SetPlatformMuteReq) (*SetPlatformMuteResp, error)
+	CheckPlatformMute(context.Context, *CheckPlatformMuteReq) (*CheckPlatformMuteResp, error)
+	GetPlatformMuteStatus(context.Context, *GetPlatformMuteStatusReq) (*GetPlatformMuteStatusResp, error)
 	// The banned-word list (see BannedWord). Admin only. Owned here
 	// because this service enforces it on the send path, which must never
 	// wait on another service.
@@ -1499,6 +1557,18 @@ func (UnimplementedMsgServer) GetAppSettings(context.Context, *GetAppSettingsReq
 }
 func (UnimplementedMsgServer) SetAppSettings(context.Context, *SetAppSettingsReq) (*SetAppSettingsResp, error) {
 	return nil, status.Error(codes.Unimplemented, "method SetAppSettings not implemented")
+}
+func (UnimplementedMsgServer) GetPlatformMute(context.Context, *GetPlatformMuteReq) (*GetPlatformMuteResp, error) {
+	return nil, status.Error(codes.Unimplemented, "method GetPlatformMute not implemented")
+}
+func (UnimplementedMsgServer) SetPlatformMute(context.Context, *SetPlatformMuteReq) (*SetPlatformMuteResp, error) {
+	return nil, status.Error(codes.Unimplemented, "method SetPlatformMute not implemented")
+}
+func (UnimplementedMsgServer) CheckPlatformMute(context.Context, *CheckPlatformMuteReq) (*CheckPlatformMuteResp, error) {
+	return nil, status.Error(codes.Unimplemented, "method CheckPlatformMute not implemented")
+}
+func (UnimplementedMsgServer) GetPlatformMuteStatus(context.Context, *GetPlatformMuteStatusReq) (*GetPlatformMuteStatusResp, error) {
+	return nil, status.Error(codes.Unimplemented, "method GetPlatformMuteStatus not implemented")
 }
 func (UnimplementedMsgServer) GetBannedWords(context.Context, *GetBannedWordsReq) (*GetBannedWordsResp, error) {
 	return nil, status.Error(codes.Unimplemented, "method GetBannedWords not implemented")
@@ -2811,6 +2881,78 @@ func _Msg_SetAppSettings_Handler(srv interface{}, ctx context.Context, dec func(
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Msg_GetPlatformMute_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetPlatformMuteReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(MsgServer).GetPlatformMute(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Msg_GetPlatformMute_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(MsgServer).GetPlatformMute(ctx, req.(*GetPlatformMuteReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Msg_SetPlatformMute_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(SetPlatformMuteReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(MsgServer).SetPlatformMute(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Msg_SetPlatformMute_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(MsgServer).SetPlatformMute(ctx, req.(*SetPlatformMuteReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Msg_CheckPlatformMute_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(CheckPlatformMuteReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(MsgServer).CheckPlatformMute(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Msg_CheckPlatformMute_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(MsgServer).CheckPlatformMute(ctx, req.(*CheckPlatformMuteReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Msg_GetPlatformMuteStatus_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetPlatformMuteStatusReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(MsgServer).GetPlatformMuteStatus(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Msg_GetPlatformMuteStatus_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(MsgServer).GetPlatformMuteStatus(ctx, req.(*GetPlatformMuteStatusReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 func _Msg_GetBannedWords_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(GetBannedWordsReq)
 	if err := dec(in); err != nil {
@@ -3381,6 +3523,22 @@ var Msg_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "SetAppSettings",
 			Handler:    _Msg_SetAppSettings_Handler,
+		},
+		{
+			MethodName: "GetPlatformMute",
+			Handler:    _Msg_GetPlatformMute_Handler,
+		},
+		{
+			MethodName: "SetPlatformMute",
+			Handler:    _Msg_SetPlatformMute_Handler,
+		},
+		{
+			MethodName: "CheckPlatformMute",
+			Handler:    _Msg_CheckPlatformMute_Handler,
+		},
+		{
+			MethodName: "GetPlatformMuteStatus",
+			Handler:    _Msg_GetPlatformMuteStatus_Handler,
 		},
 		{
 			MethodName: "GetBannedWords",

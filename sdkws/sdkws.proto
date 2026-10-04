@@ -1099,6 +1099,11 @@ message AppSettingsChangedTips {
   AppSettings settings = 1;
 }
 
+// Pushed (constant.PlatformMuteChangedNotification, 2401) to every user
+// online when an admin saves the platform mute. Empty: what a user may do
+// depends on their exemptions, so each asks GetPlatformMuteStatus.
+message PlatformMuteChangedTips {}
+
 // Pushed (constant.ScheduledMsgChangedNotification, 1706) to the owner of
 // a scheduled message, on their own devices only. A marker rather than
 // the message: the receiving device refetches that conversation's list,
