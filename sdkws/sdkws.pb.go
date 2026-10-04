@@ -126,9 +126,13 @@ type GroupInfo struct {
 	// owner and admins can. Unset behaves as on, like memberPoll: a call is
 	// an invitation anyone may decline, not something put in front of the
 	// whole group. Joining a call somebody else started is never gated.
-	MemberCall    int32 `protobuf:"varint,24,opt,name=memberCall,proto3" json:"memberCall"`
-	unknownFields protoimpl.UnknownFields
-	sizeCache     protoimpl.SizeCache
+	MemberCall int32 `protobuf:"varint,24,opt,name=memberCall,proto3" json:"memberCall"`
+	// Slow mode: a member who is neither the owner nor an admin may send one
+	// message per this many seconds here. 0 is off. One of
+	// constant.SlowModeOptions.
+	SlowModeSeconds int32 `protobuf:"varint,25,opt,name=slowModeSeconds,proto3" json:"slowModeSeconds"`
+	unknownFields   protoimpl.UnknownFields
+	sizeCache       protoimpl.SizeCache
 }
 
 func (x *GroupInfo) Reset() {
@@ -325,6 +329,13 @@ func (x *GroupInfo) GetMemberPoll() int32 {
 func (x *GroupInfo) GetMemberCall() int32 {
 	if x != nil {
 		return x.MemberCall
+	}
+	return 0
+}
+
+func (x *GroupInfo) GetSlowModeSeconds() int32 {
+	if x != nil {
+		return x.SlowModeSeconds
 	}
 	return 0
 }
@@ -1043,6 +1054,7 @@ type GroupInfoForSet struct {
 	MsgAutoDelete            *wrapperspb.Int64Value `protobuf:"bytes,14,opt,name=msgAutoDelete,proto3" json:"msgAutoDelete"`
 	MemberPoll               *wrapperspb.Int32Value `protobuf:"bytes,15,opt,name=memberPoll,proto3" json:"memberPoll"`
 	MemberCall               *wrapperspb.Int32Value `protobuf:"bytes,16,opt,name=memberCall,proto3" json:"memberCall"`
+	SlowModeSeconds          *wrapperspb.Int32Value `protobuf:"bytes,17,opt,name=slowModeSeconds,proto3" json:"slowModeSeconds"`
 	unknownFields            protoimpl.UnknownFields
 	sizeCache                protoimpl.SizeCache
 }
@@ -1185,6 +1197,13 @@ func (x *GroupInfoForSet) GetMemberPoll() *wrapperspb.Int32Value {
 func (x *GroupInfoForSet) GetMemberCall() *wrapperspb.Int32Value {
 	if x != nil {
 		return x.MemberCall
+	}
+	return nil
+}
+
+func (x *GroupInfoForSet) GetSlowModeSeconds() *wrapperspb.Int32Value {
+	if x != nil {
+		return x.SlowModeSeconds
 	}
 	return nil
 }
@@ -7613,8 +7632,10 @@ type GroupCreationDefaults struct {
 	MemberPin                *int32 `protobuf:"varint,7,opt,name=memberPin,proto3,oneof" json:"memberPin"`
 	MemberPoll               *int32 `protobuf:"varint,8,opt,name=memberPoll,proto3,oneof" json:"memberPoll"`
 	MemberCall               *int32 `protobuf:"varint,9,opt,name=memberCall,proto3,oneof" json:"memberCall"`
-	unknownFields            protoimpl.UnknownFields
-	sizeCache                protoimpl.SizeCache
+	// Seconds, one of constant.SlowModeOptions; 0 off.
+	SlowModeSeconds *int32 `protobuf:"varint,10,opt,name=slowModeSeconds,proto3,oneof" json:"slowModeSeconds"`
+	unknownFields   protoimpl.UnknownFields
+	sizeCache       protoimpl.SizeCache
 }
 
 func (x *GroupCreationDefaults) Reset() {
@@ -7706,6 +7727,13 @@ func (x *GroupCreationDefaults) GetMemberPoll() int32 {
 func (x *GroupCreationDefaults) GetMemberCall() int32 {
 	if x != nil && x.MemberCall != nil {
 		return *x.MemberCall
+	}
+	return 0
+}
+
+func (x *GroupCreationDefaults) GetSlowModeSeconds() int32 {
+	if x != nil && x.SlowModeSeconds != nil {
+		return *x.SlowModeSeconds
 	}
 	return 0
 }
@@ -7824,7 +7852,7 @@ var File_sdkws_sdkws_proto protoreflect.FileDescriptor
 
 const file_sdkws_sdkws_proto_rawDesc = "" +
 	"\n" +
-	"\x11sdkws/sdkws.proto\x12\fopenim.sdkws\x1a\x1bwrapperspb/wrapperspb.proto\"\xf7\x06\n" +
+	"\x11sdkws/sdkws.proto\x12\fopenim.sdkws\x1a\x1bwrapperspb/wrapperspb.proto\"\xa1\a\n" +
 	"\tGroupInfo\x12\x18\n" +
 	"\agroupID\x18\x01 \x01(\tR\agroupID\x12\x1c\n" +
 	"\tgroupName\x18\x02 \x01(\tR\tgroupName\x12\"\n" +
@@ -7856,7 +7884,8 @@ const file_sdkws_sdkws_proto_rawDesc = "" +
 	"memberPoll\x12\x1e\n" +
 	"\n" +
 	"memberCall\x18\x18 \x01(\x05R\n" +
-	"memberCall\"\xa1\x01\n" +
+	"memberCall\x12(\n" +
+	"\x0fslowModeSeconds\x18\x19 \x01(\x05R\x0fslowModeSeconds\"\xa1\x01\n" +
 	"\x0fPollChangedTips\x12&\n" +
 	"\x0econversationID\x18\x01 \x01(\tR\x0econversationID\x12\x18\n" +
 	"\agroupID\x18\x02 \x01(\tR\agroupID\x12\x10\n" +
@@ -7912,7 +7941,7 @@ const file_sdkws_sdkws_proto_rawDesc = "" +
 	"\x03seq\x18\x05 \x01(\x03R\x03seq\x12\x1a\n" +
 	"\bopUserID\x18\x06 \x01(\tR\bopUserID\x12&\n" +
 	"\x0eopUserNickname\x18\a \x01(\tR\x0eopUserNickname\x12\x18\n" +
-	"\aversion\x18\b \x01(\x03R\aversion\"\x95\a\n" +
+	"\aversion\x18\b \x01(\x03R\aversion\"\xdc\a\n" +
 	"\x0fGroupInfoForSet\x12\x18\n" +
 	"\agroupID\x18\x01 \x01(\tR\agroupID\x12\x1c\n" +
 	"\tgroupName\x18\x02 \x01(\tR\tgroupName\x12\"\n" +
@@ -7934,7 +7963,8 @@ const file_sdkws_sdkws_proto_rawDesc = "" +
 	"memberPoll\x12;\n" +
 	"\n" +
 	"memberCall\x18\x10 \x01(\v2\x1b.openim.protobuf.Int32ValueR\n" +
-	"memberCall\"\xff\x02\n" +
+	"memberCall\x12E\n" +
+	"\x0fslowModeSeconds\x18\x11 \x01(\v2\x1b.openim.protobuf.Int32ValueR\x0fslowModeSeconds\"\xff\x02\n" +
 	"\x13GroupMemberFullInfo\x12\x18\n" +
 	"\agroupID\x18\x01 \x01(\tR\agroupID\x12\x16\n" +
 	"\x06userID\x18\x02 \x01(\tR\x06userID\x12\x1c\n" +
@@ -8514,7 +8544,7 @@ const file_sdkws_sdkws_proto_rawDesc = "" +
 	"\x06change\x18\x01 \x01(\tR\x06change\x12\x18\n" +
 	"\acallIDs\x18\x02 \x03(\tR\acallIDs\x12\x10\n" +
 	"\x03all\x18\x03 \x01(\bR\x03all\x12\x16\n" +
-	"\x06seenAt\x18\x04 \x01(\x03R\x06seenAt\"\xd4\x04\n" +
+	"\x06seenAt\x18\x04 \x01(\x03R\x06seenAt\"\x97\x05\n" +
 	"\x15GroupCreationDefaults\x12\x1d\n" +
 	"\amuteAll\x18\x01 \x01(\x05H\x00R\amuteAll\x88\x01\x01\x12/\n" +
 	"\x10needVerification\x18\x02 \x01(\x05H\x01R\x10needVerification\x88\x01\x01\x121\n" +
@@ -8528,7 +8558,9 @@ const file_sdkws_sdkws_proto_rawDesc = "" +
 	"memberPoll\x88\x01\x01\x12#\n" +
 	"\n" +
 	"memberCall\x18\t \x01(\x05H\bR\n" +
-	"memberCall\x88\x01\x01B\n" +
+	"memberCall\x88\x01\x01\x12-\n" +
+	"\x0fslowModeSeconds\x18\n" +
+	" \x01(\x05H\tR\x0fslowModeSeconds\x88\x01\x01B\n" +
 	"\n" +
 	"\b_muteAllB\x13\n" +
 	"\x11_needVerificationB\x14\n" +
@@ -8539,7 +8571,8 @@ const file_sdkws_sdkws_proto_rawDesc = "" +
 	"\n" +
 	"_memberPinB\r\n" +
 	"\v_memberPollB\r\n" +
-	"\v_memberCall\"\x87\x02\n" +
+	"\v_memberCallB\x12\n" +
+	"\x10_slowModeSeconds\"\x87\x02\n" +
 	"\vEditMsgTips\x12&\n" +
 	"\x0econversationID\x18\x01 \x01(\tR\x0econversationID\x12\x10\n" +
 	"\x03seq\x18\x02 \x01(\x03R\x03seq\x12 \n" +
@@ -8692,107 +8725,108 @@ var file_sdkws_sdkws_proto_depIdxs = []int32{
 	108, // 10: openim.sdkws.GroupInfoForSet.msgAutoDelete:type_name -> openim.protobuf.Int64Value
 	107, // 11: openim.sdkws.GroupInfoForSet.memberPoll:type_name -> openim.protobuf.Int32Value
 	107, // 12: openim.sdkws.GroupInfoForSet.memberCall:type_name -> openim.protobuf.Int32Value
-	106, // 13: openim.sdkws.UserInfoWithEx.nickname:type_name -> openim.protobuf.StringValue
-	106, // 14: openim.sdkws.UserInfoWithEx.faceURL:type_name -> openim.protobuf.StringValue
-	106, // 15: openim.sdkws.UserInfoWithEx.ex:type_name -> openim.protobuf.StringValue
-	107, // 16: openim.sdkws.UserInfoWithEx.globalRecvMsgOpt:type_name -> openim.protobuf.Int32Value
-	12,  // 17: openim.sdkws.FriendInfo.friendUser:type_name -> openim.sdkws.UserInfo
-	11,  // 18: openim.sdkws.BlackInfo.blackUserInfo:type_name -> openim.sdkws.PublicUserInfo
-	11,  // 19: openim.sdkws.GroupRequest.userInfo:type_name -> openim.sdkws.PublicUserInfo
-	1,   // 20: openim.sdkws.GroupRequest.groupInfo:type_name -> openim.sdkws.GroupInfo
-	19,  // 21: openim.sdkws.PullMessageBySeqsReq.seqRanges:type_name -> openim.sdkws.SeqRange
-	0,   // 22: openim.sdkws.PullMessageBySeqsReq.order:type_name -> openim.sdkws.PullOrder
-	25,  // 23: openim.sdkws.PullMsgs.Msgs:type_name -> openim.sdkws.MsgData
-	98,  // 24: openim.sdkws.PullMessageBySeqsResp.msgs:type_name -> openim.sdkws.PullMessageBySeqsResp.MsgsEntry
-	99,  // 25: openim.sdkws.PullMessageBySeqsResp.notificationMsgs:type_name -> openim.sdkws.PullMessageBySeqsResp.NotificationMsgsEntry
-	100, // 26: openim.sdkws.GetMaxSeqResp.maxSeqs:type_name -> openim.sdkws.GetMaxSeqResp.MaxSeqsEntry
-	101, // 27: openim.sdkws.GetMaxSeqResp.minSeqs:type_name -> openim.sdkws.GetMaxSeqResp.MinSeqsEntry
-	102, // 28: openim.sdkws.MsgData.options:type_name -> openim.sdkws.MsgData.OptionsEntry
-	27,  // 29: openim.sdkws.MsgData.offlinePushInfo:type_name -> openim.sdkws.OfflinePushInfo
-	103, // 30: openim.sdkws.PushMessages.msgs:type_name -> openim.sdkws.PushMessages.MsgsEntry
-	104, // 31: openim.sdkws.PushMessages.notificationMsgs:type_name -> openim.sdkws.PushMessages.NotificationMsgsEntry
-	1,   // 32: openim.sdkws.GroupCreatedTips.group:type_name -> openim.sdkws.GroupInfo
-	10,  // 33: openim.sdkws.GroupCreatedTips.opUser:type_name -> openim.sdkws.GroupMemberFullInfo
-	10,  // 34: openim.sdkws.GroupCreatedTips.memberList:type_name -> openim.sdkws.GroupMemberFullInfo
-	10,  // 35: openim.sdkws.GroupCreatedTips.groupOwnerUser:type_name -> openim.sdkws.GroupMemberFullInfo
-	10,  // 36: openim.sdkws.GroupInfoSetTips.opUser:type_name -> openim.sdkws.GroupMemberFullInfo
-	1,   // 37: openim.sdkws.GroupInfoSetTips.group:type_name -> openim.sdkws.GroupInfo
-	10,  // 38: openim.sdkws.GroupInfoSetNameTips.opUser:type_name -> openim.sdkws.GroupMemberFullInfo
-	1,   // 39: openim.sdkws.GroupInfoSetNameTips.group:type_name -> openim.sdkws.GroupInfo
-	10,  // 40: openim.sdkws.GroupInfoSetAnnouncementTips.opUser:type_name -> openim.sdkws.GroupMemberFullInfo
-	1,   // 41: openim.sdkws.GroupInfoSetAnnouncementTips.group:type_name -> openim.sdkws.GroupInfo
-	1,   // 42: openim.sdkws.JoinGroupApplicationTips.group:type_name -> openim.sdkws.GroupInfo
-	11,  // 43: openim.sdkws.JoinGroupApplicationTips.applicant:type_name -> openim.sdkws.PublicUserInfo
-	16,  // 44: openim.sdkws.JoinGroupApplicationTips.request:type_name -> openim.sdkws.GroupRequest
-	1,   // 45: openim.sdkws.MemberQuitTips.group:type_name -> openim.sdkws.GroupInfo
-	10,  // 46: openim.sdkws.MemberQuitTips.quitUser:type_name -> openim.sdkws.GroupMemberFullInfo
-	1,   // 47: openim.sdkws.GroupApplicationAcceptedTips.group:type_name -> openim.sdkws.GroupInfo
-	10,  // 48: openim.sdkws.GroupApplicationAcceptedTips.opUser:type_name -> openim.sdkws.GroupMemberFullInfo
-	16,  // 49: openim.sdkws.GroupApplicationAcceptedTips.request:type_name -> openim.sdkws.GroupRequest
-	1,   // 50: openim.sdkws.GroupApplicationRejectedTips.group:type_name -> openim.sdkws.GroupInfo
-	10,  // 51: openim.sdkws.GroupApplicationRejectedTips.opUser:type_name -> openim.sdkws.GroupMemberFullInfo
-	16,  // 52: openim.sdkws.GroupApplicationRejectedTips.request:type_name -> openim.sdkws.GroupRequest
-	1,   // 53: openim.sdkws.GroupOwnerTransferredTips.group:type_name -> openim.sdkws.GroupInfo
-	10,  // 54: openim.sdkws.GroupOwnerTransferredTips.opUser:type_name -> openim.sdkws.GroupMemberFullInfo
-	10,  // 55: openim.sdkws.GroupOwnerTransferredTips.newGroupOwner:type_name -> openim.sdkws.GroupMemberFullInfo
-	10,  // 56: openim.sdkws.GroupOwnerTransferredTips.oldGroupOwnerInfo:type_name -> openim.sdkws.GroupMemberFullInfo
-	1,   // 57: openim.sdkws.MemberKickedTips.group:type_name -> openim.sdkws.GroupInfo
-	10,  // 58: openim.sdkws.MemberKickedTips.opUser:type_name -> openim.sdkws.GroupMemberFullInfo
-	10,  // 59: openim.sdkws.MemberKickedTips.kickedUserList:type_name -> openim.sdkws.GroupMemberFullInfo
-	1,   // 60: openim.sdkws.MemberInvitedTips.group:type_name -> openim.sdkws.GroupInfo
-	10,  // 61: openim.sdkws.MemberInvitedTips.opUser:type_name -> openim.sdkws.GroupMemberFullInfo
-	10,  // 62: openim.sdkws.MemberInvitedTips.invitedUserList:type_name -> openim.sdkws.GroupMemberFullInfo
-	10,  // 63: openim.sdkws.MemberInvitedTips.inviterUser:type_name -> openim.sdkws.GroupMemberFullInfo
-	1,   // 64: openim.sdkws.MemberEnterTips.group:type_name -> openim.sdkws.GroupInfo
-	10,  // 65: openim.sdkws.MemberEnterTips.entrantUser:type_name -> openim.sdkws.GroupMemberFullInfo
-	1,   // 66: openim.sdkws.GroupDismissedTips.group:type_name -> openim.sdkws.GroupInfo
-	10,  // 67: openim.sdkws.GroupDismissedTips.opUser:type_name -> openim.sdkws.GroupMemberFullInfo
-	1,   // 68: openim.sdkws.GroupBannedTips.group:type_name -> openim.sdkws.GroupInfo
-	10,  // 69: openim.sdkws.GroupBannedTips.opUser:type_name -> openim.sdkws.GroupMemberFullInfo
-	1,   // 70: openim.sdkws.GroupRestoredTips.group:type_name -> openim.sdkws.GroupInfo
-	10,  // 71: openim.sdkws.GroupRestoredTips.opUser:type_name -> openim.sdkws.GroupMemberFullInfo
-	1,   // 72: openim.sdkws.GroupDeletedTips.group:type_name -> openim.sdkws.GroupInfo
-	10,  // 73: openim.sdkws.GroupDeletedTips.opUser:type_name -> openim.sdkws.GroupMemberFullInfo
-	1,   // 74: openim.sdkws.GroupMemberMutedTips.group:type_name -> openim.sdkws.GroupInfo
-	10,  // 75: openim.sdkws.GroupMemberMutedTips.opUser:type_name -> openim.sdkws.GroupMemberFullInfo
-	10,  // 76: openim.sdkws.GroupMemberMutedTips.mutedUser:type_name -> openim.sdkws.GroupMemberFullInfo
-	1,   // 77: openim.sdkws.GroupMemberCancelMutedTips.group:type_name -> openim.sdkws.GroupInfo
-	10,  // 78: openim.sdkws.GroupMemberCancelMutedTips.opUser:type_name -> openim.sdkws.GroupMemberFullInfo
-	10,  // 79: openim.sdkws.GroupMemberCancelMutedTips.mutedUser:type_name -> openim.sdkws.GroupMemberFullInfo
-	1,   // 80: openim.sdkws.GroupMutedTips.group:type_name -> openim.sdkws.GroupInfo
-	10,  // 81: openim.sdkws.GroupMutedTips.opUser:type_name -> openim.sdkws.GroupMemberFullInfo
-	1,   // 82: openim.sdkws.GroupCancelMutedTips.group:type_name -> openim.sdkws.GroupInfo
-	10,  // 83: openim.sdkws.GroupCancelMutedTips.opUser:type_name -> openim.sdkws.GroupMemberFullInfo
-	1,   // 84: openim.sdkws.GroupMemberInfoSetTips.group:type_name -> openim.sdkws.GroupInfo
-	10,  // 85: openim.sdkws.GroupMemberInfoSetTips.opUser:type_name -> openim.sdkws.GroupMemberFullInfo
-	10,  // 86: openim.sdkws.GroupMemberInfoSetTips.changedUser:type_name -> openim.sdkws.GroupMemberFullInfo
-	51,  // 87: openim.sdkws.FriendApplicationTips.fromToUserID:type_name -> openim.sdkws.FromToUserID
-	17,  // 88: openim.sdkws.FriendApplicationTips.request:type_name -> openim.sdkws.FriendRequest
-	51,  // 89: openim.sdkws.FriendApplicationApprovedTips.fromToUserID:type_name -> openim.sdkws.FromToUserID
-	17,  // 90: openim.sdkws.FriendApplicationApprovedTips.request:type_name -> openim.sdkws.FriendRequest
-	51,  // 91: openim.sdkws.FriendApplicationRejectedTips.fromToUserID:type_name -> openim.sdkws.FromToUserID
-	17,  // 92: openim.sdkws.FriendApplicationRejectedTips.request:type_name -> openim.sdkws.FriendRequest
-	14,  // 93: openim.sdkws.FriendAddedTips.friend:type_name -> openim.sdkws.FriendInfo
-	11,  // 94: openim.sdkws.FriendAddedTips.opUser:type_name -> openim.sdkws.PublicUserInfo
-	51,  // 95: openim.sdkws.FriendDeletedTips.fromToUserID:type_name -> openim.sdkws.FromToUserID
-	51,  // 96: openim.sdkws.BlackAddedTips.fromToUserID:type_name -> openim.sdkws.FromToUserID
-	51,  // 97: openim.sdkws.BlackDeletedTips.fromToUserID:type_name -> openim.sdkws.FromToUserID
-	51,  // 98: openim.sdkws.FriendInfoChangedTips.fromToUserID:type_name -> openim.sdkws.FromToUserID
-	77,  // 99: openim.sdkws.MarkAsReadTips.seqReadCounts:type_name -> openim.sdkws.SeqReadCount
-	51,  // 100: openim.sdkws.FriendsInfoUpdateTips.fromToUserID:type_name -> openim.sdkws.FromToUserID
-	83,  // 101: openim.sdkws.SubUserOnlineStatusTips.subscribers:type_name -> openim.sdkws.SubUserOnlineStatusElem
-	105, // 102: openim.sdkws.PresenceSettings.platformSettings:type_name -> openim.sdkws.PresenceSettings.PlatformSettingsEntry
-	89,  // 103: openim.sdkws.AppSettingsChangedTips.settings:type_name -> openim.sdkws.AppSettings
-	20,  // 104: openim.sdkws.PullMessageBySeqsResp.MsgsEntry.value:type_name -> openim.sdkws.PullMsgs
-	20,  // 105: openim.sdkws.PullMessageBySeqsResp.NotificationMsgsEntry.value:type_name -> openim.sdkws.PullMsgs
-	20,  // 106: openim.sdkws.PushMessages.MsgsEntry.value:type_name -> openim.sdkws.PullMsgs
-	20,  // 107: openim.sdkws.PushMessages.NotificationMsgsEntry.value:type_name -> openim.sdkws.PullMsgs
-	90,  // 108: openim.sdkws.PresenceSettings.PlatformSettingsEntry.value:type_name -> openim.sdkws.PlatformPresenceSetting
-	109, // [109:109] is the sub-list for method output_type
-	109, // [109:109] is the sub-list for method input_type
-	109, // [109:109] is the sub-list for extension type_name
-	109, // [109:109] is the sub-list for extension extendee
-	0,   // [0:109] is the sub-list for field type_name
+	107, // 13: openim.sdkws.GroupInfoForSet.slowModeSeconds:type_name -> openim.protobuf.Int32Value
+	106, // 14: openim.sdkws.UserInfoWithEx.nickname:type_name -> openim.protobuf.StringValue
+	106, // 15: openim.sdkws.UserInfoWithEx.faceURL:type_name -> openim.protobuf.StringValue
+	106, // 16: openim.sdkws.UserInfoWithEx.ex:type_name -> openim.protobuf.StringValue
+	107, // 17: openim.sdkws.UserInfoWithEx.globalRecvMsgOpt:type_name -> openim.protobuf.Int32Value
+	12,  // 18: openim.sdkws.FriendInfo.friendUser:type_name -> openim.sdkws.UserInfo
+	11,  // 19: openim.sdkws.BlackInfo.blackUserInfo:type_name -> openim.sdkws.PublicUserInfo
+	11,  // 20: openim.sdkws.GroupRequest.userInfo:type_name -> openim.sdkws.PublicUserInfo
+	1,   // 21: openim.sdkws.GroupRequest.groupInfo:type_name -> openim.sdkws.GroupInfo
+	19,  // 22: openim.sdkws.PullMessageBySeqsReq.seqRanges:type_name -> openim.sdkws.SeqRange
+	0,   // 23: openim.sdkws.PullMessageBySeqsReq.order:type_name -> openim.sdkws.PullOrder
+	25,  // 24: openim.sdkws.PullMsgs.Msgs:type_name -> openim.sdkws.MsgData
+	98,  // 25: openim.sdkws.PullMessageBySeqsResp.msgs:type_name -> openim.sdkws.PullMessageBySeqsResp.MsgsEntry
+	99,  // 26: openim.sdkws.PullMessageBySeqsResp.notificationMsgs:type_name -> openim.sdkws.PullMessageBySeqsResp.NotificationMsgsEntry
+	100, // 27: openim.sdkws.GetMaxSeqResp.maxSeqs:type_name -> openim.sdkws.GetMaxSeqResp.MaxSeqsEntry
+	101, // 28: openim.sdkws.GetMaxSeqResp.minSeqs:type_name -> openim.sdkws.GetMaxSeqResp.MinSeqsEntry
+	102, // 29: openim.sdkws.MsgData.options:type_name -> openim.sdkws.MsgData.OptionsEntry
+	27,  // 30: openim.sdkws.MsgData.offlinePushInfo:type_name -> openim.sdkws.OfflinePushInfo
+	103, // 31: openim.sdkws.PushMessages.msgs:type_name -> openim.sdkws.PushMessages.MsgsEntry
+	104, // 32: openim.sdkws.PushMessages.notificationMsgs:type_name -> openim.sdkws.PushMessages.NotificationMsgsEntry
+	1,   // 33: openim.sdkws.GroupCreatedTips.group:type_name -> openim.sdkws.GroupInfo
+	10,  // 34: openim.sdkws.GroupCreatedTips.opUser:type_name -> openim.sdkws.GroupMemberFullInfo
+	10,  // 35: openim.sdkws.GroupCreatedTips.memberList:type_name -> openim.sdkws.GroupMemberFullInfo
+	10,  // 36: openim.sdkws.GroupCreatedTips.groupOwnerUser:type_name -> openim.sdkws.GroupMemberFullInfo
+	10,  // 37: openim.sdkws.GroupInfoSetTips.opUser:type_name -> openim.sdkws.GroupMemberFullInfo
+	1,   // 38: openim.sdkws.GroupInfoSetTips.group:type_name -> openim.sdkws.GroupInfo
+	10,  // 39: openim.sdkws.GroupInfoSetNameTips.opUser:type_name -> openim.sdkws.GroupMemberFullInfo
+	1,   // 40: openim.sdkws.GroupInfoSetNameTips.group:type_name -> openim.sdkws.GroupInfo
+	10,  // 41: openim.sdkws.GroupInfoSetAnnouncementTips.opUser:type_name -> openim.sdkws.GroupMemberFullInfo
+	1,   // 42: openim.sdkws.GroupInfoSetAnnouncementTips.group:type_name -> openim.sdkws.GroupInfo
+	1,   // 43: openim.sdkws.JoinGroupApplicationTips.group:type_name -> openim.sdkws.GroupInfo
+	11,  // 44: openim.sdkws.JoinGroupApplicationTips.applicant:type_name -> openim.sdkws.PublicUserInfo
+	16,  // 45: openim.sdkws.JoinGroupApplicationTips.request:type_name -> openim.sdkws.GroupRequest
+	1,   // 46: openim.sdkws.MemberQuitTips.group:type_name -> openim.sdkws.GroupInfo
+	10,  // 47: openim.sdkws.MemberQuitTips.quitUser:type_name -> openim.sdkws.GroupMemberFullInfo
+	1,   // 48: openim.sdkws.GroupApplicationAcceptedTips.group:type_name -> openim.sdkws.GroupInfo
+	10,  // 49: openim.sdkws.GroupApplicationAcceptedTips.opUser:type_name -> openim.sdkws.GroupMemberFullInfo
+	16,  // 50: openim.sdkws.GroupApplicationAcceptedTips.request:type_name -> openim.sdkws.GroupRequest
+	1,   // 51: openim.sdkws.GroupApplicationRejectedTips.group:type_name -> openim.sdkws.GroupInfo
+	10,  // 52: openim.sdkws.GroupApplicationRejectedTips.opUser:type_name -> openim.sdkws.GroupMemberFullInfo
+	16,  // 53: openim.sdkws.GroupApplicationRejectedTips.request:type_name -> openim.sdkws.GroupRequest
+	1,   // 54: openim.sdkws.GroupOwnerTransferredTips.group:type_name -> openim.sdkws.GroupInfo
+	10,  // 55: openim.sdkws.GroupOwnerTransferredTips.opUser:type_name -> openim.sdkws.GroupMemberFullInfo
+	10,  // 56: openim.sdkws.GroupOwnerTransferredTips.newGroupOwner:type_name -> openim.sdkws.GroupMemberFullInfo
+	10,  // 57: openim.sdkws.GroupOwnerTransferredTips.oldGroupOwnerInfo:type_name -> openim.sdkws.GroupMemberFullInfo
+	1,   // 58: openim.sdkws.MemberKickedTips.group:type_name -> openim.sdkws.GroupInfo
+	10,  // 59: openim.sdkws.MemberKickedTips.opUser:type_name -> openim.sdkws.GroupMemberFullInfo
+	10,  // 60: openim.sdkws.MemberKickedTips.kickedUserList:type_name -> openim.sdkws.GroupMemberFullInfo
+	1,   // 61: openim.sdkws.MemberInvitedTips.group:type_name -> openim.sdkws.GroupInfo
+	10,  // 62: openim.sdkws.MemberInvitedTips.opUser:type_name -> openim.sdkws.GroupMemberFullInfo
+	10,  // 63: openim.sdkws.MemberInvitedTips.invitedUserList:type_name -> openim.sdkws.GroupMemberFullInfo
+	10,  // 64: openim.sdkws.MemberInvitedTips.inviterUser:type_name -> openim.sdkws.GroupMemberFullInfo
+	1,   // 65: openim.sdkws.MemberEnterTips.group:type_name -> openim.sdkws.GroupInfo
+	10,  // 66: openim.sdkws.MemberEnterTips.entrantUser:type_name -> openim.sdkws.GroupMemberFullInfo
+	1,   // 67: openim.sdkws.GroupDismissedTips.group:type_name -> openim.sdkws.GroupInfo
+	10,  // 68: openim.sdkws.GroupDismissedTips.opUser:type_name -> openim.sdkws.GroupMemberFullInfo
+	1,   // 69: openim.sdkws.GroupBannedTips.group:type_name -> openim.sdkws.GroupInfo
+	10,  // 70: openim.sdkws.GroupBannedTips.opUser:type_name -> openim.sdkws.GroupMemberFullInfo
+	1,   // 71: openim.sdkws.GroupRestoredTips.group:type_name -> openim.sdkws.GroupInfo
+	10,  // 72: openim.sdkws.GroupRestoredTips.opUser:type_name -> openim.sdkws.GroupMemberFullInfo
+	1,   // 73: openim.sdkws.GroupDeletedTips.group:type_name -> openim.sdkws.GroupInfo
+	10,  // 74: openim.sdkws.GroupDeletedTips.opUser:type_name -> openim.sdkws.GroupMemberFullInfo
+	1,   // 75: openim.sdkws.GroupMemberMutedTips.group:type_name -> openim.sdkws.GroupInfo
+	10,  // 76: openim.sdkws.GroupMemberMutedTips.opUser:type_name -> openim.sdkws.GroupMemberFullInfo
+	10,  // 77: openim.sdkws.GroupMemberMutedTips.mutedUser:type_name -> openim.sdkws.GroupMemberFullInfo
+	1,   // 78: openim.sdkws.GroupMemberCancelMutedTips.group:type_name -> openim.sdkws.GroupInfo
+	10,  // 79: openim.sdkws.GroupMemberCancelMutedTips.opUser:type_name -> openim.sdkws.GroupMemberFullInfo
+	10,  // 80: openim.sdkws.GroupMemberCancelMutedTips.mutedUser:type_name -> openim.sdkws.GroupMemberFullInfo
+	1,   // 81: openim.sdkws.GroupMutedTips.group:type_name -> openim.sdkws.GroupInfo
+	10,  // 82: openim.sdkws.GroupMutedTips.opUser:type_name -> openim.sdkws.GroupMemberFullInfo
+	1,   // 83: openim.sdkws.GroupCancelMutedTips.group:type_name -> openim.sdkws.GroupInfo
+	10,  // 84: openim.sdkws.GroupCancelMutedTips.opUser:type_name -> openim.sdkws.GroupMemberFullInfo
+	1,   // 85: openim.sdkws.GroupMemberInfoSetTips.group:type_name -> openim.sdkws.GroupInfo
+	10,  // 86: openim.sdkws.GroupMemberInfoSetTips.opUser:type_name -> openim.sdkws.GroupMemberFullInfo
+	10,  // 87: openim.sdkws.GroupMemberInfoSetTips.changedUser:type_name -> openim.sdkws.GroupMemberFullInfo
+	51,  // 88: openim.sdkws.FriendApplicationTips.fromToUserID:type_name -> openim.sdkws.FromToUserID
+	17,  // 89: openim.sdkws.FriendApplicationTips.request:type_name -> openim.sdkws.FriendRequest
+	51,  // 90: openim.sdkws.FriendApplicationApprovedTips.fromToUserID:type_name -> openim.sdkws.FromToUserID
+	17,  // 91: openim.sdkws.FriendApplicationApprovedTips.request:type_name -> openim.sdkws.FriendRequest
+	51,  // 92: openim.sdkws.FriendApplicationRejectedTips.fromToUserID:type_name -> openim.sdkws.FromToUserID
+	17,  // 93: openim.sdkws.FriendApplicationRejectedTips.request:type_name -> openim.sdkws.FriendRequest
+	14,  // 94: openim.sdkws.FriendAddedTips.friend:type_name -> openim.sdkws.FriendInfo
+	11,  // 95: openim.sdkws.FriendAddedTips.opUser:type_name -> openim.sdkws.PublicUserInfo
+	51,  // 96: openim.sdkws.FriendDeletedTips.fromToUserID:type_name -> openim.sdkws.FromToUserID
+	51,  // 97: openim.sdkws.BlackAddedTips.fromToUserID:type_name -> openim.sdkws.FromToUserID
+	51,  // 98: openim.sdkws.BlackDeletedTips.fromToUserID:type_name -> openim.sdkws.FromToUserID
+	51,  // 99: openim.sdkws.FriendInfoChangedTips.fromToUserID:type_name -> openim.sdkws.FromToUserID
+	77,  // 100: openim.sdkws.MarkAsReadTips.seqReadCounts:type_name -> openim.sdkws.SeqReadCount
+	51,  // 101: openim.sdkws.FriendsInfoUpdateTips.fromToUserID:type_name -> openim.sdkws.FromToUserID
+	83,  // 102: openim.sdkws.SubUserOnlineStatusTips.subscribers:type_name -> openim.sdkws.SubUserOnlineStatusElem
+	105, // 103: openim.sdkws.PresenceSettings.platformSettings:type_name -> openim.sdkws.PresenceSettings.PlatformSettingsEntry
+	89,  // 104: openim.sdkws.AppSettingsChangedTips.settings:type_name -> openim.sdkws.AppSettings
+	20,  // 105: openim.sdkws.PullMessageBySeqsResp.MsgsEntry.value:type_name -> openim.sdkws.PullMsgs
+	20,  // 106: openim.sdkws.PullMessageBySeqsResp.NotificationMsgsEntry.value:type_name -> openim.sdkws.PullMsgs
+	20,  // 107: openim.sdkws.PushMessages.MsgsEntry.value:type_name -> openim.sdkws.PullMsgs
+	20,  // 108: openim.sdkws.PushMessages.NotificationMsgsEntry.value:type_name -> openim.sdkws.PullMsgs
+	90,  // 109: openim.sdkws.PresenceSettings.PlatformSettingsEntry.value:type_name -> openim.sdkws.PlatformPresenceSetting
+	110, // [110:110] is the sub-list for method output_type
+	110, // [110:110] is the sub-list for method input_type
+	110, // [110:110] is the sub-list for extension type_name
+	110, // [110:110] is the sub-list for extension extendee
+	0,   // [0:110] is the sub-list for field type_name
 }
 
 func init() { file_sdkws_sdkws_proto_init() }

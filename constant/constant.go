@@ -467,6 +467,10 @@ const (
 	ScheduledMsgResultSkippedPlatformMuted = 9 // came due while the platform mute forbade it; never sent late
 )
 
+// SlowModeOptions are the slow-mode intervals a group may have, in
+// seconds (sdkws.GroupInfo.slowModeSeconds); 0 is off.
+var SlowModeOptions = []int32{0, 5, 10, 30, 60, 300, 900, 3600}
+
 const (
 	GroupSettingUnset = 0
 	GroupSettingOn    = 1

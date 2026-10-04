@@ -70,6 +70,10 @@ message GroupInfo {
   // an invitation anyone may decline, not something put in front of the
   // whole group. Joining a call somebody else started is never gated.
   int32 memberCall = 24;
+  // Slow mode: a member who is neither the owner nor an admin may send one
+  // message per this many seconds here. 0 is off. One of
+  // constant.SlowModeOptions.
+  int32 slowModeSeconds = 25;
 }
 
 // A poll changed: someone voted, changed or withdrew a vote, or the poll
@@ -232,6 +236,7 @@ message GroupInfoForSet {
   openim.protobuf.Int64Value msgAutoDelete = 14;
   openim.protobuf.Int32Value memberPoll = 15;
   openim.protobuf.Int32Value memberCall = 16;
+  openim.protobuf.Int32Value slowModeSeconds = 17;
 }
 
 message GroupMemberFullInfo {
@@ -1170,6 +1175,8 @@ message GroupCreationDefaults {
   optional int32 memberPin = 7;
   optional int32 memberPoll = 8;
   optional int32 memberCall = 9;
+  // Seconds, one of constant.SlowModeOptions; 0 off.
+  optional int32 slowModeSeconds = 10;
 }
 
 // Pushed (constant.MsgEditNotification, 2104) to a conversation after
