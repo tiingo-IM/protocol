@@ -1070,6 +1070,36 @@ message CloseViewOnceReq {
 
 message CloseViewOnceResp {}
 
+// HoldViewOnceReq keeps a View once message's media past its retention
+// while a report of it is open, or (holdUntil 0) lets it go when the
+// report is closed. For the IM admin — chat's report service — only.
+// Refused with 1441 once the media is deleted, and 1443 for anything that
+// is not a View once message.
+message HoldViewOnceReq {
+  string conversationID = 1;
+  string clientMsgID = 2;
+  // Unix ms; 0 releases the hold.
+  int64 holdUntil = 3;
+}
+
+message HoldViewOnceResp {}
+
+// GetViewOnceMediaReq is an operator's look at a reported View once
+// message's media, through chat (which checks the report and writes the
+// Audit Log). For the IM admin only; 1441 once the media is deleted.
+message GetViewOnceMediaReq {
+  string conversationID = 1;
+  string clientMsgID = 2;
+}
+
+message GetViewOnceMediaResp {
+  string url = 1;
+  string coverURL = 2;
+  int64 urlExpireTime = 3;
+  // "picture", "video" or "voice".
+  string kind = 4;
+}
+
 // GetMsgExtraVersionReq asks whether anything in a conversation's message
 // history has been changed in place since the caller last checked.
 //
@@ -1742,6 +1772,8 @@ service msg {
   // View once: see OpenViewOnceReq.
   rpc OpenViewOnce(OpenViewOnceReq) returns (OpenViewOnceResp);
   rpc CloseViewOnce(CloseViewOnceReq) returns (CloseViewOnceResp);
+  rpc HoldViewOnce(HoldViewOnceReq) returns (HoldViewOnceResp);
+  rpc GetViewOnceMedia(GetViewOnceMediaReq) returns (GetViewOnceMediaResp);
 
   // Has anything in this conversation been rewritten in place since the
   // caller last looked? See GetMsgExtraVersionReq.

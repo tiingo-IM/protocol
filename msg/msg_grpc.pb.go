@@ -101,6 +101,8 @@ const (
 	Msg_EditMsg_FullMethodName                          = "/openim.msg.msg/EditMsg"
 	Msg_OpenViewOnce_FullMethodName                     = "/openim.msg.msg/OpenViewOnce"
 	Msg_CloseViewOnce_FullMethodName                    = "/openim.msg.msg/CloseViewOnce"
+	Msg_HoldViewOnce_FullMethodName                     = "/openim.msg.msg/HoldViewOnce"
+	Msg_GetViewOnceMedia_FullMethodName                 = "/openim.msg.msg/GetViewOnceMedia"
 	Msg_GetMsgExtraVersion_FullMethodName               = "/openim.msg.msg/GetMsgExtraVersion"
 	Msg_GetMsgExtraVersions_FullMethodName              = "/openim.msg.msg/GetMsgExtraVersions"
 	Msg_CreateScheduledMsg_FullMethodName               = "/openim.msg.msg/CreateScheduledMsg"
@@ -263,6 +265,8 @@ type MsgClient interface {
 	// View once: see OpenViewOnceReq.
 	OpenViewOnce(ctx context.Context, in *OpenViewOnceReq, opts ...grpc.CallOption) (*OpenViewOnceResp, error)
 	CloseViewOnce(ctx context.Context, in *CloseViewOnceReq, opts ...grpc.CallOption) (*CloseViewOnceResp, error)
+	HoldViewOnce(ctx context.Context, in *HoldViewOnceReq, opts ...grpc.CallOption) (*HoldViewOnceResp, error)
+	GetViewOnceMedia(ctx context.Context, in *GetViewOnceMediaReq, opts ...grpc.CallOption) (*GetViewOnceMediaResp, error)
 	// Has anything in this conversation been rewritten in place since the
 	// caller last looked? See GetMsgExtraVersionReq.
 	GetMsgExtraVersion(ctx context.Context, in *GetMsgExtraVersionReq, opts ...grpc.CallOption) (*GetMsgExtraVersionResp, error)
@@ -1101,6 +1105,26 @@ func (c *msgClient) CloseViewOnce(ctx context.Context, in *CloseViewOnceReq, opt
 	return out, nil
 }
 
+func (c *msgClient) HoldViewOnce(ctx context.Context, in *HoldViewOnceReq, opts ...grpc.CallOption) (*HoldViewOnceResp, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(HoldViewOnceResp)
+	err := c.cc.Invoke(ctx, Msg_HoldViewOnce_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *msgClient) GetViewOnceMedia(ctx context.Context, in *GetViewOnceMediaReq, opts ...grpc.CallOption) (*GetViewOnceMediaResp, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(GetViewOnceMediaResp)
+	err := c.cc.Invoke(ctx, Msg_GetViewOnceMedia_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 func (c *msgClient) GetMsgExtraVersion(ctx context.Context, in *GetMsgExtraVersionReq, opts ...grpc.CallOption) (*GetMsgExtraVersionResp, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(GetMsgExtraVersionResp)
@@ -1351,6 +1375,8 @@ type MsgServer interface {
 	// View once: see OpenViewOnceReq.
 	OpenViewOnce(context.Context, *OpenViewOnceReq) (*OpenViewOnceResp, error)
 	CloseViewOnce(context.Context, *CloseViewOnceReq) (*CloseViewOnceResp, error)
+	HoldViewOnce(context.Context, *HoldViewOnceReq) (*HoldViewOnceResp, error)
+	GetViewOnceMedia(context.Context, *GetViewOnceMediaReq) (*GetViewOnceMediaResp, error)
 	// Has anything in this conversation been rewritten in place since the
 	// caller last looked? See GetMsgExtraVersionReq.
 	GetMsgExtraVersion(context.Context, *GetMsgExtraVersionReq) (*GetMsgExtraVersionResp, error)
@@ -1621,6 +1647,12 @@ func (UnimplementedMsgServer) OpenViewOnce(context.Context, *OpenViewOnceReq) (*
 }
 func (UnimplementedMsgServer) CloseViewOnce(context.Context, *CloseViewOnceReq) (*CloseViewOnceResp, error) {
 	return nil, status.Error(codes.Unimplemented, "method CloseViewOnce not implemented")
+}
+func (UnimplementedMsgServer) HoldViewOnce(context.Context, *HoldViewOnceReq) (*HoldViewOnceResp, error) {
+	return nil, status.Error(codes.Unimplemented, "method HoldViewOnce not implemented")
+}
+func (UnimplementedMsgServer) GetViewOnceMedia(context.Context, *GetViewOnceMediaReq) (*GetViewOnceMediaResp, error) {
+	return nil, status.Error(codes.Unimplemented, "method GetViewOnceMedia not implemented")
 }
 func (UnimplementedMsgServer) GetMsgExtraVersion(context.Context, *GetMsgExtraVersionReq) (*GetMsgExtraVersionResp, error) {
 	return nil, status.Error(codes.Unimplemented, "method GetMsgExtraVersion not implemented")
@@ -3131,6 +3163,42 @@ func _Msg_CloseViewOnce_Handler(srv interface{}, ctx context.Context, dec func(i
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Msg_HoldViewOnce_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(HoldViewOnceReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(MsgServer).HoldViewOnce(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Msg_HoldViewOnce_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(MsgServer).HoldViewOnce(ctx, req.(*HoldViewOnceReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Msg_GetViewOnceMedia_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetViewOnceMediaReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(MsgServer).GetViewOnceMedia(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Msg_GetViewOnceMedia_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(MsgServer).GetViewOnceMedia(ctx, req.(*GetViewOnceMediaReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 func _Msg_GetMsgExtraVersion_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(GetMsgExtraVersionReq)
 	if err := dec(in); err != nil {
@@ -3641,6 +3709,14 @@ var Msg_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "CloseViewOnce",
 			Handler:    _Msg_CloseViewOnce_Handler,
+		},
+		{
+			MethodName: "HoldViewOnce",
+			Handler:    _Msg_HoldViewOnce_Handler,
+		},
+		{
+			MethodName: "GetViewOnceMedia",
+			Handler:    _Msg_GetViewOnceMedia_Handler,
 		},
 		{
 			MethodName: "GetMsgExtraVersion",
