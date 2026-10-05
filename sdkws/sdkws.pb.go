@@ -7748,86 +7748,6 @@ func (x *GroupCreationDefaults) GetSlowModeSeconds() int32 {
 // plain text message so that it mentions someone turns it from Text into
 // AtText, and a client that assumed the type had not changed would
 // render the new payload with the old codec.
-// ViewOnceChangedTips (constant.ViewOnceChangedNotification): a View once
-// message was opened, or is gone. ex is the message's ex as now stored;
-// its "viewOnce" key carries the state (openedAt, openedPlatformID,
-// deadline, goneAt), and a client replaces its copy's ex with it.
-type ViewOnceChangedTips struct {
-	state          protoimpl.MessageState `protogen:"open.v1"`
-	ConversationID string                 `protobuf:"bytes,1,opt,name=conversationID,proto3" json:"conversationID"`
-	Seq            int64                  `protobuf:"varint,2,opt,name=seq,proto3" json:"seq"`
-	ClientMsgID    string                 `protobuf:"bytes,3,opt,name=clientMsgID,proto3" json:"clientMsgID"`
-	SessionType    int32                  `protobuf:"varint,4,opt,name=sessionType,proto3" json:"sessionType"`
-	Ex             string                 `protobuf:"bytes,5,opt,name=ex,proto3" json:"ex"`
-	unknownFields  protoimpl.UnknownFields
-	sizeCache      protoimpl.SizeCache
-}
-
-func (x *ViewOnceChangedTips) Reset() {
-	*x = ViewOnceChangedTips{}
-	mi := &file_sdkws_sdkws_proto_msgTypes[96]
-	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-	ms.StoreMessageInfo(mi)
-}
-
-func (x *ViewOnceChangedTips) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*ViewOnceChangedTips) ProtoMessage() {}
-
-func (x *ViewOnceChangedTips) ProtoReflect() protoreflect.Message {
-	mi := &file_sdkws_sdkws_proto_msgTypes[96]
-	if x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-// Deprecated: Use ViewOnceChangedTips.ProtoReflect.Descriptor instead.
-func (*ViewOnceChangedTips) Descriptor() ([]byte, []int) {
-	return file_sdkws_sdkws_proto_rawDescGZIP(), []int{96}
-}
-
-func (x *ViewOnceChangedTips) GetConversationID() string {
-	if x != nil {
-		return x.ConversationID
-	}
-	return ""
-}
-
-func (x *ViewOnceChangedTips) GetSeq() int64 {
-	if x != nil {
-		return x.Seq
-	}
-	return 0
-}
-
-func (x *ViewOnceChangedTips) GetClientMsgID() string {
-	if x != nil {
-		return x.ClientMsgID
-	}
-	return ""
-}
-
-func (x *ViewOnceChangedTips) GetSessionType() int32 {
-	if x != nil {
-		return x.SessionType
-	}
-	return 0
-}
-
-func (x *ViewOnceChangedTips) GetEx() string {
-	if x != nil {
-		return x.Ex
-	}
-	return ""
-}
-
 type EditMsgTips struct {
 	state          protoimpl.MessageState `protogen:"open.v1"`
 	ConversationID string                 `protobuf:"bytes,1,opt,name=conversationID,proto3" json:"conversationID"`
@@ -7844,7 +7764,7 @@ type EditMsgTips struct {
 
 func (x *EditMsgTips) Reset() {
 	*x = EditMsgTips{}
-	mi := &file_sdkws_sdkws_proto_msgTypes[97]
+	mi := &file_sdkws_sdkws_proto_msgTypes[96]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -7856,7 +7776,7 @@ func (x *EditMsgTips) String() string {
 func (*EditMsgTips) ProtoMessage() {}
 
 func (x *EditMsgTips) ProtoReflect() protoreflect.Message {
-	mi := &file_sdkws_sdkws_proto_msgTypes[97]
+	mi := &file_sdkws_sdkws_proto_msgTypes[96]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -7869,7 +7789,7 @@ func (x *EditMsgTips) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use EditMsgTips.ProtoReflect.Descriptor instead.
 func (*EditMsgTips) Descriptor() ([]byte, []int) {
-	return file_sdkws_sdkws_proto_rawDescGZIP(), []int{97}
+	return file_sdkws_sdkws_proto_rawDescGZIP(), []int{96}
 }
 
 func (x *EditMsgTips) GetConversationID() string {
@@ -7926,6 +7846,86 @@ func (x *EditMsgTips) GetEditTime() int64 {
 		return x.EditTime
 	}
 	return 0
+}
+
+// ViewOnceChangedTips (constant.ViewOnceChangedNotification): a View once
+// message was opened, or is gone. ex is the message's ex as now stored;
+// its "viewOnce" key carries the state (openedAt, openedPlatformID,
+// deadline, goneAt), and a client replaces its copy's ex with it.
+type ViewOnceChangedTips struct {
+	state          protoimpl.MessageState `protogen:"open.v1"`
+	ConversationID string                 `protobuf:"bytes,1,opt,name=conversationID,proto3" json:"conversationID"`
+	Seq            int64                  `protobuf:"varint,2,opt,name=seq,proto3" json:"seq"`
+	ClientMsgID    string                 `protobuf:"bytes,3,opt,name=clientMsgID,proto3" json:"clientMsgID"`
+	SessionType    int32                  `protobuf:"varint,4,opt,name=sessionType,proto3" json:"sessionType"`
+	Ex             string                 `protobuf:"bytes,5,opt,name=ex,proto3" json:"ex"`
+	unknownFields  protoimpl.UnknownFields
+	sizeCache      protoimpl.SizeCache
+}
+
+func (x *ViewOnceChangedTips) Reset() {
+	*x = ViewOnceChangedTips{}
+	mi := &file_sdkws_sdkws_proto_msgTypes[97]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *ViewOnceChangedTips) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*ViewOnceChangedTips) ProtoMessage() {}
+
+func (x *ViewOnceChangedTips) ProtoReflect() protoreflect.Message {
+	mi := &file_sdkws_sdkws_proto_msgTypes[97]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use ViewOnceChangedTips.ProtoReflect.Descriptor instead.
+func (*ViewOnceChangedTips) Descriptor() ([]byte, []int) {
+	return file_sdkws_sdkws_proto_rawDescGZIP(), []int{97}
+}
+
+func (x *ViewOnceChangedTips) GetConversationID() string {
+	if x != nil {
+		return x.ConversationID
+	}
+	return ""
+}
+
+func (x *ViewOnceChangedTips) GetSeq() int64 {
+	if x != nil {
+		return x.Seq
+	}
+	return 0
+}
+
+func (x *ViewOnceChangedTips) GetClientMsgID() string {
+	if x != nil {
+		return x.ClientMsgID
+	}
+	return ""
+}
+
+func (x *ViewOnceChangedTips) GetSessionType() int32 {
+	if x != nil {
+		return x.SessionType
+	}
+	return 0
+}
+
+func (x *ViewOnceChangedTips) GetEx() string {
+	if x != nil {
+		return x.Ex
+	}
+	return ""
 }
 
 var File_sdkws_sdkws_proto protoreflect.FileDescriptor
@@ -8652,13 +8652,7 @@ const file_sdkws_sdkws_proto_rawDesc = "" +
 	"_memberPinB\r\n" +
 	"\v_memberPollB\r\n" +
 	"\v_memberCallB\x12\n" +
-	"\x10_slowModeSeconds\"\xa3\x01\n" +
-	"\x13ViewOnceChangedTips\x12&\n" +
-	"\x0econversationID\x18\x01 \x01(\tR\x0econversationID\x12\x10\n" +
-	"\x03seq\x18\x02 \x01(\x03R\x03seq\x12 \n" +
-	"\vclientMsgID\x18\x03 \x01(\tR\vclientMsgID\x12 \n" +
-	"\vsessionType\x18\x04 \x01(\x05R\vsessionType\x12\x0e\n" +
-	"\x02ex\x18\x05 \x01(\tR\x02ex\"\x87\x02\n" +
+	"\x10_slowModeSeconds\"\x87\x02\n" +
 	"\vEditMsgTips\x12&\n" +
 	"\x0econversationID\x18\x01 \x01(\tR\x0econversationID\x12\x10\n" +
 	"\x03seq\x18\x02 \x01(\x03R\x03seq\x12 \n" +
@@ -8667,7 +8661,13 @@ const file_sdkws_sdkws_proto_rawDesc = "" +
 	"\vsessionType\x18\x05 \x01(\x05R\vsessionType\x12 \n" +
 	"\vcontentType\x18\x06 \x01(\x05R\vcontentType\x12\x18\n" +
 	"\acontent\x18\a \x01(\tR\acontent\x12\x1a\n" +
-	"\beditTime\x18\b \x01(\x03R\beditTime*0\n" +
+	"\beditTime\x18\b \x01(\x03R\beditTime\"\xa3\x01\n" +
+	"\x13ViewOnceChangedTips\x12&\n" +
+	"\x0econversationID\x18\x01 \x01(\tR\x0econversationID\x12\x10\n" +
+	"\x03seq\x18\x02 \x01(\x03R\x03seq\x12 \n" +
+	"\vclientMsgID\x18\x03 \x01(\tR\vclientMsgID\x12 \n" +
+	"\vsessionType\x18\x04 \x01(\x05R\vsessionType\x12\x0e\n" +
+	"\x02ex\x18\x05 \x01(\tR\x02ex*0\n" +
 	"\tPullOrder\x12\x10\n" +
 	"\fPullOrderAsc\x10\x00\x12\x11\n" +
 	"\rPullOrderDesc\x10\x01B%Z#github.com/openimsdk/protocol/sdkwsb\x06proto3"
@@ -8784,8 +8784,8 @@ var file_sdkws_sdkws_proto_goTypes = []any{
 	(*ScheduledMsgChangedTips)(nil),           // 94: openim.sdkws.ScheduledMsgChangedTips
 	(*CallHistoryChangedTips)(nil),            // 95: openim.sdkws.CallHistoryChangedTips
 	(*GroupCreationDefaults)(nil),             // 96: openim.sdkws.GroupCreationDefaults
-	(*ViewOnceChangedTips)(nil),               // 97: openim.sdkws.ViewOnceChangedTips
-	(*EditMsgTips)(nil),                       // 98: openim.sdkws.EditMsgTips
+	(*EditMsgTips)(nil),                       // 97: openim.sdkws.EditMsgTips
+	(*ViewOnceChangedTips)(nil),               // 98: openim.sdkws.ViewOnceChangedTips
 	nil,                                       // 99: openim.sdkws.PullMessageBySeqsResp.MsgsEntry
 	nil,                                       // 100: openim.sdkws.PullMessageBySeqsResp.NotificationMsgsEntry
 	nil,                                       // 101: openim.sdkws.GetMaxSeqResp.MaxSeqsEntry
