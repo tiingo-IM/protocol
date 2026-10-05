@@ -91,6 +91,7 @@ const (
 	Msg_SetAppSettings_FullMethodName                   = "/openim.msg.msg/SetAppSettings"
 	Msg_GetPlatformMute_FullMethodName                  = "/openim.msg.msg/GetPlatformMute"
 	Msg_SetPlatformMute_FullMethodName                  = "/openim.msg.msg/SetPlatformMute"
+	Msg_SetInternalUser_FullMethodName                  = "/openim.msg.msg/SetInternalUser"
 	Msg_CheckPlatformMute_FullMethodName                = "/openim.msg.msg/CheckPlatformMute"
 	Msg_GetPlatformMuteStatus_FullMethodName            = "/openim.msg.msg/GetPlatformMuteStatus"
 	Msg_GetBannedWords_FullMethodName                   = "/openim.msg.msg/GetBannedWords"
@@ -249,6 +250,7 @@ type MsgClient interface {
 	// same store.
 	GetPlatformMute(ctx context.Context, in *GetPlatformMuteReq, opts ...grpc.CallOption) (*GetPlatformMuteResp, error)
 	SetPlatformMute(ctx context.Context, in *SetPlatformMuteReq, opts ...grpc.CallOption) (*SetPlatformMuteResp, error)
+	SetInternalUser(ctx context.Context, in *SetInternalUserReq, opts ...grpc.CallOption) (*SetInternalUserResp, error)
 	CheckPlatformMute(ctx context.Context, in *CheckPlatformMuteReq, opts ...grpc.CallOption) (*CheckPlatformMuteResp, error)
 	GetPlatformMuteStatus(ctx context.Context, in *GetPlatformMuteStatusReq, opts ...grpc.CallOption) (*GetPlatformMuteStatusResp, error)
 	// The banned-word list (see BannedWord). Admin only. Owned here
@@ -1005,6 +1007,16 @@ func (c *msgClient) SetPlatformMute(ctx context.Context, in *SetPlatformMuteReq,
 	return out, nil
 }
 
+func (c *msgClient) SetInternalUser(ctx context.Context, in *SetInternalUserReq, opts ...grpc.CallOption) (*SetInternalUserResp, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(SetInternalUserResp)
+	err := c.cc.Invoke(ctx, Msg_SetInternalUser_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 func (c *msgClient) CheckPlatformMute(ctx context.Context, in *CheckPlatformMuteReq, opts ...grpc.CallOption) (*CheckPlatformMuteResp, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(CheckPlatformMuteResp)
@@ -1359,6 +1371,7 @@ type MsgServer interface {
 	// same store.
 	GetPlatformMute(context.Context, *GetPlatformMuteReq) (*GetPlatformMuteResp, error)
 	SetPlatformMute(context.Context, *SetPlatformMuteReq) (*SetPlatformMuteResp, error)
+	SetInternalUser(context.Context, *SetInternalUserReq) (*SetInternalUserResp, error)
 	CheckPlatformMute(context.Context, *CheckPlatformMuteReq) (*CheckPlatformMuteResp, error)
 	GetPlatformMuteStatus(context.Context, *GetPlatformMuteStatusReq) (*GetPlatformMuteStatusResp, error)
 	// The banned-word list (see BannedWord). Admin only. Owned here
@@ -1617,6 +1630,9 @@ func (UnimplementedMsgServer) GetPlatformMute(context.Context, *GetPlatformMuteR
 }
 func (UnimplementedMsgServer) SetPlatformMute(context.Context, *SetPlatformMuteReq) (*SetPlatformMuteResp, error) {
 	return nil, status.Error(codes.Unimplemented, "method SetPlatformMute not implemented")
+}
+func (UnimplementedMsgServer) SetInternalUser(context.Context, *SetInternalUserReq) (*SetInternalUserResp, error) {
+	return nil, status.Error(codes.Unimplemented, "method SetInternalUser not implemented")
 }
 func (UnimplementedMsgServer) CheckPlatformMute(context.Context, *CheckPlatformMuteReq) (*CheckPlatformMuteResp, error) {
 	return nil, status.Error(codes.Unimplemented, "method CheckPlatformMute not implemented")
@@ -2983,6 +2999,24 @@ func _Msg_SetPlatformMute_Handler(srv interface{}, ctx context.Context, dec func
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Msg_SetInternalUser_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(SetInternalUserReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(MsgServer).SetInternalUser(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Msg_SetInternalUser_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(MsgServer).SetInternalUser(ctx, req.(*SetInternalUserReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 func _Msg_CheckPlatformMute_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(CheckPlatformMuteReq)
 	if err := dec(in); err != nil {
@@ -3669,6 +3703,10 @@ var Msg_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "SetPlatformMute",
 			Handler:    _Msg_SetPlatformMute_Handler,
+		},
+		{
+			MethodName: "SetInternalUser",
+			Handler:    _Msg_SetInternalUser_Handler,
 		},
 		{
 			MethodName: "CheckPlatformMute",

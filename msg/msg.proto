@@ -857,6 +857,17 @@ message PlatformMuteWindow {
 }
 
 // Admin only.
+// An Internal user (openim-workspace/.scratch/internal-user): chat says
+// who its merchant marked, and openim-server keeps a copy for the one
+// rule it applies itself — an internal user's own message may be taken
+// down at any age. Admin only; never shown to anyone.
+message SetInternalUserReq {
+  string userID = 1;
+  bool internal = 2;
+}
+
+message SetInternalUserResp {}
+
 message GetPlatformMuteReq {}
 
 message GetPlatformMuteResp {
@@ -1753,6 +1764,7 @@ service msg {
   // same store.
   rpc GetPlatformMute(GetPlatformMuteReq) returns (GetPlatformMuteResp);
   rpc SetPlatformMute(SetPlatformMuteReq) returns (SetPlatformMuteResp);
+  rpc SetInternalUser(SetInternalUserReq) returns (SetInternalUserResp);
   rpc CheckPlatformMute(CheckPlatformMuteReq) returns (CheckPlatformMuteResp);
   rpc GetPlatformMuteStatus(GetPlatformMuteStatusReq) returns (GetPlatformMuteStatusResp);
 
