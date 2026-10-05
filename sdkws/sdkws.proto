@@ -477,6 +477,14 @@ message OfflinePushInfo {
   string iOSPushSound = 4;
   bool iOSBadgeCount = 5;
   string signalInfo = 6;
+  // Keys of the app's own push wording (im-app-rn plugins/pushStrings.js)
+  // with their {1}, {2} arguments, for text that is not anyone's own
+  // words: the phone shows the key in its language, and title/desc are
+  // the fallback for a phone whose app has no such key.
+  string titleLocKey = 7;
+  repeated string titleLocArgs = 8;
+  string bodyLocKey = 9;
+  repeated string bodyLocArgs = 10;
 }
 
 message TipsComm {

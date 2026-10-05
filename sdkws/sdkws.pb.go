@@ -2789,6 +2789,14 @@ type OfflinePushInfo struct {
 	IOSPushSound  string                 `protobuf:"bytes,4,opt,name=iOSPushSound,proto3" json:"iOSPushSound"`
 	IOSBadgeCount bool                   `protobuf:"varint,5,opt,name=iOSBadgeCount,proto3" json:"iOSBadgeCount"`
 	SignalInfo    string                 `protobuf:"bytes,6,opt,name=signalInfo,proto3" json:"signalInfo"`
+	// Keys of the app's own push wording (im-app-rn plugins/pushStrings.js)
+	// with their {1}, {2} arguments, for text that is not anyone's own
+	// words: the phone shows the key in its language, and title/desc are
+	// the fallback for a phone whose app has no such key.
+	TitleLocKey   string   `protobuf:"bytes,7,opt,name=titleLocKey,proto3" json:"titleLocKey"`
+	TitleLocArgs  []string `protobuf:"bytes,8,rep,name=titleLocArgs,proto3" json:"titleLocArgs"`
+	BodyLocKey    string   `protobuf:"bytes,9,opt,name=bodyLocKey,proto3" json:"bodyLocKey"`
+	BodyLocArgs   []string `protobuf:"bytes,10,rep,name=bodyLocArgs,proto3" json:"bodyLocArgs"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -2863,6 +2871,34 @@ func (x *OfflinePushInfo) GetSignalInfo() string {
 		return x.SignalInfo
 	}
 	return ""
+}
+
+func (x *OfflinePushInfo) GetTitleLocKey() string {
+	if x != nil {
+		return x.TitleLocKey
+	}
+	return ""
+}
+
+func (x *OfflinePushInfo) GetTitleLocArgs() []string {
+	if x != nil {
+		return x.TitleLocArgs
+	}
+	return nil
+}
+
+func (x *OfflinePushInfo) GetBodyLocKey() string {
+	if x != nil {
+		return x.BodyLocKey
+	}
+	return ""
+}
+
+func (x *OfflinePushInfo) GetBodyLocArgs() []string {
+	if x != nil {
+		return x.BodyLocArgs
+	}
+	return nil
 }
 
 type TipsComm struct {
@@ -8224,7 +8260,7 @@ const file_sdkws_sdkws_proto_rawDesc = "" +
 	"\x05value\x18\x02 \x01(\v2\x16.openim.sdkws.PullMsgsR\x05value:\x028\x01\x1a[\n" +
 	"\x15NotificationMsgsEntry\x12\x10\n" +
 	"\x03key\x18\x01 \x01(\tR\x03key\x12,\n" +
-	"\x05value\x18\x02 \x01(\v2\x16.openim.sdkws.PullMsgsR\x05value:\x028\x01\"\xb5\x01\n" +
+	"\x05value\x18\x02 \x01(\v2\x16.openim.sdkws.PullMsgsR\x05value:\x028\x01\"\xbd\x02\n" +
 	"\x0fOfflinePushInfo\x12\x14\n" +
 	"\x05title\x18\x01 \x01(\tR\x05title\x12\x12\n" +
 	"\x04desc\x18\x02 \x01(\tR\x04desc\x12\x0e\n" +
@@ -8233,7 +8269,14 @@ const file_sdkws_sdkws_proto_rawDesc = "" +
 	"\riOSBadgeCount\x18\x05 \x01(\bR\riOSBadgeCount\x12\x1e\n" +
 	"\n" +
 	"signalInfo\x18\x06 \x01(\tR\n" +
-	"signalInfo\"d\n" +
+	"signalInfo\x12 \n" +
+	"\vtitleLocKey\x18\a \x01(\tR\vtitleLocKey\x12\"\n" +
+	"\ftitleLocArgs\x18\b \x03(\tR\ftitleLocArgs\x12\x1e\n" +
+	"\n" +
+	"bodyLocKey\x18\t \x01(\tR\n" +
+	"bodyLocKey\x12 \n" +
+	"\vbodyLocArgs\x18\n" +
+	" \x03(\tR\vbodyLocArgs\"d\n" +
 	"\bTipsComm\x12\x16\n" +
 	"\x06detail\x18\x01 \x01(\fR\x06detail\x12 \n" +
 	"\vdefaultTips\x18\x02 \x01(\tR\vdefaultTips\x12\x1e\n" +
