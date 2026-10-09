@@ -144,6 +144,11 @@ const (
 	// A View once message was opened, or is gone; see
 	// sdkws.ViewOnceChangedTips. To both people of the one-to-one chat.
 	ViewOnceChangedNotification = 1711
+	// A conversation's Shared wallpaper was set, changed or removed; see
+	// conversation.ConversationWallpaperChangedTips. Written into the
+	// conversation as a stored line, one-to-one or group, with no push
+	// and no unread count.
+	ConversationWallpaperChangedNotification = 1712
 
 	BusinessNotificationBegin = 2000
 	BusinessNotification      = 2001

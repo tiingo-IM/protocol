@@ -358,6 +358,67 @@ message GetNotificationSeqCountsResp {
   map<string, int64> counts = 1;
 }
 
+// ConversationWallpaper is a conversation's Shared wallpaper: one per
+// conversation, seen by both people of a one-to-one chat or by every
+// member of a group, unless they set their own wallpaper for it.
+//
+// wallpaper is a reference, never an image: "preset:<id>", "color:<id>"
+// (the apps own the IDs) or "photo:<url>", the url being this server's
+// own object URL (".../object/<name>", as an upload returns it).
+message ConversationWallpaper {
+  string conversationID = 1;
+  string wallpaper = 2;
+  // Who set it.
+  string setBy = 3;
+  // When, in epoch ms.
+  int64 updateTime = 4;
+}
+
+// SetConversationWallpaper sets the Shared wallpaper of a one-to-one chat
+// (either participant) or a group (its owner or an admin), and writes
+// a ConversationWallpaperChangedNotification line into the conversation.
+// Setting the wallpaper it already has changes nothing.
+message SetConversationWallpaperReq {
+  string conversationID = 1;
+  string wallpaper = 2;
+  // Filled by the API from the request, as for an upload: the prefix of
+  // this server's object URLs, which a "photo:" reference must start with.
+  // Whatever a client sends here is overwritten.
+  string urlPrefix = 3;
+}
+message SetConversationWallpaperResp {
+  ConversationWallpaper wallpaper = 1;
+}
+
+// ClearConversationWallpaper removes the Shared wallpaper, with the same
+// checks as setting one. Clearing a conversation that has none changes
+// nothing.
+message ClearConversationWallpaperReq {
+  string conversationID = 1;
+}
+message ClearConversationWallpaperResp {}
+
+// GetConversationWallpapers answers the Shared wallpapers of the caller's
+// conversations among conversationIDs. Conversations with none, and
+// those the caller is not in (a group they left), are absent.
+message GetConversationWallpapersReq {
+  repeated string conversationIDs = 1;
+}
+message GetConversationWallpapersResp {
+  repeated ConversationWallpaper wallpapers = 1;
+}
+
+// ConversationWallpaperChangedTips (constant.ConversationWallpaperChangedNotification):
+// opUserID set the conversation's Shared wallpaper to wallpaper, or
+// removed it when wallpaper is empty. The line's sender is opUserID, with
+// their nickname and face on the message.
+message ConversationWallpaperChangedTips {
+  string conversationID = 1;
+  string opUserID = 2;
+  string wallpaper = 3;
+  int64 updateTime = 4;
+}
+
 service conversation {
   rpc GetConversation(GetConversationReq) returns (GetConversationResp);
   rpc GetSortedConversationList(GetSortedConversationListReq) returns (GetSortedConversationListResp);
@@ -386,4 +447,7 @@ service conversation {
   rpc UpdateConversationsByUser(UpdateConversationsByUserReq) returns (UpdateConversationsByUserResp);
   rpc DeleteConversations(DeleteConversationsReq) returns (DeleteConversationsResp);
   rpc GetNotificationSeqCounts(GetNotificationSeqCountsReq) returns (GetNotificationSeqCountsResp);
+  rpc SetConversationWallpaper(SetConversationWallpaperReq) returns (SetConversationWallpaperResp);
+  rpc ClearConversationWallpaper(ClearConversationWallpaperReq) returns (ClearConversationWallpaperResp);
+  rpc GetConversationWallpapers(GetConversationWallpapersReq) returns (GetConversationWallpapersResp);
 }

@@ -46,6 +46,9 @@ const (
 	Conversation_UpdateConversationsByUser_FullMethodName               = "/openim.conversation.conversation/UpdateConversationsByUser"
 	Conversation_DeleteConversations_FullMethodName                     = "/openim.conversation.conversation/DeleteConversations"
 	Conversation_GetNotificationSeqCounts_FullMethodName                = "/openim.conversation.conversation/GetNotificationSeqCounts"
+	Conversation_SetConversationWallpaper_FullMethodName                = "/openim.conversation.conversation/SetConversationWallpaper"
+	Conversation_ClearConversationWallpaper_FullMethodName              = "/openim.conversation.conversation/ClearConversationWallpaper"
+	Conversation_GetConversationWallpapers_FullMethodName               = "/openim.conversation.conversation/GetConversationWallpapers"
 )
 
 // ConversationClient is the client API for Conversation service.
@@ -79,6 +82,9 @@ type ConversationClient interface {
 	UpdateConversationsByUser(ctx context.Context, in *UpdateConversationsByUserReq, opts ...grpc.CallOption) (*UpdateConversationsByUserResp, error)
 	DeleteConversations(ctx context.Context, in *DeleteConversationsReq, opts ...grpc.CallOption) (*DeleteConversationsResp, error)
 	GetNotificationSeqCounts(ctx context.Context, in *GetNotificationSeqCountsReq, opts ...grpc.CallOption) (*GetNotificationSeqCountsResp, error)
+	SetConversationWallpaper(ctx context.Context, in *SetConversationWallpaperReq, opts ...grpc.CallOption) (*SetConversationWallpaperResp, error)
+	ClearConversationWallpaper(ctx context.Context, in *ClearConversationWallpaperReq, opts ...grpc.CallOption) (*ClearConversationWallpaperResp, error)
+	GetConversationWallpapers(ctx context.Context, in *GetConversationWallpapersReq, opts ...grpc.CallOption) (*GetConversationWallpapersResp, error)
 }
 
 type conversationClient struct {
@@ -359,6 +365,36 @@ func (c *conversationClient) GetNotificationSeqCounts(ctx context.Context, in *G
 	return out, nil
 }
 
+func (c *conversationClient) SetConversationWallpaper(ctx context.Context, in *SetConversationWallpaperReq, opts ...grpc.CallOption) (*SetConversationWallpaperResp, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(SetConversationWallpaperResp)
+	err := c.cc.Invoke(ctx, Conversation_SetConversationWallpaper_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *conversationClient) ClearConversationWallpaper(ctx context.Context, in *ClearConversationWallpaperReq, opts ...grpc.CallOption) (*ClearConversationWallpaperResp, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(ClearConversationWallpaperResp)
+	err := c.cc.Invoke(ctx, Conversation_ClearConversationWallpaper_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *conversationClient) GetConversationWallpapers(ctx context.Context, in *GetConversationWallpapersReq, opts ...grpc.CallOption) (*GetConversationWallpapersResp, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(GetConversationWallpapersResp)
+	err := c.cc.Invoke(ctx, Conversation_GetConversationWallpapers_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // ConversationServer is the server API for Conversation service.
 // All implementations must embed UnimplementedConversationServer
 // for forward compatibility.
@@ -390,6 +426,9 @@ type ConversationServer interface {
 	UpdateConversationsByUser(context.Context, *UpdateConversationsByUserReq) (*UpdateConversationsByUserResp, error)
 	DeleteConversations(context.Context, *DeleteConversationsReq) (*DeleteConversationsResp, error)
 	GetNotificationSeqCounts(context.Context, *GetNotificationSeqCountsReq) (*GetNotificationSeqCountsResp, error)
+	SetConversationWallpaper(context.Context, *SetConversationWallpaperReq) (*SetConversationWallpaperResp, error)
+	ClearConversationWallpaper(context.Context, *ClearConversationWallpaperReq) (*ClearConversationWallpaperResp, error)
+	GetConversationWallpapers(context.Context, *GetConversationWallpapersReq) (*GetConversationWallpapersResp, error)
 	mustEmbedUnimplementedConversationServer()
 }
 
@@ -480,6 +519,15 @@ func (UnimplementedConversationServer) DeleteConversations(context.Context, *Del
 }
 func (UnimplementedConversationServer) GetNotificationSeqCounts(context.Context, *GetNotificationSeqCountsReq) (*GetNotificationSeqCountsResp, error) {
 	return nil, status.Error(codes.Unimplemented, "method GetNotificationSeqCounts not implemented")
+}
+func (UnimplementedConversationServer) SetConversationWallpaper(context.Context, *SetConversationWallpaperReq) (*SetConversationWallpaperResp, error) {
+	return nil, status.Error(codes.Unimplemented, "method SetConversationWallpaper not implemented")
+}
+func (UnimplementedConversationServer) ClearConversationWallpaper(context.Context, *ClearConversationWallpaperReq) (*ClearConversationWallpaperResp, error) {
+	return nil, status.Error(codes.Unimplemented, "method ClearConversationWallpaper not implemented")
+}
+func (UnimplementedConversationServer) GetConversationWallpapers(context.Context, *GetConversationWallpapersReq) (*GetConversationWallpapersResp, error) {
+	return nil, status.Error(codes.Unimplemented, "method GetConversationWallpapers not implemented")
 }
 func (UnimplementedConversationServer) mustEmbedUnimplementedConversationServer() {}
 func (UnimplementedConversationServer) testEmbeddedByValue()                      {}
@@ -988,6 +1036,60 @@ func _Conversation_GetNotificationSeqCounts_Handler(srv interface{}, ctx context
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Conversation_SetConversationWallpaper_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(SetConversationWallpaperReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ConversationServer).SetConversationWallpaper(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Conversation_SetConversationWallpaper_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ConversationServer).SetConversationWallpaper(ctx, req.(*SetConversationWallpaperReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Conversation_ClearConversationWallpaper_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ClearConversationWallpaperReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ConversationServer).ClearConversationWallpaper(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Conversation_ClearConversationWallpaper_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ConversationServer).ClearConversationWallpaper(ctx, req.(*ClearConversationWallpaperReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Conversation_GetConversationWallpapers_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetConversationWallpapersReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ConversationServer).GetConversationWallpapers(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Conversation_GetConversationWallpapers_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ConversationServer).GetConversationWallpapers(ctx, req.(*GetConversationWallpapersReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // Conversation_ServiceDesc is the grpc.ServiceDesc for Conversation service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -1102,6 +1204,18 @@ var Conversation_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "GetNotificationSeqCounts",
 			Handler:    _Conversation_GetNotificationSeqCounts_Handler,
+		},
+		{
+			MethodName: "SetConversationWallpaper",
+			Handler:    _Conversation_SetConversationWallpaper_Handler,
+		},
+		{
+			MethodName: "ClearConversationWallpaper",
+			Handler:    _Conversation_ClearConversationWallpaper_Handler,
+		},
+		{
+			MethodName: "GetConversationWallpapers",
+			Handler:    _Conversation_GetConversationWallpapers_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
