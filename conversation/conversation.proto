@@ -363,8 +363,11 @@ message GetNotificationSeqCountsResp {
 // member of a group, unless they set their own wallpaper for it.
 //
 // wallpaper is a reference, never an image: "preset:<id>", "color:<id>"
-// (the apps own the IDs) or "photo:<url>", the url being this server's
-// own object URL (".../object/<name>", as an upload returns it).
+// (the apps own the IDs) or "photo:<objectName>", objectName being the
+// name of an object in this server's object storage (what follows
+// "/object/" in the URL an upload returns, e.g. "photo:123/abc.jpg").
+// No URL and no host is ever stored: each app draws
+// "<its own API URL>/object/<objectName>".
 message ConversationWallpaper {
   string conversationID = 1;
   string wallpaper = 2;
@@ -378,13 +381,17 @@ message ConversationWallpaper {
 // (either participant) or a group (its owner or an admin), and writes
 // a ConversationWallpaperChangedNotification line into the conversation.
 // Setting the wallpaper it already has changes nothing.
+//
+// A "photo:" reference must name an object that exists in this server's
+// object storage, in the shape ^[A-Za-z0-9][A-Za-z0-9._/-]{0,511}$ with
+// no "..", no "//" and no leading or trailing "/"; anything else, a URL
+// included, is refused with 1001.
 message SetConversationWallpaperReq {
+  // 3 was urlPrefix, the API's object URL prefix, gone with photo URLs.
+  reserved 3;
+  reserved "urlPrefix";
   string conversationID = 1;
   string wallpaper = 2;
-  // Filled by the API from the request, as for an upload: the prefix of
-  // this server's object URLs, which a "photo:" reference must start with.
-  // Whatever a client sends here is overwritten.
-  string urlPrefix = 3;
 }
 message SetConversationWallpaperResp {
   ConversationWallpaper wallpaper = 1;

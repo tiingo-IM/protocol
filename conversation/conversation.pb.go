@@ -3397,8 +3397,11 @@ func (x *GetNotificationSeqCountsResp) GetCounts() map[string]int64 {
 // member of a group, unless they set their own wallpaper for it.
 //
 // wallpaper is a reference, never an image: "preset:<id>", "color:<id>"
-// (the apps own the IDs) or "photo:<url>", the url being this server's
-// own object URL (".../object/<name>", as an upload returns it).
+// (the apps own the IDs) or "photo:<objectName>", objectName being the
+// name of an object in this server's object storage (what follows
+// "/object/" in the URL an upload returns, e.g. "photo:123/abc.jpg").
+// No URL and no host is ever stored: each app draws
+// "<its own API URL>/object/<objectName>".
 type ConversationWallpaper struct {
 	state          protoimpl.MessageState `protogen:"open.v1"`
 	ConversationID string                 `protobuf:"bytes,1,opt,name=conversationID,proto3" json:"conversationID,omitempty"`
@@ -3473,16 +3476,17 @@ func (x *ConversationWallpaper) GetUpdateTime() int64 {
 // (either participant) or a group (its owner or an admin), and writes
 // a ConversationWallpaperChangedNotification line into the conversation.
 // Setting the wallpaper it already has changes nothing.
+//
+// A "photo:" reference must name an object that exists in this server's
+// object storage, in the shape ^[A-Za-z0-9][A-Za-z0-9._/-]{0,511}$ with
+// no "..", no "//" and no leading or trailing "/"; anything else, a URL
+// included, is refused with 1001.
 type SetConversationWallpaperReq struct {
 	state          protoimpl.MessageState `protogen:"open.v1"`
 	ConversationID string                 `protobuf:"bytes,1,opt,name=conversationID,proto3" json:"conversationID,omitempty"`
 	Wallpaper      string                 `protobuf:"bytes,2,opt,name=wallpaper,proto3" json:"wallpaper,omitempty"`
-	// Filled by the API from the request, as for an upload: the prefix of
-	// this server's object URLs, which a "photo:" reference must start with.
-	// Whatever a client sends here is overwritten.
-	UrlPrefix     string `protobuf:"bytes,3,opt,name=urlPrefix,proto3" json:"urlPrefix,omitempty"`
-	unknownFields protoimpl.UnknownFields
-	sizeCache     protoimpl.SizeCache
+	unknownFields  protoimpl.UnknownFields
+	sizeCache      protoimpl.SizeCache
 }
 
 func (x *SetConversationWallpaperReq) Reset() {
@@ -3525,13 +3529,6 @@ func (x *SetConversationWallpaperReq) GetConversationID() string {
 func (x *SetConversationWallpaperReq) GetWallpaper() string {
 	if x != nil {
 		return x.Wallpaper
-	}
-	return ""
-}
-
-func (x *SetConversationWallpaperReq) GetUrlPrefix() string {
-	if x != nil {
-		return x.UrlPrefix
 	}
 	return ""
 }
@@ -4072,11 +4069,10 @@ const file_conversation_conversation_proto_rawDesc = "" +
 	"\x05setBy\x18\x03 \x01(\tR\x05setBy\x12\x1e\n" +
 	"\n" +
 	"updateTime\x18\x04 \x01(\x03R\n" +
-	"updateTime\"\x81\x01\n" +
+	"updateTime\"t\n" +
 	"\x1bSetConversationWallpaperReq\x12&\n" +
 	"\x0econversationID\x18\x01 \x01(\tR\x0econversationID\x12\x1c\n" +
-	"\twallpaper\x18\x02 \x01(\tR\twallpaper\x12\x1c\n" +
-	"\turlPrefix\x18\x03 \x01(\tR\turlPrefix\"h\n" +
+	"\twallpaper\x18\x02 \x01(\tR\twallpaperJ\x04\b\x03\x10\x04R\turlPrefix\"h\n" +
 	"\x1cSetConversationWallpaperResp\x12H\n" +
 	"\twallpaper\x18\x01 \x01(\v2*.openim.conversation.ConversationWallpaperR\twallpaper\"G\n" +
 	"\x1dClearConversationWallpaperReq\x12&\n" +
